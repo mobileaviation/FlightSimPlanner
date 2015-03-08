@@ -1,0 +1,293 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="nl.robenanita.googlemapstest.flightplan.FlightPlanActivity"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MergeRootFrame"
+    android:orientation="vertical"
+    android:background="#eeeeee">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/scaleBarView"
+        android:layout_centerHorizontal="true"
+        android:gravity="center|right"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create a new FlightPlan"
+                android:textSize="25sp"
+                android:id="@+id/textView"
+                android:textColor="#464646"
+                android:layout_margin="5dp"
+                android:layout_marginRight="0dp"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <!--<com.google.android.gms.ads.AdView-->
+            <!--android:id="@+id/adCreateFlightplan"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--ads:adSize="FULL_BANNER"-->
+            <!--ads:adUnitId="ca-app-pub-5281313269938308/7393715474"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginTop="2dp" />-->
+
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:padding="10dp"
+        android:layout_gravity="bottom">
+
+        <LinearLayout android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/createFlightplanPopup"
+            android:background="@android:color/black">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:background="#eeeeee"
+                android:layout_margin="0dp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="5dp"
+                    android:background="#656565"></LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:layout_column="0"
+                        android:textColor="#464646"
+                        android:text="Name:"
+                        android:layout_gravity="center_vertical|right" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/nameFlightPlanEdit"
+                        android:layout_column="1"
+                        android:layout_gravity="center_vertical" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/abc_ab_bottom_solid_light_holo">
+
+                    <TextView
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:layout_column="0"
+                        android:textColor="#464646"
+                        android:text="Departure Airport:" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:id="@+id/departureAirportEdit"
+                        android:editable="false"
+                        android:autoText="false"
+                        android:enabled="false"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Search"
+                        android:layout_column="2"
+                        android:id="@+id/searchDepartureAirportBtn" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:layout_column="0"
+                        android:textColor="#464646"
+                        android:text="Destination Airport:" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:id="@+id/destinationAirportEdit"
+                        android:enabled="false"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Search"
+                        android:layout_column="2"
+                        android:id="@+id/searchDestinationAirportBtn" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/abc_ab_bottom_solid_light_holo">
+
+                    <TextView
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:layout_column="0"
+                        android:textColor="#464646"
+                        android:text="Alternate Airport:" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:id="@+id/alternateAirportEdit"
+                        android:enabled="false"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Search"
+                        android:layout_column="2"
+                        android:id="@+id/searchAlternateAirportBtn" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:layout_column="3"
+                        android:textColor="#464646"
+                        android:text="Altitude:" />
+
+                    <EditText
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/altitudeFlightPlanEdit"
+                        android:layout_column="4" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/abc_ab_bottom_solid_light_holo">
+
+                    <TextView
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:layout_column="3"
+                        android:textColor="#464646"
+                        android:text="Indicated Airspeed:" />
+
+                    <EditText
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/airspeedFlightPlanEdit"
+                        android:layout_column="4" />
+                </LinearLayout>
+
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                    </TableRow>
+
+
+                </TableLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="Save"
+                        android:id="@+id/savePlanBtn"
+                        android:layout_marginTop="20dp"
+                        android:layout_margin="10dp" />
+
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="Cancel"
+                        android:id="@+id/cancelPlanBtn"
+                        android:layout_marginTop="20dp"
+                        android:layout_margin="10dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</LinearLayout>

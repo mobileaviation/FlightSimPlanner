@@ -1,0 +1,474 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:whatever="http://schemas.android.com/apk/res-auto"
+    tools:context="nl.robenanita.googlemapstest.Settings.SettingsActivity">
+
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/createFlightplanPopup"
+        android:background="@android:color/black"
+        android:layout_margin="1dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:background="#eeeeee">
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/scrollView"
+                android:fillViewport="false">
+
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="10dp">
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Flight-Sim Planner Settings."
+                            android:textSize="25sp"
+                            android:id="@+id/textView"
+                            android:layout_column="0"
+                            android:textColor="#464646"
+                            android:layout_margin="5dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_span="4" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_gravity="top"
+                        android:background="#656565">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="5dp"
+                            android:text=""/>
+                    </TableRow>
+
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="22dp"
+                            android:layout_column="0"
+                            android:textColor="#464646"
+                            android:layout_margin="5dp"
+                            android:text="Home Airport:"
+                            android:layout_gravity="center_vertical|left"
+                            android:layout_marginRight="10dp" />
+
+                        <EditText
+                            android:layout_width="250dp"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:id="@+id/homeAirportEdit"
+                            android:editable="false"
+                            android:autoText="false" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Search"
+                            android:layout_column="2"
+                            android:id="@+id/searchHomeAirportBtn" />
+
+                        <!--<EditText-->
+                            <!--android:layout_width="300dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:inputType="number"-->
+                            <!--android:ems="10"-->
+                            <!--android:id="@+id/ipAddressEdit"-->
+                            <!--android:layout_column="4"-->
+                            <!--android:layout_marginLeft="20dp" />-->
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/abc_ab_bottom_solid_light_holo">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="22dp"
+                            android:id="@+id/textView3"
+                            android:layout_column="0"
+                            android:textColor="#464646"
+                            android:layout_margin="5dp"
+                            android:text="Runway:"
+                            android:layout_gravity="center_vertical|left"
+                            android:layout_marginRight="10dp" />
+
+                        <NumberPicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/runwayPicker"
+                            android:layout_column="1"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical"
+                            android:textAlignment="center"
+                            android:layout_span="2" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_span="5"
+                            android:layout_gravity="top">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp">
+
+                                <TextView
+                                    android:layout_width="200dp"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="22dp"
+                                    android:layout_column="3"
+                                    android:textColor="#464646"
+                                    android:text="Server PortNr:" />
+
+                                <EditText
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number"
+                                    android:ems="10"
+                                    android:id="@+id/portEdit"
+                                    android:layout_column="4"
+                                    android:layout_weight="1"
+                                    android:layout_marginLeft="20dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_column="0"
+                                android:layout_span="5"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp">
+
+                                <TextView
+                                    android:layout_width="200dp"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="22dp"
+                                    android:id="@+id/textView2"
+                                    android:layout_column="3"
+                                    android:textColor="#464646"
+                                    android:text="Server IPAddress:"
+                                    android:layout_marginLeft="0dp"
+                                    android:layout_marginTop="0dp" />
+
+                                <com.andreabaccega.widget.FormEditText
+                                    whatever:testType="ipAddress"
+                                    android:id="@+id/ipAddressEdit"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_column="4"
+                                    whatever:testErrorString="@string/setting_ipnotvalid"
+                                    android:inputType="phone"
+                                    android:digits="0123456789."
+                                    android:layout_marginLeft="20dp"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/abc_ab_bottom_solid_light_holo">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_span="3"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/linearLayout">
+
+                                <TextView
+                                    android:layout_width="200dp"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="22dp"
+                                    android:layout_column="3"
+                                    android:textColor="#464646"
+                                    android:text="MarkerType Visible:"
+                                    android:layout_gravity="center_vertical"
+                                    android:singleLine="true" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/linearLayout2">
+
+                                <CheckBox
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Large Airports"
+                                    android:id="@+id/largeAirportChkBox"
+                                    android:checked="true"
+                                    android:singleLine="false"
+                                    android:textColor="#464646" />
+
+                                <CheckBox
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Medium Airports"
+                                    android:id="@+id/mediumAirportChkBox"
+                                    android:checked="true"
+                                    android:singleLine="false"
+                                    android:textColor="#464646" />
+
+                                <CheckBox
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Small Airports"
+                                    android:id="@+id/smallAirportChkBox"
+                                    android:checked="true"
+                                    android:singleLine="false"
+                                    android:textColor="#464646" />
+
+                                <CheckBox
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Heliports"
+                                    android:id="@+id/heliportAirportChkBox"
+                                    android:checked="true"
+                                    android:singleLine="false"
+                                    android:textColor="#464646" />
+
+                                <CheckBox
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Seaplane Base"
+                                    android:id="@+id/seaBaseChkBox"
+                                    android:checked="true"
+                                    android:singleLine="false"
+                                    android:textColor="#464646" />
+
+                                <CheckBox
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Balloonports"
+                                    android:id="@+id/balloonBaseChkBox"
+                                    android:checked="true"
+                                    android:singleLine="false"
+                                    android:textColor="#464646" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </TableRow>
+
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_span="3"
+                            android:layout_marginTop="5dp">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginLeft="10dp"
+                                    android:focusable="true"
+                                    android:layout_span="2">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="22dp"
+                                        android:layout_column="3"
+                                        android:textColor="#464646"
+                                        android:text="Show Instruments:"
+                                        android:layout_gravity="center_vertical|top"
+                                        android:singleLine="true" />
+
+                                    <CheckBox
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/showInstrumentsChkBox"
+                                        android:checked="true"
+                                        android:layout_marginLeft="20dp"
+                                        android:singleLine="false" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/abc_ab_bottom_solid_light_holo">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_span="2"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginLeft="10dp">
+
+                                    <TextView
+                                        android:layout_width="200dp"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="22dp"
+                                        android:layout_column="3"
+                                        android:textColor="#464646"
+                                        android:text="Connection Type:"
+                                        android:layout_gravity="center_vertical"
+                                        android:singleLine="true"
+                                        android:layout_marginTop="0dp"
+                                        android:layout_marginLeft="0dp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="20dp"
+                                    android:layout_marginTop="10dp">
+
+                                    <LinearLayout
+                                        android:orientation="vertical"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <RadioGroup
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="0dp">
+
+                                            <RadioButton
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Simulator"
+                                                android:id="@+id/simRadioBtn"
+                                                android:layout_marginLeft="0dp"
+                                                android:checked="true"
+                                                android:clickable="true"
+                                                android:enabled="true"
+                                                android:textColor="#464646"
+                                                android:singleLine="false" />
+
+                                            <RadioButton
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Gps"
+                                                android:id="@+id/gpsRadioBtn"
+                                                android:layout_marginLeft="0dp"
+                                                android:checked="false"
+                                                android:enabled="true"
+                                                android:clickable="true"
+                                                android:textColor="#464646" />
+                                        </RadioGroup>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_span="5">
+
+
+                            <Button
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:text="Save"
+                                android:id="@+id/saveSettingsBtn"
+                                android:layout_marginTop="20dp"
+                                android:layout_margin="10dp"
+                                android:focusable="true" />
+
+                            <Button
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:text="Cancel"
+                                android:id="@+id/cancelSettingsBtn"
+                                android:layout_marginTop="20dp"
+                                android:layout_margin="10dp"
+                                android:focusable="true" />
+
+                        </LinearLayout>
+                    </TableRow>
+
+                </TableLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

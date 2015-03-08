@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.14.4'
+    }
+}
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+}
+
+android {
+    compileSdkVersion 19
+//    buildToolsVersion "18.1.1"
+    buildToolsVersion '19.1.0'
+
+    defaultConfig {
+        minSdkVersion 11
+        targetSdkVersion 19
+    }
+    sourceSets { main { aidl.srcDirs = ['src/main/aidl', 'src/main/aidl/'] } }
+}
+
+dependencies {
+    compile files('libs/ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar')
+    compile 'com.android.support:appcompat-v7:19.+'
+    compile 'com.google.android.gms:play-services:4.0.30'
+    compile 'com.andreabaccega:android-form-edittext:1.0.5@aar'
+    compile 'com.android.support:support-v4:19.+'
+}

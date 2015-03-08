@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Flight Sim Planner</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_connect">Connect to Server</string>
+    <string name="action_connectFsuipc">Open FSUIPC Connection</string>
+    <string name="action_start">Start Receiving Data</string>
+    <string name="action_searchairports">Search Airport</string>
+    <string name="action_flightplan">Create or Edit Flightplans</string>
+    <string name="action_flightplan_activate">Activate a flightplan</string>
+    <string name="action_maptype">Toggle through map types</string>
+    <string name="action_tracking_active">Activate - Deactivate tracking</string>
+    <string name="action_connect_disconnect">Connect - Disconnect from Sim</string>
+    <string name="countries_url">http://robenanita.yzi.me/countries.php</string>
+    <string name="airports_url">http://robenanita.yzi.me/airports.php</string>
+    <string name="search_hint_airports">"Search for airport on name or code". For example, "Schiphol" or "EHAM"</string>
+    <string name="search_hint_navaids">"Search for Navaid (VOR-DME-NDB) on name or code". For example, "Schiphol" or "SPL"</string>
+    <string name="search_hint_Fixes">"Search for Fix on code". For example, "GRONY"</string>
+    <string name="search_hint_all">Search for airport, navaid or fix.</string>
+    <string name="action_loadtrack">Load previous track</string>
+    <string name="setting_ipnotvalid">This is not a valid ipaddress!</string>
+    <string name="setting_portnotvalid">This is not a valid tcp-port!</string>
+    <string name="getridoffadds">Get rid of ads!!</string>
+    <string name="fsuipc">For FSX please install <a href="http://www.schiratti.com/dowson.html">FSUIPC</a></string>
+    <string name="xpuipc">For X-Plane please install <a href="http://www.tosi-online.de/XPUIPC/XPUIPC.html">XPUIPC</a></string>
+    <string name="installation">Follow the <a href="http://www.mobileaviationtools.com/index.php/products/flight-sim-planner/installation/">installation instructions</a> on our webpage to install our special piece of server software.</string>
+    <string name="jellylink">http://api.5jelly.com/redir/5930468</string>
+    <string name="openaiplink">http://www.openaip.net/</string>
+    <string name="openaviationdatalink">http://www.openaviationdata.com/</string>
+    <string name="ourairportlink">http://www.ourairports.com/</string>
+    <string name="weatherlink">https://www.aviationweather.gov/</string>
+    <string name="xplanelink">http://data.x-plane.com/</string>
+    <string name="fortacloudlink">http://fortacloud.co/</string>
+    <string name="openweatherlink">http://www.openweathermap.com/</string>
+    <string name="canadalink">https://weather.gc.ca/mainmenu/weather_menu_e.html</string>
+    <string name="skylineslink">https://www.skylines.aero/</string>
+    <string name="chartbundlelink">http://www.chartbundle.com/</string>
+
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
+
+    <string name="title_activity_flight_plan">Create FlightPlan</string>
+    <string name="title_activity_navigation">Navigation</string>
+    <string name="title_activity_search">Search Airports-Navaids-Fixes</string>
+    <string name="title_activity_airport_search">Airport Search</string>
+    <string name="title_activity_navaids_search">Navaids Search</string>
+    <string name="title_activity_fix_seach">Fix Seach</string>
+    <string name="title_activity_search_airports">Search Airports</string>
+    <string name="title_activity_search_navaids">Search Navaids</string>
+    <string name="search_airport_title">Search for Airports by name or ICAO code</string>
+    <string name="search_navaid_title">Search for VOR-DME_NDB by name or code</string>
+    <string name="search_fix_title">Search for Fixes by code</string>
+    <string name="title_activity_flight_plan_activate">Activate FlightPlan</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_weather">Weather</string>
+    <string name="title_activity_load_track">Load Track</string>
+    <string name="action_test">Test</string>
+    <string name="action_isnew">What is new?</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_directTo" />
+
+</resources>

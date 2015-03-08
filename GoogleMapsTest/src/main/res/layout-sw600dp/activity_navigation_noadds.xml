@@ -1,0 +1,427 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.MapFragment"
+            />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/instrumentsLayout"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#fffff0"
+                android:id="@+id/smallInstrumentsView"
+                android:layout_alignParentRight="true"
+                android:visibility="visible"
+                android:layout_below="@+id/infoPanelFragment">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true">
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="109dp"-->
+                    <!--android:layout_height="109dp"-->
+                    <!--android:id="@+id/airspeedView"/>-->
+                    <nl.robenanita.googlemapstest.Instruments.AirspeedView
+                        android:layout_width="124dp"
+                        android:layout_height="121dp"
+                        android:id="@+id/airspeedView"
+                        />
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="109dp"-->
+                    <!--android:layout_height="109dp"-->
+                    <!--android:id="@+id/horizonView" />-->
+                    <nl.robenanita.googlemapstest.Instruments.HorizonView
+                        android:layout_width="124dp"
+                        android:layout_height="121dp"
+                        android:id="@+id/horizonView"
+                        />
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="109dp"-->
+                    <!--android:layout_height="109dp"-->
+                    <!--android:id="@+id/altimeterView"/>-->
+                    <nl.robenanita.googlemapstest.Instruments.AltimeterView
+                        android:layout_width="124dp"
+                        android:layout_height="121dp"
+                        android:id="@+id/altimeterView"
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true">
+
+                    <nl.robenanita.googlemapstest.Instruments.TurnCoordinatorView
+                        android:layout_width="124dp"
+                        android:layout_height="121dp"
+                        android:id="@+id/turnCoordinatorView"
+                        />
+                    <!--<ImageView-->
+                    <!--android:layout_width="109dp"-->
+                    <!--android:layout_height="109dp"-->
+                    <!--android:id="@+id/turnCoordinatorView" />-->
+
+                    <nl.robenanita.googlemapstest.Instruments.CompassView
+                        android:layout_width="124dp"
+                        android:layout_height="121dp"
+                        android:id="@+id/compassView"
+                        />
+                    <!--<ImageView-->
+                    <!--android:layout_width="109dp"-->
+                    <!--android:layout_height="109dp"-->
+                    <!--android:id="@+id/compassView" />-->
+
+                    <nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView
+                        android:layout_width="124dp"
+                        android:layout_height="121dp"
+                        android:id="@+id/vsiView"
+                        />
+                    <!--<ImageView-->
+                    <!--android:layout_width="109dp"-->
+                    <!--android:layout_height="109dp"-->
+                    <!--android:id="@+id/vsiView" />-->
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+        <fragment
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/infoPanelFragment"
+            android:name="nl.robenanita.googlemapstest.InfoPanelFragment"
+            android:layout_toLeftOf="@+id/instrumentsLayout" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/flightplanLayout"
+            android:visibility="visible"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginBottom="2dp">
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/flightplanFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:name="nl.robenanita.googlemapstest.FlightplanGrid"
+                />
+            <!--<LinearLayout-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="#bcbcbc">-->
+
+                <!--<Button-->
+                    <!--android:layout_width="80dp"-->
+                    <!--android:layout_height="35dp"-->
+                    <!--android:text="Edit"-->
+                    <!--android:id="@+id/button"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:textSize="12dp"-->
+                    <!--android:visibility="invisible" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="120dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="Checkpoint"-->
+                    <!--android:id="@+id/textView2"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:gravity="center_horizontal|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="Station"-->
+                    <!--android:id="@+id/textView3"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="80dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="Frequency"-->
+                    <!--android:id="@+id/textView4"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="ETO"-->
+                    <!--android:id="@+id/textView5"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="ATO"-->
+                    <!--android:id="@+id/textView6"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="RETO"-->
+                    <!--android:id="@+id/textView7"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="Time LEG"-->
+                    <!--android:id="@+id/textView8"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="Time TOT"-->
+                    <!--android:id="@+id/textView9"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="CMP HDG"-->
+                    <!--android:id="@+id/textView10"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|center_horizontal|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="MAG HDG"-->
+                    <!--android:id="@+id/textView11"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="TRUE HDG"-->
+                    <!--android:id="@+id/textView12"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="TRUE TRACK"-->
+                    <!--android:id="@+id/textView13"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="Dist. LEG"-->
+                    <!--android:id="@+id/textView14"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="Dist. TOT"-->
+                    <!--android:id="@+id/textView15"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="G:S:"-->
+                    <!--android:id="@+id/textView16"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:text="Winds Dir/Spd"-->
+                    <!--android:id="@+id/textView17"-->
+                    <!--android:textColor="#383838"-->
+                    <!--android:phoneNumber="false"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:gravity="center|bottom" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="fill_parent"-->
+                    <!--android:gravity="right"-->
+                    <!--android:weightSum="1">-->
+
+                    <!--<ImageButton-->
+                        <!--android:layout_width="32dp"-->
+                        <!--android:layout_height="32dp"-->
+                        <!--android:id="@+id/closeFlightplanButton"-->
+                        <!--android:src="@drawable/closebutton"-->
+                        <!--android:clickable="true" />-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<ListView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:id="@+id/flightplanItemsList"-->
+                <!--android:footerDividersEnabled="true" />-->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="327dp"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignLeft="@+id/instrumentsLayout"
+            android:layout_below="@+id/instrumentsLayout"
+            android:layout_above="@+id/flightplanLayout"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="2dp"
+            android:background="#fffff0"
+            android:id="@+id/tracksLayout"
+            android:weightSum="1"
+            android:layout_marginLeft="00dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:gravity="right"
+                android:background="#bcbcbc">
+
+                <ImageButton
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/closeTracksBtn"
+                    android:src="@drawable/closebutton"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"
+                    android:cropToPadding="false" />
+            </LinearLayout>
+
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/tracksListView"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"
+                android:headerDividersEnabled="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="401dp"
+            android:layout_height="101dp"
+            android:id="@+id/legInfoLayout"
+            android:focusableInTouchMode="true"
+            android:layout_below="@+id/infoPanelFragment"
+            android:visibility="visible"
+            android:layout_toRightOf="@+id/scaleBarView"
+            android:layout_marginTop="3dp">
+
+            <nl.robenanita.googlemapstest.LegInfoView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                ads:courseDeviation="0"
+                android:id="@+id/legInfoPanel" />
+
+            </LinearLayout>
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:id="@+id/scaleBarView"
+            android:visibility="visible"
+            android:layout_gravity="left|bottom"
+            android:layout_alignParentBottom="false"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/infoPanelFragment" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:background="@android:color/black"
+        android:id="@+id/layersSetupLayout"
+        android:visibility="gone"
+        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#EEEEEE"
+            android:layout_margin="1dp">
+            <fragment
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:id="@+id/layersFragment"
+                android:name="nl.robenanita.googlemapstest.Settings.LayersSetup.MapLayersFragment" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

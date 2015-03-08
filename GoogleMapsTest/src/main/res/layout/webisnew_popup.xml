@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/isNewPopupLayout">
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/isNewwebView"
+        android:layout_gravity="bottom|top"
+        android:layout_weight="90" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_weight="10"
+        android:gravity="center_vertical"
+        android:background="#ffffffff">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Close"
+            android:id="@+id/closeIsNewBtn"
+            android:layout_marginLeft="10dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Do not show again!"
+            android:id="@+id/doNotShowAgaincheckBox"
+            android:layout_marginLeft="20dp" />
+    </LinearLayout>
+</LinearLayout>

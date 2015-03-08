@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    tools:context="nl.robenanita.googlemapstest.Settings.LayersSetup.LayersWeatherSetupFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="5dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="OpenWeatherMaps Weather"
+                    android:layout_marginLeft="20dp"
+                    android:typeface="normal"
+                    android:visibility="visible"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow>
+                <LinearLayout android:orientation="vertical">
+
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clouds"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/openWeatherCloudsChkBox" />
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Precipitation"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/openWeatherPrecipChkBox" />
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pressure Contours"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/openWeatherPressChkBox" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_column="2">
+
+
+                </LinearLayout>
+
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Goverment of Canada Weather"
+            android:layout_marginLeft="20dp"
+            android:typeface="normal"
+            android:visibility="visible"
+            android:textStyle="bold"
+            android:layout_column="2"
+            android:layout_marginTop="20dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Global Wind Arrows"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/canadaWeatherWindChkBox" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="North American Radar"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/canadaWeatherUsRadarChkBox" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

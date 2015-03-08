@@ -1,0 +1,161 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/scaleBarView"
+        android:layout_centerHorizontal="true"
+        android:gravity="center|left"
+        android:weightSum="1"
+        android:visibility="visible"
+        android:id="@+id/adsSearchLayout">
+
+        <!--<com.google.android.gms.ads.AdView-->
+            <!--android:id="@+id/adSearch"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--ads:adSize="FULL_BANNER"-->
+            <!--ads:adUnitId="ca-app-pub-5281313269938308/8870448674"-->
+            <!--android:layout_gravity="center" />-->
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <TabHost
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tabhost"
+            android:layout_gravity="top">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent">
+                </TabWidget>
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_height="fill_parent"
+                    android:layout_width="fill_parent">
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/airportSearchLayout"
+                        android:layout_margin="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="@string/search_airport_title"
+                            android:layout_gravity="center_horizontal" />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/searchActivityAirportText"
+                            android:layout_marginTop="10dp"
+                            android:hint="@string/search_hint_airports" />
+
+                        <ListView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:id="@+id/searchAirportsListView"
+                            android:layout_marginTop="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:choiceMode="singleChoice" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/navaidsSearchLayout"
+                        android:layout_margin="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="@string/search_navaid_title"
+                            android:layout_gravity="center_horizontal" />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/searchActivityNavaidsTxt"
+                            android:layout_marginTop="10dp"
+                            android:hint="@string/search_hint_navaids" />
+
+                        <ListView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:id="@+id/searchNavaidsListView"
+                            android:layout_marginTop="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:choiceMode="singleChoice" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/fixesSearchLayout"
+                        android:layout_margin="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="@string/search_fix_title"
+                            android:layout_gravity="center_horizontal" />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/searchActivityFixesTxt"
+                            android:layout_marginTop="10dp"
+                            android:hint="@string/search_hint_Fixes" />
+
+                        <ListView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:id="@+id/searchFixesListView"
+                            android:layout_marginTop="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:choiceMode="singleChoice" />
+
+                    </LinearLayout>
+                </FrameLayout>
+
+            </LinearLayout>
+        </TabHost>
+
+    </LinearLayout>
+
+</LinearLayout>

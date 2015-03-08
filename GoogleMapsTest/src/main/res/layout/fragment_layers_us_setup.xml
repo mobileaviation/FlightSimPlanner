@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    tools:context="nl.robenanita.googlemapstest.Settings.LayersSetup.LayersUsSetupFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="US FAA Maps"
+            android:layout_marginLeft="20dp"
+            android:typeface="normal"
+            android:visibility="visible"
+            android:textStyle="bold" />
+        <RadioGroup
+            android:layout_width="222dp"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/layersUsSectionalBtn"
+            android:id="@+id/usLayersGroup">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enabled"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/layersUSEnabledBtn"
+                android:longClickable="true"
+                android:checked="true" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sectional"
+                android:tag="sec_4326"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:checked="false"
+                android:id="@+id/layersUsSectionalBtn" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="World Aeronautical"
+                android:tag="wac_4326"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/layersUsWorldBtn" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Terminal Area"
+                android:tag="tac_4326"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/layersUsTerminalBtn" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IFR Enroute Low"
+                android:tag="enrl_4326"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/layersUsEnrouteLowBtn" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IFR Enroute High"
+                android:tag="enrh_4326"
+                android:layout_marginLeft="20dp"
+                android:checked="false"
+                android:id="@+id/layersUsEnrouteHighBtn" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IFR Area"
+                android:tag="enra_4326"
+                android:layout_marginLeft="20dp"
+                android:checked="false"
+                android:id="@+id/layersUsAreaBtn" />
+        </RadioGroup>
+    </LinearLayout>
+
+</LinearLayout>
