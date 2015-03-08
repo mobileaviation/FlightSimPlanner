@@ -569,11 +569,11 @@ public class WeatherWebService {
                                         if (name.equals("raw")) notam.SetRawText(parser.getText());
                                         if (name.equals("message")) notam.SetMessage(parser.getText());
                                         if (name.equals("icao")) notam.setStation_id(parser.getText());
-                                        name = "";
 
                                     } catch (Exception ee) {
                                         Log.e(TAG, "Parse Notam Value XML Error: " + ee.getMessage());
                                     }
+                                    name = "";
                                 }
                             }
                             break;

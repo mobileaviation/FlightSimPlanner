@@ -59,6 +59,7 @@ public class Notam {
     private Date startDate;
     public void SetStartDate(Integer start)
     {
+        Integer s = start;
         startDate = new Date((long)start*1000);
     }
 
@@ -71,7 +72,7 @@ public class Notam {
     private String qualifier;
     public void SetQualifier(String qualifier)
     {
-
+        this.qualifier = qualifier;
     }
 
     public void SetRawText(String raw)
@@ -90,9 +91,9 @@ public class Notam {
         {
             if (ii.length>j-2) {
                 if (ii[j].equals("B)"))
-                    SetStartDate(Integer.parseInt(ii[j + 1]));
+                    SetStartDate(Integer.parseInt(ii[j + 1].replaceAll("[\\D]", "")));
                 if (ii[j].equals("C)"))
-                    SetEndDate(Integer.parseInt(ii[j + 1]));
+                    SetEndDate(Integer.parseInt(ii[j + 1].replaceAll("[\\D]", "")));
             }
         }
     }
