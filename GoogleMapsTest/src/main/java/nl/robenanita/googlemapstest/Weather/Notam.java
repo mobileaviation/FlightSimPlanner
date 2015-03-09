@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest.Weather;
 
 import android.content.Context;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import nl.robenanita.googlemapstest.Airport;
@@ -59,14 +60,20 @@ public class Notam {
     private Date startDate;
     public void SetStartDate(Integer start)
     {
-        Integer s = start;
-        startDate = new Date((long)start*1000);
+        // 03 FEB 10:25 2015 = 1502031025
+
+        long s = (long)start * 1000;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(s);
+        startDate = calendar.getTime();
     }
 
     private Date endDate;
     public void SetEndDate(Integer end)
     {
-        endDate = new Date((long)end*1000);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(end);
+        endDate = calendar.getTime();
     }
 
     private String qualifier;

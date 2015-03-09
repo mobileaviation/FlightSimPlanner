@@ -65,10 +65,11 @@ public class WeatherWebService {
 
     public void GetNotamsByICAOs(List<String> Icaos)
     {
-        // http://info.vatme.net/notams/EHLE,EHAM,EHTE.xml
+        // http://api.vateud.net/notams/EHLE,EHAM,EHTE.xml
+        // http://info.vatme.net/notams/#ICAO#.xml
         notams = new ArrayList<Notam>();
 
-        String command = "http://info.vatme.net/notams/#ICAO#.xml";
+        String command = "http://api.vateud.net/notams/#ICAO#.xml";
 
         String codes = "";
         for (String code : Icaos)
