@@ -12,6 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Weather.Metar;
+import nl.robenanita.googlemapstest.Weather.MetarRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Notam;
 import nl.robenanita.googlemapstest.Weather.NotamRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Taf;
@@ -58,6 +59,14 @@ public class AirportsInfoFragment extends Fragment {
             }
         });
 
+        metarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setInfoListViewVisibility();
+                if (infoListViewVisibility==View.VISIBLE) setMetars();
+            }
+        });
+
         return view;
     }
 
@@ -71,11 +80,14 @@ public class AirportsInfoFragment extends Fragment {
         s.GetNotamsByICAOs(icaos);
     }
 
-    public void loadNotamsInList(ArrayList<Notam> notams)
+    private void setMetars()
     {
-        final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
-        NotamRawAdapter adapter = new NotamRawAdapter(notams);
-        listView.setAdapter(adapter);
+        WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
+        ArrayList<String> icaos = new ArrayList<String>();
+        icaos.add("EHLE");
+        icaos.add("EHAM");
+        icaos.add("EHTE");
+        s.GetMetarsByICAO(icaos);
     }
 
     private void setInfoListViewVisibility()
@@ -85,19 +97,23 @@ public class AirportsInfoFragment extends Fragment {
         Log.i(TAG, "Info List Visiblity: " + infoListViewVisibility.toString());
     }
 
-    private void setupMetarsView(ArrayList<Metar> metars)
+    public void setupMetarsView(ArrayList<Metar> metars)
+    {
+        final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
+        MetarRawAdapter adapter = new MetarRawAdapter(metars);
+        listView.setAdapter(adapter);
+    }
+
+    public void setupTafsView(ArrayList<Taf> tafs)
     {
 
     }
 
-    private void setupTafsView(ArrayList<Taf> tafs)
+    public void setupNotamsView(ArrayList<Notam> notams)
     {
-
-    }
-
-    private void setupNotamsView(ArrayList<Notam> notams)
-    {
-
+        final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
+        NotamRawAdapter adapter = new NotamRawAdapter(notams);
+        listView.setAdapter(adapter);
     }
 
 }

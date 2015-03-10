@@ -239,12 +239,14 @@ public class WeatherWebService {
         protected void onPostExecute(Void aVoid) {
             if (type == WeatherType.metar) {
                 Log.i(TAG, "Finished Reading metar XML");
-                weatherActivity.SetupMetarListView(metars);
+                if (weatherActivity!=null) weatherActivity.SetupMetarListView(metars);
+                if (airportsInfoFragment!=null) airportsInfoFragment.setupMetarsView(metars);
             }
             if (type == WeatherType.taf)
             {
                 Log.i(TAG, "Finished Reading taf XML");
-                weatherActivity.SetupTafListView(tafs);
+                if (weatherActivity!=null) weatherActivity.SetupTafListView(tafs);
+                if (airportsInfoFragment!=null) airportsInfoFragment.setupTafsView(tafs);
             }
             if (type == WeatherType.openaviation_notam) {
                 Log.i(TAG, "Finished Reading openaviation notam json");
@@ -252,7 +254,7 @@ public class WeatherWebService {
             }
             if (type == WeatherType.vatme_notam) {
                 Log.i(TAG, "Finished Reading vatme notams xml");
-                airportsInfoFragment.loadNotamsInList(notams);
+                if (airportsInfoFragment!=null) airportsInfoFragment.setupNotamsView(notams);
             }
 
             super.onPostExecute(aVoid);
@@ -261,9 +263,9 @@ public class WeatherWebService {
         @Override
         protected void onProgressUpdate(Integer... values) {
             if (type == WeatherType.metar)
-                weatherActivity.SetMetarProgress(values[0], "");
+                if (weatherActivity != null) weatherActivity.SetMetarProgress(values[0], "");
             if (type == WeatherType.taf)
-                weatherActivity.SetTafProgress(values[0], "");
+                if (weatherActivity != null) weatherActivity.SetTafProgress(values[0], "");
             super.onProgressUpdate(values);
         }
 
@@ -414,9 +416,9 @@ public class WeatherWebService {
                                 if (name != null) {
                                     try {
                                         if (name.equals("raw_text")) metar.raw_text = parser.getText();
+                                        if (name.equals("station_id"))metar.setStation_id(parser.getText());
                                         if (!onlyRawData) {
-                                            if (name.equals("station_id"))
-                                                metar.setStation_id(parser.getText());
+
                                             //metar.station_id = parser.getText();
                                             if (name.equals("observation_time"))
                                                 metar.observation_time = parser.getText();
@@ -490,18 +492,19 @@ public class WeatherWebService {
                         case XmlPullParser.START_TAG: {
                             name = null;
                             name = parser.getName();
-                            if (name.equals("METAR")) metar = new Metar(weatherActivity);
-                            if(metar != null)
-                                if (name.equals("sky_condition")) {
-                                    metar.AddSkyCondition(parser.getAttributeValue(null, "cloud_base_ft_agl"),
-                                            parser.getAttributeValue(null, "sky_cover"));
-                                }
+                            if (name.equals("METAR")) metar = new Metar();
+                            if (!onlyRawData)
+                                if(metar != null)
+                                    if (name.equals("sky_condition")) {
+                                        metar.AddSkyCondition(parser.getAttributeValue(null, "cloud_base_ft_agl"),
+                                                parser.getAttributeValue(null, "sky_cover"));
+                                    }
                             break;
                         }
                         case XmlPullParser.END_TAG:
                         {
                             if (parser.getName().equals("METAR")) {
-                                metar.caculateDistance(orgLocation);
+                                if (!onlyRawData) metar.caculateDistance(orgLocation);
                                 metars.add(metar);
                                 publishProgress(metars.size());
                                 metar = null;
@@ -539,8 +542,8 @@ public class WeatherWebService {
                     notam.raw_text = o.getString("text");
                     notam.setStation_id(Icao);
                     notam.SetNotamType(o.getString("type"));
-                    notam.SetEndDate(o.getInt("end"));
-                    notam.SetStartDate(o.getInt("start"));
+                    notam.SetEndDate(o.getString("end"));
+                    notam.SetStartDate(o.getString("start"));
                     notam.SetQualifier(o.getString("qualifier"));
                     notam.source = o.getString("source");
                     notams.add(notam);

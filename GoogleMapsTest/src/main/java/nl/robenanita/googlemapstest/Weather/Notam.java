@@ -57,23 +57,30 @@ public class Notam {
 
     public String source;
 
+    private Date notamTimeToDate(String notamTime)
+    {
+        Integer yy = Integer.parseInt(notamTime.substring(0,2)) + 2000;
+        Integer m = Integer.parseInt(notamTime.substring(2,4));
+        Integer d = Integer.parseInt(notamTime.substring(4,6));
+        Integer h = Integer.parseInt(notamTime.substring(6,8));
+        Integer mm = Integer.parseInt(notamTime.substring(8,10));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(yy,m,d,h,m);
+        return calendar.getTime();
+    }
+
     private Date startDate;
-    public void SetStartDate(Integer start)
+    public void SetStartDate(String start)
     {
         // 03 FEB 10:25 2015 = 1502031025
-
-        long s = (long)start * 1000;
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(s);
-        startDate = calendar.getTime();
+        startDate = notamTimeToDate(start);
     }
 
     private Date endDate;
-    public void SetEndDate(Integer end)
+    public void SetEndDate(String end)
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(end);
-        endDate = calendar.getTime();
+        endDate = notamTimeToDate(end);
     }
 
     private String qualifier;
@@ -98,9 +105,9 @@ public class Notam {
         {
             if (ii.length>j-2) {
                 if (ii[j].equals("B)"))
-                    SetStartDate(Integer.parseInt(ii[j + 1].replaceAll("[\\D]", "")));
+                    SetStartDate(ii[j + 1].replaceAll("[\\D]", ""));
                 if (ii[j].equals("C)"))
-                    SetEndDate(Integer.parseInt(ii[j + 1].replaceAll("[\\D]", "")));
+                    SetEndDate(ii[j + 1].replaceAll("[\\D]", ""));
             }
         }
     }
