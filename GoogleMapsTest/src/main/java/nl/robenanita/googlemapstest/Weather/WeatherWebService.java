@@ -35,6 +35,7 @@ public class WeatherWebService {
     public ArrayList<Metar> metars;
     public ArrayList<Taf> tafs;
     public ArrayList<Notam> notams;
+    public ArrayList<String> stations;
 
     private WeatherActivity weatherActivity;
     private AirportsInfoFragment airportsInfoFragment;
@@ -44,7 +45,8 @@ public class WeatherWebService {
         metar,
         taf,
         openaviation_notam,
-        vatme_notam
+        vatme_notam,
+        stations
     }
 
     ;
@@ -54,6 +56,7 @@ public class WeatherWebService {
         metars = new ArrayList<Metar>();
         tafs = new ArrayList<Taf>();
         notams = new ArrayList<Notam>();
+        stations = new ArrayList<String>();
     }
 
     public WeatherWebService(AirportsInfoFragment airportsInfoFragment) {
@@ -61,6 +64,7 @@ public class WeatherWebService {
         metars = new ArrayList<Metar>();
         tafs = new ArrayList<Taf>();
         notams = new ArrayList<Notam>();
+        stations = new ArrayList<String>();
     }
 
     public void GetNotamsByICAOs(List<String> Icaos)
@@ -153,6 +157,25 @@ public class WeatherWebService {
         readWeatherXMLAsync.execute();
     }
 
+    public void GetStationsByLocationRadius(LatLng location, Integer radius)
+    {
+        //http://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=stations&requestType=retrieve&format=xml&radialDistance=100;5.5,52.46
+        String command = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=stations&requestType=retrieve&format=xml&radialDistance=#RAD#;#LON#,#LAT#";
+        command = command.replace("#LON#", Double.toString(location.longitude));
+        command = command.replace("#LAT#", Double.toString(location.latitude));
+        command = command.replace("#RAD#", Integer.toString(radius));
+
+        ReadWeatherXMLAsync readWeatherXMLAsync = new ReadWeatherXMLAsync();
+        readWeatherXMLAsync.command = command;
+        readWeatherXMLAsync.type = WeatherType.stations;
+        readWeatherXMLAsync.onlyRawData = false;
+        orgLocation = location;
+
+        Log.i(TAG, "Metar command: " + command);
+
+        readWeatherXMLAsync.execute();
+    }
+
     public void GetMetar100MilesRadiusFromLocation(LatLng location)
     {
         metars = new ArrayList<Metar>();
@@ -231,6 +254,10 @@ public class WeatherWebService {
             {
                 processVatmeNotamsXml(Xml);
             }
+            if (type == WeatherType.stations)
+            {
+                processStationsXml(Xml);
+            }
 
             return null;
         }
@@ -256,6 +283,11 @@ public class WeatherWebService {
                 Log.i(TAG, "Finished Reading vatme notams xml");
                 if (airportsInfoFragment!=null) airportsInfoFragment.setupNotamsView(notams);
             }
+            if (type == WeatherType.stations) {
+                Log.i(TAG, "Finished Reading stations xml");
+                if (airportsInfoFragment!=null) airportsInfoFragment.setupStationsView(stations);
+            }
+
 
             super.onPostExecute(aVoid);
         }
@@ -267,6 +299,60 @@ public class WeatherWebService {
             if (type == WeatherType.taf)
                 if (weatherActivity != null) weatherActivity.SetTafProgress(values[0], "");
             super.onProgressUpdate(values);
+        }
+
+        private void processStationsXml(String Xml)
+        {
+            Log.i(TAG, "Stations XML: " + Xml);
+            String station = "";
+
+            XmlPullParser parser = android.util.Xml.newPullParser();
+            try {
+                parser.setInput(new StringReader(Xml));
+                int eventType = parser.getEventType();
+                String name = null;
+
+                while(eventType != XmlPullParser.END_DOCUMENT) {
+                    switch (eventType) {
+                        case XmlPullParser.TEXT:
+                        {
+
+                            if (name != null) {
+                                try {
+                                    if (name.equals("station_id")) station = parser.getText();
+                                    name = "";
+                                }
+                                catch (Exception ee)
+                                {
+                                    Log.i(TAG, "Parse Metar Value XML Error: " + ee.getMessage());
+                                }
+                            }
+
+                            break;
+                        }
+                        case XmlPullParser.START_TAG: {
+                            name = parser.getName();
+                            break;
+                        }
+                        case XmlPullParser.END_TAG:
+                        {
+                            if (parser.getName().equals("Station")) {
+                                stations.add(station);
+                                publishProgress(stations.size());
+                            }
+                            break;
+                        }
+
+                    }
+
+                    eventType = parser.next();
+                }
+                Log.i(TAG, "End XML Parsing : " + stations.size());
+            }
+            catch (Exception ee)
+            {
+                Log.e(TAG, "Station XML Parse error: " + ee.getMessage());
+            }
         }
 
         private void processTafXml(String Xml)

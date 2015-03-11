@@ -15,6 +15,7 @@ import nl.robenanita.googlemapstest.Weather.Metar;
 import nl.robenanita.googlemapstest.Weather.MetarRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Notam;
 import nl.robenanita.googlemapstest.Weather.NotamRawAdapter;
+import nl.robenanita.googlemapstest.Weather.StationsAdapter;
 import nl.robenanita.googlemapstest.Weather.Taf;
 import nl.robenanita.googlemapstest.Weather.TafRawAdapter;
 import nl.robenanita.googlemapstest.Weather.WeatherWebService;
@@ -30,6 +31,7 @@ public class AirportsInfoFragment extends Fragment {
     private String TAG = "GooglemapsTest";
 
     private ListView infoListView;
+    private ListView icaoCodesListView;
     private Button notamsBtn;
     private Button metarBtn;
     private Button tafBtn;
@@ -44,6 +46,7 @@ public class AirportsInfoFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_airports_info, container, false);
 
         infoListView = (ListView)view.findViewById(R.id.airportsInfoListView);
+        icaoCodesListView = (ListView)view.findViewById(R.id.airportsInfoIcaoListView);
 
         infoListViewVisibility = infoListView.getVisibility();
 
@@ -64,7 +67,7 @@ public class AirportsInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setInfoListViewVisibility();
-                if (infoListViewVisibility==View.VISIBLE) setMetars();
+                if (infoListViewVisibility==View.VISIBLE) setStations();// setMetars();
             }
         });
 
@@ -72,7 +75,7 @@ public class AirportsInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setInfoListViewVisibility();
-                if (infoListViewVisibility==View.VISIBLE) setTafs();
+                if (infoListViewVisibility==View.VISIBLE) setStations(); //setTafs();
             }
         });
 
@@ -109,10 +112,19 @@ public class AirportsInfoFragment extends Fragment {
         s.GetTafsByICAO(icaos);
     }
 
+    private void setStations()
+    {
+        WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
+        NavigationActivity activity = (NavigationActivity)getActivity();
+
+        s.GetStationsByLocationRadius(activity.curPosition, 100);
+    }
+
     private void setInfoListViewVisibility()
     {
         infoListViewVisibility = (infoListViewVisibility==view.GONE) ? view.VISIBLE : view.GONE;
         infoListView.setVisibility(infoListViewVisibility);
+        icaoCodesListView.setVisibility(infoListViewVisibility);
         Log.i(TAG, "Info List Visiblity: " + infoListViewVisibility.toString());
     }
 
@@ -135,6 +147,13 @@ public class AirportsInfoFragment extends Fragment {
         final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
         NotamRawAdapter adapter = new NotamRawAdapter(notams);
         listView.setAdapter(adapter);
+    }
+
+    public void setupStationsView(ArrayList<String> stations)
+    {
+        Log.i(TAG,"Stations setup");
+        StationsAdapter adapter = new StationsAdapter(stations);
+        icaoCodesListView.setAdapter(adapter);
     }
 
 }
