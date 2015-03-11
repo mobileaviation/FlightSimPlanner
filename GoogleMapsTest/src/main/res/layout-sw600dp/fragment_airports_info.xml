@@ -44,5 +44,6 @@
         android:layout_toRightOf="@+id/airportsInfoLayout"
         android:layout_toEndOf="@+id/airportsInfoLayout"
         android:focusableInTouchMode="true"
+        android:visibility="gone"
         android:background="#ffffffff" />
 </RelativeLayout>

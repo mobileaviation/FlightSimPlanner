@@ -289,9 +289,10 @@ public class WeatherWebService {
                                         // TAF data Fields --------------------
                                         if (name.equals("raw_text"))
                                             taf.raw_text = parser.getText();
+                                        if (name.equals("station_id"))
+                                            taf.setStation_id(parser.getText());
                                         if (!onlyRawData) {
-                                            if (name.equals("station_id"))
-                                                taf.setStation_id(parser.getText());
+
                                             if (name.equals("issue_time"))
                                                 taf.issue_time = parser.getText();
                                             if (name.equals("bulletin_time"))
@@ -345,9 +346,9 @@ public class WeatherWebService {
 
                                             }
                                             // forecast data Fields ---------------
-                                            name = "";
                                         }
 
+                                        name = "";
                                     } catch (Exception ee) {
                                         Log.i(TAG, "Parse Taf Value XML Error: " + ee.getMessage());
                                     }
@@ -359,21 +360,23 @@ public class WeatherWebService {
                             name = null;
                             name = parser.getName();
 
-                            if (name.equals("TAF")) taf = new Taf(weatherActivity);
+                            if (name.equals("TAF")) taf = new Taf();
                             if(taf != null)
                                 if (name.equals("forecast")) forecast = taf.getNewForecastClass();
 
-                            if (name.equals("sky_condition")) {
-                                forecast.AddSkyCondition(parser.getAttributeValue(null, "cloud_base_ft_agl"),
-                                        parser.getAttributeValue(null, "sky_cover"));
-                            }
+                            if (!onlyRawData)
+                                if(taf != null)
+                                    if (name.equals("sky_condition")) {
+                                        forecast.AddSkyCondition(parser.getAttributeValue(null, "cloud_base_ft_agl"),
+                                                parser.getAttributeValue(null, "sky_cover"));
+                                    }
 
                             break;
                         }
                         case XmlPullParser.END_TAG:
                         {
                             if (parser.getName().equals("TAF")) {
-                                taf.caculateDistance(orgLocation);
+                                if (!onlyRawData) taf.caculateDistance(orgLocation);
                                 tafs.add(taf);
                                 publishProgress(tafs.size());
                                 taf = null;

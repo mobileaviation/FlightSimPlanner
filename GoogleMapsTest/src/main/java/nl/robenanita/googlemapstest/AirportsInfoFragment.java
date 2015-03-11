@@ -16,6 +16,7 @@ import nl.robenanita.googlemapstest.Weather.MetarRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Notam;
 import nl.robenanita.googlemapstest.Weather.NotamRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Taf;
+import nl.robenanita.googlemapstest.Weather.TafRawAdapter;
 import nl.robenanita.googlemapstest.Weather.WeatherWebService;
 
 
@@ -67,6 +68,14 @@ public class AirportsInfoFragment extends Fragment {
             }
         });
 
+        tafBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setInfoListViewVisibility();
+                if (infoListViewVisibility==View.VISIBLE) setTafs();
+            }
+        });
+
         return view;
     }
 
@@ -90,6 +99,16 @@ public class AirportsInfoFragment extends Fragment {
         s.GetMetarsByICAO(icaos);
     }
 
+    private void setTafs()
+    {
+        WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
+        ArrayList<String> icaos = new ArrayList<String>();
+        icaos.add("EHLE");
+        icaos.add("EHAM");
+        icaos.add("EHTE");
+        s.GetTafsByICAO(icaos);
+    }
+
     private void setInfoListViewVisibility()
     {
         infoListViewVisibility = (infoListViewVisibility==view.GONE) ? view.VISIBLE : view.GONE;
@@ -106,7 +125,9 @@ public class AirportsInfoFragment extends Fragment {
 
     public void setupTafsView(ArrayList<Taf> tafs)
     {
-
+        final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
+        TafRawAdapter adapter = new TafRawAdapter(tafs);
+        listView.setAdapter(adapter);
     }
 
     public void setupNotamsView(ArrayList<Notam> notams)

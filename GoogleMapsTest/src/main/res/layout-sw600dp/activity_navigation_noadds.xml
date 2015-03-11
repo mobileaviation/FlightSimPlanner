@@ -391,6 +391,23 @@
 
             </LinearLayout>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_toStartOf="@+id/legInfoLayout"
+            android:visibility="visible"
+            android:id="@+id/airportInfoLayout"
+            android:layout_below="@+id/scaleBarView"
+            android:layout_alignLeft="@+id/map">
+            <fragment
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:name="nl.robenanita.googlemapstest.AirportsInfoFragment"
+                />
+        </LinearLayout>
+
         <ImageView
             android:layout_width="300dp"
             android:layout_height="50dp"
