@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -59,7 +60,7 @@ public class AirportsInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setInfoListViewVisibility();
-                if (infoListViewVisibility==View.VISIBLE) setNotams();
+                if (infoListViewVisibility==View.VISIBLE) setStations();// setNotams();
             }
         });
 
@@ -79,36 +80,44 @@ public class AirportsInfoFragment extends Fragment {
             }
         });
 
+        icaoCodesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                StationsAdapter adapter = (StationsAdapter)adapterView.getAdapter();
+                Log.i(TAG, "Code" + (String)adapter.getItem(i));
+            }
+        });
+
         return view;
     }
 
-    private void setNotams()
+    private void setNotams(String code)
     {
         WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
         ArrayList<String> icaos = new ArrayList<String>();
-        icaos.add("EHLE");
-        icaos.add("EHAM");
-        icaos.add("EHTE");
+        icaos.add(code);
+        //icaos.add("EHAM");
+        //icaos.add("EHTE");
         s.GetNotamsByICAOs(icaos);
     }
 
-    private void setMetars()
+    private void setMetars(String code)
     {
         WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
         ArrayList<String> icaos = new ArrayList<String>();
-        icaos.add("EHLE");
-        icaos.add("EHAM");
-        icaos.add("EHTE");
+        icaos.add(code);
+        //icaos.add("EHAM");
+        //icaos.add("EHTE");
         s.GetMetarsByICAO(icaos);
     }
 
-    private void setTafs()
+    private void setTafs(String code)
     {
         WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
         ArrayList<String> icaos = new ArrayList<String>();
-        icaos.add("EHLE");
-        icaos.add("EHAM");
-        icaos.add("EHTE");
+        icaos.add(code);
+        //icaos.add("EHAM");
+        //icaos.add("EHTE");
         s.GetTafsByICAO(icaos);
     }
 
@@ -117,7 +126,7 @@ public class AirportsInfoFragment extends Fragment {
         WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
         NavigationActivity activity = (NavigationActivity)getActivity();
 
-        s.GetStationsByLocationRadius(activity.curPosition, 100);
+        s.GetStationsByLocationRadius(activity.curPosition, 80);
     }
 
     private void setInfoListViewVisibility()
