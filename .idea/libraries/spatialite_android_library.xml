@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="spatialite-android-library">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GoogleMapsTest/libs/spatialite-android-library.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

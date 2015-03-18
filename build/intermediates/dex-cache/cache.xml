@@ -16,6 +16,20 @@
         <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\support-v4-19.1.0-e311e493b238b75da4095bd5ee7b69d76d73dc42.jar" />
     </item>
     <item
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\jts-1.12.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="4b1a8eec9ea08c69c622cd8aef73ff22edc26223">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\jts-1.12-f21626b386464c3c0944c79c872da97b700e241c.jar" />
+    </item>
+    <item
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\spatialite-android-library.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="a0add2c9d8e04f5d8be0a830d70d5b0670324934">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\spatialite-android-library-a0289bbeaab4ef7b13aff15bd02c52ab1f022ead.jar" />
+    </item>
+    <item
         jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
         jumboMode="false"
         revision="19.1.0"

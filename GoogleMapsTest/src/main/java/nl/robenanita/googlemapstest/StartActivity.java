@@ -21,7 +21,6 @@ import com.google.android.gms.ads.AdView;
 
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
-import nl.robenanita.googlemapstest.database.CheckDatabaseSource;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
 import nl.robenanita.googlemapstest.database.NavaidsDataSource;
@@ -31,6 +30,7 @@ import nl.robenanita.googlemapstest.inappbilling.util.IabHelper;
 import nl.robenanita.googlemapstest.inappbilling.util.IabResult;
 import nl.robenanita.googlemapstest.inappbilling.util.Inventory;
 import nl.robenanita.googlemapstest.inappbilling.util.Purchase;
+import nl.robenanita.googlemapstest.spatialdb.SpatialHelper;
 
 public class StartActivity extends ActionBarActivity {
     private String TAG = "GooglemapsTest";
@@ -57,6 +57,7 @@ public class StartActivity extends ActionBarActivity {
         setContentView(R.layout.activity_start);
 
         checkDatabaseVersion();
+
 
         boolean adds = loadAds();
 
@@ -90,7 +91,7 @@ public class StartActivity extends ActionBarActivity {
 
         SetupLinkbutton();
 
-        GetCounts();
+        //GetCounts();
 
         //testSimBtn = (Button) findViewById(R.id.testSimServerBtn);
         //testSimBtn.setOnClickListener(new View.OnClickListener() {
@@ -416,9 +417,16 @@ public class StartActivity extends ActionBarActivity {
     }
 
     private void checkDatabaseVersion() {
-        CheckDatabaseSource checkDatabaseSource = new CheckDatabaseSource(this);
-        checkDatabaseSource.open();
-        checkDatabaseSource.checkVersion();
+        //CheckDatabaseSource checkDatabaseSource = new CheckDatabaseSource(this);
+        //checkDatabaseSource.open();
+        //checkDatabaseSource.checkVersion();
+
+        SpatialHelper spatialHelper = new SpatialHelper(this);
+        spatialHelper.openDatabase();
+
+        spatialHelper.testDatabase();
+
+        spatialHelper.closeDatabase();
 
 //        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
 //        propertiesDataSource.open();
