@@ -7,11 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import jsqlite.Constants;
 import jsqlite.Database;
 import jsqlite.Stmt;
-import jsqlite.TableResult;
 
 /**
  * Created by Rob Verhoef on 18-3-2015.
@@ -161,17 +162,53 @@ public class SpatialHelper {
             if (stmt01.step()) {
                 Log.i(TAG, "GEOS_VERSION: " + stmt01.column_string(0));
             }
-            stmt01.close();
 
-            //database.exec("SELECT * FROM tbl_Continent;", new Callback() {
-            TableResult t = database.get_table("SELECT * FROM tbl_Continent;");
+
+//            //database.exec("SELECT * FROM tbl_Continent;", new Callback() {
+            String q = "SELECT * FROM tbl_Airports WHERE MbrWithin(position,LineFromText('LINESTRING(3.417 53.563, 3.417 50.969, 7.740 50.969, 7.740 53.563,3.417 53.563)', 4326)) = 1;";
+            stmt01 = database.prepare(q);
+            while (stmt01.step()) {
+                Log.i(TAG, "Airport: " + stmt01.column_string(0));
+            }
+
+            stmt01.close();
 
             Log.i(TAG, "Tests finished");
 
         } catch (jsqlite.Exception e) {
+            e.printStackTrace();
             Log.e(TAG, "database test functions error: " + e.getMessage());
+
+        }
+    }
+
+    public Map<String, Integer> getCounts()
+    {
+        // SELECT COUNT(*) FROM tbl_Airports
+        // SELECT COUNT(*) FROM tbl_Navaids
+        // SELECT COUNT(*) FROM tbl_Runways
+        // SE:ECT COUNT(*) FROM tbl_Fixes
+        HashMap<String, Integer> counts = new HashMap<String, Integer>();
+        try {
+            Stmt stmt01 = database.prepare("SELECT COUNT(*) FROM tbl_Airports;");
+            stmt01.step();
+            counts.put("Airports", stmt01.column_int(0));
+            stmt01 = database.prepare("SELECT COUNT(*) FROM tbl_Navaids;");
+            stmt01.step();
+            counts.put("Navaids", stmt01.column_int(0));
+            stmt01 = database.prepare("SELECT COUNT(*) FROM tbl_Runways;");
+            stmt01.step();
+            counts.put("Runways", stmt01.column_int(0));
+            stmt01 = database.prepare("SELECT COUNT(*) FROM tbl_Fixes;");
+            stmt01.step();
+            counts.put("Fixes", stmt01.column_int(0));
+            stmt01.close();
+        }
+        catch (jsqlite.Exception e) {
+            Log.e(TAG, "Get counts error: " + e.getMessage());
             e.printStackTrace();
         }
+        return counts;
     }
 
 

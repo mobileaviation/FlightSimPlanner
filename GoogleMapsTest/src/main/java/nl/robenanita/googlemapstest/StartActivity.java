@@ -19,13 +19,11 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.HashMap;
+
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
-import nl.robenanita.googlemapstest.database.AirportDataSource;
-import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
-import nl.robenanita.googlemapstest.database.NavaidsDataSource;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
-import nl.robenanita.googlemapstest.database.RunwaysDataSource;
 import nl.robenanita.googlemapstest.inappbilling.util.IabHelper;
 import nl.robenanita.googlemapstest.inappbilling.util.IabResult;
 import nl.robenanita.googlemapstest.inappbilling.util.Inventory;
@@ -91,7 +89,7 @@ public class StartActivity extends ActionBarActivity {
 
         SetupLinkbutton();
 
-        //GetCounts();
+        GetCounts();
 
         //testSimBtn = (Button) findViewById(R.id.testSimServerBtn);
         //testSimBtn.setOnClickListener(new View.OnClickListener() {
@@ -375,62 +373,59 @@ public class StartActivity extends ActionBarActivity {
         Integer fpCount = flightPlanDataSource.GetFlightplanCount();
         flightPlanDataSource.close();
 
-        AirportDataSource airportDataSource = new AirportDataSource(this);
-        airportDataSource.open(-1);
-        Integer apCount = airportDataSource.GetAirportsCount();
-        airportDataSource.close();
-
-        NavaidsDataSource navaidsDataSource = new NavaidsDataSource(this);
-        navaidsDataSource.open(-1);
-        Integer naCount = navaidsDataSource.GetNavaidsCount();
-        navaidsDataSource.close();
-
-        RunwaysDataSource runwaysDataSource = new RunwaysDataSource(this);
-        runwaysDataSource.open();
-        Integer ruCount = runwaysDataSource.GetRunwaysCount();
-        runwaysDataSource.close();
-
-        FixesDataSource fixesDataSource = new FixesDataSource(this);
-        fixesDataSource.open(-1);
-        Integer fiCount = fixesDataSource.GetFixesCount();
-        fixesDataSource.close();
+        SpatialHelper spatialHelper = new SpatialHelper(this);
+        spatialHelper.openDatabase();
+        HashMap<String, Integer> counts = (HashMap<String, Integer>) spatialHelper.getCounts();
+//        AirportDataSource airportDataSource = new AirportDataSource(this);
+//        airportDataSource.open(-1);
+//        Integer apCount = airportDataSource.GetAirportsCount();
+//        airportDataSource.close();
+//
+//        NavaidsDataSource navaidsDataSource = new NavaidsDataSource(this);
+//        navaidsDataSource.open(-1);
+//        Integer naCount = navaidsDataSource.GetNavaidsCount();
+//        navaidsDataSource.close();
+//
+//        RunwaysDataSource runwaysDataSource = new RunwaysDataSource(this);
+//        runwaysDataSource.open();
+//        Integer ruCount = runwaysDataSource.GetRunwaysCount();
+//        runwaysDataSource.close();
+//
+//        FixesDataSource fixesDataSource = new FixesDataSource(this);
+//        fixesDataSource.open(-1);
+//        Integer fiCount = fixesDataSource.GetFixesCount();
+//        fixesDataSource.close();
 
         airportCountTxt = (TextView) findViewById(R.id.airportCountTxt);
         flightplanCountTxt = (TextView) findViewById(R.id.flightplanCountTxt);
         navaidsCountTxt = (TextView) findViewById(R.id.navaidsCountTxt);
         runwaysCountTxt = (TextView) findViewById(R.id.runwaysCountTxt);
         fixesCountTxt = (TextView) findViewById(R.id.fixesCountTxt);
-        airportCountTxt.setText(Integer.toString(apCount));
+        airportCountTxt.setText(Integer.toString(counts.get("Airports")));
         flightplanCountTxt.setText(Integer.toString(fpCount));
-        navaidsCountTxt.setText(Integer.toString(naCount));
-        runwaysCountTxt.setText(Integer.toString(ruCount));
-        fixesCountTxt.setText(Integer.toString(fiCount));
+        navaidsCountTxt.setText(Integer.toString(counts.get("Navaids")));
+        runwaysCountTxt.setText(Integer.toString(counts.get("Runways")));
+        fixesCountTxt.setText(Integer.toString(counts.get("Fixes")));
 
-        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-        propertiesDataSource.open();
-        propertiesDataSource.FillProperties();
-        propertiesDataSource.close();
+        spatialHelper.closeDatabase();
 
-        databaseVersionTxt = (TextView) findViewById(R.id.databaseVersionTxt);
-        databaseVersionTxt.setText(propertiesDataSource.DBVersion.value1);
+//        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
+//        propertiesDataSource.open();
+//        propertiesDataSource.FillProperties();
+//        propertiesDataSource.close();
+//
+//        databaseVersionTxt = (TextView) findViewById(R.id.databaseVersionTxt);
+//        databaseVersionTxt.setText(propertiesDataSource.DBVersion.value1);
 
     }
 
     private void checkDatabaseVersion() {
-        //CheckDatabaseSource checkDatabaseSource = new CheckDatabaseSource(this);
-        //checkDatabaseSource.open();
-        //checkDatabaseSource.checkVersion();
-
         SpatialHelper spatialHelper = new SpatialHelper(this);
         spatialHelper.openDatabase();
 
         spatialHelper.testDatabase();
 
         spatialHelper.closeDatabase();
-
-//        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-//        propertiesDataSource.open();
-//        propertiesDataSource.checkVersion();
     }
 
 //    private void SetupSpinners() {
