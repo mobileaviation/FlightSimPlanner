@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.andreabaccega\android-form-edittext\1.0.5\classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="529ad965ecbdd6e85335e0d90a61606cdcbdb488">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes-1246d3cc272594b3362b4905cb16df4168b90257.jar" />
-    </item>
-    <item
-        jar="C:\Program Files (x86)\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\support-v4-19.1.0-e311e493b238b75da4095bd5ee7b69d76d73dc42.jar" />
-    </item>
-    <item
-        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes-0945b9d053ae8f421a2fbfb13538544aa31bc4fa.jar" />
-    </item>
-    <item
-        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.google.android.gms\play-services\4.0.30\classes.jar"
+        jar="C:\Workspace\FlightSimPlanner\GoogleMapsTest\build\intermediates\exploded-aar\com.google.android.gms\play-services\4.0.30\classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="cebe8e4a3a469c4623addcca1dc571407ff3a08e">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes-42f7f838290ead44e05d0dd25ef0d9471a3b3c7c.jar" />
+        <dex dex="C:\Workspace\FlightSimPlanner\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes-a666b8aec990b60fa702a873a090866bda49ba0c.jar" />
     </item>
     <item
-        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar"
+        jar="C:\Users\Rob Verhoef.WIN7-ROBVERHOEF\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
+        <dex dex="C:\Workspace\FlightSimPlanner\GoogleMapsTest\build\intermediates\pre-dexed\debug\support-v4-19.1.0-4a97373ef736bd6d67d0bf924cb64e7c7661831a.jar" />
+    </item>
+    <item
+        jar="C:\Workspace\FlightSimPlanner\GoogleMapsTest\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
+        <dex dex="C:\Workspace\FlightSimPlanner\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes-2e92033ee8e9274a6951a40ee3404b2d1bbe48a5.jar" />
+    </item>
+    <item
+        jar="C:\Workspace\FlightSimPlanner\GoogleMapsTest\libs\ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="ddcd1698b4bc242e26bfd99e3779688ab311b918">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.1.1-jar-with-dependencies-61c7f19c4bcb2e5fcd7026d9194d3eef7b81320a.jar" />
+        <dex dex="C:\Workspace\FlightSimPlanner\GoogleMapsTest\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.1.1-jar-with-dependencies-833a02c3ee9be6651f9f5ce99748f2265b0edf56.jar" />
+    </item>
+    <item
+        jar="C:\Workspace\FlightSimPlanner\GoogleMapsTest\build\intermediates\exploded-aar\com.andreabaccega\android-form-edittext\1.0.5\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="529ad965ecbdd6e85335e0d90a61606cdcbdb488">
+        <dex dex="C:\Workspace\FlightSimPlanner\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes-61134483f4926f029b719f454391f97525254131.jar" />
     </item>
 
 </items>

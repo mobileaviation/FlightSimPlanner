@@ -238,6 +238,7 @@ public class AirportDataSource {
         return airports;
     }
 
+
     public Airport GetAirportByID(Integer id) {
         String query = "SELECT * FROM " + DBHelper.AIRPORT_TABLE_NAME +
                 " WHERE id=" + Integer.toString(id) + ";";
