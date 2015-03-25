@@ -273,7 +273,7 @@ public class StartActivity extends ActionBarActivity {
 
     private void setupInAppBilling()
     {
-        Button buyAddsButton;
+        final Button buyAddsButton;
         buyAddsButton = (Button) findViewById(R.id.buyAppButton);
 
         final boolean debug = false;// BuildConfig.DEBUG;
@@ -303,17 +303,25 @@ public class StartActivity extends ActionBarActivity {
         mHelper = new IabHelper(this, base64EncodedPublicKey);
 
 
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-                                       public void onIabSetupFinished(IabResult result)
-                                       {
-                                           if (!result.isSuccess()) {
-                                               Log.d(TAG, "In-app Billing setup failed: " +
-                                                       result);
-                                           } else {
-                                               Log.d(TAG, "In-app Billing is set up OK");
-                                           }
-                                       }
-                                   });
+        try {
+
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                public void onIabSetupFinished(IabResult result) {
+                    if (!result.isSuccess()) {
+                        Log.d(TAG, "In-app Billing setup failed: " +
+                                result);
+                        buyAddsButton.setEnabled(false);
+                    } else {
+                        Log.d(TAG, "In-app Billing is set up OK");
+                        buyAddsButton.setEnabled(true);
+                    }
+                }
+            });
+        }
+        catch(Exception e) {
+            Log.d(TAG, "In-App Billing setup crash: " + e.getMessage());
+            buyAddsButton.setEnabled(false);
+        }
     }
 
     private void removeAdds()
