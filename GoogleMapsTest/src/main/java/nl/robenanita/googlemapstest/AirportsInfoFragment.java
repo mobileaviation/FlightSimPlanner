@@ -39,6 +39,7 @@ public class AirportsInfoFragment extends Fragment {
     private Button chartBtn;
     private View view;
     private Integer infoListViewVisibility;
+    private WeatherWebService.WeatherType typeVisible;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +61,10 @@ public class AirportsInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setInfoListViewVisibility();
-                if (infoListViewVisibility==View.VISIBLE) setStations();// setNotams();
+                if (infoListViewVisibility==View.VISIBLE) {
+                    typeVisible = WeatherWebService.WeatherType.vatme_notam;
+                    setStations();// setNotams();
+                }
             }
         });
 
@@ -68,7 +72,10 @@ public class AirportsInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setInfoListViewVisibility();
-                if (infoListViewVisibility==View.VISIBLE) setStations();// setMetars();
+                if (infoListViewVisibility==View.VISIBLE) {
+                    typeVisible = WeatherWebService.WeatherType.metar;
+                    setStations();
+                }// setMetars();
             }
         });
 
@@ -76,7 +83,10 @@ public class AirportsInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setInfoListViewVisibility();
-                if (infoListViewVisibility==View.VISIBLE) setStations(); //setTafs();
+                if (infoListViewVisibility==View.VISIBLE) {
+                    typeVisible = WeatherWebService.WeatherType.taf;
+                    setStations();
+                } //setTafs();
             }
         });
 
@@ -85,6 +95,18 @@ public class AirportsInfoFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 StationsAdapter adapter = (StationsAdapter)adapterView.getAdapter();
                 Log.i(TAG, "Code" + (String)adapter.getItem(i));
+                switch (typeVisible) {
+                    case metar :
+                        setMetars((String)adapter.getItem(i)); break;
+                    case taf:
+                        setTafs((String)adapter.getItem(i)); break;
+                    case openaviation_notam:
+                        break;
+                    case vatme_notam:
+                        setNotams((String)adapter.getItem(i)); break;
+                    case stations:
+                        break;
+                }
             }
         });
 
@@ -134,7 +156,6 @@ public class AirportsInfoFragment extends Fragment {
         infoListViewVisibility = (infoListViewVisibility==view.GONE) ? view.VISIBLE : view.GONE;
         infoListView.setVisibility(infoListViewVisibility);
         icaoCodesListView.setVisibility(infoListViewVisibility);
-        Log.i(TAG, "Info List Visiblity: " + infoListViewVisibility.toString());
     }
 
     public void setupMetarsView(ArrayList<Metar> metars)

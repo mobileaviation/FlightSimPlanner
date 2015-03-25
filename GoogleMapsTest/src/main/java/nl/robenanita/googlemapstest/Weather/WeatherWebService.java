@@ -41,15 +41,13 @@ public class WeatherWebService {
     private AirportsInfoFragment airportsInfoFragment;
     private LatLng orgLocation;
 
-    enum WeatherType {
+    public enum WeatherType {
         metar,
         taf,
         openaviation_notam,
         vatme_notam,
         stations
     }
-
-    ;
 
     public WeatherWebService(WeatherActivity weatherActivity) {
         this.weatherActivity = weatherActivity;
@@ -266,14 +264,16 @@ public class WeatherWebService {
         protected void onPostExecute(Void aVoid) {
             if (type == WeatherType.metar) {
                 Log.i(TAG, "Finished Reading metar XML");
-                if (weatherActivity!=null) weatherActivity.SetupMetarListView(metars);
-                if (airportsInfoFragment!=null) airportsInfoFragment.setupMetarsView(metars);
+                onDataAvailable.OnMetarsAvailable(metars);
+                //if (weatherActivity!=null) weatherActivity.SetupMetarListView(metars);
+                //if (airportsInfoFragment!=null) airportsInfoFragment.setupMetarsView(metars);
             }
             if (type == WeatherType.taf)
             {
                 Log.i(TAG, "Finished Reading taf XML");
-                if (weatherActivity!=null) weatherActivity.SetupTafListView(tafs);
-                if (airportsInfoFragment!=null) airportsInfoFragment.setupTafsView(tafs);
+                onDataAvailable.OnTafsAvailable(tafs);
+                //if (weatherActivity!=null) weatherActivity.SetupTafListView(tafs);
+                //if (airportsInfoFragment!=null) airportsInfoFragment.setupTafsView(tafs);
             }
             if (type == WeatherType.openaviation_notam) {
                 Log.i(TAG, "Finished Reading openaviation notam json");
@@ -281,16 +281,20 @@ public class WeatherWebService {
             }
             if (type == WeatherType.vatme_notam) {
                 Log.i(TAG, "Finished Reading vatme notams xml");
-                if (airportsInfoFragment!=null) airportsInfoFragment.setupNotamsView(notams);
+                onDataAvailable.OnNotamsAvailable(notams);
+                //if (airportsInfoFragment!=null) airportsInfoFragment.setupNotamsView(notams);
             }
             if (type == WeatherType.stations) {
                 Log.i(TAG, "Finished Reading stations xml");
-                if (airportsInfoFragment!=null) airportsInfoFragment.setupStationsView(stations);
+                onDataAvailable.OnStationsAvailable(stations);
+                //if (airportsInfoFragment!=null) airportsInfoFragment.setupStationsView(stations);
             }
 
 
             super.onPostExecute(aVoid);
         }
+
+
 
         @Override
         protected void onProgressUpdate(Integer... values) {
@@ -747,5 +751,13 @@ public class WeatherWebService {
         }
     }
 
+    public OnDataAvailable onDataAvailable = null;
+    public void setOnDataAvailable(final OnDataAvailable d) {onDataAvailable = d;}
+    public interface OnDataAvailable{
+        public void OnMetarsAvailable(ArrayList<Metar> metars);
+        public void OnTafsAvailable(ArrayList<Taf> tafs);
+        public void OnNotamsAvailable(ArrayList<Notam> notams);
+        public void OnStationsAvailable(ArrayList<String> stations);
+    }
 
 }
