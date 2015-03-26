@@ -16,8 +16,8 @@ import nl.robenanita.googlemapstest.R;
  * Created by Rob Verhoef on 11-3-2015.
  */
 public class StationsAdapter extends BaseAdapter {
-    private ArrayList<String> stations;
-    public StationsAdapter(ArrayList<String> stations) { this.stations = stations; }
+    private ArrayList<Station> stations;
+    public StationsAdapter(ArrayList<Station> stations) { this.stations = stations; }
 
     @Override
     public int getCount() {
@@ -42,9 +42,9 @@ public class StationsAdapter extends BaseAdapter {
         TextView stationText = (TextView) view.findViewById(R.id.airport_info_station_item_text);
         LinearLayout stationLayout = (LinearLayout) view.findViewById(R.id.airport_info_station_item_layout);
 
-        String m = stations.get(i);
+        Station m = stations.get(i);
 
-        stationText.setText(m);
+        stationText.setText(m.station_id);
 
         if ( (i & 1) == 0 ) {
             stationLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));

@@ -35,7 +35,7 @@ public class WeatherWebService {
     public ArrayList<Metar> metars;
     public ArrayList<Taf> tafs;
     public ArrayList<Notam> notams;
-    public ArrayList<String> stations;
+    public ArrayList<Station> stations;
 
     private WeatherActivity weatherActivity;
     private AirportsInfoFragment airportsInfoFragment;
@@ -54,7 +54,7 @@ public class WeatherWebService {
         metars = new ArrayList<Metar>();
         tafs = new ArrayList<Taf>();
         notams = new ArrayList<Notam>();
-        stations = new ArrayList<String>();
+        stations = new ArrayList<Station>();
     }
 
     public WeatherWebService(AirportsInfoFragment airportsInfoFragment) {
@@ -62,7 +62,7 @@ public class WeatherWebService {
         metars = new ArrayList<Metar>();
         tafs = new ArrayList<Taf>();
         notams = new ArrayList<Notam>();
-        stations = new ArrayList<String>();
+        stations = new ArrayList<Station>();
     }
 
     public void GetNotamsByICAOs(List<String> Icaos)
@@ -308,7 +308,8 @@ public class WeatherWebService {
         private void processStationsXml(String Xml)
         {
             Log.i(TAG, "Stations XML: " + Xml);
-            String station = "";
+            Station station = null;
+
 
             XmlPullParser parser = android.util.Xml.newPullParser();
             try {
@@ -323,7 +324,9 @@ public class WeatherWebService {
 
                             if (name != null) {
                                 try {
-                                    if (name.equals("station_id")) station = parser.getText();
+                                    if (name.equals("station_id")) station.station_id = parser.getText();
+                                    if (name.equals("METAR")) station.AddSiteType("METAR");
+                                    if (name.equals("TAF")) station.AddSiteType("TAF");
                                     name = "";
                                 }
                                 catch (Exception ee)
@@ -336,6 +339,9 @@ public class WeatherWebService {
                         }
                         case XmlPullParser.START_TAG: {
                             name = parser.getName();
+
+                            if (name.equals("Station")) station = new Station();
+
                             break;
                         }
                         case XmlPullParser.END_TAG:
@@ -757,7 +763,7 @@ public class WeatherWebService {
         public void OnMetarsAvailable(ArrayList<Metar> metars);
         public void OnTafsAvailable(ArrayList<Taf> tafs);
         public void OnNotamsAvailable(ArrayList<Notam> notams);
-        public void OnStationsAvailable(ArrayList<String> stations);
+        public void OnStationsAvailable(ArrayList<Station> stations);
     }
 
 }
