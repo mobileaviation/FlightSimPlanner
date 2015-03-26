@@ -187,107 +187,104 @@ public class NavigationActivity extends ActionBarActivity implements
         //infoPanel.LoadAdd();
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                //Log.i(TAG, "onCameraChange fired: Zoom level: " + cameraPosition.zoom);
-                Boolean redrawMarkers = false;
-                if (Math.abs(cameraPosition.zoom - curZoom)>1)
-                {
-                    curZoom = cameraPosition.zoom;
-                    Log.i(TAG, "Zoom Difference > 1: " + cameraPosition.zoom);
-                    redrawMarkers = true;
-                }
-
-                Location curLoc = new Location("curLoc");
-                curLoc.setLongitude(curPosition.longitude);
-                curLoc.setLatitude(curPosition.latitude);
-                Location camLoc = new Location("camLoc");
-                camLoc.setLongitude(cameraPosition.target.longitude);
-                camLoc.setLatitude(cameraPosition.target.latitude);
-
-                SetupScaleBar();
-
-                if (camLoc.distanceTo(curLoc)*cameraPosition.zoom>200000)
-                {
-                    Log.i(TAG, "Distance: " + Float.toString(camLoc.distanceTo(curLoc)*cameraPosition.zoom));
-                    curPosition = cameraPosition.target;
-                    redrawMarkers = true;
-                }
-
-                if (redrawMarkers)
-                {
-                    //CreateMarkers();
-                    SetAirportMarkersByZoomAndBoundary();
-                }
-
-
-            }
-        });
-
-        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                if (selectedFlightplan != null) {
-                    if (!selectedFlightplan.getFlightplanActive()) {
-                        Log.i(TAG, "Long click on " + Double.toString(latLng.latitude) + " : " + Double.toString(latLng.longitude));
-                        ShowNewWaypointPopup(latLng);
+        if (map != null) {
+            map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                @Override
+                public void onCameraChange(CameraPosition cameraPosition) {
+                    //Log.i(TAG, "onCameraChange fired: Zoom level: " + cameraPosition.zoom);
+                    Boolean redrawMarkers = false;
+                    if (Math.abs(cameraPosition.zoom - curZoom) > 1) {
+                        curZoom = cameraPosition.zoom;
+                        Log.i(TAG, "Zoom Difference > 1: " + cameraPosition.zoom);
+                        redrawMarkers = true;
                     }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
+
+                    Location curLoc = new Location("curLoc");
+                    curLoc.setLongitude(curPosition.longitude);
+                    curLoc.setLatitude(curPosition.latitude);
+                    Location camLoc = new Location("camLoc");
+                    camLoc.setLongitude(cameraPosition.target.longitude);
+                    camLoc.setLatitude(cameraPosition.target.latitude);
+
+                    SetupScaleBar();
+
+                    if (camLoc.distanceTo(curLoc) * cameraPosition.zoom > 200000) {
+                        Log.i(TAG, "Distance: " + Float.toString(camLoc.distanceTo(curLoc) * cameraPosition.zoom));
+                        curPosition = cameraPosition.target;
+                        redrawMarkers = true;
+                    }
+
+                    if (redrawMarkers) {
+                        //CreateMarkers();
+                        SetAirportMarkersByZoomAndBoundary();
+                    }
+
+
+                }
+            });
+
+            map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    if (selectedFlightplan != null) {
+                        if (!selectedFlightplan.getFlightplanActive()) {
+                            Log.i(TAG, "Long click on " + Double.toString(latLng.latitude) + " : " + Double.toString(latLng.longitude));
+                            ShowNewWaypointPopup(latLng);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
+                                    , Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
                                 , Toast.LENGTH_LONG).show();
                     }
                 }
-                else {
-                    Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
-                            , Toast.LENGTH_LONG).show();
+            });
+
+            map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDragStart(Marker marker) {
+
                 }
-            }
-        });
 
-        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker marker) {
+                @Override
+                public void onMarkerDrag(Marker marker) {
 
-            }
+                }
 
-            @Override
-            public void onMarkerDrag(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                Waypoint  w = waypointMarkerMap.get(marker);
-                if (w != null) {
-                    w.location.setLatitude(marker.getPosition().latitude);
-                    w.location.setLongitude(marker.getPosition().longitude);
-                    if (selectedFlightplan != null) {
-                        removeAllRunwayMarkers(selectedFlightplan);
-                        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-                        flightPlanDataSource.open();
-                        flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
-                        flightPlanDataSource.close();
-                        LoadFlightplan(selectedFlightplan.id);
+                @Override
+                public void onMarkerDragEnd(Marker marker) {
+                    Waypoint w = waypointMarkerMap.get(marker);
+                    if (w != null) {
+                        w.location.setLatitude(marker.getPosition().latitude);
+                        w.location.setLongitude(marker.getPosition().longitude);
+                        if (selectedFlightplan != null) {
+                            removeAllRunwayMarkers(selectedFlightplan);
+                            FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+                            flightPlanDataSource.open();
+                            flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
+                            flightPlanDataSource.close();
+                            LoadFlightplan(selectedFlightplan.id);
+                        }
                     }
                 }
-            }
-        });
+            });
 
 
+            UiSettings settings = map.getUiSettings();
+            settings.setCompassEnabled(true);
+            settings.setRotateGesturesEnabled(false);
+            settings.setTiltGesturesEnabled(false);
+            settings.setScrollGesturesEnabled(true);
+            settings.setZoomControlsEnabled(true);
+            settings.setZoomGesturesEnabled(true);
 
-        UiSettings settings = map.getUiSettings();
-        settings.setCompassEnabled(true);
-        settings.setRotateGesturesEnabled(false);
-        settings.setTiltGesturesEnabled(false);
-        settings.setScrollGesturesEnabled(true);
-        settings.setZoomControlsEnabled(true);
-        settings.setZoomGesturesEnabled(true);
+            mapController = new MapController(map, this);
 
-        mapController = new MapController(map, this);
+            mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            mapController.setUpTileProvider();
+        }
 
         LoadProperties();
 
@@ -315,7 +312,7 @@ public class NavigationActivity extends ActionBarActivity implements
             }
         });
 
-        mapController.setUpTileProvider();
+
 
 
     }
