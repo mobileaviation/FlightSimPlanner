@@ -95,16 +95,16 @@ public class AirportsInfoFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 StationsAdapter adapter = (StationsAdapter)adapterView.getAdapter();
-                Log.i(TAG, "Code" + (String)adapter.getItem(i));
+                Log.i(TAG, "Code" + adapter.getStation(i).station_id);
                 switch (typeVisible) {
                     case metar :
-                        setMetars((String)adapter.getItem(i)); break;
+                        setMetars(adapter.getStation(i).station_id); break;
                     case taf:
-                        setTafs((String)adapter.getItem(i)); break;
+                        setTafs(adapter.getStation(i).station_id); break;
                     case openaviation_notam:
                         break;
                     case vatme_notam:
-                        setNotams((String)adapter.getItem(i)); break;
+                        setNotams(adapter.getStation(i).station_id); break;
                     case stations:
                         break;
                 }
@@ -181,6 +181,8 @@ public class AirportsInfoFragment extends Fragment {
         infoListViewVisibility = (infoListViewVisibility==view.GONE) ? view.VISIBLE : view.GONE;
         infoListView.setVisibility(infoListViewVisibility);
         icaoCodesListView.setVisibility(infoListViewVisibility);
+        infoListView.setAdapter(null);
+        icaoCodesListView.setAdapter(null);
     }
 
     public void setupMetarsView(ArrayList<Metar> metars)

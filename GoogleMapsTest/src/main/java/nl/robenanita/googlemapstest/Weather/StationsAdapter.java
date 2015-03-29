@@ -29,6 +29,9 @@ public class StationsAdapter extends BaseAdapter {
         return stations.get(i);
     }
 
+
+    public Station getStation(int i) { return  stations.get(i); }
+
     @Override
     public long getItemId(int i) {
         return i;

@@ -26,6 +26,7 @@ android {
 
 dependencies {
     compile files('libs/ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar')
+    compile files('libs/jts-1.12.jar')
     compile 'com.android.support:appcompat-v7:19.+'
     compile 'com.google.android.gms:play-services:4.0.30'
     compile 'com.andreabaccega:android-form-edittext:1.0.5@aar'

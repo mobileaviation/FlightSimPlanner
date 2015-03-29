@@ -212,6 +212,7 @@ public class AirportDataSource {
     {
         String u = "UPDATE " + DBHelper.AIRPORT_TABLE_NAME + " SET " + DBHelper.C_pid +
                 "=" + Integer.toString(uniqueId);
+        Log.i(TAG , "Set program pid: " + u);
         database.execSQL(u);
     }
 
@@ -408,7 +409,7 @@ public class AirportDataSource {
                 + "A." + dbHelper.C_latitude_deg + ","
                 + "A." + dbHelper.C_longitude_deg + ","
                 + "A." + dbHelper.C_type + ","
-                + "A." + DBHelper.C_mapLocation_ID + ","
+                //+ "A." + DBHelper.C_mapLocation_ID + ","
                 + "A._id,"
                 + "R." + DBHelper.C_le_heading + ","
                 + "R." + DBHelper.C_le_ident + ","
@@ -419,7 +420,7 @@ public class AirportDataSource {
                 + "R." + DBHelper.C_he_longitude
                 + " FROM " + DBHelper.AIRPORT_TABLE_NAME + " A " +
                 "LEFT JOIN " + DBHelper.RUNWAY_TABLE_NAME + " R ON R." + DBHelper.C_airport_ref + " = A." + DBHelper.C_id + " " + where
-                + " AND " + DBHelper.C_pid + "<>" + pid;
+                + " AND (" + DBHelper.C_pid + "<>" + pid + " or " +  DBHelper.C_pid + " is null);";
 
         Log.i(TAG, "Airports Query: " + query);
 
@@ -481,7 +482,7 @@ public class AirportDataSource {
         airport.ident = cursor.getString(cursor.getColumnIndex(DBHelper.C_ident));
         airport.name = cursor.getString(cursor.getColumnIndex(DBHelper.C_name));
         airport.id = cursor.getInt(cursor.getColumnIndex(DBHelper.C_id));
-        airport.MapLocation_ID = cursor.getInt(cursor.getColumnIndex(DBHelper.C_mapLocation_ID));
+        //airport.MapLocation_ID = cursor.getInt(cursor.getColumnIndex(DBHelper.C_mapLocation_ID));
         airport.latitude_deg = cursor.getDouble(cursor.getColumnIndex(DBHelper.C_latitude_deg));
         airport.longitude_deg = cursor.getDouble(cursor.getColumnIndex(DBHelper.C_longitude_deg));
         airport.heading = (cursor.isNull(cursor.getColumnIndex(DBHelper.C_le_heading))) ? 0 : cursor.getDouble(cursor.getColumnIndex(DBHelper.C_le_heading));
