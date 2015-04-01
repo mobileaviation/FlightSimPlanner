@@ -1,7 +1,5 @@
 package nl.robenanita.googlemapstest.Weather;
 
-import android.content.Context;
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,13 +16,11 @@ public class Notam {
         Cancel
     }
 
-    public Notam(Context c)
+    public Notam()
     {
-        this.c = c;
         startDate = new Date();
         station_id = "";
     }
-    private Context c;
 
     public String raw_text;
     public String message;

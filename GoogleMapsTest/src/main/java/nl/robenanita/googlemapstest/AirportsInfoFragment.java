@@ -16,10 +16,13 @@ import nl.robenanita.googlemapstest.Weather.Metar;
 import nl.robenanita.googlemapstest.Weather.MetarRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Notam;
 import nl.robenanita.googlemapstest.Weather.NotamRawAdapter;
+import nl.robenanita.googlemapstest.Weather.NotamsWebService;
 import nl.robenanita.googlemapstest.Weather.Station;
 import nl.robenanita.googlemapstest.Weather.StationsAdapter;
+import nl.robenanita.googlemapstest.Weather.StationsWebService;
 import nl.robenanita.googlemapstest.Weather.Taf;
 import nl.robenanita.googlemapstest.Weather.TafRawAdapter;
+import nl.robenanita.googlemapstest.Weather.Type;
 import nl.robenanita.googlemapstest.Weather.WeatherWebService;
 
 
@@ -40,7 +43,7 @@ public class AirportsInfoFragment extends Fragment {
     private Button chartBtn;
     private View view;
     private Integer infoListViewVisibility;
-    private WeatherWebService.WeatherType typeVisible;
+    private Type typeVisible;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +66,7 @@ public class AirportsInfoFragment extends Fragment {
             public void onClick(View view) {
                 setInfoListViewVisibility();
                 if (infoListViewVisibility==View.VISIBLE) {
-                    typeVisible = WeatherWebService.WeatherType.vatme_notam;
+                    typeVisible = Type.vatme_notam;
                     setStations();// setNotams();
                 }
             }
@@ -74,7 +77,7 @@ public class AirportsInfoFragment extends Fragment {
             public void onClick(View view) {
                 setInfoListViewVisibility();
                 if (infoListViewVisibility==View.VISIBLE) {
-                    typeVisible = WeatherWebService.WeatherType.metar;
+                    typeVisible = Type.metar;
                     setStations();
                 }// setMetars();
             }
@@ -85,7 +88,7 @@ public class AirportsInfoFragment extends Fragment {
             public void onClick(View view) {
                 setInfoListViewVisibility();
                 if (infoListViewVisibility==View.VISIBLE) {
-                    typeVisible = WeatherWebService.WeatherType.taf;
+                    typeVisible = Type.taf;
                     setStations();
                 } //setTafs();
             }
@@ -105,7 +108,7 @@ public class AirportsInfoFragment extends Fragment {
                         break;
                     case vatme_notam:
                         setNotams(adapter.getStation(i).station_id); break;
-                    case stations:
+                    case station:
                         break;
                 }
             }
@@ -116,8 +119,8 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setNotams(String code)
     {
-        WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
-        setWeatherWebServiceDataAvailableListener(s);
+        NotamsWebService s = new NotamsWebService();
+        setNotamsWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
         s.GetNotamsByICAOs(icaos);
@@ -125,7 +128,7 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setMetars(String code)
     {
-        WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
+        WeatherWebService s = new WeatherWebService();
         setWeatherWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
@@ -134,7 +137,7 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setTafs(String code)
     {
-        WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
+        WeatherWebService s = new WeatherWebService();
         setWeatherWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
@@ -154,11 +157,22 @@ public class AirportsInfoFragment extends Fragment {
                 setupTafsView(tafs);
             }
 
+        });
+    }
+
+    private void setNotamsWebServiceDataAvailableListener(NotamsWebService service)
+    {
+        service.setOnDataAvailable(new NotamsWebService.OnDataAvailable() {
             @Override
             public void OnNotamsAvailable(ArrayList<Notam> notams) {
                 setupNotamsView(notams);
             }
+        });
+    }
 
+    private void setStationsWebServiceDataAvailableListener(StationsWebService service)
+    {
+        service.setOnDataAvailable(new StationsWebService.OnDataAvailable() {
             @Override
             public void OnStationsAvailable(ArrayList<Station> stations) {
                 setupStationsView(stations);
@@ -168,10 +182,10 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setStations()
     {
-        WeatherWebService s = new WeatherWebService(AirportsInfoFragment.this);
+        StationsWebService s = new StationsWebService();
         NavigationActivity activity = (NavigationActivity)getActivity();
 
-        setWeatherWebServiceDataAvailableListener(s);
+        setStationsWebServiceDataAvailableListener(s);
 
         s.GetStationsByLocationRadius(activity.curPosition, 80);
     }

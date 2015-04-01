@@ -10,8 +10,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedReader;
@@ -20,10 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import nl.robenanita.googlemapstest.AirportsInfoFragment;
 
 /**
  * Created by Rob Verhoef on 2-5-2014.
@@ -34,79 +29,13 @@ public class WeatherWebService {
 
     public ArrayList<Metar> metars;
     public ArrayList<Taf> tafs;
-    public ArrayList<Notam> notams;
-    public ArrayList<Station> stations;
 
-    private WeatherActivity weatherActivity;
-    private AirportsInfoFragment airportsInfoFragment;
     private LatLng orgLocation;
 
-    public enum WeatherType {
-        metar,
-        taf,
-        openaviation_notam,
-        vatme_notam,
-        stations
-    }
 
-    public WeatherWebService(WeatherActivity weatherActivity) {
-        this.weatherActivity = weatherActivity;
+    public WeatherWebService() {
         metars = new ArrayList<Metar>();
         tafs = new ArrayList<Taf>();
-        notams = new ArrayList<Notam>();
-        stations = new ArrayList<Station>();
-    }
-
-    public WeatherWebService(AirportsInfoFragment airportsInfoFragment) {
-        this.airportsInfoFragment = airportsInfoFragment;
-        metars = new ArrayList<Metar>();
-        tafs = new ArrayList<Taf>();
-        notams = new ArrayList<Notam>();
-        stations = new ArrayList<Station>();
-    }
-
-    public void GetNotamsByICAOs(List<String> Icaos)
-    {
-        // http://api.vateud.net/notams/EHLE,EHAM,EHTE.xml
-        // http://info.vatme.net/notams/#ICAO#.xml
-        notams = new ArrayList<Notam>();
-
-        String command = "http://api.vateud.net/notams/#ICAO#.xml";
-
-        String codes = "";
-        for (String code : Icaos)
-        {
-            codes = codes + code + ",";
-        }
-        codes = codes.substring(0, codes.length()-1);
-        command = command.replace("#ICAO#", codes);
-
-        ReadWeatherXMLAsync readWeatherXMLAsync = new ReadWeatherXMLAsync();
-        readWeatherXMLAsync.command = command;
-        readWeatherXMLAsync.type = WeatherType.vatme_notam;
-        readWeatherXMLAsync.onlyRawData = true;
-
-        Log.i(TAG, "Vatme Notam command: " + command);
-
-        readWeatherXMLAsync.execute();
-    }
-
-    public void GetNotamByICAO(String IcaoCode) {
-        metars = new ArrayList<Metar>();
-
-        String command = "https://api.openaviationdata.com/v1/notam?icao=#ICAO#&key=Cr5jWc5oRDIomdWggEx0WiPG1cDofJSD";
-
-        command = command.replace("#ICAO#", IcaoCode);
-
-        ReadWeatherXMLAsync readWeatherXMLAsync = new ReadWeatherXMLAsync();
-        readWeatherXMLAsync.command = command;
-        readWeatherXMLAsync.type = WeatherType.openaviation_notam;
-        readWeatherXMLAsync.onlyRawData = true;
-        readWeatherXMLAsync.Icao = IcaoCode;
-
-        Log.i(TAG, "OpenAviation Notam command: " + command);
-
-        readWeatherXMLAsync.execute();
     }
 
     public void GetMetarsByICAO(List<String> IcaoCode) {
@@ -124,7 +53,7 @@ public class WeatherWebService {
 
         ReadWeatherXMLAsync readWeatherXMLAsync = new ReadWeatherXMLAsync();
         readWeatherXMLAsync.command = command;
-        readWeatherXMLAsync.type = WeatherType.metar;
+        readWeatherXMLAsync.type = Type.metar;
         readWeatherXMLAsync.onlyRawData = true;
 
         Log.i(TAG, "Metar command: " + command);
@@ -147,29 +76,10 @@ public class WeatherWebService {
 
         ReadWeatherXMLAsync readWeatherXMLAsync = new ReadWeatherXMLAsync();
         readWeatherXMLAsync.command = command;
-        readWeatherXMLAsync.type = WeatherType.taf;
+        readWeatherXMLAsync.type = Type.taf;
         readWeatherXMLAsync.onlyRawData = true;
 
         Log.i(TAG, "Taf command: " + command);
-
-        readWeatherXMLAsync.execute();
-    }
-
-    public void GetStationsByLocationRadius(LatLng location, Integer radius)
-    {
-        //http://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=stations&requestType=retrieve&format=xml&radialDistance=100;5.5,52.46
-        String command = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=stations&requestType=retrieve&format=xml&radialDistance=#RAD#;#LON#,#LAT#";
-        command = command.replace("#LON#", Double.toString(location.longitude));
-        command = command.replace("#LAT#", Double.toString(location.latitude));
-        command = command.replace("#RAD#", Integer.toString(radius));
-
-        ReadWeatherXMLAsync readWeatherXMLAsync = new ReadWeatherXMLAsync();
-        readWeatherXMLAsync.command = command;
-        readWeatherXMLAsync.type = WeatherType.stations;
-        readWeatherXMLAsync.onlyRawData = false;
-        orgLocation = location;
-
-        Log.i(TAG, "Metar command: " + command);
 
         readWeatherXMLAsync.execute();
     }
@@ -185,7 +95,7 @@ public class WeatherWebService {
 
         ReadWeatherXMLAsync readWeatherXMLAsync = new ReadWeatherXMLAsync();
         readWeatherXMLAsync.command = command;
-        readWeatherXMLAsync.type = WeatherType.metar;
+        readWeatherXMLAsync.type = Type.metar;
         readWeatherXMLAsync.onlyRawData = false;
         orgLocation = location;
 
@@ -205,7 +115,7 @@ public class WeatherWebService {
 
         ReadWeatherXMLAsync readWeatherXMLAsync = new ReadWeatherXMLAsync();
         readWeatherXMLAsync.command = command;
-        readWeatherXMLAsync.type = WeatherType.taf;
+        readWeatherXMLAsync.type = Type.taf;
         readWeatherXMLAsync.onlyRawData = false;
         orgLocation = location;
 
@@ -228,7 +138,7 @@ public class WeatherWebService {
     {
         public String command;
         public String Icao;
-        public WeatherType type;
+        public Type type;
         public String Xml;
         public Boolean onlyRawData;
 
@@ -236,25 +146,13 @@ public class WeatherWebService {
         protected Void doInBackground(String... strings) {
             Xml = readFromUrl(command);
 
-            if (type == WeatherType.metar)
+            if (type == Type.metar)
             {
                 processMetarXml(Xml);
             }
-            if (type == WeatherType.taf)
+            if (type == Type.taf)
             {
                 processTafXml(Xml);
-            }
-            if (type == WeatherType.openaviation_notam)
-            {
-                processOpenAviationNotamJson(Xml);
-            }
-            if (type == WeatherType.vatme_notam)
-            {
-                processVatmeNotamsXml(Xml);
-            }
-            if (type == WeatherType.stations)
-            {
-                processStationsXml(Xml);
             }
 
             return null;
@@ -262,32 +160,14 @@ public class WeatherWebService {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if (type == WeatherType.metar) {
+            if (type == Type.metar) {
                 Log.i(TAG, "Finished Reading metar XML");
                 onDataAvailable.OnMetarsAvailable(metars);
-                //if (weatherActivity!=null) weatherActivity.SetupMetarListView(metars);
-                //if (airportsInfoFragment!=null) airportsInfoFragment.setupMetarsView(metars);
             }
-            if (type == WeatherType.taf)
+            if (type == Type.taf)
             {
                 Log.i(TAG, "Finished Reading taf XML");
                 onDataAvailable.OnTafsAvailable(tafs);
-                //if (weatherActivity!=null) weatherActivity.SetupTafListView(tafs);
-                //if (airportsInfoFragment!=null) airportsInfoFragment.setupTafsView(tafs);
-            }
-            if (type == WeatherType.openaviation_notam) {
-                Log.i(TAG, "Finished Reading openaviation notam json");
-                //weatherActivity.SetupTafListView(tafs);
-            }
-            if (type == WeatherType.vatme_notam) {
-                Log.i(TAG, "Finished Reading vatme notams xml");
-                onDataAvailable.OnNotamsAvailable(notams);
-                //if (airportsInfoFragment!=null) airportsInfoFragment.setupNotamsView(notams);
-            }
-            if (type == WeatherType.stations) {
-                Log.i(TAG, "Finished Reading stations xml");
-                onDataAvailable.OnStationsAvailable(stations);
-                //if (airportsInfoFragment!=null) airportsInfoFragment.setupStationsView(stations);
             }
 
 
@@ -298,71 +178,7 @@ public class WeatherWebService {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            if (type == WeatherType.metar)
-                if (weatherActivity != null) weatherActivity.SetMetarProgress(values[0], "");
-            if (type == WeatherType.taf)
-                if (weatherActivity != null) weatherActivity.SetTafProgress(values[0], "");
-            super.onProgressUpdate(values);
-        }
 
-        private void processStationsXml(String Xml)
-        {
-            Log.i(TAG, "Stations XML: " + Xml);
-            Station station = null;
-
-
-            XmlPullParser parser = android.util.Xml.newPullParser();
-            try {
-                parser.setInput(new StringReader(Xml));
-                int eventType = parser.getEventType();
-                String name = null;
-
-                while(eventType != XmlPullParser.END_DOCUMENT) {
-                    switch (eventType) {
-                        case XmlPullParser.TEXT:
-                        {
-
-                            if (name != null) {
-                                try {
-                                    if (name.equals("station_id")) station.station_id = parser.getText();
-                                    if (name.equals("METAR")) station.AddSiteType("METAR");
-                                    if (name.equals("TAF")) station.AddSiteType("TAF");
-                                    name = "";
-                                }
-                                catch (Exception ee)
-                                {
-                                    Log.i(TAG, "Parse Metar Value XML Error: " + ee.getMessage());
-                                }
-                            }
-
-                            break;
-                        }
-                        case XmlPullParser.START_TAG: {
-                            name = parser.getName();
-
-                            if (name.equals("Station")) station = new Station();
-
-                            break;
-                        }
-                        case XmlPullParser.END_TAG:
-                        {
-                            if (parser.getName().equals("Station")) {
-                                stations.add(station);
-                                publishProgress(stations.size());
-                            }
-                            break;
-                        }
-
-                    }
-
-                    eventType = parser.next();
-                }
-                Log.i(TAG, "End XML Parsing : " + stations.size());
-            }
-            catch (Exception ee)
-            {
-                Log.e(TAG, "Station XML Parse error: " + ee.getMessage());
-            }
         }
 
         private void processTafXml(String Xml)
@@ -624,95 +440,6 @@ public class WeatherWebService {
             }
         }
 
-        private void processOpenAviationNotamJson(String Json)
-        {
-            try {
-                JSONObject jObj = new JSONObject(Json);
-                JSONObject dataObj = jObj.getJSONObject("data");
-                JSONObject IcaoObj = dataObj.getJSONObject(Icao);
-
-                Iterator<String> k = IcaoObj.keys();
-                while(k.hasNext())
-                {
-                    Notam notam = new Notam(weatherActivity);
-                    String name = k.next();
-                    Log.e(TAG, "Icao Object: " + name);
-                    JSONObject o = IcaoObj.getJSONObject(name);
-                    notam.raw_text = o.getString("text");
-                    notam.setStation_id(Icao);
-                    notam.SetNotamType(o.getString("type"));
-                    notam.SetEndDate(o.getString("end"));
-                    notam.SetStartDate(o.getString("start"));
-                    notam.SetQualifier(o.getString("qualifier"));
-                    notam.source = o.getString("source");
-                    notams.add(notam);
-                }
-
-            } catch (JSONException e) {
-                Log.e(TAG, "Notam Json read Error: " + e.toString());
-            }
-        }
-
-        private void processVatmeNotamsXml(String Xml)
-        {
-            XmlPullParser parser = android.util.Xml.newPullParser();
-            try {
-                parser.setInput(new StringReader(Xml));
-                int eventType = parser.getEventType();
-                Notam notam = null;
-                String name = null;
-
-                while(eventType != XmlPullParser.END_DOCUMENT) {
-                    switch (eventType) {
-                        case XmlPullParser.TEXT: {
-                            if (notam != null) {
-                                if (name != null) {
-                                    try {
-
-                                        if (name.equals("raw")) notam.SetRawText(parser.getText());
-                                        if (name.equals("message")) notam.SetMessage(parser.getText());
-                                        if (name.equals("icao")) notam.setStation_id(parser.getText());
-
-                                    } catch (Exception ee) {
-                                        Log.e(TAG, "Parse Notam Value XML Error: " + ee.getMessage());
-                                    }
-                                    name = "";
-                                }
-                            }
-                            break;
-                        }
-                        case XmlPullParser.START_TAG: {
-                            name = parser.getName();
-                            if (name != null)
-                                if (name.equals("object")) notam = new Notam(null);
-
-                            break;
-                        }
-                        case XmlPullParser.END_TAG:
-                        {
-                            if (parser.getName().equals("object")) {
-                                notams.add(notam);
-                                publishProgress(notams.size());
-                                notam = null;
-                            }
-                            break;
-                        }
-
-                    }
-
-                    eventType = parser.next();
-                }
-                Integer s = notams.size();
-                Log.i(TAG, "Succesfully fetched " + s.toString() + " notams");
-            }
-            catch (Exception ee)
-            {
-                Log.e(TAG, "Notams XML Parse error: " + ee.getMessage());
-            }
-
-
-        }
-
         private String readFromUrl(String Url)
         {
             HttpGet request = new HttpGet(Url);
@@ -762,8 +489,6 @@ public class WeatherWebService {
     public interface OnDataAvailable{
         public void OnMetarsAvailable(ArrayList<Metar> metars);
         public void OnTafsAvailable(ArrayList<Taf> tafs);
-        public void OnNotamsAvailable(ArrayList<Notam> notams);
-        public void OnStationsAvailable(ArrayList<Station> stations);
     }
 
 }
