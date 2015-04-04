@@ -65,10 +65,31 @@ public class WeatherActivity extends ActionBarActivity {
             ProgressBar t = (ProgressBar) findViewById(R.id.tafprogressBar);
             t.setVisibility(View.VISIBLE);
 
-            WeatherWebService weatherWebService = new WeatherWebService(WeatherActivity.this);
+            WeatherWebService weatherWebService = new WeatherWebService();
+            setWeatherServiceListeners(weatherWebService);
             weatherWebService.GetMetar100MilesRadiusFromLocation(airportLocation);
             weatherWebService.GetTaf100MilesRadiusFromLocation(airportLocation);
         }
+    }
+
+    private void setWeatherServiceListeners(WeatherWebService weatherWebService) {
+        weatherWebService.setOnDataAvailable(new WeatherWebService.OnDataAvailable() {
+            @Override
+            public void OnMetarsAvailable(ArrayList<Metar> metars) {
+                SetupMetarListView(metars);
+            }
+
+            @Override
+            public void OnTafsAvailable(ArrayList<Taf> tafs) {
+                SetupTafListView(tafs);
+            }
+        });
+
+    }
+
+    private void test()
+    {
+
     }
 
     public void SetMetarProgress(Integer progress, String Message)
