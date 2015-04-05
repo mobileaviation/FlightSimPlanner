@@ -317,7 +317,8 @@ public class FlightPlanDataSource {
         cursor.moveToFirst();
         while (!cursor.isAfterLast())
         {
-            FlightPlan flightPlan = cursorToFlightplan(cursor);
+            FlightPlan flightPlan = new FlightPlan();
+            cursorToFlightplan(cursor, flightPlan);
             flightPlans.add(flightPlan);
             cursor.moveToNext();
         }
@@ -326,10 +327,8 @@ public class FlightPlanDataSource {
         return flightPlans;
     }
 
-    public FlightPlan GetFlightplanByID(Integer id)
+    public FlightPlan GetFlightplanByID(Integer id, FlightPlan flightPlan)
     {
-        FlightPlan flightPlan = null;
-
         String query = "SELECT * FROM " + UserDBHelper.FLIGHTPLAN_TABLE_NAME +
                 " WHERE _id=" + Integer.toString(id) + ";";
 
@@ -337,15 +336,14 @@ public class FlightPlanDataSource {
 
         if (cursor.moveToFirst())
         {
-            flightPlan = cursorToFlightplan(cursor);
+            cursorToFlightplan(cursor, flightPlan);
         }
 
         return flightPlan;
     }
 
-    private FlightPlan cursorToFlightplan(Cursor cursor)
+    private FlightPlan cursorToFlightplan(Cursor cursor, FlightPlan flightPlan)
     {
-        FlightPlan flightPlan = new FlightPlan();
         flightPlan.id = cursor.getInt(cursor.getColumnIndex("_id"));
         flightPlan.departure_airport.id = cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_departure_airport_id));
         flightPlan.destination_airport.id = cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_destination_airport_id));
