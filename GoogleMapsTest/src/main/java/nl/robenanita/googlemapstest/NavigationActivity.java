@@ -1072,13 +1072,30 @@ public class NavigationActivity extends ActionBarActivity implements
 
             BufferOp bufOp = new BufferOp(g);
             bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
-            Geometry buffer = bufOp.getResultGeometry(1);
+            Geometry buffer = bufOp.getResultGeometry(.3);
+            drawBuffer(buffer);
 
-            Log.i(TAG, "Buffer Geometry created");
-
+            Geometry e = buffer.getEnvelope();
+            drawBuffer(e);
 
             selectedFlightplan.track = map.addPolyline(selectedFlightplan.trackOptions);
         }
+    }
+
+    private void drawBuffer(Geometry buffer)
+    {
+        Coordinate[] coordinates = buffer.getCoordinates();
+        PolylineOptions o = new PolylineOptions();
+        o.color(Color.RED);
+        o.width(2);
+        for (Coordinate c : coordinates)
+        {
+            LatLng p = new LatLng(c.y, c.x);
+            o.add(p);
+
+        }
+
+        map.addPolyline(o);
     }
 
 
