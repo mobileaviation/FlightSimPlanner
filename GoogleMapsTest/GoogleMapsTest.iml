@@ -87,9 +87,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="ksoap2-android-assembly-3.1.1-jar-with-dependencies" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-19.1.0" level="project" />
+    <orderEntry type="library" exported="" name="jts-1.12" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="android-form-edittext-1.0.5" level="project" />
-    <orderEntry type="library" exported="" name="jts-1.8" level="project" />
     <orderEntry type="library" exported="" name="play-services-4.0.30" level="project" />
   </component>
 </module>

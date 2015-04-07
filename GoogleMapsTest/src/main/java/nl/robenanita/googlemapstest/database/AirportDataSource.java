@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -455,6 +457,33 @@ public class AirportDataSource {
     private void UpdateProgramID(String query)
     {
 
+    }
+
+    public ArrayList<String> getAirportsInBuffer(Geometry buffer)
+    {
+        ArrayList<String> airports = new ArrayList<String>();
+        // First create the envelope
+        Geometry e = buffer.getEnvelope();
+        Coordinate[] corners = e.getCoordinates();
+        Coordinate c1 = corners[0];
+        Coordinate c2 = corners[2];
+
+        String select = "SELECT " + DBHelper.C_ident + " FROM " + DBHelper.AIRPORT_TABLE_NAME + " WHERE ";
+        String latBetween = "";
+        latBetween = "latitude_deg BETWEEN " + Double.toString(c1.y)
+                + " AND " + Double.toString(c2.y);
+
+        String lonBetween = "";
+        lonBetween = "longitude_deg BETWEEN " + Double.toString(c1.x)
+                + " AND " + Double.toString(c2.x);
+
+        select = select + latBetween + " AND " + lonBetween;
+
+        Cursor cursor = database.rawQuery(select, null);
+
+        cursor.moveToFirst();
+
+        return airports;
     }
 
     public Map<Integer, Airport> getAllAirports() {

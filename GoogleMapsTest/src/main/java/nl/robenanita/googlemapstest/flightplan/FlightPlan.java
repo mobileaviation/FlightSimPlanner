@@ -6,6 +6,10 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.operation.buffer.BufferOp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -79,6 +83,26 @@ public class FlightPlan implements Serializable {
         flightPlanDataSource.GetWaypointsByFlightPlan(this);
         flightPlanDataSource.clearTimes(this, true);
         flightPlanDataSource.close();
+
+        createBuffer();
+    }
+
+
+    public Geometry buffer;
+    private void createBuffer() {
+        Coordinate[] coordinates = new Coordinate[this.Waypoints.size()];
+        Integer i = 0;
+        for (Waypoint w : this.Waypoints)
+        {
+            coordinates[i] = new Coordinate(w.location.getLongitude(), w.location.getLatitude());
+            i++;
+        }
+        Geometry g = new GeometryFactory().createLineString(coordinates);
+        BufferOp bufOp = new BufferOp(g);
+        bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
+        buffer = bufOp.getResultGeometry(.3);
+
+        //Geometry e = buffer.getEnvelope();
     }
 
     private OnDistanceFromWaypoint onDistanceFromWaypoint = null;

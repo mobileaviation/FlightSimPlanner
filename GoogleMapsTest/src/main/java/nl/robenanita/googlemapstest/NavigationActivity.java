@@ -52,8 +52,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.operation.buffer.BufferOp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -635,6 +633,14 @@ public class NavigationActivity extends ActionBarActivity implements
         SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
         PlaceFlightplanAirportMarkers();
+
+        // Buffer test
+        drawBuffer(selectedFlightplan.buffer);
+
+        AirportDataSource airportDataSource = new AirportDataSource(this);
+        airportDataSource.open(uniqueID);
+        airportDataSource.getAirportsInBuffer(selectedFlightplan.buffer);
+        airportDataSource.close();
     }
 
     private void SetupFlightplanListeners(FlightPlan flightPlan)
@@ -1041,7 +1047,6 @@ public class NavigationActivity extends ActionBarActivity implements
         {
             LatLng point = null;
             Integer i = 0;
-            Coordinate[] coordinates = new Coordinate[selectedFlightplan.Waypoints.size()];
 
             waypointMarkerMap = new HashMap<Marker, Waypoint>();
             for(Waypoint waypoint : selectedFlightplan.Waypoints)
@@ -1064,19 +1069,7 @@ public class NavigationActivity extends ActionBarActivity implements
                     waypointMarkerMap.put(waypoint.marker, waypoint);
                 }
 
-                coordinates[i] = new Coordinate(point.longitude, point.latitude);
-                i++;
             }
-
-            Geometry g = new GeometryFactory().createLineString(coordinates);
-
-            BufferOp bufOp = new BufferOp(g);
-            bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
-            Geometry buffer = bufOp.getResultGeometry(.3);
-            drawBuffer(buffer);
-
-            Geometry e = buffer.getEnvelope();
-            drawBuffer(e);
 
             selectedFlightplan.track = map.addPolyline(selectedFlightplan.trackOptions);
         }
