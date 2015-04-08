@@ -1,11 +1,15 @@
 package nl.robenanita.googlemapstest.flightplan;
 
+import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-//import com.google.maps.android.MarkerManager;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.operation.buffer.BufferOp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +18,10 @@ import java.util.Date;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.LegInfoView;
+import nl.robenanita.googlemapstest.database.AirportDataSource;
+import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
+
+//import com.google.maps.android.MarkerManager;
 
 /**
  * Created by Rob Verhoef on 3-3-14.
@@ -53,6 +61,50 @@ public class FlightPlan implements Serializable {
 
     private Leg activeLeg;
     private int legWaypointIndex;
+
+    public void LoadFlightplan(Context context, Integer flightPlan_ID, Integer uniqueID)
+    {
+        // First load the basis of the flightplan
+        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(context);
+        flightPlanDataSource.open();
+        flightPlanDataSource.GetFlightplanByID(flightPlan_ID, this);
+        flightPlanDataSource.close();
+
+        // Second, load the airports information
+        AirportDataSource airportDataSource = new AirportDataSource(context);
+        airportDataSource.open(uniqueID);
+        this.departure_airport = airportDataSource.GetAirportByID(this.departure_airport.id);
+        this.destination_airport = airportDataSource.GetAirportByID(this.destination_airport.id);
+        this.alternate_airport = airportDataSource.GetAirportByID(this.alternate_airport.id);
+        airportDataSource.close();
+
+        // Load the waypoint for this flightplan
+        flightPlanDataSource.open();
+        flightPlanDataSource.GetWaypointsByFlightPlan(this);
+        flightPlanDataSource.clearTimes(this, true);
+        flightPlanDataSource.close();
+
+        createBuffer();
+    }
+
+
+    public Geometry buffer;
+    private void createBuffer() {
+        Coordinate[] coordinates = new Coordinate[this.Waypoints.size()];
+        Integer i = 0;
+        for (Waypoint w : this.Waypoints)
+        {
+            coordinates[i] = new Coordinate(w.location.getLongitude(), w.location.getLatitude());
+            i++;
+        }
+        Geometry g = new GeometryFactory().createLineString(coordinates);
+        BufferOp bufOp = new BufferOp(g);
+        bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
+        buffer = bufOp.getResultGeometry(.3);
+
+        //Geometry e = buffer.getEnvelope();
+    }
+
     private OnDistanceFromWaypoint onDistanceFromWaypoint = null;
     private OnNewActiveWaypoint onNewActiveWaypoint = null;
 

@@ -50,6 +50,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -619,37 +621,26 @@ public class NavigationActivity extends ActionBarActivity implements
 
         if (track != null) track.RemoveTrack();
 
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(this);
-        flightPlanDataSource.open();
-        selectedFlightplan = flightPlanDataSource.GetFlightplanByID(flightplan_id);
-
-        flightPlanDataSource.close();
-
-        AirportDataSource airportDataSource = new AirportDataSource(this);
-        airportDataSource.open(uniqueID);
-        selectedFlightplan.departure_airport = airportDataSource.GetAirportByID(selectedFlightplan.departure_airport.id);
-        selectedFlightplan.destination_airport = airportDataSource.GetAirportByID(selectedFlightplan.destination_airport.id);
-        selectedFlightplan.alternate_airport = airportDataSource.GetAirportByID(selectedFlightplan.alternate_airport.id);
-        airportDataSource.close();
-
+        selectedFlightplan = new FlightPlan();
+        selectedFlightplan.LoadFlightplan(this, flightplan_id, uniqueID);
 
         Log.i(TAG, "Selected flightplan: " + selectedFlightplan.name);
 
-        LoadWaypointForFlightplan(selectedFlightplan);
-        ClearFlightplan(selectedFlightplan);
         selectedFlightplan.UpdateWaypointsData();
 
         LoadFlightplanRunways();
-
-        // Setup Track
-
         ShowFlightplanTrack();
-
         SetupFlightplanListeners(selectedFlightplan);
-
         LoadFlightplanGrid();
-
         PlaceFlightplanAirportMarkers();
+
+        // Buffer test
+        drawBuffer(selectedFlightplan.buffer);
+
+        AirportDataSource airportDataSource = new AirportDataSource(this);
+        airportDataSource.open(uniqueID);
+        airportDataSource.getAirportsInBuffer(selectedFlightplan.buffer);
+        airportDataSource.close();
     }
 
     private void SetupFlightplanListeners(FlightPlan flightPlan)
@@ -685,14 +676,14 @@ public class NavigationActivity extends ActionBarActivity implements
         });
     }
 
-    private void ClearFlightplan(FlightPlan flightPlan)
-    {
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(this);
-        flightPlanDataSource.open();
-        flightPlanDataSource.clearTimes(flightPlan, true);
-        flightPlanDataSource.close();
-
-    }
+//    private void ClearFlightplan(FlightPlan flightPlan)
+//    {
+//        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(this);
+//        flightPlanDataSource.open();
+//        flightPlanDataSource.clearTimes(flightPlan, true);
+//        flightPlanDataSource.close();
+//
+//    }
 
     private void LoadFlightplanRunways()
     {
@@ -989,13 +980,13 @@ public class NavigationActivity extends ActionBarActivity implements
         infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
     }
 
-    private void LoadWaypointForFlightplan(FlightPlan flightPlan)
-    {
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-        flightPlanDataSource.open();
-        flightPlan = flightPlanDataSource.GetWaypointsByFlightPlan(selectedFlightplan);
-        flightPlanDataSource.close();
-    }
+//    private void LoadWaypointForFlightplan(FlightPlan flightPlan)
+//    {
+//        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+//        flightPlanDataSource.open();
+//        flightPlan = flightPlanDataSource.GetWaypointsByFlightPlan(selectedFlightplan);
+//        flightPlanDataSource.close();
+//    }
 
     private void ShowDirectToPopup()
     {
@@ -1055,6 +1046,8 @@ public class NavigationActivity extends ActionBarActivity implements
         if (selectedFlightplan != null)
         {
             LatLng point = null;
+            Integer i = 0;
+
             waypointMarkerMap = new HashMap<Marker, Waypoint>();
             for(Waypoint waypoint : selectedFlightplan.Waypoints)
             {
@@ -1075,10 +1068,27 @@ public class NavigationActivity extends ActionBarActivity implements
                     waypoint.marker = map.addMarker(m);
                     waypointMarkerMap.put(waypoint.marker, waypoint);
                 }
+
             }
 
             selectedFlightplan.track = map.addPolyline(selectedFlightplan.trackOptions);
         }
+    }
+
+    private void drawBuffer(Geometry buffer)
+    {
+        Coordinate[] coordinates = buffer.getCoordinates();
+        PolylineOptions o = new PolylineOptions();
+        o.color(Color.RED);
+        o.width(2);
+        for (Coordinate c : coordinates)
+        {
+            LatLng p = new LatLng(c.y, c.x);
+            o.add(p);
+
+        }
+
+        map.addPolyline(o);
     }
 
 
