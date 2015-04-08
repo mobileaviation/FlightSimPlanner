@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\jts-1.12.jar"
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\jts-1.13.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="4b1a8eec9ea08c69c622cd8aef73ff22edc26223">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\jts-1.12-f21626b386464c3c0944c79c872da97b700e241c.jar" />
+        sha1="1d7457bff1a63d8f2b2e0e0961300aa1831d0fb7">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\jts-1.13-400dbb4597f06f3bb2b5d22e9d33714be1991c51.jar" />
     </item>
 
 </items>

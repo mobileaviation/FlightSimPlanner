@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="jts-1.12">
+  <library name="jts-1.13">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/GoogleMapsTest/libs/jts-1.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GoogleMapsTest/libs/jts-1.13.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -10,6 +10,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.operation.buffer.BufferOp;
+
 import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Weather.Metar;
@@ -24,7 +29,7 @@ import nl.robenanita.googlemapstest.Weather.Taf;
 import nl.robenanita.googlemapstest.Weather.TafRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Type;
 import nl.robenanita.googlemapstest.Weather.WeatherWebService;
-
+import nl.robenanita.googlemapstest.database.AirportDataSource;
 
 
 public class AirportsInfoFragment extends Fragment {
@@ -182,12 +187,33 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setStations()
     {
-        StationsWebService s = new StationsWebService();
+        //StationsWebService s = new StationsWebService();
+        Geometry g2 = null;
         NavigationActivity activity = (NavigationActivity)getActivity();
+        if (activity.selectedFlightplan != null)
+        {
+            g2 = activity.selectedFlightplan.buffer;
+        }
+        else
+        {
+            // Create  buffer around curposition
+            Geometry g1 = new GeometryFactory().createPoint(new Coordinate(activity.curPosition.longitude,
+                    activity.curPosition.latitude));
+            BufferOp bufOp = new BufferOp(g1);
+            bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
+            g2 = bufOp.getResultGeometry(1);
+        }
 
-        setStationsWebServiceDataAvailableListener(s);
+        AirportDataSource airportDataSource = new AirportDataSource(activity);
+        airportDataSource.open(-1);
+        setupStationsView(airportDataSource.getAirportsInBuffer(g2));
+        airportDataSource.close();
 
-        s.GetStationsByLocationRadius(activity.curPosition, 80);
+        //setStationsWebServiceDataAvailableListener(s);
+
+        //s.GetStationsByLocationRadius(activity.curPosition, 80);
+
+
     }
 
     private void setInfoListViewVisibility()

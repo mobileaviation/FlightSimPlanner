@@ -9,6 +9,9 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.prep.PreparedGeometry;
+import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.Map;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.Runway;
+import nl.robenanita.googlemapstest.Weather.Station;
 
 /**
  * Created by Rob Verhoef on 18-1-14.
@@ -459,16 +463,19 @@ public class AirportDataSource {
 
     }
 
-    public ArrayList<String> getAirportsInBuffer(Geometry buffer)
+    public ArrayList<Station> getAirportsInBuffer(Geometry buffer)
     {
-        ArrayList<String> airports = new ArrayList<String>();
+        ArrayList<Station> airports = new ArrayList<Station>();
         // First create the envelope
         Geometry e = buffer.getEnvelope();
         Coordinate[] corners = e.getCoordinates();
         Coordinate c1 = corners[0];
         Coordinate c2 = corners[2];
 
-        String select = "SELECT " + DBHelper.C_ident + " FROM " + DBHelper.AIRPORT_TABLE_NAME + " WHERE ";
+        String select = "SELECT " + DBHelper.C_ident +
+                "," + DBHelper.C_latitude_deg +
+                "," + DBHelper.C_longitude_deg +
+                " FROM " + DBHelper.AIRPORT_TABLE_NAME + " WHERE ";
         String latBetween = "";
         latBetween = "latitude_deg BETWEEN " + Double.toString(c1.y)
                 + " AND " + Double.toString(c2.y);
@@ -482,6 +489,18 @@ public class AirportDataSource {
         Cursor cursor = database.rawQuery(select, null);
 
         cursor.moveToFirst();
+        PreparedGeometry targetPrep
+                = PreparedGeometryFactory.prepare(buffer);
+        while(!cursor.isAfterLast())
+        {
+            Station s = new Station();
+            s.station_id = cursor.getString(cursor.getColumnIndex(DBHelper.C_ident));
+            s.latitude = cursor.getDouble(cursor.getColumnIndex(DBHelper.C_latitude_deg));
+            s.longitude = cursor.getDouble(cursor.getColumnIndex(DBHelper.C_longitude_deg));
+            Geometry g1 = new GeometryFactory().createPoint(new Coordinate(s.longitude, s.latitude));
+            if (targetPrep.contains(g1)) airports.add(s);
+            cursor.moveToNext();
+        }
 
         return airports;
     }
