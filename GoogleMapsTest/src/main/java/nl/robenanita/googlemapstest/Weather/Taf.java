@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest.Weather;
 
+import android.content.Context;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -13,17 +14,19 @@ import nl.robenanita.googlemapstest.database.AirportDataSource;
  * Created by Rob Verhoef on 7-5-2014.
  */
 public class Taf {
-    public Taf()
+    public Taf(Context context)
     {
+        this.context = context;
         elevation_m = 0;
         forecast = new ArrayList<forecast_class>();
     }
 
+    private Context context;
     public String station_id;
     public void setStation_id(String station_id)
     {
         this.station_id = station_id;
-        AirportDataSource airportDataSource = new AirportDataSource(null);
+        AirportDataSource airportDataSource = new AirportDataSource(context);
         airportDataSource.open(-1);
         airport = airportDataSource.GetAirportByIDENT(station_id);
         airportDataSource.close();

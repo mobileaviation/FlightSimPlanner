@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest.Weather;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -31,9 +32,10 @@ public class WeatherWebService {
     public ArrayList<Taf> tafs;
 
     private LatLng orgLocation;
+    private Context context;
 
-
-    public WeatherWebService() {
+    public WeatherWebService(Context context) {
+        this.context = context;
         metars = new ArrayList<Metar>();
         tafs = new ArrayList<Taf>();
     }
@@ -269,10 +271,10 @@ public class WeatherWebService {
                             break;
                         }
                         case XmlPullParser.START_TAG: {
-                            name = null;
+                            //name = null;
                             name = parser.getName();
 
-                            if (name.equals("TAF")) taf = new Taf();
+                            if (name.equals("TAF")) taf = new Taf(context);
                             if(taf != null)
                                 if (name.equals("forecast")) forecast = taf.getNewForecastClass();
 
@@ -330,8 +332,10 @@ public class WeatherWebService {
                             if (metar != null) {
                                 if (name != null) {
                                     try {
-                                        if (name.equals("raw_text")) metar.raw_text = parser.getText();
-                                        if (name.equals("station_id"))metar.setStation_id(parser.getText());
+                                        if (name.equals("raw_text"))
+                                            metar.raw_text = parser.getText();
+                                        if (name.equals("station_id"))
+                                            metar.setStation_id(parser.getText());
                                         if (!onlyRawData) {
 
                                             //metar.station_id = parser.getText();
@@ -389,8 +393,8 @@ public class WeatherWebService {
                                                 metar.quality_control_flags = parser.getText();
                                             if (name.equals("wx_string"))
                                                 metar.wx_string = parser.getText();
-                                            if (name.equals("station_id"))
-                                                metar.station_id = parser.getText();
+//                                            if (name.equals("station_id"))
+//                                                metar.station_id = parser.getText();
                                             if (name.equals("vert_vis_ft"))
                                                 metar.vert_vis_ft = getInteger(parser.getText());
                                         }
@@ -405,9 +409,9 @@ public class WeatherWebService {
                             break;
                         }
                         case XmlPullParser.START_TAG: {
-                            name = null;
+                            //name = null;
                             name = parser.getName();
-                            if (name.equals("METAR")) metar = new Metar();
+                            if (name.equals("METAR")) metar = new Metar(context);
                             if (!onlyRawData)
                                 if(metar != null)
                                     if (name.equals("sky_condition")) {

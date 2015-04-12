@@ -484,7 +484,11 @@ public class AirportDataSource {
         lonBetween = "longitude_deg BETWEEN " + Double.toString(c1.x)
                 + " AND " + Double.toString(c2.x);
 
-        select = select + latBetween + " AND " + lonBetween;
+        String type = "type in ('large_airport','medium_airport','small_airport')";
+
+        select = select + latBetween + " AND " + lonBetween + " AND " + type;
+
+        Log.d(TAG, select);
 
         Cursor cursor = database.rawQuery(select, null);
 

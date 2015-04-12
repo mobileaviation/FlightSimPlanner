@@ -133,7 +133,7 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setMetars(String code)
     {
-        WeatherWebService s = new WeatherWebService();
+        WeatherWebService s = new WeatherWebService(view.getContext());
         setWeatherWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
@@ -142,7 +142,7 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setTafs(String code)
     {
-        WeatherWebService s = new WeatherWebService();
+        WeatherWebService s = new WeatherWebService(view.getContext());
         setWeatherWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
