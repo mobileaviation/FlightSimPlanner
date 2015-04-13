@@ -409,7 +409,8 @@
             android:visibility="visible"
             android:id="@+id/airportInfoLayout"
             android:layout_below="@+id/scaleBarView"
-            android:layout_alignLeft="@+id/map">
+            android:layout_alignLeft="@+id/map"
+            android:layout_marginBottom="10dp">
             <fragment
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"

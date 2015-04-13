@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -46,6 +47,7 @@ public class AirportsInfoFragment extends Fragment {
     private Button metarBtn;
     private Button tafBtn;
     private Button chartBtn;
+    private TextView airportIdentText;
     private View view;
     private Integer infoListViewVisibility;
     private Type typeVisible;
@@ -58,6 +60,7 @@ public class AirportsInfoFragment extends Fragment {
 
         infoListView = (ListView)view.findViewById(R.id.airportsInfoListView);
         icaoCodesListView = (ListView)view.findViewById(R.id.airportsInfoIcaoListView);
+        airportIdentText = (TextView) view.findViewById(R.id.airportIdentText);
 
         infoListViewVisibility = infoListView.getVisibility();
 
@@ -147,6 +150,20 @@ public class AirportsInfoFragment extends Fragment {
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
         s.GetTafsByICAO(icaos);
+    }
+
+    private void setAirport(String code)
+    {
+        Airport airport = getAirport(code);
+    }
+
+    private Airport getAirport(String code)
+    {
+        Airport airport;
+        AirportDataSource airportDataSource = new AirportDataSource(view.getContext());
+        airportDataSource.open(-1);
+        airport = airportDataSource.GetAirportByIDENT(code);
+        return airport;
     }
 
     private void setWeatherWebServiceDataAvailableListener(WeatherWebService service)

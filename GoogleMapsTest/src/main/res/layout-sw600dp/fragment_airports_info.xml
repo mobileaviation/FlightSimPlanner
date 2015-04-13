@@ -11,7 +11,7 @@
         android:layout_height="fill_parent"
         android:layout_gravity="left|top"
         android:gravity="center_vertical"
-        android:id="@+id/airportsInfoLayout">
+        android:id="@+id/airportsInfoListLayout">
 
         <Button
             android:layout_width="30dp"
@@ -41,16 +41,16 @@
         android:layout_height="fill_parent"
         android:id="@+id/airportsInfoListView"
         android:layout_gravity="left"
-        android:layout_toRightOf="@+id/airportsInfoLayout"
-        android:layout_toEndOf="@+id/airportsInfoLayout"
+        android:layout_toRightOf="@+id/airportsInfoListLayout"
+        android:layout_toEndOf="@+id/airportsInfoListLayout"
         android:focusableInTouchMode="true"
         android:visibility="gone"
         android:background="#ffffffff" />
     <ListView
-        android:layout_width="70dp"
+        android:layout_width="75dp"
         android:layout_height="fill_parent"
         android:id="@+id/airportsInfoIcaoListView"
-        android:layout_toRightOf="@+id/airportsInfoLayout"
+        android:layout_toRightOf="@+id/airportsInfoListLayout"
         android:visibility="gone"
         android:background="#ffffffff" />
 </RelativeLayout>
