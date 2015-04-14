@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -41,6 +43,7 @@ public class AirportsInfoFragment extends Fragment {
 
     private String TAG = "GooglemapsTest";
 
+    private LinearLayout airportsInfoListLayout;
     private ListView infoListView;
     private ListView icaoCodesListView;
     private Button notamsBtn;
@@ -48,9 +51,11 @@ public class AirportsInfoFragment extends Fragment {
     private Button tafBtn;
     private Button chartBtn;
     private TextView airportIdentText;
+    private TextView infoTypeText;
     private View view;
     private Integer infoListViewVisibility;
     private Type typeVisible;
+    private ProgressBar infoProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,8 +66,11 @@ public class AirportsInfoFragment extends Fragment {
         infoListView = (ListView)view.findViewById(R.id.airportsInfoListView);
         icaoCodesListView = (ListView)view.findViewById(R.id.airportsInfoIcaoListView);
         airportIdentText = (TextView) view.findViewById(R.id.airportIdentText);
+        infoTypeText = (TextView) view.findViewById(R.id.infoTypeText);
+        airportsInfoListLayout = (LinearLayout) view.findViewById(R.id.airportsInfoListLayout);
+        infoProgressBar = (ProgressBar) view.findViewById(R.id.airportInfoProgressBar);
 
-        infoListViewVisibility = infoListView.getVisibility();
+        infoListViewVisibility = airportsInfoListLayout.getVisibility();
 
         notamsBtn = (Button)view.findViewById(R.id.notamBtn);
         metarBtn = (Button)view.findViewById(R.id.metarBtn);
@@ -107,6 +115,8 @@ public class AirportsInfoFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 StationsAdapter adapter = (StationsAdapter)adapterView.getAdapter();
                 Log.i(TAG, "Code" + adapter.getStation(i).station_id);
+                infoListView.setVisibility(View.GONE);
+                infoProgressBar.setVisibility(View.VISIBLE);
                 switch (typeVisible) {
                     case metar :
                         setMetars(adapter.getStation(i).station_id); break;
@@ -131,7 +141,9 @@ public class AirportsInfoFragment extends Fragment {
         setNotamsWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
+        infoTypeText.setText("Notams");
         s.GetNotamsByICAOs(icaos);
+        setAirport(code);
     }
 
     private void setMetars(String code)
@@ -140,7 +152,9 @@ public class AirportsInfoFragment extends Fragment {
         setWeatherWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
+        infoTypeText.setText("Metar");
         s.GetMetarsByICAO(icaos);
+        setAirport(code);
     }
 
     private void setTafs(String code)
@@ -149,12 +163,15 @@ public class AirportsInfoFragment extends Fragment {
         setWeatherWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
+        infoTypeText.setText("Taf");
         s.GetTafsByICAO(icaos);
+        setAirport(code);
     }
 
     private void setAirport(String code)
     {
         Airport airport = getAirport(code);
+        airportIdentText.setText(airport.ident);
     }
 
     private Airport getAirport(String code)
@@ -236,8 +253,9 @@ public class AirportsInfoFragment extends Fragment {
     private void setInfoListViewVisibility()
     {
         infoListViewVisibility = (infoListViewVisibility==view.GONE) ? view.VISIBLE : view.GONE;
-        infoListView.setVisibility(infoListViewVisibility);
+        airportsInfoListLayout.setVisibility(infoListViewVisibility);
         icaoCodesListView.setVisibility(infoListViewVisibility);
+
         infoListView.setAdapter(null);
         icaoCodesListView.setAdapter(null);
     }
@@ -247,6 +265,8 @@ public class AirportsInfoFragment extends Fragment {
         final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
         MetarRawAdapter adapter = new MetarRawAdapter(metars);
         listView.setAdapter(adapter);
+        listView.setVisibility(View.VISIBLE);
+        infoProgressBar.setVisibility(View.GONE);
     }
 
     public void setupTafsView(ArrayList<Taf> tafs)
@@ -254,6 +274,8 @@ public class AirportsInfoFragment extends Fragment {
         final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
         TafRawAdapter adapter = new TafRawAdapter(tafs);
         listView.setAdapter(adapter);
+        listView.setVisibility(View.VISIBLE);
+        infoProgressBar.setVisibility(View.GONE);
     }
 
     public void setupNotamsView(ArrayList<Notam> notams)
@@ -261,6 +283,8 @@ public class AirportsInfoFragment extends Fragment {
         final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
         NotamRawAdapter adapter = new NotamRawAdapter(notams);
         listView.setAdapter(adapter);
+        listView.setVisibility(View.VISIBLE);
+        infoProgressBar.setVisibility(View.GONE);
     }
 
     public void setupStationsView(ArrayList<Station> stations)

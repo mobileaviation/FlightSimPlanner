@@ -43,15 +43,30 @@
         android:layout_toRightOf="@+id/airportsInfoIcaoListView"
         android:layout_toEndOf="@+id/airportsInfoIcaoListView"
         android:id="@+id/airportsInfoListLayout"
-        android:weightSum="1">
+        android:visibility="gone"
+        android:weightSum="1"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
             android:id="@+id/airportIdentText"
             android:layout_gravity="top"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#ffcecece"
+            android:gravity="center"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Metar"
+            android:id="@+id/infoTypeText"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
             android:background="#ffcecece"
@@ -64,14 +79,21 @@
             android:layout_gravity="left"
             android:layout_toRightOf="@+id/airportsInfoIcaoListView"
             android:focusableInTouchMode="true"
-            android:visibility="visible"
-            android:background="#ffffffff" />
+            android:background="#ffffffff"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/airportInfoProgressBar"
+            android:layout_gravity="center" />
     </LinearLayout>
 
     <ListView
         android:layout_width="75dp"
         android:layout_height="fill_parent"
         android:id="@+id/airportsInfoIcaoListView"
-        android:visibility="visible"
-        android:background="#ffffffff" />
+        android:visibility="gone"
+        android:background="#ffffffff"
+        android:layout_toRightOf="@+id/airportsInfoLayout" />
 </RelativeLayout>
