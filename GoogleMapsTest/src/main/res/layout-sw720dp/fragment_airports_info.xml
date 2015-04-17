@@ -52,7 +52,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:text="...."
             android:id="@+id/airportIdentText"
             android:layout_gravity="top"
             android:layout_marginTop="3dp"
@@ -65,7 +65,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Metar"
+            android:text="...."
             android:id="@+id/infoTypeText"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
@@ -83,10 +83,23 @@
             android:visibility="gone" />
 
         <ProgressBar
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
+            android:background="#ffffffff"
             android:id="@+id/airportInfoProgressBar"
+            android:visibility="gone"
             android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Select an Airport"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:background="#ffffffff"
+            android:id="@+id/selectAirportForInfoText"
+            android:visibility="visible" />
     </LinearLayout>
 
     <ListView

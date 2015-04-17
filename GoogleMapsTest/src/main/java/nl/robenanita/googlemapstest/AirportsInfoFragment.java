@@ -52,6 +52,7 @@ public class AirportsInfoFragment extends Fragment {
     private Button chartBtn;
     private TextView airportIdentText;
     private TextView infoTypeText;
+    private TextView selectAirportForInfoText;
     private View view;
     private Integer infoListViewVisibility;
     private Type typeVisible;
@@ -69,6 +70,7 @@ public class AirportsInfoFragment extends Fragment {
         infoTypeText = (TextView) view.findViewById(R.id.infoTypeText);
         airportsInfoListLayout = (LinearLayout) view.findViewById(R.id.airportsInfoListLayout);
         infoProgressBar = (ProgressBar) view.findViewById(R.id.airportInfoProgressBar);
+        selectAirportForInfoText = (TextView) view.findViewById(R.id.selectAirportForInfoText);
 
         infoListViewVisibility = airportsInfoListLayout.getVisibility();
 
@@ -80,7 +82,7 @@ public class AirportsInfoFragment extends Fragment {
         notamsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setInfoListViewVisibility();
+                setInfoListViewVisibility(Type.vatme_notam);
                 if (infoListViewVisibility==View.VISIBLE) {
                     typeVisible = Type.vatme_notam;
                     setStations();// setNotams();
@@ -91,7 +93,7 @@ public class AirportsInfoFragment extends Fragment {
         metarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setInfoListViewVisibility();
+                setInfoListViewVisibility(Type.metar);
                 if (infoListViewVisibility==View.VISIBLE) {
                     typeVisible = Type.metar;
                     setStations();
@@ -102,7 +104,7 @@ public class AirportsInfoFragment extends Fragment {
         tafBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setInfoListViewVisibility();
+                setInfoListViewVisibility(Type.taf);
                 if (infoListViewVisibility==View.VISIBLE) {
                     typeVisible = Type.taf;
                     setStations();
@@ -117,6 +119,7 @@ public class AirportsInfoFragment extends Fragment {
                 Log.i(TAG, "Code" + adapter.getStation(i).station_id);
                 infoListView.setVisibility(View.GONE);
                 infoProgressBar.setVisibility(View.VISIBLE);
+                selectAirportForInfoText.setVisibility(View.GONE);
                 switch (typeVisible) {
                     case metar :
                         setMetars(adapter.getStation(i).station_id); break;
@@ -250,12 +253,19 @@ public class AirportsInfoFragment extends Fragment {
 
     }
 
-    private void setInfoListViewVisibility()
+    private void setInfoListViewVisibility(Type typeVisible)
     {
         infoListViewVisibility = (infoListViewVisibility==view.GONE) ? view.VISIBLE : view.GONE;
+        if ((infoListViewVisibility==view.VISIBLE) && (this.typeVisible!=typeVisible))
+            infoListViewVisibility = view.VISIBLE; else infoListViewVisibility = view.GONE;
         airportsInfoListLayout.setVisibility(infoListViewVisibility);
         icaoCodesListView.setVisibility(infoListViewVisibility);
-
+        selectAirportForInfoText.setVisibility(infoListViewVisibility);
+        infoListView.setVisibility(view.GONE);
+        if (typeVisible == Type.metar) infoTypeText.setText("Metar");
+        if (typeVisible == Type.taf) infoTypeText.setText("Taf");
+        if (typeVisible == Type.vatme_notam) infoTypeText.setText("Notams");
+        airportIdentText.setText("....");
         infoListView.setAdapter(null);
         icaoCodesListView.setAdapter(null);
     }
