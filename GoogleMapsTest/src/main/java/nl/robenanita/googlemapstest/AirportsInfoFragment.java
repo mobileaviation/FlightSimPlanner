@@ -255,9 +255,10 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setInfoListViewVisibility(Type typeVisible)
     {
-        infoListViewVisibility = (infoListViewVisibility==view.GONE) ? view.VISIBLE : view.GONE;
-        if ((infoListViewVisibility==view.VISIBLE) && (this.typeVisible!=typeVisible))
-            infoListViewVisibility = view.VISIBLE; else infoListViewVisibility = view.GONE;
+        //infoListViewVisibility = (infoListViewVisibility==view.GONE) ? view.VISIBLE : view.GONE;
+        if (infoListViewVisibility==view.GONE) infoListViewVisibility = view.VISIBLE; else
+            if ((infoListViewVisibility==view.VISIBLE) && (this.typeVisible!=typeVisible))
+                infoListViewVisibility = view.VISIBLE; else infoListViewVisibility = view.GONE;
         airportsInfoListLayout.setVisibility(infoListViewVisibility);
         icaoCodesListView.setVisibility(infoListViewVisibility);
         selectAirportForInfoText.setVisibility(infoListViewVisibility);
