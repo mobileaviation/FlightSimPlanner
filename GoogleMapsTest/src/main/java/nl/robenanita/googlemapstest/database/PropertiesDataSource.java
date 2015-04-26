@@ -19,7 +19,8 @@ import nl.robenanita.googlemapstest.Runway;
  */
 public class PropertiesDataSource {
     private SQLiteDatabase database;
-    private UserDBHelper dbHelper;
+    private UserDBHelper userDbHelper;
+    private DBHelper dbHelper;
     private String TAG = "GooglemapsTest";
     private Context c;
 
@@ -27,16 +28,20 @@ public class PropertiesDataSource {
 
     public PropertiesDataSource(Context context) {
         c = context;
-        dbHelper = new UserDBHelper(context);
+        userDbHelper = new UserDBHelper(context);
     }
 
-    public void open(){
+    public void open(boolean user){
         try {
             //..dbHelper.createDataBase();
-            database = dbHelper.getWritableDatabase();
-
-            markerProperties = new MarkerProperties();
-            fillMarkerProperties();
+            if (user) {
+                database = userDbHelper.getWritableDatabase();
+                markerProperties = new MarkerProperties();
+                fillMarkerProperties();
+            } else
+            {
+                database = dbHelper.getWritableDatabase();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,8 +49,9 @@ public class PropertiesDataSource {
 
     }
 
-    public void close() {
-        dbHelper.close();
+    public void close(boolean user) {
+        if (user) userDbHelper.close();
+        else dbHelper.close();
     }
 
 //    public void checkVersion()

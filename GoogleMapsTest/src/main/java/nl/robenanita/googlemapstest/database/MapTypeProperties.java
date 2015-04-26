@@ -49,7 +49,7 @@ public class MapTypeProperties {
     public void LoadFromDatabase(Context context)
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("MAPTYPE");
         if (p != null)
         {
@@ -59,13 +59,13 @@ public class MapTypeProperties {
         {
             SaveToDatabase(context);
         }
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
     }
 
     public void SaveToDatabase(Context context)
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("MAPTYPE");
         if (p != null)
         {
@@ -82,7 +82,7 @@ public class MapTypeProperties {
             propertiesDataSource.InsertProperty(pn);
         }
 
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
     }
 
     public void SetValue(Integer chart, Boolean visible)

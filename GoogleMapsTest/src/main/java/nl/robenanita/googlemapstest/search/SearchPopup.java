@@ -65,9 +65,9 @@ public class SearchPopup extends PopupWindow {
         double longspan = (distance/111325)*(1/ Math.cos(Math.toRadians(location.latitude)));
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(layout.getContext());
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         MarkerProperties markerProperties = propertiesDataSource.getMarkersProperties();
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
 
         LatLngBounds bounds = new LatLngBounds(
                 new LatLng(location.latitude-latspan, location.longitude-longspan),

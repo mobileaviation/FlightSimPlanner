@@ -48,7 +48,7 @@ public class WeatherProperties {
     public void LoadFromDatabase(Context context)
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("WEATHERCHARTS");
         if (p != null)
         {
@@ -58,13 +58,13 @@ public class WeatherProperties {
         {
             SaveToDatabase(context);
         }
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
     }
 
     public void SaveToDatabase(Context context)
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("WEATHERCHARTS");
         if (p != null)
         {
@@ -80,7 +80,7 @@ public class WeatherProperties {
             propertiesDataSource.InsertProperty(pn);
         }
 
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
     }
 
     public void SetValue(TileProviderFormats.weathermapLayer chart, Boolean visible)

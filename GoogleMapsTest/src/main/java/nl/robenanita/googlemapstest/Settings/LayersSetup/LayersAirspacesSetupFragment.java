@@ -33,7 +33,7 @@ public class LayersAirspacesSetupFragment extends Fragment {
     private void getProperty()
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(n);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         p = propertiesDataSource.getMapSetup("AIRSPACES");
 
         if (p==null)
@@ -44,7 +44,7 @@ public class LayersAirspacesSetupFragment extends Fragment {
             p.value2 = Boolean.toString(true);
             propertiesDataSource.InsertProperty(p);
         }
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
     }
 
 
@@ -75,9 +75,9 @@ public class LayersAirspacesSetupFragment extends Fragment {
     public void SaveToDatabase(Context context)
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         propertiesDataSource.updateProperty(p);
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
     }
 
 

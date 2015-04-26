@@ -428,10 +428,10 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void LoadProperties() {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         propertiesDataSource.FillProperties();
         markerProperties = propertiesDataSource.getMarkersProperties();
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
 
         connectionType = propertiesDataSource.getConnectionType();
         instrumentsVisible = propertiesDataSource.getInstrumentsVisible();
@@ -1388,7 +1388,7 @@ public class NavigationActivity extends ActionBarActivity implements
         super.onStart();
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(NavigationActivity.this);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("SHOWISNEW");
         PackageInfo pinfo = null;
         try {
@@ -1411,7 +1411,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 }
             }
 
-            propertiesDataSource.close();
+            propertiesDataSource.close(true);
 
             if (Boolean.parseBoolean(p.value2))
             {

@@ -85,9 +85,9 @@ public class SearchActivity extends ActionBarActivity {
         LatLng location = b.getParcelable("location");
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         MarkerProperties markerProperties = propertiesDataSource.getMarkersProperties();
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
 
         double distance = 50000;
 

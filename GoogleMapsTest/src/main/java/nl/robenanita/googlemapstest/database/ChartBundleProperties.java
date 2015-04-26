@@ -40,7 +40,7 @@ public class ChartBundleProperties {
     public void LoadFromDatabase(Context context)
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("CHARTBUNDLE");
         if (p != null)
         {
@@ -50,13 +50,13 @@ public class ChartBundleProperties {
         {
             SaveToDatabase(context);
         }
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
     }
 
     public void SaveToDatabase(Context context)
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("CHARTBUNDLE");
         if (p != null)
         {
@@ -71,7 +71,7 @@ public class ChartBundleProperties {
             pn.value2 = ToXml();
             propertiesDataSource.InsertProperty(pn);
         }
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
     }
 
     public void SetValue(TileProviderFormats.chartBundleLayer chart, Boolean visible)

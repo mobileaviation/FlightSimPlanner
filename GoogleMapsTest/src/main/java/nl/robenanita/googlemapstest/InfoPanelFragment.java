@@ -101,9 +101,9 @@ public class InfoPanelFragment extends Fragment {
     public void LoadAdd()
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(view.getContext());
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         boolean ads = propertiesDataSource.checkNoAdvertisements();
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
 
 
         if (!ads) {

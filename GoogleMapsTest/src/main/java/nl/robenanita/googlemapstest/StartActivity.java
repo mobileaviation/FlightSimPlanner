@@ -260,9 +260,9 @@ public class StartActivity extends ActionBarActivity {
                     if (result.isSuccess()) {
                         // Remove the Advertisements and set the database to purchased = 1
                         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(StartActivity.this);
-                        propertiesDataSource.open();
+                        propertiesDataSource.open(true);
                         propertiesDataSource.setNoAdvertisements();
-                        propertiesDataSource.close();
+                        propertiesDataSource.close(true);
                         removeAdds();
 
                     } else {
@@ -284,9 +284,9 @@ public class StartActivity extends ActionBarActivity {
                 if (debug){
                     Log.i(TAG, "This is in debug so set the NoAdvertisement");
                     PropertiesDataSource propertiesDataSource = new PropertiesDataSource(StartActivity.this);
-                    propertiesDataSource.open();
+                    propertiesDataSource.open(true);
                     propertiesDataSource.setNoAdvertisements();
-                    propertiesDataSource.close();
+                    propertiesDataSource.close(true);
                 }
                 else {
 
@@ -414,9 +414,9 @@ public class StartActivity extends ActionBarActivity {
         fixesCountTxt.setText(Integer.toString(fiCount));
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         propertiesDataSource.FillProperties();
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
 
         databaseVersionTxt = (TextView) findViewById(R.id.databaseVersionTxt);
         databaseVersionTxt.setText(propertiesDataSource.DBVersion.value1);
@@ -500,9 +500,9 @@ public class StartActivity extends ActionBarActivity {
     public boolean loadAds()
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         boolean v = propertiesDataSource.checkNoAdvertisements();
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
 
         if (!v) {
             AdView leftAd = (AdView) findViewById(R.id.adLeft);

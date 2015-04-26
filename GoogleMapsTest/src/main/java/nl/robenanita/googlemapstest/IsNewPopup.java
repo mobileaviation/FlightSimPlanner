@@ -30,9 +30,9 @@ public class IsNewPopup extends PopupWindow {
         isNewView.loadUrl("file:///android_asset/index.html");
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(layout.getContext());
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("SHOWISNEW");
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
 
         CheckBox doNotShowAgainChkBox = (CheckBox) layout.findViewById(R.id.doNotShowAgaincheckBox);
         doNotShowAgainChkBox.setChecked(!Boolean.parseBoolean(p.value2));
@@ -41,11 +41,11 @@ public class IsNewPopup extends PopupWindow {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 PropertiesDataSource propertiesDataSource = new PropertiesDataSource(layout.getContext());
-                propertiesDataSource.open();
+                propertiesDataSource.open(true);
                 Property p = propertiesDataSource.getMapSetup("SHOWISNEW");
                 p.value2 = Boolean.toString(!b);
                 propertiesDataSource.updateProperty(p);
-                propertiesDataSource.close();
+                propertiesDataSource.close(true);
             }
         });
 

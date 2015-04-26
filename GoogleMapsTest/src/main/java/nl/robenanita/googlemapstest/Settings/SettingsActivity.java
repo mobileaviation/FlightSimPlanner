@@ -54,10 +54,10 @@ public class SettingsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_settings);
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         propertiesDataSource.FillProperties();
         markerProperties = propertiesDataSource.getMarkersProperties();
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
 
         setupMarkersVisible();
 
@@ -138,7 +138,7 @@ public class SettingsActivity extends ActionBarActivity {
         if (ipAddressTxt.testValidity()) {
             valid = true;
             PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-            propertiesDataSource.open();
+            propertiesDataSource.open(true);
             propertiesDataSource.FillProperties();
 
             NavigationActivity.ConnectionType c;
@@ -187,7 +187,7 @@ public class SettingsActivity extends ActionBarActivity {
             markersCheckBoxesToProperties();
             propertiesDataSource.storePropertiesInDB(markerProperties);
 
-            propertiesDataSource.close();
+            propertiesDataSource.close(true);
 
         }
 

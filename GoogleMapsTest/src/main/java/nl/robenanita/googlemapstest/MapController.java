@@ -87,9 +87,9 @@ public class MapController
         chartBundleProperties.LoadFromDatabase(context);
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open();
+        propertiesDataSource.open(true);
         Property p = propertiesDataSource.getMapSetup("AIRSPACES");
-        propertiesDataSource.close();
+        propertiesDataSource.close(true);
         boolean airspacesVisible = (p!=null) ? Boolean.valueOf(p.value2) : true;
 
         TileProvider SkylinesTileProvider = TileProviderFactory.getSkylinesProvider(TileProviderFormats.skylinesLayer.Airspace, context);
