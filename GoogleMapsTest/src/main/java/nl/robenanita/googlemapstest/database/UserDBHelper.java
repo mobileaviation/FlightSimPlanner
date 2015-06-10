@@ -10,13 +10,14 @@ import android.util.Log;
  */
 public class UserDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "userairnav.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
     public static final String TRACKPOINTS_TABLE_NAME = "tbl_Trackpoints";
     public static final String PROPERTIES_TABLE_NAME = "tbl_Properties";
     public static final String FLIGHTPLAN_TABLE_NAME = "tbl_Flightplans";
     public static final String USERWAYPOINT_TABLE_NAME = "tbl_Userwaypoints";
+    public static final String AIRPORTINFO_TABLE_NAME = "tbl_AirportInfo";
 
     private static final String TAG = "GooglemapsTest";
 
@@ -56,7 +57,42 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_distance_total = "distance_total";
     public static final String C_sortorder = "sortorder";
 
+    public static final String C_metar = "metar";
+    public static final String C_metar_date = "metar_date";
+    public static final String C_taf = "taf";
+    public static final String C_taf_date = "taf_date";
+    public static final String C_notam = "notam";
+    public static final String C_notam_date = "notam_date";
+    public static final String C_notam_position = "notam_position";
+    public static final String C_notam_polygon = "notam_polygon";
+    public static final String C_fir_id = "fir_id";
+    public static final String C_ident = "ident";
+
     // Database creation sql statement
+    private static final String AIRPORTINFO_TABLE = "create table "
+            + AIRPORTINFO_TABLE_NAME +" (_id integer primary key autoincrement, "
+            + C_airport_id + " integer, "
+            + C_fir_id + " integer, "
+            + C_ident + " text, "
+            + C_metar + " text, "
+            + C_metar_date + " integer, "
+            + C_taf + " text, "
+            + C_taf_date + " integer, "
+            + C_notam + " text, "
+            + C_notam_date + " integer, "
+            + C_notam_position + " text, "
+            + C_notam_polygon + " text"
+            + " );";
+
+    private static final String AIRPORTINFO_IDENT_INDEX = "create index airportinfo_ident_index" +
+            " on " + AIRPORTINFO_TABLE_NAME + " (" + C_ident + ");";
+    private static final String AIRPORTINFO_METARDATE_INDEX = "create index airportinfo_metardate_index" +
+            " on " + AIRPORTINFO_TABLE_NAME + " (" + C_metar_date + ");";
+    private static final String AIRPORTINFO_TAFDATE_INDEX = "create index airportinfo_tafdate_index" +
+            " on " + AIRPORTINFO_TABLE_NAME + " (" + C_taf_date + ");";
+    private static final String AIRPORTINFO_NOTAMDATE_INDEX = "create index airportinfo_notamdate_index" +
+            " on " + AIRPORTINFO_TABLE_NAME + " (" + C_notam_date + ");";
+
     private static final String FLIGHTPLAN_TABLE = "create table "
             + FLIGHTPLAN_TABLE_NAME +" (_id integer primary key autoincrement, "
             + C_name + " text, "
@@ -153,15 +189,17 @@ public class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL(TRACKS_TABLE);
         Log.i(TAG, "Creating Database table Properties");
         db.execSQL(PROPERTIES_TABLE);
-    }
+        Log.i(TAG, "Creating Database table AirportInfo");
+        db.execSQL(AIRPORTINFO_TABLE);
+        Log.i(TAG, "Creating Index AirportInfo Ident");
+        db.execSQL(AIRPORTINFO_IDENT_INDEX);
+        Log.i(TAG, "Creating Index AirportInfo metardate");
+        db.execSQL(AIRPORTINFO_METARDATE_INDEX);
+        Log.i(TAG, "Creating Index AirportInfo tafdate");
+        db.execSQL(AIRPORTINFO_TAFDATE_INDEX);
+        Log.i(TAG, "Creating Index AirportInfo notamdate");
+        db.execSQL(AIRPORTINFO_NOTAMDATE_INDEX);
 
-    private void dropTables(SQLiteDatabase db)
-    {
-        db.execSQL("DROP TABLE IF EXISTS " + FLIGHTPLAN_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + USERWAYPOINT_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + TRACKPOINTS_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + TRACKS_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + PROPERTIES_TABLE_NAME);
     }
 
     private void insertBasicPropertiesData(SQLiteDatabase db)
@@ -182,9 +220,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
-        //dropTables(db);
-        //createTables(db);
-        //insertBasicPropertiesData(db);
+
         // add columns to flightplan table
         if (oldVersion<3) db.execSQL(FLIGHTPLAN_TABLE_ADD_DATE);
 
@@ -192,6 +228,20 @@ public class UserDBHelper extends SQLiteOpenHelper {
             String i = "INSERT INTO " + PROPERTIES_TABLE_NAME + " (" +
                     C_name + ", " + C_value1 + ", " + C_value2 + ") VALUES(";
             db.execSQL(i + "'MARKERS', 'visible', 'test');");
+        }
+
+        if (oldVersion<6){
+            db.execSQL("drop table if exists " + AIRPORTINFO_TABLE_NAME + ";");
+            Log.i(TAG, "Creating Database table AirportInfo");
+            db.execSQL(AIRPORTINFO_TABLE);
+            Log.i(TAG, "Creating Index AirportInfo Ident");
+            db.execSQL(AIRPORTINFO_IDENT_INDEX);
+            Log.i(TAG, "Creating Index AirportInfo metardate");
+            db.execSQL(AIRPORTINFO_METARDATE_INDEX);
+            Log.i(TAG, "Creating Index AirportInfo tafdate");
+            db.execSQL(AIRPORTINFO_TAFDATE_INDEX);
+            Log.i(TAG, "Creating Index AirportInfo notamdate");
+            db.execSQL(AIRPORTINFO_NOTAMDATE_INDEX);
         }
 
         updated = true;

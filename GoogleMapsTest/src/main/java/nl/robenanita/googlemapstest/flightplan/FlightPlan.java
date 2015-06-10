@@ -38,6 +38,8 @@ public class FlightPlan implements Serializable {
         distance = LegInfoView.Distance.larger2000Meters;
         endPlan = false;
         showOnlyActive = false;
+
+        bufferPolyline = null;
     }
 
     private String TAG = "GooglemapsTest";
@@ -89,6 +91,8 @@ public class FlightPlan implements Serializable {
 
 
     public Geometry buffer;
+    public Polyline bufferPolyline;
+
     private void createBuffer() {
         Coordinate[] coordinates = new Coordinate[this.Waypoints.size()];
         Integer i = 0;

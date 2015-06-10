@@ -359,13 +359,11 @@ public class NavigationActivity extends ActionBarActivity implements
         if (selectedFlightplan != null)
         {
             removeOldFlightplanTrack();
-
             removeAllRunwayMarkers(selectedFlightplan);
+            removeBuffer(selectedFlightplan);
 
             legInfoView.setVisibility(View.GONE);
-
             selectedFlightplan = null;
-
             if (track != null) track.RemoveTrack();
         }
     }
@@ -616,6 +614,7 @@ public class NavigationActivity extends ActionBarActivity implements
         {
             removeAllRunwayMarkers(selectedFlightplan);
             removeOldFlightplanTrack();
+            removeBuffer(selectedFlightplan);
             selectedFlightplan = null;
         }
 
@@ -635,7 +634,7 @@ public class NavigationActivity extends ActionBarActivity implements
         PlaceFlightplanAirportMarkers();
 
         // Buffer test
-        drawBuffer(selectedFlightplan.buffer);
+        drawBuffer(selectedFlightplan);
 
         AirportDataSource airportDataSource = new AirportDataSource(this);
         airportDataSource.open(uniqueID);
@@ -1075,8 +1074,18 @@ public class NavigationActivity extends ActionBarActivity implements
         }
     }
 
-    private void drawBuffer(Geometry buffer)
+    private void removeBuffer(FlightPlan flightPlan)
     {
+        if (flightPlan.bufferPolyline != null)
+        {
+            flightPlan.bufferPolyline.remove();
+            flightPlan.bufferPolyline = null;
+        }
+    }
+
+    private void drawBuffer(FlightPlan flightPlan)
+    {
+        Geometry buffer = flightPlan.buffer;
         Coordinate[] coordinates = buffer.getCoordinates();
         PolylineOptions o = new PolylineOptions();
         o.color(Color.RED);
@@ -1088,7 +1097,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
         }
 
-        map.addPolyline(o);
+        flightPlan.bufferPolyline = map.addPolyline(o);
     }
 
 

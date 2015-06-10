@@ -243,7 +243,8 @@ public class AirportsInfoFragment extends Fragment {
 
         AirportDataSource airportDataSource = new AirportDataSource(activity);
         airportDataSource.open(-1);
-        setupStationsView(airportDataSource.getAirportsInBuffer(g2));
+        ArrayList<Station> stations = airportDataSource.getAirportsInBuffer(g2);
+        setupStationsView(stations);
         airportDataSource.close();
 
         //setStationsWebServiceDataAvailableListener(s);
