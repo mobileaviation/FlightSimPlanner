@@ -2,10 +2,16 @@ package nl.robenanita.googlemapstest.Weather;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
@@ -21,6 +27,7 @@ public class Taf {
         forecast = new ArrayList<forecast_class>();
     }
 
+    private String TAG = "GooglemapsTest";
     private Context context;
     public String station_id;
     public void setStation_id(String station_id)
@@ -35,6 +42,18 @@ public class Taf {
 
     public String raw_text;
     public String issue_time;
+    public Date GetIssueTime()
+    {
+        // 2015-06-11T11:13:00Z
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        try {
+            return format.parse(issue_time);
+        } catch (ParseException e) {
+            Log.e(TAG, "Taf: Date parse error");
+            return new Date();
+        }
+    }
+
     public String bulletin_time;
     public String valid_time_from;
     public String valid_time_to;

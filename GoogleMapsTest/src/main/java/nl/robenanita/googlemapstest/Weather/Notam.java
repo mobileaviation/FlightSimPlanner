@@ -42,6 +42,8 @@ public class Notam {
 
     public  String NotamCode;
 
+    public String NotamNumber;
+
     private NotamType notamType;
     public NotamType GetNotamType() { return notamType; }
     public void SetNotamType(String notamType)
@@ -72,12 +74,14 @@ public class Notam {
         // 03 FEB 10:25 2015 = 1502031025
         startDate = notamTimeToDate(start);
     }
+    public Date GetStartDate() { return (startDate!= null ? startDate : new Date()); }
 
     private Date endDate;
     public void SetEndDate(String end)
     {
         endDate = notamTimeToDate(end);
     }
+    public Date GetEndDate() { return (endDate!= null ? endDate : new Date()); }
 
     private String qualifier;
     public void SetQualifier(String qualifier)
@@ -85,12 +89,15 @@ public class Notam {
         this.qualifier = qualifier;
     }
 
+
     public void SetRawText(String raw)
     {
         raw_text = raw;
         // more processing
         Integer i = raw_text.indexOf("NOTAM");
         SetNotamType(raw_text.substring(i+5, i+6));
+
+        NotamNumber = raw_text.substring(0, i-1);
 
         i = raw_text.indexOf("Q)");
         Integer s = raw_text.indexOf("A)");

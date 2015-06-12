@@ -2,10 +2,16 @@ package nl.robenanita.googlemapstest.Weather;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
@@ -23,6 +29,7 @@ public class Metar {
         elevation_m = 0;
     }
     private Context c;
+    private String TAG = "GooglemapsTest";
 
     public String raw_text;
     public String station_id;
@@ -36,6 +43,18 @@ public class Metar {
     }
     public Airport airport;
     public String observation_time;
+    public Date GetObservationTime()
+    {
+        // 2015-06-11T11:13:00Z
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        try {
+            return format.parse(observation_time);
+        } catch (ParseException e) {
+            Log.e(TAG , "Metar: Date parse error" );
+            return new Date();
+        }
+    }
+
     public float latitude;
     public float longitude;
     public float distance_to_org_m;

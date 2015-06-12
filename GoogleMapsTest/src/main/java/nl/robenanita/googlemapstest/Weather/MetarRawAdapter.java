@@ -54,4 +54,9 @@ public class MetarRawAdapter extends BaseAdapter {
 
         return view;
     }
+
+    public Metar getMetar(int i)
+    {
+        return metars.get(i);
+    }
 }

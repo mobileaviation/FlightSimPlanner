@@ -54,4 +54,9 @@ public class TafRawAdapter extends BaseAdapter {
 
         return view;
     }
+
+    public Taf getTaf(int i)
+    {
+        return tafs.get(i);
+    }
 }

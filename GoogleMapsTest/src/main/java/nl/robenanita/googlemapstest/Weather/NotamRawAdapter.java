@@ -53,4 +53,9 @@ public class NotamRawAdapter extends BaseAdapter {
 
         return view;
     }
+
+    public Notam getNotam(int i)
+    {
+        return notams.get(i);
+    }
 }

@@ -33,6 +33,7 @@ import nl.robenanita.googlemapstest.Weather.TafRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Type;
 import nl.robenanita.googlemapstest.Weather.WeatherWebService;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
+import nl.robenanita.googlemapstest.database.AirportInfoDataSource;
 
 
 public class AirportsInfoFragment extends Fragment {
@@ -57,6 +58,7 @@ public class AirportsInfoFragment extends Fragment {
     private Integer infoListViewVisibility;
     private Type typeVisible;
     private ProgressBar infoProgressBar;
+    private Airport airport;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -173,7 +175,7 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setAirport(String code)
     {
-        Airport airport = getAirport(code);
+        airport = getAirport(code);
         airportIdentText.setText(airport.ident);
     }
 
@@ -279,6 +281,17 @@ public class AirportsInfoFragment extends Fragment {
         listView.setAdapter(adapter);
         listView.setVisibility(View.VISIBLE);
         infoProgressBar.setVisibility(View.GONE);
+
+        if (metars.size()>0) {
+            getAirport(metars.get(0).station_id);
+            AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(view.getContext());
+            airportInfoDataSource.open();
+            for (Metar metar : metars) {
+                metar.airport = airport;
+                airportInfoDataSource.InsertMetar(metar);
+            }
+            airportInfoDataSource.close();
+        }
     }
 
     public void setupTafsView(ArrayList<Taf> tafs)
@@ -288,6 +301,17 @@ public class AirportsInfoFragment extends Fragment {
         listView.setAdapter(adapter);
         listView.setVisibility(View.VISIBLE);
         infoProgressBar.setVisibility(View.GONE);
+
+        if (tafs.size()>0) {
+            getAirport(tafs.get(0).station_id);
+            AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(view.getContext());
+            airportInfoDataSource.open();
+            for (Taf taf : tafs) {
+                taf.airport = airport;
+                airportInfoDataSource.InsertTaf(taf);
+            }
+            airportInfoDataSource.close();
+        }
     }
 
     public void setupNotamsView(ArrayList<Notam> notams)
@@ -297,6 +321,57 @@ public class AirportsInfoFragment extends Fragment {
         listView.setAdapter(adapter);
         listView.setVisibility(View.VISIBLE);
         infoProgressBar.setVisibility(View.GONE);
+
+        if (notams.size()>0) {
+            getAirport(notams.get(0).getStation_id());
+            AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(view.getContext());
+            airportInfoDataSource.open();
+            for (Notam notam : notams) {
+                notam.airport = airport;
+                airportInfoDataSource.InsertNotam(notam);
+            }
+            airportInfoDataSource.close();
+        }
+    }
+
+    private void setListViewListeners()
+    {
+        final ListView listView = (ListView) view.findViewById(R.id.airportsInfoListView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(view.getContext());
+                airportInfoDataSource.open();
+                switch (typeVisible) {
+                    case metar :
+                        MetarRawAdapter adapter = (MetarRawAdapter) adapterView.getAdapter();
+                        Metar metar = adapter.getMetar(i);
+                        getAirport(metar.station_id);
+                        metar.airport = airport;
+                        airportInfoDataSource.InsertMetar(metar);
+                        break;
+                    case taf:
+                        TafRawAdapter adapter1 = (TafRawAdapter) adapterView.getAdapter();
+                        Taf taf = adapter1.getTaf(i);
+                        getAirport(taf.station_id);
+                        taf.airport = airport;
+                        airportInfoDataSource.InsertTaf(taf);
+                        break;
+                    case openaviation_notam:
+                        break;
+                    case vatme_notam:
+                        NotamRawAdapter adapter2 = (NotamRawAdapter) adapterView.getAdapter();
+                        Notam notam = adapter2.getNotam(i);
+                        getAirport(notam.getStation_id());
+                        notam.airport = airport;
+                        airportInfoDataSource.InsertNotam(notam);
+                        break;
+                    case station:
+                        break;
+                }
+                airportInfoDataSource.close();
+            }
+        });
     }
 
     public void setupStationsView(ArrayList<Station> stations)

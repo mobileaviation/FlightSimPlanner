@@ -205,10 +205,10 @@ public class WeatherWebService {
                                             taf.raw_text = parser.getText();
                                         if (name.equals("station_id"))
                                             taf.setStation_id(parser.getText());
+                                        if (name.equals("issue_time"))
+                                            taf.issue_time = parser.getText();
                                         if (!onlyRawData) {
 
-                                            if (name.equals("issue_time"))
-                                                taf.issue_time = parser.getText();
                                             if (name.equals("bulletin_time"))
                                                 taf.bulletin_time = parser.getText();
                                             if (name.equals("valid_time_from"))
@@ -330,80 +330,75 @@ public class WeatherWebService {
                         case XmlPullParser.TEXT:
                         {
                             if (metar != null) {
-                                if (name != null) {
-                                    try {
-                                        if (name.equals("raw_text"))
-                                            metar.raw_text = parser.getText();
-                                        if (name.equals("station_id"))
-                                            metar.setStation_id(parser.getText());
-                                        if (!onlyRawData) {
+                                if (name != null) try {
+                                    if (name.equals("raw_text"))
+                                        metar.raw_text = parser.getText();
+                                    if (name.equals("station_id"))
+                                        metar.setStation_id(parser.getText());
+                                    if (name.equals("observation_time"))
+                                        metar.observation_time = parser.getText();
+                                    if (!onlyRawData) {
 
-                                            //metar.station_id = parser.getText();
-                                            if (name.equals("observation_time"))
-                                                metar.observation_time = parser.getText();
-                                            if (name.equals("latitude"))
-                                                metar.latitude = getFloat(parser.getText());
-                                            if (name.equals("longitude"))
-                                                metar.longitude = getFloat(parser.getText());
-                                            if (name.equals("temp_c"))
-                                                metar.temp_c = getFloat(parser.getText());
-                                            if (name.equals("dewpoint_c"))
-                                                metar.dewpoint_c = getFloat(parser.getText());
-                                            if (name.equals("wind_dir_degrees"))
-                                                metar.wind_dir_degrees = getInteger(parser.getText());
-                                            if (name.equals("wind_speed_kt"))
-                                                metar.wind_speed_kt = getInteger(parser.getText());
-                                            if (name.equals("wind_gust_kt"))
-                                                metar.wind_gust_kt = getInteger(parser.getText());
-                                            if (name.equals("visibility_statute_mi"))
-                                                metar.visibility_statute_mi = getFloat(parser.getText());
-                                            if (name.equals("altim_in_hg"))
-                                                metar.altim_in_hg = getFloat(parser.getText());
-                                            if (name.equals("elevation_m"))
-                                                getFloat(parser.getText());
-                                            if (name.equals("flight_category"))
-                                                metar.flight_category = parser.getText();
-                                            if (name.equals("metar_type"))
-                                                metar.metar_type = parser.getText();
-                                            if (name.equals("three_hr_pressure_tendency_mb"))
-                                                metar.three_hr_pressure_tendency_mb = getFloat(parser.getText());
-                                            if (name.equals("maxT_c"))
-                                                metar.maxT_c = getFloat(parser.getText());
-                                            if (name.equals("minT_c"))
-                                                metar.minT_c = getFloat(parser.getText());
-                                            if (name.equals("maxT24hr_c"))
-                                                metar.maxT24hr_c = getFloat(parser.getText());
-                                            if (name.equals("minT24hr_c"))
-                                                metar.minT24hr_c = getFloat(parser.getText());
-                                            if (name.equals("precip_in"))
-                                                metar.precip_in = getFloat(parser.getText());
-                                            if (name.equals("pcp3hr_in"))
-                                                metar.pcp3hr_in = getFloat(parser.getText());
-                                            if (name.equals("pcp6hr_in"))
-                                                metar.pcp6hr_in = getFloat(parser.getText());
-                                            if (name.equals("pcp24hr_in"))
-                                                metar.pcp24hr_in = getFloat(parser.getText());
-                                            if (name.equals("snow_in"))
-                                                metar.snow_in = getFloat(parser.getText());
-                                            if (name.equals("elevation_m"))
-                                                metar.elevation_m = getFloat(parser.getText());
-                                            if (name.equals("sea_level_pressure_mb"))
-                                                metar.sea_level_pressure_mb = getFloat(parser.getText());
-                                            if (name.equals("quality_control_flags"))
-                                                metar.quality_control_flags = parser.getText();
-                                            if (name.equals("wx_string"))
-                                                metar.wx_string = parser.getText();
+                                        if (name.equals("latitude"))
+                                            metar.latitude = getFloat(parser.getText());
+                                        if (name.equals("longitude"))
+                                            metar.longitude = getFloat(parser.getText());
+                                        if (name.equals("temp_c"))
+                                            metar.temp_c = getFloat(parser.getText());
+                                        if (name.equals("dewpoint_c"))
+                                            metar.dewpoint_c = getFloat(parser.getText());
+                                        if (name.equals("wind_dir_degrees"))
+                                            metar.wind_dir_degrees = getInteger(parser.getText());
+                                        if (name.equals("wind_speed_kt"))
+                                            metar.wind_speed_kt = getInteger(parser.getText());
+                                        if (name.equals("wind_gust_kt"))
+                                            metar.wind_gust_kt = getInteger(parser.getText());
+                                        if (name.equals("visibility_statute_mi"))
+                                            metar.visibility_statute_mi = getFloat(parser.getText());
+                                        if (name.equals("altim_in_hg"))
+                                            metar.altim_in_hg = getFloat(parser.getText());
+                                        if (name.equals("elevation_m"))
+                                            getFloat(parser.getText());
+                                        if (name.equals("flight_category"))
+                                            metar.flight_category = parser.getText();
+                                        if (name.equals("metar_type"))
+                                            metar.metar_type = parser.getText();
+                                        if (name.equals("three_hr_pressure_tendency_mb"))
+                                            metar.three_hr_pressure_tendency_mb = getFloat(parser.getText());
+                                        if (name.equals("maxT_c"))
+                                            metar.maxT_c = getFloat(parser.getText());
+                                        if (name.equals("minT_c"))
+                                            metar.minT_c = getFloat(parser.getText());
+                                        if (name.equals("maxT24hr_c"))
+                                            metar.maxT24hr_c = getFloat(parser.getText());
+                                        if (name.equals("minT24hr_c"))
+                                            metar.minT24hr_c = getFloat(parser.getText());
+                                        if (name.equals("precip_in"))
+                                            metar.precip_in = getFloat(parser.getText());
+                                        if (name.equals("pcp3hr_in"))
+                                            metar.pcp3hr_in = getFloat(parser.getText());
+                                        if (name.equals("pcp6hr_in"))
+                                            metar.pcp6hr_in = getFloat(parser.getText());
+                                        if (name.equals("pcp24hr_in"))
+                                            metar.pcp24hr_in = getFloat(parser.getText());
+                                        if (name.equals("snow_in"))
+                                            metar.snow_in = getFloat(parser.getText());
+                                        if (name.equals("elevation_m"))
+                                            metar.elevation_m = getFloat(parser.getText());
+                                        if (name.equals("sea_level_pressure_mb"))
+                                            metar.sea_level_pressure_mb = getFloat(parser.getText());
+                                        if (name.equals("quality_control_flags"))
+                                            metar.quality_control_flags = parser.getText();
+                                        if (name.equals("wx_string"))
+                                            metar.wx_string = parser.getText();
 //                                            if (name.equals("station_id"))
 //                                                metar.station_id = parser.getText();
-                                            if (name.equals("vert_vis_ft"))
-                                                metar.vert_vis_ft = getInteger(parser.getText());
-                                        }
-                                        name = "";
+                                        if (name.equals("vert_vis_ft"))
+                                            metar.vert_vis_ft = getInteger(parser.getText());
                                     }
-                                    catch (Exception ee)
-                                    {
-                                        Log.i(TAG, "Parse Metar Value XML Error: " + ee.getMessage());
-                                    }
+                                    name = "";
+                                } catch (Exception ee) {
+                                    Log.i(TAG, "Parse Metar Value XML Error: " + ee.getMessage());
                                 }
                             }
                             break;
