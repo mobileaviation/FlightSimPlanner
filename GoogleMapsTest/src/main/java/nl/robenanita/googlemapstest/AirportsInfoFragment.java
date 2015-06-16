@@ -147,7 +147,10 @@ public class AirportsInfoFragment extends Fragment {
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
         infoTypeText.setText("Notams");
-        s.GetNotamsByICAOs(icaos);
+
+        s.GetNotamsFromFAAByICAO(code);
+
+        //s.GetNotamsByICAOs(icaos);
         setAirport(code);
     }
 

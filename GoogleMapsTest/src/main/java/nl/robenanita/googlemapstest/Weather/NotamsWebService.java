@@ -79,6 +79,21 @@ public class NotamsWebService {
         readNotamsLAsync.execute();
     }
 
+    public void GetNotamsFromFAAByICAO(String IcaoCode)
+    {
+        String command = "https://pilotweb.nas.faa.gov/PilotWeb/notamRetrievalByICAOAction.do?method=displayByICAOs&reportType=RAW&formatType=DOMESTIC&retrieveLocId=#ICAO#&actionType=notamRetrievalByICAOs";
+        command = command.replace("#ICAO#", IcaoCode);
+
+        ReadNotamsAsync readNotamsLAsync = new ReadNotamsAsync();
+        readNotamsLAsync.command = command;
+        readNotamsLAsync.type = Type.faa_notam;
+        readNotamsLAsync.Icao = IcaoCode;
+
+        Log.i(TAG, "FAA Notam command: " + command);
+
+        readNotamsLAsync.execute();
+    }
+
     private class ReadNotamsAsync extends AsyncTask<String, Integer, Void>
     {
         public String command;
@@ -108,6 +123,10 @@ public class NotamsWebService {
                 Log.i(TAG, "Finished Reading vatme notams xml");
                 onDataAvailable.OnNotamsAvailable(notams);
             }
+            if (type == Type.faa_notam) {
+                Log.i(TAG, "Finished Reading Faa notams html");
+                onDataAvailable.OnNotamsAvailable(notams);
+            }
 
             super.onPostExecute(aVoid);
         }
@@ -124,8 +143,41 @@ public class NotamsWebService {
             {
                 processVatmeNotamsXml(Xml);
             }
+            if (type == Type.faa_notam)
+            {
+                processFaaNotamXml(Xml);
+            }
 
             return null;
+        }
+
+        private void processFaaNotamXml(String Html)
+        {
+            Integer index = 0;
+            Integer i = 0;
+            Integer j = 0;
+
+            while(j>-1)
+            {
+
+                try {
+                    i = Html.indexOf("<PRE>", index);
+                    j = Html.indexOf("</PRE>", index);
+
+                    Notam notam = new Notam();
+                    notam.SetRawFAAText(Html.substring(i+5, j));
+                    notam.setStation_id(Icao);
+                    notams.add(notam);
+
+                    index = j + 4;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    j = -1;
+                }
+
+            }
+
+            Log.i(TAG, "Found " + notams.size() + " raw notams");
         }
 
         private void processOpenAviationNotamJson(String Json)

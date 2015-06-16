@@ -71,7 +71,7 @@ public class AirportInfoDataSource {
                     + "\"" + notam.getStation_id() + "\","
                     + notam.airport.id + ","
                     + "\"\","
-                    + "\"\""
+                    + "\"" + notam.getLocationString() + "\""
                     + ")";
             database.execSQL(insertQuery);
         }
@@ -99,12 +99,14 @@ public class AirportInfoDataSource {
                     + "(" + UserDBHelper.C_metar + ","
                     + UserDBHelper.C_metar_date + ","
                     + UserDBHelper.C_ident + ","
-                    + UserDBHelper.C_airport_id
+                    + UserDBHelper.C_airport_id + ","
+                    + UserDBHelper.C_notam_position
                     + ") VALUES("
                     + "\"" + metar.raw_text + "\","
                     + metar.GetObservationTime().getTime() + ","
                     + "\"" + metar.station_id + "\","
-                    + metar.airport.id
+                    + metar.airport.id + ","
+                    + "\"" + metar.airport.getPointString() + "\""
                     + ")";
             database.execSQL(insertQuery);
         }
@@ -132,12 +134,14 @@ public class AirportInfoDataSource {
                     + "(" + UserDBHelper.C_taf + ","
                     + UserDBHelper.C_taf_date + ","
                     + UserDBHelper.C_ident + ","
-                    + UserDBHelper.C_airport_id
+                    + UserDBHelper.C_airport_id + ","
+                    + UserDBHelper.C_notam_position
                     + ") VALUES("
                     + "\"" + taf.raw_text + "\","
                     + taf.GetIssueTime().getTime() + ","
                     + "\"" + taf.station_id + "\","
-                    + taf.airport.id
+                    + taf.airport.id + ","
+                    + "\"" + taf.airport.getPointString() + "\""
                     + ")";
             database.execSQL(insertQuery);
         }

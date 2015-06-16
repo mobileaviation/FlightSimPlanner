@@ -8,5 +8,6 @@ public enum Type {
     taf,
     openaviation_notam,
     vatme_notam,
-    station
+    station,
+    faa_notam
 }

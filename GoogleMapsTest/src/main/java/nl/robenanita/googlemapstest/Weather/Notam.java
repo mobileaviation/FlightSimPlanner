@@ -1,5 +1,8 @@
 package nl.robenanita.googlemapstest.Weather;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.io.WKTWriter;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -22,9 +25,14 @@ public class Notam {
         station_id = "";
     }
 
+    private String TAG = "GooglemapsTest";
     public String raw_text;
     public String message;
     private String station_id;
+
+    private String position;
+    private String fir;
+
     public void setStation_id(String station_id)
     {
         this.station_id = station_id;
@@ -102,8 +110,13 @@ public class Notam {
         i = raw_text.indexOf("Q)");
         Integer s = raw_text.indexOf("A)");
         qualifier = raw_text.substring(i+3, s);
+        String [] qq = qualifier.split("/");
+        fir = qq[0];
+        position = qq[7];
+        location = qq[7];
 
         String[] ii = raw_text.split(" ");
+
         for (int j=0; j<ii.length; j++)
         {
             if (ii.length>j-2) {
@@ -114,6 +127,110 @@ public class Notam {
             }
         }
     }
+
+    public void SetRawFAAText(String FAARaw)
+    {
+        if (FAARaw.contains("NOTAM") && FAARaw.contains("Q)"))
+        {
+            // This is an european formatted Notam
+            // Process using SetRawText
+            SetRawText(FAARaw);
+            // And extract the message
+            if (FAARaw.contains("E)"))  // This is the description which should always be there
+            {
+                String message = FAARaw.substring(FAARaw.indexOf("E)")+2,
+                        (FAARaw.indexOf("F)")>-1) ? FAARaw.indexOf("F)") : FAARaw.length() );
+
+                if (FAARaw.contains("D)"))
+                {
+                    String d = FAARaw.substring(FAARaw.indexOf("D)") + 2, FAARaw.length());
+                    message = message + "\n" + d.substring(1, (d.indexOf(")")>-1) ? d.indexOf(")")-1 : d.length());
+                }
+
+                SetMessage(message);
+            }
+        }
+        else
+        {
+            // American style Notam
+            // Starts with a !
+            if (FAARaw.startsWith("!"))
+            {
+                // Message starts a 3rd space
+                raw_text = FAARaw;
+                String[] mm = FAARaw.split(" ");
+                String m = FAARaw.substring(mm[0].length()+1 + mm[1].length()+1 + mm[2].length()+1, FAARaw.length());
+                NotamNumber = mm[0].substring(1, mm[0].length()) + "_" + mm[1];
+                SetMessage(m);
+
+                location = "";
+                position = "";
+            }
+        }
+    }
+
+    private String location;
+    public String getLocationString()
+    {
+        String[] ll = location.split("[NSWE]");
+
+        // 5259N00454E999
+        // lat 52.59 N 00 4.54E
+
+        // 5218N00446E005
+        // lat 52.18N00 4.46E00  5NM
+        // 5218
+        // 00446
+        // 005
+
+        if (ll.length==3) {
+
+            String min = null;
+            String deg = null;
+            String sec = null;
+            Double lat = null;
+
+            try {
+                min = ll[0].substring(ll[0].length() - 2, ll[0].length());
+                deg = ll[0].substring(0, ll[0].length() - 2);
+                sec = ll[1].substring(0, 2);
+
+                lat = Double.valueOf(deg) + (Double.valueOf(min) / 60) + (Double.valueOf(sec) / 3600)
+                        * ((position.contains("S")) ? -1 : 1);
+            } catch (NumberFormatException e) {
+                lat = Double.valueOf(0d);
+            }
+
+            Double lon = null;
+            try {
+                ll[1] = ll[1].substring(2, ll[1].length());
+
+                min = ll[1].substring(ll[1].length() - 2, ll[1].length());
+                deg = ll[1].substring(0, ll[1].length() - 2);
+                sec = ll[2].substring(0, 2);
+
+                lon = Double.valueOf(deg) + (Double.valueOf(min) / 60) + (Double.valueOf(sec) / 3600)
+                        * ((position.contains("W")) ? -1 : 1);
+            } catch (NumberFormatException e) {
+                lon = Double.valueOf(0d);
+            }
+
+            // 5129N00023W005
+            // lat 51.29N00 0.23W00 5NM
+
+            //([LATITUDE_DEG])+([LATITUDE_MIN]/60)+([LATITUDE_SEC]/3600))*
+            //IF [Latitude_Direction]="South" THEN -1 ELSE 1 END
+
+
+            // lon, lat
+            Coordinate geographicalLocation = new Coordinate(lon, lat);
+            return WKTWriter.toPoint(geographicalLocation);
+        }
+        else return (airport != null) ?
+                WKTWriter.toPoint(new Coordinate(airport.longitude_deg, airport.latitude_deg))
+                : "Unknown";
+    }
+
 
     public void SetMessage(String message)
     {

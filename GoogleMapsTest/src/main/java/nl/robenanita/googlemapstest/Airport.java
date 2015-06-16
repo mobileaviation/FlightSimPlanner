@@ -11,6 +11,8 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.io.WKTWriter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -57,6 +59,11 @@ public class Airport implements Serializable {
     public LatLng getLatLng()
     {
         return new LatLng(latitude_deg, longitude_deg);
+    }
+    public String getPointString()
+    {
+        Coordinate c = new Coordinate(longitude_deg, latitude_deg);
+        return WKTWriter.toPoint(c);
     }
 
     public BitmapDescriptor GetIcon(float angle, String iata_code)
