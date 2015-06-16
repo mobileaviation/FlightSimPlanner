@@ -26,12 +26,12 @@ public class Notam {
     }
 
     private String TAG = "GooglemapsTest";
-    public String raw_text;
-    public String message;
-    private String station_id;
+    public String raw_text = "";
+    public String message = "";
+    private String station_id = "";
 
-    private String position;
-    private String fir;
+    private String position = "";
+    private String fir = "";
 
     public void setStation_id(String station_id)
     {
@@ -48,9 +48,9 @@ public class Notam {
 
     public Airport airport;
 
-    public  String NotamCode;
+    public  String NotamCode = "";
 
-    public String NotamNumber;
+    public String NotamNumber = "";
 
     private NotamType notamType;
     public NotamType GetNotamType() { return notamType; }
@@ -61,7 +61,7 @@ public class Notam {
         if (notamType.equals("C")) this.notamType = NotamType.Cancel;
     }
 
-    public String source;
+    public String source = "";
 
     private Date notamTimeToDate(String notamTime)
     {
@@ -91,7 +91,7 @@ public class Notam {
     }
     public Date GetEndDate() { return (endDate!= null ? endDate : new Date()); }
 
-    private String qualifier;
+    private String qualifier = "";
     public void SetQualifier(String qualifier)
     {
         this.qualifier = qualifier;
@@ -105,15 +105,21 @@ public class Notam {
         Integer i = raw_text.indexOf("NOTAM");
         SetNotamType(raw_text.substring(i+5, i+6));
 
-        NotamNumber = raw_text.substring(0, i-1);
+        NotamNumber = raw_text.substring(0, i).trim();
 
         i = raw_text.indexOf("Q)");
-        Integer s = raw_text.indexOf("A)");
-        qualifier = raw_text.substring(i+3, s);
-        String [] qq = qualifier.split("/");
-        fir = qq[0];
-        position = qq[7];
-        location = qq[7];
+        if (i>-1) {
+            Integer s = raw_text.indexOf("A)");
+            if (s>-1) {
+                qualifier = raw_text.substring(i + 3, s);
+                String[] qq = qualifier.split("/");
+                if (qq.length==7) {
+                    fir = qq[0];
+                    position = qq[7];
+                    location = qq[7];
+                }
+            }
+        }
 
         String[] ii = raw_text.split(" ");
 
@@ -130,7 +136,7 @@ public class Notam {
 
     public void SetRawFAAText(String FAARaw)
     {
-        if (FAARaw.contains("NOTAM") && FAARaw.contains("Q)"))
+        if (FAARaw.contains("NOTAM")) //&& FAARaw.contains("Q)")
         {
             // This is an european formatted Notam
             // Process using SetRawText
@@ -141,13 +147,14 @@ public class Notam {
                 String message = FAARaw.substring(FAARaw.indexOf("E)")+2,
                         (FAARaw.indexOf("F)")>-1) ? FAARaw.indexOf("F)") : FAARaw.length() );
 
+
                 if (FAARaw.contains("D)"))
                 {
                     String d = FAARaw.substring(FAARaw.indexOf("D)") + 2, FAARaw.length());
                     message = message + "\n" + d.substring(1, (d.indexOf(")")>-1) ? d.indexOf(")")-1 : d.length());
                 }
 
-                SetMessage(message);
+                SetMessage(message.trim());
             }
         }
         else
@@ -162,14 +169,11 @@ public class Notam {
                 String m = FAARaw.substring(mm[0].length()+1 + mm[1].length()+1 + mm[2].length()+1, FAARaw.length());
                 NotamNumber = mm[0].substring(1, mm[0].length()) + "_" + mm[1];
                 SetMessage(m);
-
-                location = "";
-                position = "";
             }
         }
     }
 
-    private String location;
+    private String location = "";
     public String getLocationString()
     {
         String[] ll = location.split("[NSWE]");
