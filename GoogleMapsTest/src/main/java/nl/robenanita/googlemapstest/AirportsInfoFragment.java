@@ -289,11 +289,16 @@ public class AirportsInfoFragment extends Fragment {
             getAirport(metars.get(0).station_id);
             AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(view.getContext());
             airportInfoDataSource.open();
-            for (Metar metar : metars) {
-                metar.airport = airport;
-                airportInfoDataSource.InsertMetar(metar);
+            try {
+                airportInfoDataSource.ResetMetars(metars.get(0));
+                for (Metar metar : metars) {
+                    metar.airport = airport;
+                    airportInfoDataSource.InsertMetar(metar);
+                }
+            } finally {
+                airportInfoDataSource.close();
             }
-            airportInfoDataSource.close();
+
         }
     }
 
@@ -309,11 +314,16 @@ public class AirportsInfoFragment extends Fragment {
             getAirport(tafs.get(0).station_id);
             AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(view.getContext());
             airportInfoDataSource.open();
-            for (Taf taf : tafs) {
-                taf.airport = airport;
-                airportInfoDataSource.InsertTaf(taf);
+            try {
+                airportInfoDataSource.ResetTafs(tafs.get(0));
+                for (Taf taf : tafs) {
+                    taf.airport = airport;
+                    airportInfoDataSource.InsertTaf(taf);
+                }
+            } finally {
+                airportInfoDataSource.close();
             }
-            airportInfoDataSource.close();
+
         }
     }
 
@@ -329,11 +339,16 @@ public class AirportsInfoFragment extends Fragment {
             getAirport(notams.get(0).getStation_id());
             AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(view.getContext());
             airportInfoDataSource.open();
-            for (Notam notam : notams) {
-                notam.airport = airport;
-                airportInfoDataSource.InsertNotam(notam);
+            try {
+                airportInfoDataSource.ResetNotams(notams.get(0));
+                for (Notam notam : notams) {
+                    notam.airport = airport;
+                    airportInfoDataSource.InsertNotam(notam);
+                }
+            } finally {
+                airportInfoDataSource.close();
             }
-            airportInfoDataSource.close();
+
         }
     }
 

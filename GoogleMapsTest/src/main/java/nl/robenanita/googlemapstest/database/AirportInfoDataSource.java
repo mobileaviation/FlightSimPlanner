@@ -34,6 +34,16 @@ public class AirportInfoDataSource {
         dbHelper.close();
     }
 
+    public void ResetNotams(Notam notam)
+    {
+        String updateLatestQuery = "UPDATE " + UserDBHelper.AIRPORTINFO_TABLE_NAME
+                + " SET " + UserDBHelper.C_latest + "=0"
+                + " WHERE " + UserDBHelper.C_ident + "=\"" + notam.getStation_id() + "\""
+                + " AND " + UserDBHelper.C_latest + "=1"
+                + " AND " + UserDBHelper.C_notam_number + "!=''";;
+        database.execSQL(updateLatestQuery);
+    }
+
     public void InsertNotam(Notam notam)
     {
         // get Airport...
@@ -41,15 +51,16 @@ public class AirportInfoDataSource {
         // INSERT INTO tbl_AirportInfo (airport_id, ident, notam, notam_number, notam_date, notam_position, notam_polygon)
         // VALUES(....)
         // UPDATE
-
         String checkQuery = "SELECT " + UserDBHelper.C_ident + " FROM " + UserDBHelper.AIRPORTINFO_TABLE_NAME
                 + " WHERE " + UserDBHelper.C_notam_number + "=\"" + notam.NotamNumber + "\";";
         Cursor cursor = database.rawQuery(checkQuery, null);
+
         if (cursor.getCount()>0)
         {
             Log.i(TAG, "found notam: " + notam.getStation_id() + " So update.." );
             String updateQuery = "UPDATE " + UserDBHelper.AIRPORTINFO_TABLE_NAME
-                    + " SET " + UserDBHelper.C_notam + "=\"" + notam.message.replace("\"", "'") + "\""
+                    + " SET " + UserDBHelper.C_notam + "=\"" + notam.message.replace("\"", "'") + "\","
+                    + " " + UserDBHelper.C_latest + "=1"
                     + " WHERE " + UserDBHelper.C_notam_number + "='" + notam.NotamNumber + "';";
             database.execSQL(updateQuery);
         }
@@ -63,7 +74,8 @@ public class AirportInfoDataSource {
                     + UserDBHelper.C_ident + ","
                     + UserDBHelper.C_airport_id + ","
                     + UserDBHelper.C_notam_polygon + ","
-                    + UserDBHelper.C_notam_position
+                    + UserDBHelper.C_notam_position + ","
+                    + UserDBHelper.C_latest
                     + ") VALUES("
                     + "\"" + notam.message.replace("\"", "'") + "\","
                     + notam.GetStartDate().getTime() + ","
@@ -71,10 +83,21 @@ public class AirportInfoDataSource {
                     + "\"" + notam.getStation_id() + "\","
                     + notam.airport.id + ","
                     + "\"\","
-                    + "\"" + notam.getLocationString() + "\""
+                    + "\"" + notam.getLocationString() + "\","
+                    + "1"
                     + ")";
             database.execSQL(insertQuery);
         }
+    }
+
+    public void ResetMetars(Metar metar)
+    {
+        String updateLatestQuery = "UPDATE " + UserDBHelper.AIRPORTINFO_TABLE_NAME
+                + " SET " + UserDBHelper.C_latest + "=0"
+                + " WHERE " + UserDBHelper.C_ident + "=\"" + metar.station_id + "\""
+                + " AND " + UserDBHelper.C_latest + "=1"
+                + " AND " + UserDBHelper.C_metar + "!=''";
+        database.execSQL(updateLatestQuery);
     }
 
     public void InsertMetar(Metar metar)
@@ -83,11 +106,13 @@ public class AirportInfoDataSource {
                 + " WHERE " + UserDBHelper.C_metar_date + "=" + metar.GetObservationTime().getTime() + " AND "
                 + UserDBHelper.C_ident + "=\"" + metar.station_id + "\";";
         Cursor cursor = database.rawQuery(checkQuery, null);
+
         if (cursor.getCount()>0)
         {
             Log.i(TAG, "found metar: " + metar.station_id + " So update.." );
             String updateQuery = "UPDATE " + UserDBHelper.AIRPORTINFO_TABLE_NAME
-                    + " SET " + UserDBHelper.C_metar + "=\"" + metar.raw_text.replace("\"", "'") + "\""
+                    + " SET " + UserDBHelper.C_metar + "=\"" + metar.raw_text.replace("\"", "'") + "\","
+                    + " " + UserDBHelper.C_latest + "=1"
                     + " WHERE " + UserDBHelper.C_metar_date + "=" + metar.GetObservationTime().getTime() + " AND "
                     + UserDBHelper.C_ident + "=\"" + metar.station_id + "\";";
             database.execSQL(updateQuery);
@@ -100,16 +125,28 @@ public class AirportInfoDataSource {
                     + UserDBHelper.C_metar_date + ","
                     + UserDBHelper.C_ident + ","
                     + UserDBHelper.C_airport_id + ","
-                    + UserDBHelper.C_notam_position
+                    + UserDBHelper.C_notam_position + ","
+                    + UserDBHelper.C_latest
                     + ") VALUES("
                     + "\"" + metar.raw_text.replace("\"", "'") + "\","
                     + metar.GetObservationTime().getTime() + ","
                     + "\"" + metar.station_id + "\","
                     + metar.airport.id + ","
-                    + "\"" + metar.airport.getPointString() + "\""
+                    + "\"" + metar.airport.getPointString() + "\","
+                    + "1"
                     + ")";
             database.execSQL(insertQuery);
         }
+    }
+
+    public void ResetTafs(Taf taf)
+    {
+        String updateLatestQuery = "UPDATE " + UserDBHelper.AIRPORTINFO_TABLE_NAME
+                + " SET " + UserDBHelper.C_latest + "=0"
+                + " WHERE " + UserDBHelper.C_ident + "=\"" + taf.station_id + "\""
+                + " AND " + UserDBHelper.C_latest + "=1"
+                + " AND " + UserDBHelper.C_taf +"!=''";
+        database.execSQL(updateLatestQuery);
     }
 
     public void InsertTaf(Taf taf)
@@ -122,7 +159,8 @@ public class AirportInfoDataSource {
         {
             Log.i(TAG, "found TAF: " + taf.station_id + " So update.." );
             String updateQuery = "UPDATE " + UserDBHelper.AIRPORTINFO_TABLE_NAME
-                    + " SET " + UserDBHelper.C_taf + "=\"" + taf.raw_text.replace("\"", "'") + "\""
+                    + " SET " + UserDBHelper.C_taf + "=\"" + taf.raw_text.replace("\"", "'") + "\","
+                    + " " + UserDBHelper.C_latest + "=1"
                     + " WHERE " + UserDBHelper.C_taf_date + "=" + taf.GetIssueTime().getTime() + " AND "
                     + UserDBHelper.C_ident + "=\"" + taf.station_id + "\";";
             database.execSQL(updateQuery);
@@ -135,13 +173,15 @@ public class AirportInfoDataSource {
                     + UserDBHelper.C_taf_date + ","
                     + UserDBHelper.C_ident + ","
                     + UserDBHelper.C_airport_id + ","
-                    + UserDBHelper.C_notam_position
+                    + UserDBHelper.C_notam_position + ","
+                    + UserDBHelper.C_latest
                     + ") VALUES("
                     + "\"" + taf.raw_text.replace("\"", "'") + "\","
                     + taf.GetIssueTime().getTime() + ","
                     + "\"" + taf.station_id + "\","
                     + taf.airport.id + ","
-                    + "\"" + taf.airport.getPointString() + "\""
+                    + "\"" + taf.airport.getPointString() + "\","
+                    + "1"
                     + ")";
             database.execSQL(insertQuery);
         }
