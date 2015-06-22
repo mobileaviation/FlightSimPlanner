@@ -34,6 +34,13 @@ public class AirportInfoDataSource {
         dbHelper.close();
     }
 
+    public Cursor GetNotams(String icao)
+    {
+        String q = "SELECT " + UserDBHelper.C_notam + " FROM " + UserDBHelper.AIRPORTINFO_TABLE_NAME
+                + " WHERE "  + UserDBHelper.C_latest + "=1 AND " + UserDBHelper.C_ident + "=\"" + icao + "\";";
+        return database.rawQuery(q, null);
+    }
+
     public void ResetNotams(Notam notam)
     {
         String updateLatestQuery = "UPDATE " + UserDBHelper.AIRPORTINFO_TABLE_NAME

@@ -65,15 +65,25 @@ public class Notam {
 
     private Date notamTimeToDate(String notamTime)
     {
-        Integer yy = Integer.parseInt(notamTime.substring(0,2)) + 2000;
-        Integer m = Integer.parseInt(notamTime.substring(2,4));
-        Integer d = Integer.parseInt(notamTime.substring(4,6));
-        Integer h = Integer.parseInt(notamTime.substring(6,8));
-        Integer mm = Integer.parseInt(notamTime.substring(8,10));
+        // can also be "PERM"
+        if (notamTime.length()>10) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(yy,m,d,h,m);
-        return calendar.getTime();
+            notamTime = notamTime.replaceAll("[\\D]", "");
+
+            Integer yy = Integer.parseInt(notamTime.substring(0, 2)) + 2000;
+            Integer m = Integer.parseInt(notamTime.substring(2, 4));
+            Integer d = Integer.parseInt(notamTime.substring(4, 6));
+            Integer h = Integer.parseInt(notamTime.substring(6, 8));
+            Integer mm = Integer.parseInt(notamTime.substring(8, 10));
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(yy, m, d, h, m);
+            return calendar.getTime();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private Date startDate;
@@ -127,9 +137,10 @@ public class Notam {
         {
             if (ii.length>j-2) {
                 if (ii[j].equals("B)"))
-                    SetStartDate(ii[j + 1].replaceAll("[\\D]", ""));
+
+                    SetStartDate(ii[j + 1]);
                 if (ii[j].equals("C)"))
-                    SetEndDate(ii[j + 1].replaceAll("[\\D]", ""));
+                    SetEndDate(ii[j + 1]);
             }
         }
     }

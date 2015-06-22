@@ -1,5 +1,7 @@
 package nl.robenanita.googlemapstest.Weather;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -23,12 +25,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import nl.robenanita.googlemapstest.TCPClient;
+import nl.robenanita.googlemapstest.database.AirportInfoDataSource;
+import nl.robenanita.googlemapstest.database.UserDBHelper;
+
 /**
  * Created by Rob Verhoef on 1-4-2015.
  */
 public class NotamsWebService {
-    public NotamsWebService()
+    public NotamsWebService(Context context)
     {
+        this.context = context;
         notams = new ArrayList<Notam>();
     }
 
@@ -38,6 +45,7 @@ public class NotamsWebService {
 
     public ArrayList<Notam> notams;
     private LatLng orgLocation;
+    private Context context;
 
     public void GetNotamsByICAOs(List<String> Icaos)
     {
@@ -153,31 +161,58 @@ public class NotamsWebService {
 
         private void processFaaNotamXml(String Html)
         {
-            Integer index = 0;
-            Integer i = 0;
-            Integer j = 0;
+            if (Html!="false") {
+                Integer index = 0;
+                Integer i = 0;
+                Integer j = 0;
 
-            while(j>-1)
-            {
+                while (j > -1) {
 
-                try {
-                    i = Html.indexOf("<PRE>", index);
-                    j = Html.indexOf("</PRE>", index);
+                    try {
+                        i = Html.indexOf("<PRE>", index);
+                        j = Html.indexOf("</PRE>", index);
 
-                    Notam notam = new Notam();
-                    notam.SetRawFAAText(Html.substring(i+5, j));
-                    notam.setStation_id(Icao);
-                    notams.add(notam);
+                        Notam notam = new Notam();
+                        notam.SetRawFAAText(Html.substring(i + 5, j));
+                        notam.setStation_id(Icao);
+                        notams.add(notam);
 
-                    index = j + 4;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    j = -1;
+                        index = j + 4;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        j = -1;
+                    }
+
                 }
 
+                Log.i(TAG, "Found " + notams.size() + " raw notams");
             }
-
-            Log.i(TAG, "Found " + notams.size() + " raw notams");
+            else
+            {
+                Log.i(TAG, "Could not reach the FAA Website, retrieve from database");
+                AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(context);
+                airportInfoDataSource.open();
+                try {
+                    Cursor n = airportInfoDataSource.GetNotams(Icao);
+                    n.moveToFirst();
+                    while (!n.isAfterLast())
+                    {
+                        Notam notam = new Notam();
+                        notam.SetRawFAAText(n.getString(n.getColumnIndex(UserDBHelper.C_notam)));
+                        notam.setStation_id(Icao);
+                        notams.add(notam);
+                        n.moveToNext();
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                finally {
+                    airportInfoDataSource.close();
+                }
+                Log.i(TAG, "Found in Database: " + notams.size() + " raw notams");
+            }
         }
 
         private void processOpenAviationNotamJson(String Json)
@@ -271,26 +306,32 @@ public class NotamsWebService {
 
         private String readFromUrl(String Url)
         {
-            HttpGet request = new HttpGet(Url);
-            HttpClient httpclient = new DefaultHttpClient();
-            String Result = "";
+            Boolean serverAvailable = TCPClient.isServerReachable("pilotweb.nas.faa.gov");
+            if (serverAvailable) {
+                HttpGet request = new HttpGet(Url);
+                HttpClient httpclient = new DefaultHttpClient();
+                String Result = "";
 
-            try
-            {
-                HttpResponse response = httpclient.execute(request);
-                Result = inputStreamToString(response.getEntity().getContent()).toString();
+                try {
+                    HttpResponse response = httpclient.execute(request);
+                    Result = inputStreamToString(response.getEntity().getContent()).toString();
 
-            }
-            catch (ClientProtocolException e)
-            {
-                e.printStackTrace();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+                } catch (ClientProtocolException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
 
-            return Result;
+                return Result;
+            }
+            else
+            {
+                return "false";
+            }
         }
 
         private StringBuilder inputStreamToString(InputStream is)

@@ -141,4 +141,15 @@ public class TCPClient {
     public interface OnMessageReceived {
         public void messageReceived(String message);
     }
+
+
+    // Static helper methods
+    static public boolean isServerReachable(String url) {
+        try {
+            InetAddress.getByName(url).isReachable(3000); //Replace with your name
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

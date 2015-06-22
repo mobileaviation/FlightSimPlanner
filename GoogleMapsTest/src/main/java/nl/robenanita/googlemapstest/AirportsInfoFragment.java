@@ -142,7 +142,7 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setNotams(String code)
     {
-        NotamsWebService s = new NotamsWebService();
+        NotamsWebService s = new NotamsWebService(view.getContext());
         setNotamsWebServiceDataAvailableListener(s);
         ArrayList<String> icaos = new ArrayList<String>();
         icaos.add(code);
