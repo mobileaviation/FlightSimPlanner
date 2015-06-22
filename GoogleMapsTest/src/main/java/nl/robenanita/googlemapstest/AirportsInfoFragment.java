@@ -243,7 +243,7 @@ public class AirportsInfoFragment extends Fragment {
                     activity.curPosition.latitude));
             BufferOp bufOp = new BufferOp(g1);
             bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
-            g2 = bufOp.getResultGeometry(1);
+            g2 = bufOp.getResultGeometry(2);
         }
 
         AirportDataSource airportDataSource = new AirportDataSource(activity);

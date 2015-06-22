@@ -205,6 +205,11 @@ public class PropertiesDataSource {
         return a;
     }
 
+    public Property GetProperty(String name)
+    {
+        return getProperty(name);
+    }
+
     private Property getProperty(String name)
     {
         String query = "SELECT * FROM " + UserDBHelper.PROPERTIES_TABLE_NAME

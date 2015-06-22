@@ -18,8 +18,10 @@ import java.util.Date;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.LegInfoView;
+import nl.robenanita.googlemapstest.Property;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
+import nl.robenanita.googlemapstest.database.PropertiesDataSource;
 
 //import com.google.maps.android.MarkerManager;
 
@@ -66,6 +68,7 @@ public class FlightPlan implements Serializable {
 
     public void LoadFlightplan(Context context, Integer flightPlan_ID, Integer uniqueID)
     {
+
         // First load the basis of the flightplan
         FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(context);
         flightPlanDataSource.open();
@@ -86,14 +89,32 @@ public class FlightPlan implements Serializable {
         flightPlanDataSource.clearTimes(this, true);
         flightPlanDataSource.close();
 
+        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
+        propertiesDataSource.open(true);
+        bufferProperty = propertiesDataSource.GetProperty("BUFFER");
+        propertiesDataSource.close(true);
+
         createBuffer();
     }
 
 
     public Geometry buffer;
     public Polyline bufferPolyline;
+    public Property bufferProperty;
+
+    public void CreateBuffer()
+    {
+        createBuffer();
+    }
 
     private void createBuffer() {
+        if (bufferProperty == null)
+        {
+            bufferProperty = new Property();
+            bufferProperty.name = "BUFFER";
+            bufferProperty.value1 = "0.3";
+            bufferProperty.value2 = "true";
+        }
         Coordinate[] coordinates = new Coordinate[this.Waypoints.size()];
         Integer i = 0;
         for (Waypoint w : this.Waypoints)
@@ -104,7 +125,7 @@ public class FlightPlan implements Serializable {
         Geometry g = new GeometryFactory().createLineString(coordinates);
         BufferOp bufOp = new BufferOp(g);
         bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
-        buffer = bufOp.getResultGeometry(.3);
+        buffer = bufOp.getResultGeometry(Double.parseDouble(bufferProperty.value1));
 
         //Geometry e = buffer.getEnvelope();
     }
@@ -381,6 +402,7 @@ public class FlightPlan implements Serializable {
                 fromWaypoint = nextWaypoint;
             }
         }
+        createBuffer();
     }
 
     public void setOnDistanceFromWaypoint( final OnDistanceFromWaypoint d) {onDistanceFromWaypoint = d; }

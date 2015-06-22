@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class UserDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "userairnav.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
     public static final String TRACKPOINTS_TABLE_NAME = "tbl_Trackpoints";
@@ -238,7 +238,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
             db.execSQL(i + "'MARKERS', 'visible', 'test');");
         }
 
-        if (oldVersion<8){
+        if (oldVersion<9){
             db.execSQL("drop table if exists " + AIRPORTINFO_TABLE_NAME + ";");
             Log.i(TAG, "Creating Database table AirportInfo");
             db.execSQL(AIRPORTINFO_TABLE);
@@ -252,6 +252,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
             db.execSQL(AIRPORTINFO_NOTAMDATE_INDEX);
             Log.i(TAG, "Creating Index AirportInfo notamnumber");
             db.execSQL(AIRPORTINFO_NOTAMNUMBER_INDEX);
+
+            String i = "INSERT INTO " + PROPERTIES_TABLE_NAME + " (" +
+                    C_name + ", " + C_value1 + ", " + C_value2 + ") VALUES(";
+            db.execSQL(i + "'BUFFER', '0.3', 'true');");
         }
 
         updated = true;

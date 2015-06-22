@@ -429,6 +429,7 @@ public class NavigationActivity extends ActionBarActivity implements
         propertiesDataSource.open(true);
         propertiesDataSource.FillProperties();
         markerProperties = propertiesDataSource.getMarkersProperties();
+        Property bufferProperty = propertiesDataSource.GetProperty("BUFFER");
         propertiesDataSource.close(true);
 
         connectionType = propertiesDataSource.getConnectionType();
@@ -497,6 +498,14 @@ public class NavigationActivity extends ActionBarActivity implements
             }
 
             SetAirportMarkersByZoomAndBoundary();
+        }
+
+        if (selectedFlightplan != null)
+        {
+            removeBuffer(selectedFlightplan);
+            selectedFlightplan.bufferProperty = bufferProperty;
+            selectedFlightplan.CreateBuffer();
+            drawBuffer(selectedFlightplan);
         }
 
     }
@@ -894,6 +903,7 @@ public class NavigationActivity extends ActionBarActivity implements
     {
         removeOldFlightplanTrack();
         removeAllRunwayMarkers(selectedFlightplan);
+        removeBuffer(selectedFlightplan);
 
         Collections.sort(selectedFlightplan.Waypoints);
         selectedFlightplan.UpdateWaypointsData();
@@ -912,6 +922,7 @@ public class NavigationActivity extends ActionBarActivity implements
         ShowFlightplanTrack();
         SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
+        drawBuffer(selectedFlightplan);
     }
 
     public void DeviationClick(final Waypoint waypoint)
@@ -1098,6 +1109,7 @@ public class NavigationActivity extends ActionBarActivity implements
         }
 
         flightPlan.bufferPolyline = map.addPolyline(o);
+        flightPlan.bufferPolyline.setVisible(Boolean.parseBoolean(flightPlan.bufferProperty.value2));
     }
 
 
@@ -1483,6 +1495,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 {
                     removeAllRunwayMarkers(selectedFlightplan);
                     removeOldFlightplanTrack();
+                    removeBuffer(selectedFlightplan);
 
                     setupNewWaypointInFlightplan(addWayPointPopup.WaypointName,
                             addWayPointPopup.Location.latitude,
@@ -1552,6 +1565,7 @@ public class NavigationActivity extends ActionBarActivity implements
         flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
         flightPlanDataSource.close();
 
+        drawBuffer(selectedFlightplan);
         LoadFlightplanRunways();
         ShowFlightplanTrack();
         LoadFlightplanGrid();

@@ -22,6 +22,7 @@ import com.andreabaccega.widget.FormEditText;
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.AirportType;
 import nl.robenanita.googlemapstest.NavigationActivity;
+import nl.robenanita.googlemapstest.Property;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Runway;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
@@ -47,6 +48,9 @@ public class SettingsActivity extends ActionBarActivity {
     private String[] rws;
     private SearchAirportsPopup searchAirportsPopup;
     private MarkerProperties markerProperties;
+    private Property bufferProperty;
+    private TextView bufferSizeTxt;
+    private CheckBox bufferVisibleBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,7 @@ public class SettingsActivity extends ActionBarActivity {
         propertiesDataSource.open(true);
         propertiesDataSource.FillProperties();
         markerProperties = propertiesDataSource.getMarkersProperties();
+        bufferProperty = propertiesDataSource.GetProperty("BUFFER");
         propertiesDataSource.close(true);
 
         setupMarkersVisible();
@@ -67,6 +72,11 @@ public class SettingsActivity extends ActionBarActivity {
         airport = propertiesDataSource.InitAirport;
         runway = propertiesDataSource.InitRunway;
         setupRunwaysSpinner();
+
+        bufferSizeTxt = (TextView)findViewById(R.id.bufferSizeEdit);
+        bufferVisibleBox = (CheckBox) findViewById(R.id.bufferVisibleBox);
+        bufferSizeTxt.setText(bufferProperty.value1);
+        bufferVisibleBox.setChecked(Boolean.parseBoolean(bufferProperty.value2));
 
         ipAddressTxt = (FormEditText)findViewById(R.id.ipAddressEdit);
         //setupIpAddressEdit();
@@ -186,6 +196,10 @@ public class SettingsActivity extends ActionBarActivity {
 
             markersCheckBoxesToProperties();
             propertiesDataSource.storePropertiesInDB(markerProperties);
+
+            bufferProperty.value1 = bufferSizeTxt.getText().toString();
+            bufferProperty.value2 = (bufferVisibleBox.isChecked() ? "true" : "false");
+            propertiesDataSource.updateProperty(bufferProperty);
 
             propertiesDataSource.close(true);
 

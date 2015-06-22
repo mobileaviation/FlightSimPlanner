@@ -59,7 +59,7 @@ public class AirportInfoDataSource {
         {
             Log.i(TAG, "found notam: " + notam.getStation_id() + " So update.." );
             String updateQuery = "UPDATE " + UserDBHelper.AIRPORTINFO_TABLE_NAME
-                    + " SET " + UserDBHelper.C_notam + "=\"" + notam.message.replace("\"", "'") + "\","
+                    + " SET " + UserDBHelper.C_notam + "=\"" + notam.raw_text.replace("\"", "'") + "\","
                     + " " + UserDBHelper.C_latest + "=1"
                     + " WHERE " + UserDBHelper.C_notam_number + "='" + notam.NotamNumber + "';";
             database.execSQL(updateQuery);
@@ -77,7 +77,7 @@ public class AirportInfoDataSource {
                     + UserDBHelper.C_notam_position + ","
                     + UserDBHelper.C_latest
                     + ") VALUES("
-                    + "\"" + notam.message.replace("\"", "'") + "\","
+                    + "\"" + notam.raw_text.replace("\"", "'") + "\","
                     + notam.GetStartDate().getTime() + ","
                     + "\"" + notam.NotamNumber + "\","
                     + "\"" + notam.getStation_id() + "\","
