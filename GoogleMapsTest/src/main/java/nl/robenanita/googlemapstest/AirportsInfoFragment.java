@@ -20,6 +20,7 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 
 import java.util.ArrayList;
 
+import nl.robenanita.googlemapstest.Weather.Fir;
 import nl.robenanita.googlemapstest.Weather.Metar;
 import nl.robenanita.googlemapstest.Weather.MetarRawAdapter;
 import nl.robenanita.googlemapstest.Weather.Notam;
@@ -34,6 +35,7 @@ import nl.robenanita.googlemapstest.Weather.Type;
 import nl.robenanita.googlemapstest.Weather.WeatherWebService;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.AirportInfoDataSource;
+import nl.robenanita.googlemapstest.database.FirDataSource;
 
 
 public class AirportsInfoFragment extends Fragment {
@@ -179,7 +181,7 @@ public class AirportsInfoFragment extends Fragment {
     private void setAirport(String code)
     {
         airport = getAirport(code);
-        airportIdentText.setText(airport.ident);
+        airportIdentText.setText(code);
     }
 
     private Airport getAirport(String code)
@@ -243,7 +245,7 @@ public class AirportsInfoFragment extends Fragment {
                     activity.curPosition.latitude));
             BufferOp bufOp = new BufferOp(g1);
             bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
-            g2 = bufOp.getResultGeometry(2);
+            g2 = bufOp.getResultGeometry(1);
         }
 
         AirportDataSource airportDataSource = new AirportDataSource(activity);
@@ -395,6 +397,27 @@ public class AirportsInfoFragment extends Fragment {
     public void setupStationsView(ArrayList<Station> stations)
     {
         Log.i(TAG,"Stations setup");
+        FirDataSource firDataSource = new FirDataSource(view.getContext());
+
+        ArrayList<Fir> firs = null;
+        try {
+            firDataSource.open();
+            firs = firDataSource.GetPossibleFirs(stations);
+        } finally {
+            firDataSource.close();
+        }
+
+        if (firs != null)
+        {
+            for (Fir fir : firs)
+            {
+                Station station = new Station();
+                station.fir = true;
+                station.station_id = fir.ident;
+                stations.add(0, station);
+            }
+        }
+
         StationsAdapter adapter = new StationsAdapter(stations);
         icaoCodesListView.setAdapter(adapter);
     }

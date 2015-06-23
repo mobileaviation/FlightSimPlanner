@@ -88,7 +88,7 @@ public class AirportInfoDataSource {
                     + notam.GetStartDate().getTime() + ","
                     + "\"" + notam.NotamNumber + "\","
                     + "\"" + notam.getStation_id() + "\","
-                    + notam.airport.id + ","
+                    + ((notam.airport!=null)? notam.airport.id : -1) + ","
                     + "\"\","
                     + "\"" + notam.getLocationString() + "\","
                     + "1"
@@ -193,5 +193,7 @@ public class AirportInfoDataSource {
             database.execSQL(insertQuery);
         }
     }
+
+
 
 }

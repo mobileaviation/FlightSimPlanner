@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/airport_info_station_item_text" />
+        android:id="@+id/airport_info_station_item_text"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp" />
 
 </LinearLayout>

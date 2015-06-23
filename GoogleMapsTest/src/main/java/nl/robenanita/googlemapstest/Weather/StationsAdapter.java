@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest.Weather;
 
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class StationsAdapter extends BaseAdapter {
         Station m = stations.get(i);
 
         stationText.setText(m.station_id);
+        if (m.fir) stationText.setTypeface(null, Typeface.BOLD_ITALIC);
 
         if ( (i & 1) == 0 ) {
             //stationLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));

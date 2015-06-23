@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Station {
     public Station(){
         siteTypes = new ArrayList<SiteType>();
+        fir = false;
     }
 
     public String station_id;
@@ -17,6 +18,7 @@ public class Station {
     public Double elevation_m;
     public String site;
     public String state;
+    public Boolean fir;
     private ArrayList<SiteType> siteTypes;
     public void AddSiteType(String type)
     {
