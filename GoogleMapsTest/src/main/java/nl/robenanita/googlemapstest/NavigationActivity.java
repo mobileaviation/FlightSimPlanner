@@ -96,7 +96,7 @@ public class NavigationActivity extends ActionBarActivity implements
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener {
-    private GoogleMap map;
+    public GoogleMap map;
     private Marker plane;
 
     private MarkerProperties markerProperties;

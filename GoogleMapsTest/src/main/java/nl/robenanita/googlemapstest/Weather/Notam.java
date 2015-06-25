@@ -1,5 +1,12 @@
 package nl.robenanita.googlemapstest.Weather;
 
+import android.graphics.Color;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.io.WKTWriter;
 
@@ -7,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Helpers;
 
 /**
  * Created by Rob Verhoef on 4-3-2015.
@@ -30,7 +38,6 @@ public class Notam {
     public String message = "";
     private String station_id = "";
 
-    private String position = "";
     private String fir = "";
 
     public void setStation_id(String station_id)
@@ -125,7 +132,6 @@ public class Notam {
                 String[] qq = qualifier.split("/");
                 if (qq.length==7) {
                     fir = qq[0];
-                    position = qq[7];
                     location = qq[7];
                 }
             }
@@ -143,6 +149,8 @@ public class Notam {
                     SetEndDate(ii[j + 1]);
             }
         }
+
+        getPosition();
     }
 
     public void SetRawFAAText(String FAARaw)
@@ -184,6 +192,33 @@ public class Notam {
         }
     }
 
+    public void PlaceNotamMarker(GoogleMap map)
+    {
+        LatLng pos = getPosition();
+        if (pos != null) {
+            CircleOptions co = new CircleOptions();
+            co.center(getPosition());
+            co.fillColor(Color.CYAN);
+            co.radius(500);
+            co.strokeColor(Color.BLACK);
+            co.strokeWidth(1);
+            marker = map.addCircle(co);
+            map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+        }
+    }
+    private Circle marker;
+
+    private LatLng getPosition()
+    {
+        // Dutch notams
+        // PSN 521837N0045613E
+        LatLng latLng = null;
+
+        latLng = Helpers.getDutchFormatPosition(raw_text);
+
+        return latLng;
+    }
+
     private String location = "";
     public String getLocationString()
     {
@@ -211,7 +246,7 @@ public class Notam {
                 sec = ll[1].substring(0, 2);
 
                 lat = Double.valueOf(deg) + (Double.valueOf(min) / 60) + (Double.valueOf(sec) / 3600)
-                        * ((position.contains("S")) ? -1 : 1);
+                        * ((location.contains("S")) ? -1 : 1);
             } catch (NumberFormatException e) {
                 lat = Double.valueOf(0d);
             }
@@ -225,7 +260,7 @@ public class Notam {
                 sec = ll[2].substring(0, 2);
 
                 lon = Double.valueOf(deg) + (Double.valueOf(min) / 60) + (Double.valueOf(sec) / 3600)
-                        * ((position.contains("W")) ? -1 : 1);
+                        * ((location.contains("W")) ? -1 : 1);
             } catch (NumberFormatException e) {
                 lon = Double.valueOf(0d);
             }

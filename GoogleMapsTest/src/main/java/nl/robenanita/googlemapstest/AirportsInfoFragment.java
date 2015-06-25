@@ -336,6 +336,7 @@ public class AirportsInfoFragment extends Fragment {
         listView.setAdapter(adapter);
         listView.setVisibility(View.VISIBLE);
         infoProgressBar.setVisibility(View.GONE);
+        setListViewListeners();
 
         if (notams.size()>0) {
             getAirport(notams.get(0).getStation_id());
@@ -360,36 +361,27 @@ public class AirportsInfoFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AirportInfoDataSource airportInfoDataSource = new AirportInfoDataSource(view.getContext());
-                airportInfoDataSource.open();
+                NavigationActivity activity = (NavigationActivity)getActivity();
                 switch (typeVisible) {
                     case metar :
-                        MetarRawAdapter adapter = (MetarRawAdapter) adapterView.getAdapter();
-                        Metar metar = adapter.getMetar(i);
-                        getAirport(metar.station_id);
-                        metar.airport = airport;
-                        airportInfoDataSource.InsertMetar(metar);
                         break;
                     case taf:
-                        TafRawAdapter adapter1 = (TafRawAdapter) adapterView.getAdapter();
-                        Taf taf = adapter1.getTaf(i);
-                        getAirport(taf.station_id);
-                        taf.airport = airport;
-                        airportInfoDataSource.InsertTaf(taf);
                         break;
                     case openaviation_notam:
                         break;
                     case vatme_notam:
+                        NotamRawAdapter adapter1 = (NotamRawAdapter) adapterView.getAdapter();
+                        Notam notam1 = adapter1.getNotam(i);
+                        notam1.PlaceNotamMarker(activity.map);
+                        break;
+                    case faa_notam:
                         NotamRawAdapter adapter2 = (NotamRawAdapter) adapterView.getAdapter();
-                        Notam notam = adapter2.getNotam(i);
-                        getAirport(notam.getStation_id());
-                        notam.airport = airport;
-                        airportInfoDataSource.InsertNotam(notam);
+                        Notam notam2 = adapter2.getNotam(i);
+                        notam2.PlaceNotamMarker(activity.map);
                         break;
                     case station:
                         break;
                 }
-                airportInfoDataSource.close();
             }
         });
     }
