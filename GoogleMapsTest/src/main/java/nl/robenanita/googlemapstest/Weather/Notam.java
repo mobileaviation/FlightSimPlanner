@@ -1,12 +1,13 @@
 package nl.robenanita.googlemapstest.Weather;
 
-import android.graphics.Color;
+import android.os.Handler;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.io.WKTWriter;
 
@@ -15,6 +16,7 @@ import java.util.Date;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.Helpers;
+import nl.robenanita.googlemapstest.R;
 
 /**
  * Created by Rob Verhoef on 4-3-2015.
@@ -150,7 +152,7 @@ public class Notam {
             }
         }
 
-        getPosition();
+        //getPosition();
     }
 
     public void SetRawFAAText(String FAARaw)
@@ -194,19 +196,50 @@ public class Notam {
 
     public void PlaceNotamMarker(GoogleMap map)
     {
+        if (marker != null) marker.remove();
+        marker = null;
+
         LatLng pos = getPosition();
         if (pos != null) {
-            CircleOptions co = new CircleOptions();
-            co.center(getPosition());
-            co.fillColor(Color.CYAN);
-            co.radius(500);
-            co.strokeColor(Color.BLACK);
-            co.strokeWidth(1);
-            marker = map.addCircle(co);
+//            CircleOptions co = new CircleOptions();
+//            co.center(getPosition());
+//            co.fillColor(Color.CYAN);
+//            co.radius(1000);
+//            co.strokeColor(Color.BLACK);
+//            co.strokeWidth(1);
+//            marker = map.addCircle(co);
+            MarkerOptions co = new MarkerOptions();
+            co.anchor(0.5f, 0.5f);
+            co.position(pos);
+            co.icon(BitmapDescriptorFactory.fromResource(R.drawable.notamred));
+            co.title(message);
+            marker = map.addMarker(co);
             map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+
+            //AnimateMarker();
         }
     }
-    private Circle marker;
+    private Marker marker;
+
+    private void AnimateMarker()
+    {
+        final Handler handler = new Handler();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+//                if (marker.getFillColor()==Color.CYAN)
+//                    marker.setFillColor(Color.BLUE);
+//                else
+//                    marker.setFillColor(Color.CYAN);
+
+                handler.postDelayed(this, 250);
+            }
+        });
+
+
+    }
 
     private LatLng getPosition()
     {

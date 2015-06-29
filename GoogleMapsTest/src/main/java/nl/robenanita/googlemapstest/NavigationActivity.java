@@ -109,6 +109,8 @@ public class NavigationActivity extends ActionBarActivity implements
     private String ServerIPAddress;
     private int ServerPort;
 
+
+
     private Timer testTimer;
 
     private Button enableTrackingBtn;
@@ -317,6 +319,25 @@ public class NavigationActivity extends ActionBarActivity implements
 
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to stop navigating?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NavigationActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void closeFlightplanShowAlert()
