@@ -223,6 +223,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL(i + "'INSTRUMENTS', 'visible', '1');");
         db.execSQL(i + "'LOCATION', 'Provider', 'sim');");
         db.execSQL(i + "'MARKERS', 'visible', 'test');");
+        db.execSQL(i + "'BUFFER', '0.3', 'true');");
     }
 
     @Override

@@ -1,0 +1,112 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="nl.robenanita.googlemapstest.AirportsInfoFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left|top"
+        android:gravity="center_vertical"
+        android:id="@+id/airportsInfoLayout">
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="100dp"
+            android:id="@+id/notamBtn"
+            android:background="@drawable/notambtnstyle" />
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="100dp"
+            android:id="@+id/metarBtn"
+            android:background="@drawable/metarbtnstyle" />
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="100dp"
+            android:id="@+id/tafBtn"
+            android:background="@drawable/tafbtnstyle" />
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="100dp"
+            android:id="@+id/chartBtn"
+            android:background="@drawable/chartbtnstyle"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@+id/airportsInfoIcaoListView"
+        android:layout_toEndOf="@+id/airportsInfoIcaoListView"
+        android:id="@+id/airportsInfoListLayout"
+        android:visibility="gone"
+        android:weightSum="1"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false">
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="...."
+            android:id="@+id/airportIdentText"
+            android:layout_gravity="top"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#ffcecece"
+            android:gravity="center"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="...."
+            android:id="@+id/infoTypeText"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#ffcecece"
+            android:gravity="center" />
+
+        <ListView
+            android:layout_width="200dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/airportsInfoListView"
+            android:layout_gravity="left"
+            android:layout_toRightOf="@+id/airportsInfoIcaoListView"
+            android:focusableInTouchMode="true"
+            android:background="#ffffffff"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffffff"
+            android:id="@+id/airportInfoProgressBar"
+            android:visibility="gone"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Select an Airport"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:background="#ffffffff"
+            android:id="@+id/selectAirportForInfoText"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="75dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/airportsInfoIcaoListView"
+        android:visibility="gone"
+        android:background="#ffffffff"
+        android:layout_toRightOf="@+id/airportsInfoLayout" />
+</RelativeLayout>
