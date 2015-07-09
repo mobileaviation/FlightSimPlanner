@@ -8,7 +8,6 @@ import android.location.Location;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import nl.robenanita.googlemapstest.LocationTracking;
 
@@ -116,6 +115,8 @@ public class LocationTrackingDataSource {
         while (!c.isAfterLast())
         {
             TrackPoint t = cursorToTrackPoint(c);
+            // meters to feet
+            // t.altitude = t.altitude * 3.2808399f;
             tp.add(t);
             c.moveToNext();
         }

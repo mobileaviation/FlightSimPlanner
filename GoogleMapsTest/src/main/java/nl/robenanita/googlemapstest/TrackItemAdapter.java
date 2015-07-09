@@ -90,7 +90,7 @@ public class TrackItemAdapter extends BaseAdapter {
         trackItemLonTxt.setText(Location.convert(t.longitude, Location.FORMAT_MINUTES));
 
         trackItemSpeedTxt.setText(String.format("%dkt", Math.round(t.ground_speed)));
-        trackItemHeightTxt.setText(String.format("%dft", Math.round(t.altitude)));
+        trackItemHeightTxt.setText(String.format("%dft", Math.round(t.altitude * 3.2808399f)));
 
         return view;
     }

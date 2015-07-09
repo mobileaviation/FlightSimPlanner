@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="fill_parent"
             android:clickable="false"
             android:background="@drawable/infopanelborder"
@@ -31,7 +31,7 @@
                 android:id="@+id/textView"
                 android:singleLine="true"
                 android:textColor="#000000"
-                android:textSize="15dp" />
+                android:textSize="20dp" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -51,7 +51,7 @@
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
                     android:layout_marginTop="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,14 +64,14 @@
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
-                    android:textSize="15dp" />
+                    android:textSize="20dp" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="fill_parent"
             android:background="@drawable/infopanelborder"
             android:id="@+id/linearLayout"
@@ -84,7 +84,7 @@
                 android:id="@+id/textView18"
                 android:singleLine="true"
                 android:textColor="#000000"
-                android:textSize="15dp" />
+                android:textSize="20dp" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -104,14 +104,14 @@
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
                     android:layout_marginTop="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="20dp" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="80dp"
+            android:layout_width="98dp"
             android:layout_height="fill_parent"
             android:background="@drawable/infopanelborder"
             android:id="@+id/linearLayout2"
@@ -125,7 +125,7 @@
                 android:singleLine="true"
                 android:textColor="#000000"
                 android:focusableInTouchMode="false"
-                android:textSize="15dp"
+                android:textSize="20dp"
                 android:textIsSelectable="false" />
 
             <LinearLayout
@@ -146,28 +146,28 @@
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
                     android:layout_marginTop="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="20dp" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="fill_parent"
             android:background="@drawable/infopanelborder"
-            android:id="@+id/linearLayout9"
+            android:id="@+id/linearLayout10"
             android:layout_marginLeft="3dp" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Altitude:"
-                android:id="@+id/textView27"
+                android:id="@+id/textView28"
                 android:singleLine="true"
                 android:textColor="#000000"
                 android:focusableInTouchMode="false"
-                android:textSize="15dp"
+                android:textSize="20dp"
                 android:textIsSelectable="false" />
 
             <LinearLayout
@@ -188,7 +188,7 @@
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
                     android:layout_marginTop="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -209,7 +209,7 @@
                 android:singleLine="true"
                 android:textColor="#000000"
                 android:focusableInTouchMode="true"
-                android:textSize="15dp" />
+                android:textSize="20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -222,7 +222,7 @@
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:shadowRadius="0.01"
-                android:textSize="15dp"
+                android:textSize="20dp"
                 android:layout_weight="1"
                 android:textColorHighlight="#ffffffff"
                 android:textIsSelectable="false" />
@@ -235,12 +235,12 @@
                 android:gravity="bottom">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:text="Dis: 500NM"
                     android:id="@+id/distanceToTxt"
                     android:singleLine="true"
-                    android:textSize="15dp"
+                    android:textSize="20dp"
                     android:textIsSelectable="false"
                     android:textColor="#fff2ec12"
                     android:shadowColor="#ff000000"
@@ -250,7 +250,7 @@
                     android:password="false" />
 
                 <TextView
-                    android:layout_width="80dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="Hdg: 050"
                     android:id="@+id/hdgToTxt"
@@ -260,7 +260,7 @@
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
-                    android:textSize="15dp"
+                    android:textSize="20dp"
                     android:textIsSelectable="false" />
             </LinearLayout>
 

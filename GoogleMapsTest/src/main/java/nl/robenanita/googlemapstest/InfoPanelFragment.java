@@ -41,6 +41,7 @@ public class InfoPanelFragment extends Fragment {
         TextView lonTxt = (TextView) view.findViewById(R.id.longitudeTxt);
         TextView headingTxt = (TextView) view.findViewById(R.id.headingTxt);
         TextView gsTxt = (TextView) view.findViewById(R.id.groundspeedTxt);
+        TextView altitudeTxt = (TextView) view.findViewById(R.id.infoAltitudeTxt);
 
         String latStr = Location.convert(location.getLatitude(), Location.FORMAT_SECONDS);
         String lonStr = Location.convert(location.getLongitude(), Location.FORMAT_SECONDS);
@@ -53,6 +54,9 @@ public class InfoPanelFragment extends Fragment {
         // Calculate m/s to knots
         gsTxt.setText(
                 String.format("%d kt", Math.round(location.getSpeed()*1.9438444924574f)));
+        // Calculate Meters to Feet
+        altitudeTxt.setText(
+                String.format("%04d ft", Math.round(location.getAltitude() * 3.2808399d)));
 
         curlocation = location;
     }

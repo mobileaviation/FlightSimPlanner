@@ -501,6 +501,7 @@ public class NavigationActivity extends ActionBarActivity implements
             l.setLongitude(planePos.longitude);
             l.setBearing(d);
             l.setSpeed(0f);
+            l.setAltitude(0d);
             SetInfoPanel(l);
         }
         else
@@ -1903,8 +1904,8 @@ public class NavigationActivity extends ActionBarActivity implements
                             double he = 0d;
                             if (o != null) {
                                 he = Double.parseDouble(o.toString());
-                                he = he * 3.2808399d; // meters to feet
-                                setAltimeter(he);
+                                //he = he * 3.2808399d; // meters to feet
+                                setAltimeter(he * 3.2808399d);
                             }
 
                             loc.setLatitude(lat);
