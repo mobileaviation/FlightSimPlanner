@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:id="@+id/instrumentsLayout"
     android:visibility="visible">
 
@@ -16,7 +16,7 @@
 
         <ImageButton
             android:layout_width="40dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:id="@+id/flightPlanItemDownImgBtn"
             android:scaleType="fitXY"
             android:src="@drawable/arrowdown"
@@ -74,7 +74,8 @@
             android:layout_height="wrap_content"
             android:text="Take Off"
             android:id="@+id/setTakeoffTimeBtn"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:textSize="10dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -98,7 +99,8 @@
         android:id="@+id/flightplanRETOTxt"
         android:textColor="#383838"
         android:phoneNumber="false"
-        android:gravity="center" />
+        android:gravity="center"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="50dp"
@@ -108,7 +110,8 @@
         android:textColor="#383838"
         android:phoneNumber="false"
         android:singleLine="false"
-        android:gravity="center" />
+        android:gravity="center"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="50dp"
@@ -166,7 +169,8 @@
         android:textColor="#383838"
         android:phoneNumber="false"
         android:singleLine="false"
-        android:gravity="center" />
+        android:gravity="center"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="50dp"
@@ -176,7 +180,8 @@
         android:textColor="#383838"
         android:phoneNumber="false"
         android:singleLine="false"
-        android:gravity="center" />
+        android:gravity="center"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="50dp"

@@ -510,6 +510,7 @@ public class StartActivity extends ActionBarActivity {
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                     .addTestDevice("36A5D52DC49CF3A84F6BD03381312CE1")
                     .addTestDevice("70F82DF4BD716E85F87B34C81B78C5ED")
+                    .addTestDevice("B066A1E31D72FAD22CD44C97D2DAAFE6")
                     .build();
             leftAd.loadAd(leftRequest);
             leftAd.setAdListener(new AdListener() {
@@ -532,6 +533,7 @@ public class StartActivity extends ActionBarActivity {
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                     .addTestDevice("36A5D52DC49CF3A84F6BD03381312CE1")
                     .addTestDevice("70F82DF4BD716E85F87B34C81B78C5ED")
+                    .addTestDevice("B066A1E31D72FAD22CD44C97D2DAAFE6")
                     .build();
             rightAd.loadAd(rightRequest);
             return true;

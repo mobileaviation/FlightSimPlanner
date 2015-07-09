@@ -72,7 +72,8 @@
                 android:id="@+id/textView7"
                 android:textColor="#383838"
                 android:phoneNumber="false"
-                android:gravity="center|bottom" />
+                android:gravity="center|bottom"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="50dp"
@@ -82,7 +83,8 @@
                 android:textColor="#383838"
                 android:phoneNumber="false"
                 android:singleLine="false"
-                android:gravity="center|bottom" />
+                android:gravity="center|bottom"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="50dp"
@@ -132,7 +134,8 @@
                 android:textColor="#383838"
                 android:phoneNumber="false"
                 android:singleLine="false"
-                android:gravity="center|bottom" />
+                android:gravity="center|bottom"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="50dp"
@@ -142,7 +145,8 @@
                 android:textColor="#383838"
                 android:phoneNumber="false"
                 android:singleLine="false"
-                android:gravity="center|bottom" />
+                android:gravity="center|bottom"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="50dp"

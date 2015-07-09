@@ -15,17 +15,17 @@
 
         <Button
             android:layout_width="30dp"
-            android:layout_height="100dp"
+            android:layout_height="50dp"
             android:id="@+id/notamBtn"
             android:background="@drawable/notambtnstyle" />
         <Button
             android:layout_width="30dp"
-            android:layout_height="100dp"
+            android:layout_height="50dp"
             android:id="@+id/metarBtn"
             android:background="@drawable/metarbtnstyle" />
         <Button
             android:layout_width="30dp"
-            android:layout_height="100dp"
+            android:layout_height="50dp"
             android:id="@+id/tafBtn"
             android:background="@drawable/tafbtnstyle" />
         <Button
@@ -59,7 +59,7 @@
             android:layout_marginBottom="3dp"
             android:background="#ffcecece"
             android:gravity="center"
-            android:textSize="18dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:layout_width="200dp"
@@ -70,7 +70,8 @@
             android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
             android:background="#ffcecece"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textSize="15dp" />
 
         <ListView
             android:layout_width="200dp"
@@ -96,7 +97,7 @@
             android:text="Select an Airport"
             android:gravity="center"
             android:textStyle="bold"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:background="#ffffffff"
             android:id="@+id/selectAirportForInfoText"
             android:visibility="visible" />
