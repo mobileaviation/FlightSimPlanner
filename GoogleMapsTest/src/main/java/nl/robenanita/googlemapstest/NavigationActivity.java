@@ -843,8 +843,8 @@ public class NavigationActivity extends ActionBarActivity implements
 
         final VariationDeviationPopup variationDeviationPopup = new VariationDeviationPopup(this, Layout, HeadingError.variation);
         variationDeviationPopup.setContentView(Layout);
-        variationDeviationPopup.setWidth(popupWidth);
-        variationDeviationPopup.setHeight(popupHeight);
+        variationDeviationPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        variationDeviationPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         variationDeviationPopup.setFocusable(true);
         variationDeviationPopup.SetValue(0);
 
@@ -959,8 +959,8 @@ public class NavigationActivity extends ActionBarActivity implements
 
         final VariationDeviationPopup deviationPopup = new VariationDeviationPopup(this, Layout, HeadingError.deviation);
         deviationPopup.setContentView(Layout);
-        deviationPopup.setWidth(popupWidth);
-        deviationPopup.setHeight(popupHeight);
+        deviationPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        deviationPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         deviationPopup.setFocusable(true);
         deviationPopup.SetValue(0);
 
@@ -1026,13 +1026,11 @@ public class NavigationActivity extends ActionBarActivity implements
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View Layout = layoutInflater.inflate(R.layout.directto_popup, viewGroup);
 
-        int popupWidth = 500;
-        int popupHeight = 300;
         final DirectToPopup directToPopupPopup = new DirectToPopup(this, Layout,
                 (selectedFlightplan == null) ? null : selectedFlightplan.alternate_airport, this);
         directToPopupPopup.setContentView(Layout);
-        directToPopupPopup.setWidth(popupWidth);
-        directToPopupPopup.setHeight(popupHeight);
+        directToPopupPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        directToPopupPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         directToPopupPopup.setFocusable(true);
 
         directToPopupPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -1484,8 +1482,8 @@ public class NavigationActivity extends ActionBarActivity implements
         final IsNewPopup isNewPopup = new IsNewPopup(this, Layout);
 
         isNewPopup.setContentView(Layout);
-        isNewPopup.setWidth(popupWidth);
-        isNewPopup.setHeight(popupHeight);
+        isNewPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        isNewPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         isNewPopup.setFocusable(true);
 
         isNewPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
@@ -1494,9 +1492,6 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void ShowNewWaypointPopup(LatLng Location)
     {
-        int popupWidth = 500;
-        int popupHeight = 250;
-
         LinearLayout viewGroup = (LinearLayout) findViewById(R.id.addWaypointPopup);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View Layout = layoutInflater.inflate(R.layout.add_waypoint, viewGroup);
@@ -1505,8 +1500,8 @@ public class NavigationActivity extends ActionBarActivity implements
 
         addWayPointPopup.Location = Location;
         addWayPointPopup.setContentView(Layout);
-        addWayPointPopup.setWidth(popupWidth);
-        addWayPointPopup.setHeight(popupHeight);
+        addWayPointPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        addWayPointPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         addWayPointPopup.setFocusable(true);
 
         addWayPointPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {

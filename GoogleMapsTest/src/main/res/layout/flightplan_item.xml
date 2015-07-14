@@ -159,7 +159,8 @@
         android:textColor="#383838"
         android:phoneNumber="false"
         android:singleLine="false"
-        android:gravity="center" />
+        android:gravity="center"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="50dp"

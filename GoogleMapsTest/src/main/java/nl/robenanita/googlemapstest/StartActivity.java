@@ -194,12 +194,12 @@ public class StartActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data)
     {
-        if (mHelper != null)
-            if (!mHelper.handleActivityResult(requestCode,
-                    resultCode, data)) {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
-        else
+//        if (mHelper != null)
+//            if (!mHelper.handleActivityResult(requestCode,
+//                    resultCode, data)) {
+//                super.onActivityResult(requestCode, resultCode, data);
+//            }
+//        else
                 super.onActivityResult(requestCode, resultCode, data);
     }
 
