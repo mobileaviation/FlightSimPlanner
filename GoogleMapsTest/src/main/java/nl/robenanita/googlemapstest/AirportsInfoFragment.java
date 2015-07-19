@@ -124,6 +124,8 @@ public class AirportsInfoFragment extends Fragment {
                 infoListView.setVisibility(View.GONE);
                 infoProgressBar.setVisibility(View.VISIBLE);
                 selectAirportForInfoText.setVisibility(View.GONE);
+                icaoCodesListView.invalidateViews();
+                adapter.setSelectedIndex(i);
                 switch (typeVisible) {
                     case metar :
                         setMetars(adapter.getStation(i).station_id); break;

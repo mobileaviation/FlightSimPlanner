@@ -29,7 +29,10 @@ public class CompassNeedle extends View{
 
         Bitmap source = BitmapFactory.decodeResource(getResources(), R.drawable.compassarrow);
         Matrix matrix = new Matrix();
-        matrix.setRotate(heading,source.getWidth()/2,source.getHeight()/2);
+        matrix.postRotate(heading,source.getWidth()/2,source.getHeight()/2);
+        float sx = (float)getWidth() / (float)source.getWidth();
+        float sy = (float)getHeight() / (float)source.getHeight();
+        matrix.postScale(sx, sy);
         canvas.drawBitmap(source, matrix, new Paint());
 
     }

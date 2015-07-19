@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest.Weather;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,14 @@ import nl.robenanita.googlemapstest.R;
 public class StationsAdapter extends BaseAdapter {
     private ArrayList<Station> stations;
     public StationsAdapter(ArrayList<Station> stations) { this.stations = stations; }
+    private int evenColor = Color.TRANSPARENT;
+    private int unevenColor = 0xffe0e0e0;
+    private int selectedColor = Color.parseColor("#7ecce8");
+    private static int selectedIndex = -1;
+
+    public void setSelectedIndex(int selectedIndex) {
+        StationsAdapter.selectedIndex = selectedIndex;
+    }
 
     @Override
     public int getCount() {
@@ -50,12 +59,19 @@ public class StationsAdapter extends BaseAdapter {
         stationText.setText(m.station_id);
         if (m.fir) stationText.setTypeface(null, Typeface.BOLD_ITALIC);
 
-        if ( (i & 1) == 0 ) {
-            //stationLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));
-            stationLayout.setBackgroundResource(R.drawable.border);
+//        if ( (i & 1) == 0 ) {
+//            //stationLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));
+//            stationLayout.setBackgroundResource(R.drawable.border);
+//
+//        }
 
-        }
+        if (isEven(i))
+            stationLayout.setBackgroundColor((i==selectedIndex) ? selectedColor : evenColor);
+        else
+            stationLayout.setBackgroundColor((i==selectedIndex) ? selectedColor : unevenColor);
 
         return view;
     }
+
+    boolean isEven(double num) { return ((num % 2) == 0) ; }
 }

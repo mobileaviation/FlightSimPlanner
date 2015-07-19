@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="250dp"
+    android:layout_width="wrap_content"
     android:id="@+id/track_item_layout"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="30dp"
+        android:layout_width="40dp"
         android:layout_height="fill_parent"
         android:layout_marginRight="5dp"
         android:gravity="center_vertical">
@@ -17,8 +17,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="00:00"
-            android:id="@+id/trackItemTimeTxt"
-            android:textSize="10dp" />
+            android:id="@+id/trackItemTimeTxt" />
     </LinearLayout>
 
     <LinearLayout
@@ -32,21 +31,19 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Lat:.."
-            android:id="@+id/textView"
-            android:textSize="10dp" />
+            android:id="@+id/textView" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Lon:.."
-            android:id="@+id/textView2"
-            android:textSize="10dp" />
+            android:id="@+id/textView2" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="70dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp">
 
@@ -55,16 +52,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="000:00,00000"
-            android:id="@+id/trackItemLatTxt"
-            android:textSize="10dp" />
+            android:id="@+id/trackItemLatTxt" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="000:00,00000"
-            android:id="@+id/trackItemLonTxt"
-            android:textSize="10dp" />
+            android:id="@+id/trackItemLonTxt" />
     </LinearLayout>
 
     <LinearLayout
@@ -77,16 +72,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Height:..."
-            android:id="@+id/textView4"
-            android:textSize="10dp" />
+            android:id="@+id/textView4" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Speed:..."
-            android:id="@+id/textView3"
-            android:textSize="10dp" />
+            android:id="@+id/textView3" />
     </LinearLayout>
 
     <LinearLayout
@@ -97,27 +90,25 @@
         android:layout_marginLeft="5dp">
 
         <TextView
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="00000ft"
             android:id="@+id/trackItemHeightTxt"
-            android:singleLine="false"
-            android:textSize="10dp" />
+            android:singleLine="false" />
 
         <TextView
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="000kt"
-            android:id="@+id/trackItemSpeedTxt"
-            android:textSize="10dp" />
+            android:id="@+id/trackItemSpeedTxt" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="35dp"
+        android:layout_height="match_parent">
 
         <!--<ImageView-->
             <!--android:layout_width="wrap_content"-->
@@ -126,8 +117,8 @@
             <!--android:src="@drawable/compassarrow"-->
             <!--android:scaleType="center" />-->
         <nl.robenanita.googlemapstest.CompassNeedle
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:id="@+id/compassArrowView" />
     </LinearLayout>
 </LinearLayout>

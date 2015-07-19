@@ -26,7 +26,8 @@
             android:id="@+id/instrumentsLayout"
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:visibility="gone">
 
             <TableLayout
                 android:layout_width="wrap_content"
@@ -331,7 +332,7 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="327dp"
+            android:layout_width="250dp"
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
             android:layout_alignLeft="@+id/instrumentsLayout"

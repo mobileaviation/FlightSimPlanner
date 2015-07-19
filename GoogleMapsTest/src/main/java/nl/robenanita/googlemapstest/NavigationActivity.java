@@ -1470,24 +1470,27 @@ public class NavigationActivity extends ActionBarActivity implements
         }
     }
 
+    private boolean isNewPopupVisible;
     private void showIsNewPopup()
     {
-        int popupWidth = 440;
-        int popupHeight = 500;
+        if (!isNewPopupVisible) {
+            int popupWidth = 440;
+            int popupHeight = 500;
 
-        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.isNewPopupLayout);
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View Layout = layoutInflater.inflate(R.layout.webisnew_popup, viewGroup);
+            LinearLayout viewGroup = (LinearLayout) findViewById(R.id.isNewPopupLayout);
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View Layout = layoutInflater.inflate(R.layout.webisnew_popup, viewGroup);
 
-        final IsNewPopup isNewPopup = new IsNewPopup(this, Layout);
+            final IsNewPopup isNewPopup = new IsNewPopup(this, Layout);
 
-        isNewPopup.setContentView(Layout);
-        isNewPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        isNewPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        isNewPopup.setFocusable(true);
+            isNewPopup.setContentView(Layout);
+            isNewPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+            isNewPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+            isNewPopup.setFocusable(true);
 
-        isNewPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
-
+            isNewPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
+            isNewPopupVisible = true;
+        }
     }
 
     private void ShowNewWaypointPopup(LatLng Location)
