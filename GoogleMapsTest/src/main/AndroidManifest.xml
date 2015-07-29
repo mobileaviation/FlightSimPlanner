@@ -54,8 +54,8 @@
 
         <!-- Release Key -->
          <!--<meta-data-->
-         <!--android:name="com.google.android.maps.v2.API_KEY"-->
-         <!--android:value="AIzaSyDavE-lD2S16hK_jZbhvDXzDDBAeOqIFZw" />-->
+            <!--android:name="com.google.android.maps.v2.API_KEY"-->
+            <!--android:value="AIzaSyDavE-lD2S16hK_jZbhvDXzDDBAeOqIFZw" />-->
 
 
         <!-- debug key pc -->

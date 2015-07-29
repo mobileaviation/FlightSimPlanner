@@ -414,12 +414,13 @@ public class StartActivity extends ActionBarActivity {
         fixesCountTxt.setText(Integer.toString(fiCount));
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-        propertiesDataSource.open(true);
-        propertiesDataSource.FillProperties();
-        propertiesDataSource.close(true);
+        propertiesDataSource.open(false);
+        Property v = propertiesDataSource.GetProperty("DB_VERSION");
+        propertiesDataSource.close(false);
 
         databaseVersionTxt = (TextView) findViewById(R.id.databaseVersionTxt);
-        databaseVersionTxt.setText(propertiesDataSource.DBVersion.value1);
+        databaseVersionTxt.setText(v.value1);
+
 
     }
 
