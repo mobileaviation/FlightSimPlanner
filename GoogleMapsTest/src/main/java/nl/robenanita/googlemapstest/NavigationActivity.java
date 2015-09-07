@@ -658,11 +658,15 @@ public class NavigationActivity extends ActionBarActivity implements
 
         selectedFlightplan.UpdateWaypointsData();
 
-        LoadFlightplanRunways();
+        //LoadFlightplanRunways();
+        LoadRunways(selectedFlightplan.departure_airport);
+        LoadRunways(selectedFlightplan.destination_airport);
+        LoadRunways(selectedFlightplan.alternate_airport);
         ShowFlightplanTrack();
         SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
         PlaceFlightplanAirportMarkers();
+
 
         // Buffer test
         drawBuffer(selectedFlightplan);
@@ -715,68 +719,68 @@ public class NavigationActivity extends ActionBarActivity implements
 //
 //    }
 
-    private void LoadFlightplanRunways()
-    {
-        class ASyncRunways extends AsyncTask<String, Integer, Void> {
-            @Override
-            protected Void doInBackground(String... strings) {
-                RunwaysDataSource runwaysDataSource = new RunwaysDataSource(getBaseContext());
-                runwaysDataSource.open();
-                RunwaysList departureRunways;
-                departureRunways = runwaysDataSource.loadRunwaysByAirport(selectedFlightplan.departure_airport);
-                selectedFlightplan.departure_airport.runways = departureRunways;
-                RunwaysList destinationRunways;
-                destinationRunways = runwaysDataSource.loadRunwaysByAirport(selectedFlightplan.destination_airport);
-                selectedFlightplan.destination_airport.runways = destinationRunways;
-                RunwaysList alternateRunways;
-                alternateRunways = runwaysDataSource.loadRunwaysByAirport(selectedFlightplan.alternate_airport);
-                selectedFlightplan.alternate_airport.runways = alternateRunways;
-                runwaysDataSource.close();
-                return null;
-            }
-
-            @Override
-            protected void onPreExecute() {
-                Log.i(TAG, "Starting Async Runways loading.");
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                Log.i(TAG, "Finished Async Runways loading.");
-                for (Runway r : selectedFlightplan.departure_airport.runways) LoadRunwayMarkers(r);
-                Log.i(TAG, "Found departure Runways: " + selectedFlightplan.departure_airport.runways.size());
-                for (Runway r : selectedFlightplan.destination_airport.runways) LoadRunwayMarkers(r);
-                Log.i(TAG, "Found destination Runways: " + selectedFlightplan.destination_airport.runways.size());
-                for (Runway r : selectedFlightplan.alternate_airport.runways) LoadRunwayMarkers(r);
-                Log.i(TAG, "Found alternate Runways: " + selectedFlightplan.alternate_airport.runways.size());
-            }
-
-            private void LoadRunwayMarkers(Runway runway)
-            {
-                if (runway.le_latitude_deg>0)
-                {
-                    MarkerOptions m = new MarkerOptions();
-                    m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
-                    m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
-                    m.rotation((float) runway.le_heading_degT);
-                    m.title(runway.le_ident);
-                    runway.lowMarker = map.addMarker(m);
-                }
-                if (runway.he_latitude_deg>0)
-                {
-                    MarkerOptions m1 = new MarkerOptions();
-                    m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
-                    m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
-                    m1.rotation((float) runway.he_heading_degT);
-                    m1.title(runway.he_ident);
-                    runway.hiMarker = map.addMarker(m1);
-                }
-            }
-        }
-
-        ASyncRunways aSyncRunways = new ASyncRunways();
-        aSyncRunways.execute();
-    }
+//    private void LoadFlightplanRunways()
+//    {
+//        class ASyncRunways extends AsyncTask<String, Integer, Void> {
+//            @Override
+//            protected Void doInBackground(String... strings) {
+//                RunwaysDataSource runwaysDataSource = new RunwaysDataSource(getBaseContext());
+//                runwaysDataSource.open();
+//                RunwaysList departureRunways;
+//                departureRunways = runwaysDataSource.loadRunwaysByAirport(selectedFlightplan.departure_airport);
+//                selectedFlightplan.departure_airport.runways = departureRunways;
+//                RunwaysList destinationRunways;
+//                destinationRunways = runwaysDataSource.loadRunwaysByAirport(selectedFlightplan.destination_airport);
+//                selectedFlightplan.destination_airport.runways = destinationRunways;
+//                RunwaysList alternateRunways;
+//                alternateRunways = runwaysDataSource.loadRunwaysByAirport(selectedFlightplan.alternate_airport);
+//                selectedFlightplan.alternate_airport.runways = alternateRunways;
+//                runwaysDataSource.close();
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPreExecute() {
+//                Log.i(TAG, "Starting Async Runways loading.");
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                Log.i(TAG, "Finished Async Runways loading.");
+//                for (Runway r : selectedFlightplan.departure_airport.runways) LoadRunwayMarkers(r);
+//                Log.i(TAG, "Found departure Runways: " + selectedFlightplan.departure_airport.runways.size());
+//                for (Runway r : selectedFlightplan.destination_airport.runways) LoadRunwayMarkers(r);
+//                Log.i(TAG, "Found destination Runways: " + selectedFlightplan.destination_airport.runways.size());
+//                for (Runway r : selectedFlightplan.alternate_airport.runways) LoadRunwayMarkers(r);
+//                Log.i(TAG, "Found alternate Runways: " + selectedFlightplan.alternate_airport.runways.size());
+//            }
+//
+//            private void LoadRunwayMarkers(Runway runway)
+//            {
+//                if (runway.le_latitude_deg>0)
+//                {
+//                    MarkerOptions m = new MarkerOptions();
+//                    m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
+//                    m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+//                    m.rotation((float) runway.le_heading_degT);
+//                    m.title(runway.le_ident);
+//                    runway.lowMarker = map.addMarker(m);
+//                }
+//                if (runway.he_latitude_deg>0)
+//                {
+//                    MarkerOptions m1 = new MarkerOptions();
+//                    m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
+//                    m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+//                    m1.rotation((float) runway.he_heading_degT);
+//                    m1.title(runway.he_ident);
+//                    runway.hiMarker = map.addMarker(m1);
+//                }
+//            }
+//        }
+//
+//        ASyncRunways aSyncRunways = new ASyncRunways();
+//        aSyncRunways.execute();
+//    }
 
     private void LoadFlightplanGrid()
     {
@@ -940,10 +944,16 @@ public class NavigationActivity extends ActionBarActivity implements
 
         flightPlanDataSource.close();
 
-        LoadFlightplanRunways();
+        //LoadFlightplanRunways();
+        //PlaceFlightplanAirportMarkers();
+        LoadRunways(selectedFlightplan.departure_airport);
+        LoadRunways(selectedFlightplan.destination_airport);
+        LoadRunways(selectedFlightplan.alternate_airport);
         ShowFlightplanTrack();
         SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
+
+
         drawBuffer(selectedFlightplan);
     }
 
@@ -1585,8 +1595,13 @@ public class NavigationActivity extends ActionBarActivity implements
         flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
         flightPlanDataSource.close();
 
+
+        LoadRunways(selectedFlightplan.departure_airport);
+        LoadRunways(selectedFlightplan.destination_airport);
+        LoadRunways(selectedFlightplan.alternate_airport);
         drawBuffer(selectedFlightplan);
-        LoadFlightplanRunways();
+        PlaceFlightplanAirportMarkers();
+        //LoadFlightplanRunways();
         ShowFlightplanTrack();
         LoadFlightplanGrid();
     }
@@ -2160,6 +2175,37 @@ public class NavigationActivity extends ActionBarActivity implements
         }
     }
 
+    private void LoadRunways(Airport airport)
+    {
+        RunwaysDataSource runwaysDataSource = new RunwaysDataSource(this);
+        runwaysDataSource.open();
+        airport.runways = runwaysDataSource.loadRunwaysByAirport(airport);
+        runwaysDataSource.close();
+        LoadRunwayMarkers(airport.runways);
+    }
+
+    private void LoadRunwayMarkers(RunwaysList runways)
+    {
+        for (Runway runway: runways) {
+            if (runway.le_latitude_deg > 0) {
+                MarkerOptions m = new MarkerOptions();
+                m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
+                m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+                m.rotation((float) runway.le_heading_degT);
+                m.title(runway.le_ident);
+                runway.lowMarker = map.addMarker(m);
+            }
+            if (runway.he_latitude_deg > 0) {
+                MarkerOptions m1 = new MarkerOptions();
+                m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
+                m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+                m1.rotation((float) runway.he_heading_degT);
+                m1.title(runway.he_ident);
+                runway.hiMarker = map.addMarker(m1);
+            }
+        }
+    }
+
     private void PlaceFlightplanAirportMarkers()
     {
         if (selectedFlightplan != null)
@@ -2167,6 +2213,7 @@ public class NavigationActivity extends ActionBarActivity implements
             Airport dep = airports.get(selectedFlightplan.departure_airport.id);
             if (dep == null) {
                 dep = selectedFlightplan.departure_airport;
+                //if (dep.runways.size()==0) LoadRunways(dep);
                 airports.put(dep.id, dep);
             }
             setupAirportMarker(dep);
@@ -2175,6 +2222,7 @@ public class NavigationActivity extends ActionBarActivity implements
             Airport des = airports.get(selectedFlightplan.destination_airport.id);
             if (des == null) {
                 des = selectedFlightplan.destination_airport;
+                //if (des.runways.size()==0) LoadRunways(des);
                 airports.put(des.id, des);
             }
             setupAirportMarker(des);
@@ -2183,6 +2231,7 @@ public class NavigationActivity extends ActionBarActivity implements
             Airport alt = airports.get(selectedFlightplan.alternate_airport.id);
             if (alt == null) {
                 alt = selectedFlightplan.alternate_airport;
+                //if (alt.runways.size()==0) LoadRunways(alt);
                 airports.put(alt.id, alt);
             }
             setupAirportMarker(alt);
