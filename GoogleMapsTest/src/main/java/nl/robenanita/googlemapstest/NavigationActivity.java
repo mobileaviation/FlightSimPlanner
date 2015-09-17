@@ -88,6 +88,7 @@ import nl.robenanita.googlemapstest.flightplan.FlightPlanActivity;
 import nl.robenanita.googlemapstest.flightplan.Leg;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
+import nl.robenanita.googlemapstest.markers.PlaneMarker;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
@@ -97,7 +98,7 @@ public class NavigationActivity extends ActionBarActivity implements
         GooglePlayServicesClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener {
     public GoogleMap map;
-    private Marker plane;
+    private PlaneMarker plane;
 
     private MarkerProperties markerProperties;
 
@@ -488,13 +489,14 @@ public class NavigationActivity extends ActionBarActivity implements
 
         if (plane == null)
         {
-            plane = map.addMarker(new MarkerOptions()
-                    .position(planePos)
-                    .title("Plane Position")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.blackaircrafticonsmall))
-                    .rotation(d)
-                    .anchor(0.5f, 0.5f)
-                    .flat(true));
+//            plane = map.addMarker(new MarkerOptions()
+//                    .position(planePos)
+//                    .title("Plane Position")
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.blackaircrafticonsmall))
+//                    .rotation(d)
+//                    .anchor(0.5f, 0.5f)
+//                    .flat(true));
+            plane = new PlaneMarker(map, planePos, d);
 
             Location l = new Location("plane");
             l.setLatitude(planePos.latitude);
