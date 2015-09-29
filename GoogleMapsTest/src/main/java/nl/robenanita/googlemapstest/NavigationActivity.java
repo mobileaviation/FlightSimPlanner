@@ -1098,6 +1098,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 selectedFlightplan.trackOptions.width(5);
                 selectedFlightplan.trackOptions.add(point);
 
+
                 if ((waypoint.airport_id == 0) && (waypoint.navaid_id == 0) && (waypoint.fix_id == 0))
                 {
                     MarkerOptions m = new MarkerOptions();
@@ -1114,6 +1115,7 @@ public class NavigationActivity extends ActionBarActivity implements
             }
 
             selectedFlightplan.track = map.addPolyline(selectedFlightplan.trackOptions);
+            selectedFlightplan.track.setZIndex(1000);
         }
     }
 
@@ -1133,6 +1135,7 @@ public class NavigationActivity extends ActionBarActivity implements
         PolylineOptions o = new PolylineOptions();
         o.color(Color.RED);
         o.width(2);
+        o.zIndex(1000);
         for (Coordinate c : coordinates)
         {
             LatLng p = new LatLng(c.y, c.x);
@@ -2072,6 +2075,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 PolylineOptions trackOptions = new PolylineOptions();
                 trackOptions.color(Color.GREEN);
                 trackOptions.width(5);
+                trackOptions.zIndex(1000);
                 trackOptions.add(oldPoint);
                 trackOptions.add(new LatLng(newPoint.getLatitude(), newPoint.getLongitude()));
                 oldPoint = new LatLng(newPoint.getLatitude(), newPoint.getLongitude());

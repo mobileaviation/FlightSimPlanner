@@ -34,6 +34,7 @@ public class LoadTrack {
         trackOptions = new PolylineOptions();
         trackOptions.color(Color.YELLOW);
         trackOptions.width(5);
+        trackOptions.zIndex(1000);
 
         for (LocationTrackingDataSource.TrackPoint tp : trackPoints)
         {
