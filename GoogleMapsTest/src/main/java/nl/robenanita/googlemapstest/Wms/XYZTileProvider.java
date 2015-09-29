@@ -16,7 +16,7 @@ import java.net.URL;
 /**
  * Created by Rob Verhoef on 14-10-2014.
  */
-public class OpenWeatherMapUrlTileProvider implements TileProvider {
+public class XYZTileProvider implements TileProvider {
     private String url;
     private Paint opacityPaint = new Paint();
     private static String TAG = "GooglemapsTest";
@@ -30,7 +30,7 @@ public class OpenWeatherMapUrlTileProvider implements TileProvider {
      *
      * @param url The tile server's endpoint URL, from which to retrieve {@link Tile} images
      */
-    public OpenWeatherMapUrlTileProvider(String url, String layer, int opacity )
+    public XYZTileProvider(String url, String layer, int opacity )
     {
 
         this.url = url.replace("#LAYER#", layer);

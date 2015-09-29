@@ -67,6 +67,8 @@ public class MapController
     private TileOverlay canadaWeatherPressOverlay;
     private TileOverlay canadaWeatherUSRadarOverlay;
 
+    private TileOverlay airportTestOverlay;
+
     public void setUpTileProvider()
     {
         TileProvider tp1 = TileProviderFactory.getFAAProvider(TileProviderFormats.chartBundleLayer.sec_4326, context);
@@ -114,6 +116,11 @@ public class MapController
         TileProvider tp12 =
                 TileProviderFactory.getCanadaWeatherProvider(TileProviderFormats.weathermapLayer.RADAR_RDBR, TileProviderFormats.canadamapStyle.RADAR);
         canadaWeatherUSRadarOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp12));
+
+        TileProvider tp13 =
+                TileProviderFactory.getTileAirportMapProvider("EHAM-VAC-1", 100);
+        airportTestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp13));
+        airportTestOverlay.setVisible(true);
 
         weatherProperties = new WeatherProperties();
         weatherProperties.ClearProperties();

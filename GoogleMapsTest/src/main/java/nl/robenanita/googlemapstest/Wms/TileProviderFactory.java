@@ -77,8 +77,16 @@ public class TileProviderFactory {
     public static TileProvider getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer layer,
                                                       int opacity)
     {
-        TileProvider tileProvider = new OpenWeatherMapUrlTileProvider(TileProviderFormats.OPENWEATHERTILE_FORMAT,
+        TileProvider tileProvider = new XYZTileProvider(TileProviderFormats.OPENWEATHERTILE_FORMAT,
                 layer.toString(), opacity);
+        return tileProvider;
+    }
+
+    public static TileProvider getTileAirportMapProvider(String airportmap,
+                                                             int opacity)
+    {
+        TileProvider tileProvider = new XYZTileProvider(TileProviderFormats.AIRPORTMAP_FORMAT,
+                airportmap, opacity);
         return tileProvider;
     }
 }

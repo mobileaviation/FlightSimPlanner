@@ -176,6 +176,10 @@ public class TileProviderFormats {
             "#LAYER#/" +
             "{zoom}/{x}/{y}.png";
 
+    public static final String AIRPORTMAP_FORMAT = "http://www.robenanita.nl/tileserver/tileserver.php?%2Findex.json&callback=_callbacks_._0iepyf5mh?/"+
+            "#LAYER#/"+  //EHAM-VAC-1
+            "{zoom}/{x}/{y}.png";
+
     public enum weathermapLayer {
         clouds,
         precipitation,
