@@ -13,6 +13,7 @@
     <string name="action_maptype">Toggle through map types</string>
     <string name="action_tracking_active">Activate - Deactivate tracking</string>
     <string name="action_connect_disconnect">Connect - Disconnect from Sim</string>
+    <string name="action_loadaip">Load Aip Airspace</string>
     <string name="countries_url">http://robenanita.yzi.me/countries.php</string>
     <string name="airports_url">http://robenanita.yzi.me/airports.php</string>
     <string name="search_hint_airports">"Search for airport on name or code". For example, "Schiphol" or "EHAM"</string>

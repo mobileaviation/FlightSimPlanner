@@ -89,6 +89,7 @@ import nl.robenanita.googlemapstest.flightplan.Leg;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
+import nl.robenanita.googlemapstest.openaip.Airspaces;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
@@ -1326,6 +1327,12 @@ public class NavigationActivity extends ActionBarActivity implements
             case R.id.action_isnew:
             {
                 showIsNewPopup();
+                return true;
+            }
+            case R.id.action_loadaip:
+            {
+                Airspaces a = new Airspaces();
+                a.OpenAipFile(this, "openaip_airspace_netherlands_nl.aip");
                 return true;
             }
 
