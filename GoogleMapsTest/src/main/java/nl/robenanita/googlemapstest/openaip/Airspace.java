@@ -12,8 +12,10 @@ public class Airspace {
     public String Country;
     public String Name;
     public Integer AltLimit_Top;
+    public AltitudeUnit AltLimit_Top_Unit;
     public AltitudeReference AltLimit_Top_Ref;
     public Integer AltLimit_Bottom;
+    public AltitudeUnit AltLimit_Bottom_Unit;
     public AltitudeReference AltLimit_Bottom_Ref;
     public Geometry Geometry;
 }
