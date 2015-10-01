@@ -14,12 +14,4 @@ public enum AltitudeReference {
         return super.toString();
     }
 
-    public AltitudeReference parse(String reference)
-    {
-        if (reference.equals("GND")) return this.GND;
-        if (reference.equals("MSL")) return this.MSL;
-        if (reference.equals("STD")) return this.STD;
-        return STD;
-    }
-
 }

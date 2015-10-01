@@ -5,6 +5,9 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.Xml;
 
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -63,6 +66,39 @@ public class Airspaces extends ArrayList<Airspace> {
                         Add(airspace);
                         airspace.Category = AirspaceCategory.valueOf(parser.getAttributeValue(null, "CATEGORY"));
                     }
+
+                    if (name.equals("ALTLIMIT_TOP")) {
+                        readAltTop = true;
+                        if (airspace != null) {
+                            String a = parser.getAttributeValue(null, "REFERENCE");
+                            airspace.AltLimit_Top_Ref = AltitudeReference.valueOf(
+                                    parser.getAttributeValue(null, "REFERENCE"));
+                        }
+                    }
+
+                    if (name.equals("ALTLIMIT_BOTTOM")) {
+                        readAltTop = false;
+                        if (airspace != null) {
+                            String a = parser.getAttributeValue(null, "REFERENCE");
+                            airspace.AltLimit_Bottom_Ref = AltitudeReference.valueOf(
+                                    parser.getAttributeValue(null, "REFERENCE"));
+                        }
+                    }
+
+                    if (name.equals("ALT")) {
+                        if (readAltTop) {
+                            if (airspace != null) {
+                                airspace.AltLimit_Top_Unit = AltitudeUnit.valueOf(
+                                        parser.getAttributeValue(null, "UNIT"));
+                            }
+                        } else {
+                            if (airspace != null) {
+                                airspace.AltLimit_Bottom_Unit = AltitudeUnit.valueOf(
+                                        parser.getAttributeValue(null, "UNIT"));
+                            }
+                        }
+                    }
+
                 }
                 if (eventType == XmlPullParser.TEXT) {
                     if (name.equals("VERSION")) {
@@ -81,41 +117,29 @@ public class Airspaces extends ArrayList<Airspace> {
                         if (airspace != null) airspace.Name = parser.getText();
                     }
 
-                    if (name.equals("ALTLIMIT_TOP")) {
-                        readAltTop = true;
-                        if (airspace != null) airspace.AltLimit_Top_Ref = AltitudeReference.valueOf(
-                                parser.getAttributeValue(null, "REFERENCE"));
-                    }
 
-                    if (name.equals("ALTLIMIT_BOTTOM")) {
-                        readAltTop = false;
-                        if (airspace != null)
-                            airspace.AltLimit_Bottom_Ref = AltitudeReference.valueOf(
-                                    parser.getAttributeValue(null, "REFERENCE"));
-                    }
 
                     if (name.equals("ALT")) {
                         if (readAltTop) {
                             if (airspace != null) {
                                 airspace.AltLimit_Top = Integer.parseInt(parser.getText());
-                                airspace.AltLimit_Top_Unit = AltitudeUnit.valueOf(
-                                        parser.getAttributeValue(null, "UNIT"));
                             }
                         } else {
                             if (airspace != null) {
                                 airspace.AltLimit_Bottom = Integer.parseInt(parser.getText());
-                                airspace.AltLimit_Bottom_Unit = AltitudeUnit.valueOf(
-                                        parser.getAttributeValue(null, "UNIT"));
                             }
                         }
-
-
-//                    if (name.equals("POLYGON"))
-//                    {
-//                        if (airspace != null) airspace.Version = parser.getText();
-//                    }
-
                     }
+                    if (name.equals("POLYGON"))
+                    {
+                        if (airspace != null) {
+                            String p = "POLYGON ((" + parser.getText() + "))";
+                            WKTReader r = new WKTReader();
+                            airspace.Geometry = r.read(p);
+                        }
+                    }
+
+
                     name = "";
                 }
 
@@ -125,6 +149,8 @@ public class Airspaces extends ArrayList<Airspace> {
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }
