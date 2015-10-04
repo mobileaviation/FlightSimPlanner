@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest.openaip;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
@@ -20,6 +21,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.AirportType;
+import nl.robenanita.googlemapstest.database.AirspacesDataSource;
 
 /**
  * Created by Rob Verhoef on 29-9-2015.
@@ -27,10 +29,20 @@ import nl.robenanita.googlemapstest.AirportType;
 public class Airspaces extends ArrayList<Airspace> {
     private String TAG = "GooglemapsTest";
 
-    public Airspaces()
+    public Airspaces(Context context)
     {
-
+        progressDialog = null;
+        this.context = context;
     }
+
+    public Airspaces(Context context, ProgressDialog progressDialog)
+    {
+        this.progressDialog = progressDialog;
+        this.context = context;
+    }
+
+    private ProgressDialog progressDialog;
+    private Context context;
 
     public void Add(Airspace airspace)
     {
@@ -40,10 +52,28 @@ public class Airspaces extends ArrayList<Airspace> {
     public void OpenAipFile(Context context, String filename)
     {
         //String _filename = Environment.getExternalStorageDirectory().toString()+"/Download/" + filename;
-        String _filename = "/sdcard/Download/" + filename;
+        String _filename = "/sdcard/Download/airnavdb/" + filename;
         String XML = readFromFile(context, _filename);
         readXML(XML);
         Log.i(TAG, "XML Read");
+
+
+
+        insertIntoDatabase();
+        Log.i(TAG, "Database Insert Finished");
+    }
+
+    private void insertIntoDatabase()
+    {
+        AirspacesDataSource dataSource = new AirspacesDataSource(context);
+        dataSource.open();
+
+        for (Airspace airspace : this)
+        {
+            dataSource.insertAirspace(airspace);
+        }
+
+        dataSource.close();
     }
 
     private void readXML(String xml)
@@ -114,7 +144,11 @@ public class Airspaces extends ArrayList<Airspace> {
                     }
 
                     if (name.equals("NAME")) {
-                        if (airspace != null) airspace.Name = parser.getText();
+                        if (airspace != null) {
+                            airspace.Name = parser.getText();
+                            if (progressDialog != null) progressDialog.setMessage("Loading Airspaces: " + airspace.Name);
+                            Log.i(TAG, "Load Airspace: " + airspace.Name);
+                        }
                     }
 
 

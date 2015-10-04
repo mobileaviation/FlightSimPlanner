@@ -3,6 +3,7 @@ package nl.robenanita.googlemapstest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -1331,8 +1332,14 @@ public class NavigationActivity extends ActionBarActivity implements
             }
             case R.id.action_loadaip:
             {
-                Airspaces a = new Airspaces();
+                ProgressDialog progressDialog = new ProgressDialog(this);
+                Airspaces a = new Airspaces(this, progressDialog);
+
+                progressDialog.setTitle("Load Airspaces");
+                progressDialog.setMessage("Loading Airspaces: .....");
+                progressDialog.show();
                 a.OpenAipFile(this, "openaip_airspace_netherlands_nl.aip");
+                progressDialog.dismiss();
                 return true;
             }
 
