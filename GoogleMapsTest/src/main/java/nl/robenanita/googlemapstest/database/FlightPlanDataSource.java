@@ -150,10 +150,12 @@ public class FlightPlanDataSource {
 
     public void UpdateInsertWaypoints(ArrayList<Waypoint> waypoints)
     {
+        Integer order = 10;
         for (Waypoint waypoint : waypoints)
         {
 //            String[] args = {airport_id.toString()};
 //            database.delete(DBHelper.RUNWAY_TABLE_NAME, DBHelper.C_airport_id + " =?", args);
+
             if (waypoint.id == null)
             {
                 long id = database.insert(UserDBHelper.USERWAYPOINT_TABLE_NAME, null,

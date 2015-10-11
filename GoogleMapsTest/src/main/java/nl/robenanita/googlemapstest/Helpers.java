@@ -1,6 +1,9 @@
 package nl.robenanita.googlemapstest;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.vividsolutions.jts.geom.Coordinate;
 
 /**
  * Created by Rob Verhoef on 25-6-2015.
@@ -51,5 +54,46 @@ public class Helpers {
         }
 
         return latLng;
+    }
+
+    public static LatLng parseOpenAirLocation(String location)
+    {
+        // replace DP, DB, V X=
+        String l = location.replace("DP", "");
+        l = l.replace("DB", "");
+        l = l.replace("V X=", "");
+        l = l.trim();
+
+        // 53:40:00 N 006:30:00 E
+        String[] loc = l.split(" ");
+
+        LatLng latLng = null;
+        String lat[] = loc[0].split(":");
+        Double _lat = Double.valueOf(lat[0]) +
+                (Double.valueOf(lat[1]) / 60) +
+                (Double.valueOf(lat[2]) / 3600)
+                        * ((loc[1].equals("S")) ? -1 : 1);
+        String lon[] = loc[2].split(":");
+
+        Double _lon = Double.valueOf(lon[0]) +
+                (Double.valueOf(lon[1]) / 60) +
+                (Double.valueOf(lon[2]) / 3600)
+                        * ((loc[1].equals("W")) ? -1 : 1);
+        latLng = new LatLng(_lat,_lon);
+
+        return latLng;
+    }
+
+    public static Location getLocation(LatLng latLng)
+    {
+        Location location = new Location("");
+        location.setLongitude(latLng.longitude);
+        location.setLatitude(latLng.latitude);
+        return location;
+    }
+
+    public static Coordinate getCoordinate(LatLng latLng)
+    {
+        return new Coordinate(latLng.longitude, latLng.latitude);
     }
 }

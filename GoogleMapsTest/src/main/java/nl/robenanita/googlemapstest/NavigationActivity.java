@@ -74,6 +74,7 @@ import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.Weather.WeatherActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
+import nl.robenanita.googlemapstest.database.AirspacesDataSource;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
 import nl.robenanita.googlemapstest.database.FrequenciesDataSource;
@@ -226,7 +227,7 @@ public class NavigationActivity extends ActionBarActivity implements
                         SetAirportMarkersByZoomAndBoundary();
                     }
 
-
+                    CheckAirspaces();
                 }
             });
 
@@ -322,6 +323,16 @@ public class NavigationActivity extends ActionBarActivity implements
 
 
 
+    }
+
+    private void CheckAirspaces() {
+        AirspacesDataSource airspacesDataSource = new AirspacesDataSource(this);
+        airspacesDataSource.open();
+
+        CameraPosition cameraPosition = map.getCameraPosition();
+        //cameraPosition.
+
+        airspacesDataSource.close();
     }
 
     @Override
@@ -1332,14 +1343,22 @@ public class NavigationActivity extends ActionBarActivity implements
             }
             case R.id.action_loadaip:
             {
-                ProgressDialog progressDialog = new ProgressDialog(this);
-                Airspaces a = new Airspaces(this, progressDialog);
+                // Testing polygon create code ****************
+                Airspaces a = new Airspaces(this);
+//                a.TestDraw(map);
+                // Testing polygon create code ****************
 
-                progressDialog.setTitle("Load Airspaces");
-                progressDialog.setMessage("Loading Airspaces: .....");
-                progressDialog.show();
-                a.OpenAipFile(this, "openaip_airspace_netherlands_nl.aip");
-                progressDialog.dismiss();
+                // Loading airspace test code ************************
+//                ProgressDialog progressDialog = new ProgressDialog(this);
+//                Airspaces a = new Airspaces(this, progressDialog);
+//
+//                progressDialog.setTitle("Load Airspaces");
+//                progressDialog.setMessage("Loading Airspaces: .....");
+//                progressDialog.show();
+//                //a.OpenAipFile(this, "openaip_airspace_netherlands_nl.aip");
+                a.OpenOpenAirTextFile(this, "EeldeCtrTest.txt");
+//                progressDialog.dismiss();
+                // Loading airspace test code ************************
                 return true;
             }
 
