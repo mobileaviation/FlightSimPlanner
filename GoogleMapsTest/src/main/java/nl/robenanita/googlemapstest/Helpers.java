@@ -5,6 +5,12 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 import com.vividsolutions.jts.geom.Coordinate;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import nl.robenanita.googlemapstest.openaip.AltitudeReference;
+import nl.robenanita.googlemapstest.openaip.AltitudeUnit;
+
 /**
  * Created by Rob Verhoef on 25-6-2015.
  */
@@ -95,5 +101,43 @@ public class Helpers {
     public static Coordinate getCoordinate(LatLng latLng)
     {
         return new Coordinate(latLng.longitude, latLng.latitude);
+    }
+
+    public static String findRegex(String pattern, String input)
+    {
+        try {
+            Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = p.matcher(input);
+            matcher.find();
+            return matcher.group();
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
+    }
+
+    public static AltitudeUnit parseUnit(String value)
+    {
+        value = value.toUpperCase();
+        if (value.equals("MSL")) return AltitudeUnit.F;
+        if (value.equals("AGL")) return AltitudeUnit.F;
+        if (value.equals("FT")) return AltitudeUnit.F;
+        if (value.equals("FL")) return AltitudeUnit.FL;
+        if (value.equals("GND") || value.equals("SFC")) return AltitudeUnit.F;
+
+        return AltitudeUnit.F;
+    }
+
+    public static AltitudeReference parseReference(String value)
+    {
+        value = value.toUpperCase();
+        if (value.equals("MSL")) return AltitudeReference.MSL;
+        if (value.equals("AGL")) return AltitudeReference.AGL;
+        if (value.equals("FT")) return AltitudeReference.MSL;
+        if (value.equals("FL")) return AltitudeReference.STD;
+        if (value.equals("GND")|| value.equals("SFC")) return AltitudeReference.GND;
+
+        return AltitudeReference.MSL;
     }
 }

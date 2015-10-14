@@ -6,7 +6,8 @@ package nl.robenanita.googlemapstest.openaip;
 public enum AltitudeReference {
     GND,        // Ground
     MSL,        // Main sea level
-    STD         // Standard atmosphere
+    STD,        // Standard atmosphere
+    AGL         // Above Ground level
     ;
 
     @Override
