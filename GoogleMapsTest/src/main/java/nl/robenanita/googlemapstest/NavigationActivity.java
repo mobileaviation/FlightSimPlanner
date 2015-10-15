@@ -1356,10 +1356,16 @@ public class NavigationActivity extends ActionBarActivity implements
 //                progressDialog.setMessage("Loading Airspaces: .....");
 //                progressDialog.show();
 //                //a.OpenAipFile(this, "openaip_airspace_netherlands_nl.aip");
-                a.OpenOpenAirTextFile(this, "EeldeCtrTest.txt");
-                //a.OpenOpenAirTextFile(this, "EHv15_3c.txt");
-                a.drawAirspace(a.get(0), map);
-                a.drawAirspace(a.get(1), map);
+                //a.OpenOpenAirTextFile(this, "EeldeCtrTest.txt");
+                a.OpenOpenAirTextFile(this, "EHv15_3c.txt");
+                a.drawAirspace(a.get(10), map);
+                a.drawAirspace(a.get(30), map);
+                a.drawAirspace(a.get(94), map);
+                a.drawAirspace(a.get(13), map);
+                a.drawAirspace(a.get(59), map);
+                a.drawAirspace(a.get(80), map);
+                a.drawAirspace(a.get(105), map);
+                a.drawAirspace(a.get(12), map);
 //                progressDialog.dismiss();
                 // Loading airspace test code ************************
                 return true;

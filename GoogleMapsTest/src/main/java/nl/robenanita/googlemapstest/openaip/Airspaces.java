@@ -112,6 +112,7 @@ public class Airspaces extends ArrayList<Airspace> {
         Airspace airspace = null;
         LatLng location = null;
         LatLng center = null;
+        Boolean circle  = false;
         for (String l : lines)
         {
 
@@ -125,7 +126,7 @@ public class Airspaces extends ArrayList<Airspace> {
                 //
 
                 if (l.startsWith("AC")) {
-                    if ((airspace != null) && (airspace.coordinates.size()>0)) airspace.coordinates.add(airspace.coordinates.get(0));
+                    if ((airspace != null) && (airspace.coordinates.size()>0) && !circle) airspace.coordinates.add(airspace.coordinates.get(0));
                     airspace = new Airspace();
                     this.add(airspace);
                     airspace.Category = AirspaceCategory.valueOf(l.replace("AC ", ""));
@@ -163,12 +164,17 @@ public class Airspaces extends ArrayList<Airspace> {
                     LatLng begin = Helpers.parseOpenAirLocation(be[0]);
                     LatLng end = Helpers.parseOpenAirLocation(be[1]);
                     airspace.coordinates.addAll(GeometricHelpers.drawArc(begin, end, center));
+                    circle = false;
                 }
                 if (l.startsWith("DP")) {
                     location = Helpers.parseOpenAirLocation(l);
                     airspace.coordinates.add(new Coordinate(location.longitude, location.latitude));
+                    circle = false;
                 }
                 if (l.startsWith("DC")) {
+                    String m = Helpers.findRegex("([0-9.]+\\w)|([0-9])", l);
+                    airspace.coordinates.addAll(GeometricHelpers.drawCircle(center, Double.valueOf(m)));
+                    circle = true;
                 }
             }
         }
