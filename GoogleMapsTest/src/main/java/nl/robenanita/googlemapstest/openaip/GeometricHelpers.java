@@ -82,7 +82,7 @@ public class GeometricHelpers {
         return list;
     }
 
-    public static ArrayList<Coordinate> drawArc(LatLng start, LatLng end, LatLng center)
+    public static ArrayList<Coordinate> drawArc(LatLng start, LatLng end, LatLng center, Boolean positive)
     {
         // Get Location class from LatLng Class
         Location _center = Helpers.getLocation(center);
@@ -126,7 +126,7 @@ public class GeometricHelpers {
             coordinates = geometricShapeFactory.createArc(Math.toRadians(arcEnd), Math.toRadians(arcSize * -1)).getCoordinates();
 
         ArrayList<Coordinate> list = new ArrayList<Coordinate>(Arrays.asList(coordinates));
-        Collections.reverse(list);
+        if (positive) Collections.reverse(list);
         return list;
     }
 }

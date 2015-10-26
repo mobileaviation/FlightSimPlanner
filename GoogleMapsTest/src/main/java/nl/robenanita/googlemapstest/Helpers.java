@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest;
 
+import android.app.LoaderManager;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -64,6 +65,7 @@ public class Helpers {
 
     public static LatLng parseOpenAirLocation(String location)
     {
+        location = location.toUpperCase();
         // replace DP, DB, V X=
         String l = location.replace("DP", "");
         l = l.replace("DB", "");
@@ -71,23 +73,25 @@ public class Helpers {
         l = l.trim();
 
         // 53:40:00 N 006:30:00 E
-        String[] loc = l.split(" ");
+        String[] loc = l.split("[NS]");
 
         LatLng latLng = null;
         String lat[] = loc[0].split(":");
-        Double _lat = Double.valueOf(lat[0]) +
+        Double _lat = (Double.valueOf(lat[0]) +
                 (Double.valueOf(lat[1]) / 60) +
-                (Double.valueOf(lat[2]) / 3600)
-                        * ((loc[1].equals("S")) ? -1 : 1);
-        String lon[] = loc[2].split(":");
+                (Double.valueOf(Helpers.findRegex("[0-9]+\\w",lat[2])) / 3600))
+                        * ((l.indexOf("S")>3) ? -1d : 1d);
+        loc[1] = loc[1].replaceAll("[EW]", "");
+        String lon[] = loc[1].split(":");
 
-        Double _lon = Double.valueOf(lon[0]) +
+        Double _lon = (Double.valueOf(lon[0]) +
                 (Double.valueOf(lon[1]) / 60) +
-                (Double.valueOf(lon[2]) / 3600)
-                        * ((loc[1].equals("W")) ? -1 : 1);
-        latLng = new LatLng(_lat,_lon);
+                (Double.valueOf(Helpers.findRegex("[0-9]+\\w",lon[2])) / 3600))
+                        * ((l.indexOf("W")>3) ? -1d : 1d);
+        latLng = new LatLng(_lat, _lon);
 
         return latLng;
+
     }
 
     public static Location getLocation(LatLng latLng)

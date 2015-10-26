@@ -221,21 +221,45 @@ public class FlightPlanDataSource {
             // update waypoint sortorder
             // update flightplan set date to today
 
-            int orderInc = 1000 / (flightPlan.Waypoints.size()-1);
-            int order = orderInc;
-            flightPlan.Waypoints.get(0).order = 1;
-            flightPlan.Waypoints.get(flightPlan.Waypoints.size()-1).order = 1000;
-            for (int i=1; i<flightPlan.Waypoints.size()-1; i++) {
-                flightPlan.Waypoints.get(i).order = order;
-                order = order + orderInc;
-            }
+            updateWaypointSortOrder(flightPlan);
 
             UpdateInsertWaypoints(flightPlan.Waypoints);
             flightPlan.date = new Date();
             UpdateFlightplanWind(flightPlan);
         }
+        else
+        {
+            updateWaypointSortOrder(flightPlan);
+            updateWaypointSortOrderDB(flightPlan);
+        }
+
 
         return flightPlan;
+    }
+
+    public void updateWaypointSortOrder(FlightPlan flightPlan)
+    {
+        int orderInc = 1000 / (flightPlan.Waypoints.size()-1);
+        int order = orderInc;
+        flightPlan.Waypoints.get(0).order = 1;
+        flightPlan.Waypoints.get(flightPlan.Waypoints.size()-1).order = 1000;
+        for (int i=1; i<flightPlan.Waypoints.size()-1; i++) {
+            flightPlan.Waypoints.get(i).order = order;
+            order = order + orderInc;
+        }
+    }
+
+    public void updateWaypointSortOrderDB(FlightPlan flightPlan)
+    {
+        for (Waypoint waypoint: flightPlan.Waypoints)
+        {
+            String q = "UPDATE " + UserDBHelper.USERWAYPOINT_TABLE_NAME +
+                    " SET " +UserDBHelper.C_sortorder + "=" + waypoint.order.toString() +
+                    " WHERE _id=" + waypoint.id.toString();
+
+            Log.i(TAG, "Update sortorder: " + q);
+            database.execSQL(q);
+        }
     }
 
     public void MoveWaypointDown(FlightPlan flightPlan, Waypoint waypoint)

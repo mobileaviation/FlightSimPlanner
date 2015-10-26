@@ -113,6 +113,7 @@ public class Airspaces extends ArrayList<Airspace> {
         LatLng location = null;
         LatLng center = null;
         Boolean circle  = false;
+        Boolean positive = true;
         for (String l : lines)
         {
 
@@ -129,7 +130,7 @@ public class Airspaces extends ArrayList<Airspace> {
                     if ((airspace != null) && (airspace.coordinates.size()>0) && !circle) airspace.coordinates.add(airspace.coordinates.get(0));
                     airspace = new Airspace();
                     this.add(airspace);
-                    airspace.Category = AirspaceCategory.valueOf(l.replace("AC ", ""));
+                    airspace.Category = AirspaceCategory.valueOf(l.replace("AC ", "").trim());
                 }
                 if (l.startsWith("AN")) {
                     if (airspace != null) {
@@ -156,6 +157,9 @@ public class Airspaces extends ArrayList<Airspace> {
                         airspace.AltLimit_Bottom_Unit = Helpers.parseUnit(m);
                     }
                 }
+                if (l.startsWith("V D=-")) positive = false;
+                if (l.startsWith("V D=+")) positive = true;
+
                 if (l.startsWith("V X")) {
                     center = Helpers.parseOpenAirLocation(l);
                 }
@@ -163,7 +167,8 @@ public class Airspaces extends ArrayList<Airspace> {
                     String[] be = l.split(",");
                     LatLng begin = Helpers.parseOpenAirLocation(be[0]);
                     LatLng end = Helpers.parseOpenAirLocation(be[1]);
-                    airspace.coordinates.addAll(GeometricHelpers.drawArc(begin, end, center));
+                    if (positive) airspace.coordinates.addAll(GeometricHelpers.drawArc(begin, end, center, positive));
+                        else airspace.coordinates.addAll(GeometricHelpers.drawArc(end, begin, center, positive));
                     circle = false;
                 }
                 if (l.startsWith("DP")) {
@@ -218,17 +223,17 @@ public class Airspaces extends ArrayList<Airspace> {
         LatLng center = Helpers.parseOpenAirLocation("V X=53:15:00 N 004:57:00 E");
         LatLng begin = Helpers.parseOpenAirLocation("DB 53:11:06 N 004:38:03 E");
         LatLng end = Helpers.parseOpenAirLocation("53:15:00 N 004:36:57 E");
-        list.addAll(GeometricHelpers.drawArc(begin, end, center));
+        list.addAll(GeometricHelpers.drawArc(begin, end, center, true));
 
         center = Helpers.parseOpenAirLocation("V X=53:15:00 N 004:57:00 E");
         begin = Helpers.parseOpenAirLocation("DB 53:15:00 N 004:43:38 E");
         end = Helpers.parseOpenAirLocation("53:19:30 N 004:45:59 E");
-        list.addAll(GeometricHelpers.drawArc(begin, end, center));
+        list.addAll(GeometricHelpers.drawArc(begin, end, center, true));
 
         center = Helpers.parseOpenAirLocation("V X=53:15:10 N 004:57:00 E");
         begin = Helpers.parseOpenAirLocation("DB 53:19:30 N 004:45:59 E");
         end = Helpers.parseOpenAirLocation("53:22:27 N 004:52:07 E");
-        list.addAll(GeometricHelpers.drawArc(begin, end, center));
+        list.addAll(GeometricHelpers.drawArc(begin, end, center, true));
 
         l = Helpers.parseOpenAirLocation("DP 53:26:20 N 005:09:40 E");
         list.add(new Coordinate(l.longitude, l.latitude));
@@ -255,21 +260,23 @@ public class Airspaces extends ArrayList<Airspace> {
 
     }
 
-    public void drawAirspace(Airspace airspace, GoogleMap map)
+    public LatLng drawAirspace(Airspace airspace, GoogleMap map)
     {
         PolylineOptions o = new PolylineOptions();
         o.color(Color.RED);
         o.width(2);
         o.zIndex(1000);
+        LatLng pos = null;
         for (Coordinate coordinate : airspace.coordinates)
         {
-            LatLng p = new LatLng(coordinate.y, coordinate.x);
-            o.add(p);
+            pos = new LatLng(coordinate.y, coordinate.x);
+            o.add(pos);
         }
 
         Polyline p = map.addPolyline(o);
         p.setVisible(true);
         p.setZIndex(1000);
+        return pos;
     }
 
     private void readOpenAipXML(String xml)

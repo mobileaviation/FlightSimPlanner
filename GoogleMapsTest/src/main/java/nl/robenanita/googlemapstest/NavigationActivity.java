@@ -1357,15 +1357,43 @@ public class NavigationActivity extends ActionBarActivity implements
 //                progressDialog.show();
 //                //a.OpenAipFile(this, "openaip_airspace_netherlands_nl.aip");
                 //a.OpenOpenAirTextFile(this, "EeldeCtrTest.txt");
+                //a.OpenOpenAirTextFile(this, "ED_CW14_2015.txt");
                 a.OpenOpenAirTextFile(this, "EHv15_3c.txt");
-                a.drawAirspace(a.get(10), map);
-                a.drawAirspace(a.get(30), map);
+//                a.OpenOpenAirTextFile(this, "test.txt");
+//                a.drawAirspace(a.get(0), map);
+//                a.drawAirspace(a.get(1), map);
+//                a.drawAirspace(a.get(2), map);
+//                a.drawAirspace(a.get(3), map);
+//                a.drawAirspace(a.get(4), map);
+//                a.drawAirspace(a.get(5), map);
+//                a.drawAirspace(a.get(6), map);
+
+//                a.OpenOpenAirTextFile(this, "allusa.v15.10-15.1.txt");
+//                a.drawAirspace(a.get(2110), map);
+//                a.drawAirspace(a.get(2111), map);
+//                a.drawAirspace(a.get(2112), map);
+//                a.drawAirspace(a.get(2113), map);
+//                a.drawAirspace(a.get(2114), map);
+//                a.drawAirspace(a.get(2115), map);
+//                a.drawAirspace(a.get(2116), map);
+
+                // Germany test items
+//                a.drawAirspace(a.get(124), map);
+//                a.drawAirspace(a.get(127), map);
+//                a.drawAirspace(a.get(131), map);
+//                a.drawAirspace(a.get(192), map);
+//                a.drawAirspace(a.get(267), map);
+//                a.drawAirspace(a.get(268), map);
+//                a.drawAirspace(a.get(238), map);
+
+                // Dutch test items
                 a.drawAirspace(a.get(94), map);
                 a.drawAirspace(a.get(13), map);
                 a.drawAirspace(a.get(59), map);
                 a.drawAirspace(a.get(80), map);
                 a.drawAirspace(a.get(105), map);
                 a.drawAirspace(a.get(12), map);
+                a.drawAirspace(a.get(83), map);
 //                progressDialog.dismiss();
                 // Loading airspace test code ************************
                 return true;
@@ -1640,6 +1668,8 @@ public class NavigationActivity extends ActionBarActivity implements
         FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
         flightPlanDataSource.open();
         flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
+        flightPlanDataSource.updateWaypointSortOrder(selectedFlightplan);
+        flightPlanDataSource.updateWaypointSortOrderDB(selectedFlightplan);
         flightPlanDataSource.close();
 
 
