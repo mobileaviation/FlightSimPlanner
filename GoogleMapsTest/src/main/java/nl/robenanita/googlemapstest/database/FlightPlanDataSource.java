@@ -197,6 +197,17 @@ public class FlightPlanDataSource {
         return count;
     }
 
+    public void DeleteFlightplan(FlightPlan flightPlan)
+    {
+        String q = "DELETE FROM " + UserDBHelper.USERWAYPOINT_TABLE_NAME +
+                " WHERE " + UserDBHelper.C_flightplan_id + "=" + Integer.toString(flightPlan.id);
+        database.execSQL(q);
+
+        String q1 = "DELETE FROM " + UserDBHelper.FLIGHTPLAN_TABLE_NAME +
+                " WHERE _id=" + Integer.toString(flightPlan.id) + ";";
+        database.execSQL(q1);
+    }
+
     public FlightPlan GetWaypointsByFlightPlan(FlightPlan flightPlan)
     {
         flightPlan.Waypoints = new ArrayList<Waypoint>();

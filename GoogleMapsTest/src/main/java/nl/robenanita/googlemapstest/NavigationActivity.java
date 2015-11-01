@@ -525,6 +525,7 @@ public class NavigationActivity extends ActionBarActivity implements
             {
                 plane.setPosition(planePos);
                 plane.setRotation(d);
+                plane.UpdateDirectionLine();
 
                 Location l = new Location("plane");
                 l.setLatitude(planePos.latitude);
@@ -1115,9 +1116,11 @@ public class NavigationActivity extends ActionBarActivity implements
                 if ((waypoint.airport_id == 0) && (waypoint.navaid_id == 0) && (waypoint.fix_id == 0))
                 {
                     MarkerOptions m = new MarkerOptions();
-                    m.title(waypoint.name);
                     m.position(new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude()));
-                    m.title(waypoint.name);
+                    String t = "Name: " + waypoint.name + "\r\n" +
+                            "HDG: " + Math.round(waypoint.compass_heading) +
+                            "DIST: " + waypoint.distance_leg + " NM";
+                    m.title(t);
                     m.icon(waypoint.GetIcon());
                     m.anchor(0.5f, 0.5f);
                     m.draggable(true);
@@ -1232,6 +1235,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
         plane.setPosition(planePosition);
         plane.setRotation(position.getBearing());
+        plane.UpdateDirectionLine();
 
     }
 
@@ -2264,22 +2268,24 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void LoadRunwayMarkers(RunwaysList runways)
     {
-        for (Runway runway: runways) {
-            if (runway.le_latitude_deg > 0) {
-                MarkerOptions m = new MarkerOptions();
-                m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
-                m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
-                m.rotation((float) runway.le_heading_degT);
-                m.title(runway.le_ident);
-                runway.lowMarker = map.addMarker(m);
-            }
-            if (runway.he_latitude_deg > 0) {
-                MarkerOptions m1 = new MarkerOptions();
-                m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
-                m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
-                m1.rotation((float) runway.he_heading_degT);
-                m1.title(runway.he_ident);
-                runway.hiMarker = map.addMarker(m1);
+        if (runways != null) {
+            for (Runway runway : runways) {
+                if (runway.le_latitude_deg > 0) {
+                    MarkerOptions m = new MarkerOptions();
+                    m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
+                    m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+                    m.rotation((float) runway.le_heading_degT);
+                    m.title(runway.le_ident);
+                    runway.lowMarker = map.addMarker(m);
+                }
+                if (runway.he_latitude_deg > 0) {
+                    MarkerOptions m1 = new MarkerOptions();
+                    m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
+                    m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+                    m1.rotation((float) runway.he_heading_degT);
+                    m1.title(runway.he_ident);
+                    runway.hiMarker = map.addMarker(m1);
+                }
             }
         }
     }
@@ -2459,10 +2465,13 @@ public class NavigationActivity extends ActionBarActivity implements
             private Marker marker;
             private Airport airport;
             private Navaid navaid;
+            private Waypoint waypoint;
             @Override
             public View getInfoWindow(Marker marker) {
                 airport = airportMarkerMap.get(marker);
                 navaid = navaidMarkerMap.get(marker);
+                waypoint = waypointMarkerMap.get(marker);
+
                 this.marker = marker;
 
                 if (airport != null)
@@ -2478,12 +2487,28 @@ public class NavigationActivity extends ActionBarActivity implements
                             R.layout.navaid_info_window, null);
                     setUpNavaidWindow();
                 }
+                if (waypoint != null)
+                {
+                    this.view = getLayoutInflater().inflate(
+                            R.layout.navaid_info_window, null);
+                    setupWaypointWindow();
+                }
                 return view;
             }
 
             @Override
             public View getInfoContents(Marker marker) {
                 return null;
+            }
+
+            private void setupWaypointWindow()
+            {
+                if (waypoint != null)
+                {
+                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowNavaidInfoTxt);
+                    String info = waypoint.getWaypointInfo();
+                    infoTxt.setText(info);
+                }
             }
 
             private void setUpNavaidWindow()
