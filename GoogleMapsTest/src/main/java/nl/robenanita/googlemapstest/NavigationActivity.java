@@ -1117,10 +1117,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 {
                     MarkerOptions m = new MarkerOptions();
                     m.position(new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude()));
-                    String t = "Name: " + waypoint.name + "\r\n" +
-                            "HDG: " + Math.round(waypoint.compass_heading) +
-                            "DIST: " + waypoint.distance_leg + " NM";
-                    m.title(t);
+                    m.title(waypoint.name);
                     m.icon(waypoint.GetIcon());
                     m.anchor(0.5f, 0.5f);
                     m.draggable(true);
@@ -2470,7 +2467,8 @@ public class NavigationActivity extends ActionBarActivity implements
             public View getInfoWindow(Marker marker) {
                 airport = airportMarkerMap.get(marker);
                 navaid = navaidMarkerMap.get(marker);
-                waypoint = waypointMarkerMap.get(marker);
+                if (waypointMarkerMap != null)
+                    waypoint = waypointMarkerMap.get(marker);
 
                 this.marker = marker;
 
