@@ -16,6 +16,7 @@
     <item android:id="@+id/action_loadaip"
         android:title="@string/action_loadaip"
         android:orderInCategory="99"
+        android:visible="false"
         app:showAsAction="never" />
     <item android:id="@+id/action_searchAirport"
         android:title="@string/action_searchairports"
