@@ -48,14 +48,14 @@
             android:value="@integer/google_play_services_version" />
 
         <!-- Release Key -->
-         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDavE-lD2S16hK_jZbhvDXzDDBAeOqIFZw" />
+         <!--<meta-data-->
+            <!--android:name="com.google.android.maps.v2.API_KEY"-->
+            <!--android:value="AIzaSyDavE-lD2S16hK_jZbhvDXzDDBAeOqIFZw" />-->
 
         <!-- debug key pc -->
-        <!--<meta-data-->
-            <!--android:name="com.google.android.maps.v2.API_KEY"-->
-            <!--android:value="AIzaSyABm4rXxmSonfmVBT7RysrGx4FhONpgBk8" />-->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyABm4rXxmSonfmVBT7RysrGx4FhONpgBk8" />
 
         <meta-data
             android:name="com.google.android.gms.version"

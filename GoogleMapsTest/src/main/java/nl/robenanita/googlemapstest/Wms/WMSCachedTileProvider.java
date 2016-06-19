@@ -125,8 +125,12 @@ public class WMSCachedTileProvider implements TileProvider {
                     bbox[MINY], bbox[MAXX], bbox[MAXY]);
 
         if (tileProviderType == TileProviderType.skylines)
-            s = String.format(Locale.US, TileProviderFormats.SKYLINES_FORMAT, bbox[MINX],
-                    bbox[MINY], bbox[MAXX], bbox[MAXY]);
+            //s = String.format(Locale.US, TileProviderFormats.SKYLINES_FORMAT, bbox[MINX],
+            //        bbox[MINY], bbox[MAXX], bbox[MAXY]);
+            s = TileProviderFormats.SKYLINES_FORMAT_XYZ
+                    .replace("{x}", Integer.toString(x))
+                    .replace("{y}", Integer.toString(y))
+                    .replace("{zoom}", Integer.toString(zoom));
 
         if (tileProviderType == TileProviderType.canadaweather)
             s = String.format(Locale.US, TileProviderFormats.CANADAWEATHER_FORMAT, bbox[MINX],

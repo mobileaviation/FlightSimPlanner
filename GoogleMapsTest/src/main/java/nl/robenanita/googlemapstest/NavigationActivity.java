@@ -63,6 +63,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.robenanita.googlemapstest.Charts.PDFCharts;
 import nl.robenanita.googlemapstest.Instruments.AirspeedView;
 import nl.robenanita.googlemapstest.Instruments.AltimeterView;
 import nl.robenanita.googlemapstest.Instruments.CompassView;
@@ -102,6 +103,7 @@ public class NavigationActivity extends ActionBarActivity implements
         com.google.android.gms.location.LocationListener {
     public GoogleMap map;
     private PlaneMarker plane;
+
 
     private MarkerProperties markerProperties;
 
@@ -181,6 +183,7 @@ public class NavigationActivity extends ActionBarActivity implements
         //setUniqueIDtoDatabase();
 
         Log.i(TAG, "Starting Flightsim mapping tool with ID: " + Integer.toString(uniqueID));
+
 
         legInfoView = (LegInfoView) findViewById(R.id.legInfoPanel);
         legInfoView.setVisibility(View.GONE);
@@ -1475,9 +1478,17 @@ public class NavigationActivity extends ActionBarActivity implements
 //                NavigationActivity.this.startActivityForResult(startTestIntent, 500);
 //                return true;
 //            }
+
+            case R.id.action_loadchart:
+            {
+                PDFCharts pdfCharts = new PDFCharts(this);
+                pdfCharts.LoadTestPDF();
+                return true;
+            }
             case R.id.action_DirectTo:
             {
                 ShowDirectToPopup();
+                return true;
             }
         }
         return super.onOptionsItemSelected(item);

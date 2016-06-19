@@ -3,45 +3,66 @@
 
     <item
         jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\jts-1.13.jar"
-        jumboMode="false"
+        jumboMode="true"
         revision="19.1.0"
         sha1="1d7457bff1a63d8f2b2e0e0961300aa1831d0fb7">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\release\jts-1.13-400dbb4597f06f3bb2b5d22e9d33714be1991c51.jar" />
-    </item>
-    <item
-        jar="C:\android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\release\support-v4-19.1.0-5cf530e9160d069452ee3b60a727af2da442d9c2.jar" />
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\jts-1.13_400dbb4597f06f3bb2b5d22e9d33714be1991c51.jar" />
     </item>
     <item
         jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.andreabaccega\android-form-edittext\1.0.5\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         revision="19.1.0"
         sha1="529ad965ecbdd6e85335e0d90a61606cdcbdb488">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\release\classes-79afdc9e7a941a2c1736745936f7c5adcce09ded.jar" />
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\com.andreabaccega-android-form-edittext-1.0.5_79afdc9e7a941a2c1736745936f7c5adcce09ded.jar" />
     </item>
     <item
-        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\jars\classes.jar"
-        jumboMode="false"
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
         revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\release\classes-1d8c96d48312220858634de5c9ff0f6f8d581c12.jar" />
+        sha1="e54ebf86ff0edbfc2819772305c466e5d5945153">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\instant-run_50da36f3c1ee54f7bbcc01d1cbb21dd3fc0ee135.jar" />
+    </item>
+    <item
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="19.1.0"
+        sha1="93f88c8ab4d9f99514234a8048f0d07d00a2a0ab">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\instant-run-bootstrap_697882f9e17a2abea7883b2636c23e4d1db89f99.jar" />
     </item>
     <item
         jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar"
-        jumboMode="false"
+        jumboMode="true"
         revision="19.1.0"
         sha1="ddcd1698b4bc242e26bfd99e3779688ab311b918">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\release\ksoap2-android-assembly-3.1.1-jar-with-dependencies-61c7f19c4bcb2e5fcd7026d9194d3eef7b81320a.jar" />
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.1.1-jar-with-dependencies_61c7f19c4bcb2e5fcd7026d9194d3eef7b81320a.jar" />
+    </item>
+    <item
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.joanzapata.pdfview\android-pdfview\1.0.4\jars\classes.jar"
+        jumboMode="true"
+        revision="19.1.0"
+        sha1="df559ab8a9d5d44cf0a49dbb2be402637b90ba90">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\com.joanzapata.pdfview-android-pdfview-1.0.4_6176fd165d44769e8cdc13570e95adc3cf19f303.jar" />
+    </item>
+    <item
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\jars\classes.jar"
+        jumboMode="true"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-19.1.0_1d8c96d48312220858634de5c9ff0f6f8d581c12.jar" />
     </item>
     <item
         jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\exploded-aar\com.google.android.gms\play-services\4.0.30\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         revision="19.1.0"
         sha1="cebe8e4a3a469c4623addcca1dc571407ff3a08e">
-        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\release\classes-f8f3fbe7a4e9a3095967dd1388ee0d4ffd20c270.jar" />
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-4.0.30_f8f3fbe7a4e9a3095967dd1388ee0d4ffd20c270.jar" />
+    </item>
+    <item
+        jar="C:\android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="true"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\support-v4-19.1.0_5cf530e9160d069452ee3b60a727af2da442d9c2.jar" />
     </item>
 
 </items>
