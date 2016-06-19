@@ -46,26 +46,41 @@ public class FlightPlanActivateActivity extends ActionBarActivity {
         flightPlanDataSource.close();
 
         flightplanList = (ListView) findViewById(R.id.flightplanList);
-        FlightplanAdapter adapter = new FlightplanAdapter(flightPlans);
+        final FlightplanAdapter adapter = new FlightplanAdapter(flightPlans, this);
         flightplanList.setAdapter(adapter);
 
-        flightplanList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        flightplanList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+////                if (selectedFlightplan != null)
+////                {
+////                    if (selectedFlightplan.track != null)
+////                        selectedFlightplan.track.remove();
+////                    selectedFlightplan = null;
+////                }
+//
+//                flightplanList.setSelection(i);
+//                FlightplanAdapter adapter1 = (FlightplanAdapter) adapterView.getAdapter();
+//                selectedFlightplan = adapter1.GetFlightplan(i);
+//                Log.i(TAG, "Selected flightplan: " + selectedFlightplan.name);
+//
+//                adapter1.setSelectedIndex(i);
+//                adapter1.notifyDataSetChanged();
+//
+//                windSpeedEdit.setText(selectedFlightplan.wind_speed.toString());
+//                windDirEdit.setText(Float.toString(selectedFlightplan.wind_direction));
+//                activateBtn.setEnabled(true);
+//            }
+//        });
+        adapter.SetOnFlightplanClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                if (selectedFlightplan != null)
-//                {
-//                    if (selectedFlightplan.track != null)
-//                        selectedFlightplan.track.remove();
-//                    selectedFlightplan = null;
-//                }
+            public void onClick(View view) {
+                final Integer f = (Integer)view.getTag();
+                adapter.setSelectedIndex(f);
+                adapter.notifyDataSetChanged();
 
-                flightplanList.setSelection(i);
-                FlightplanAdapter adapter1 = (FlightplanAdapter) adapterView.getAdapter();
-                selectedFlightplan = adapter1.GetFlightplan(i);
-                Log.i(TAG, "Selected flightplan: " + selectedFlightplan.name);
-
-                adapter1.setSelectedIndex(i);
-                adapter1.notifyDataSetChanged();
+                selectedFlightplan = adapter.GetFlightplan(f);
+                Log.i(TAG, "Selected Flightplan: " + selectedFlightplan.name);
 
                 windSpeedEdit.setText(selectedFlightplan.wind_speed.toString());
                 windDirEdit.setText(Float.toString(selectedFlightplan.wind_direction));

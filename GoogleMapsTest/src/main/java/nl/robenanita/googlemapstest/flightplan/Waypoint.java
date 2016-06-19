@@ -62,4 +62,20 @@ public class Waypoint  implements Comparable<Waypoint>, Serializable {
         Integer s = waypoint.order;
         return this.order - s;
     }
+
+    public String getWaypointInfo()
+    {
+        String info = "No waypoint information.";
+
+        info = "Waypoint Information................\n" +
+                "Name : " + this.name + "\n" +
+                "Heading : " + Math.round(this.compass_heading) + "\n" +
+                "Distance : " + (this.distance_leg / 1851)  + " NM\n" +
+                "\n" +
+                "Location..........................\n" +
+                "Latitude  : " + Double.toString(this.location.getLatitude()) + "\n" +
+                "Longitude : " + Double.toString(this.location.getLongitude());
+
+        return info;
+    }
 }

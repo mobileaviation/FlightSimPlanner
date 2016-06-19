@@ -86,31 +86,29 @@ public class FlightPlanActivity extends ActionBarActivity {
         searchAirportsPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                switch (airportType)
-                {
-                    case 3 :
-                    {
-                        alternateAirport = searchAirportsPopup.SelectedAirport;
-                        EditText alternateText = (EditText) findViewById(R.id.alternateAirportEdit);
-                        alternateText.setText(alternateAirport.name);
-                        Log.i(TAG, "Selected Alternate airport" + alternateAirport.name);
-                        break;
-                    }
-                    case 2 :
-                    {
-                        destinationAirport = searchAirportsPopup.SelectedAirport;
-                        EditText destinationEdit = (EditText) findViewById(R.id.destinationAirportEdit);
-                        destinationEdit.setText(destinationAirport.name);
-                        Log.i(TAG, "Selected Destination airport" + destinationAirport.name);
-                        break;
-                    }
-                    case 1 :
-                    {
-                        departureAirport = searchAirportsPopup.SelectedAirport;
-                        EditText departureEdit = (EditText) findViewById(R.id.departureAirportEdit);
-                        departureEdit.setText(departureAirport.name);
-                        Log.i(TAG, "Selected Departure airport" + departureAirport.name);
-                        break;
+                if (searchAirportsPopup.SelectedAirport != null) {
+                    switch (airportType) {
+                        case 3: {
+                            alternateAirport = searchAirportsPopup.SelectedAirport;
+                            EditText alternateText = (EditText) findViewById(R.id.alternateAirportEdit);
+                            alternateText.setText(alternateAirport.name);
+                            Log.i(TAG, "Selected Alternate airport" + alternateAirport.name);
+                            break;
+                        }
+                        case 2: {
+                            destinationAirport = searchAirportsPopup.SelectedAirport;
+                            EditText destinationEdit = (EditText) findViewById(R.id.destinationAirportEdit);
+                            destinationEdit.setText(destinationAirport.name);
+                            Log.i(TAG, "Selected Destination airport" + destinationAirport.name);
+                            break;
+                        }
+                        case 1: {
+                            departureAirport = searchAirportsPopup.SelectedAirport;
+                            EditText departureEdit = (EditText) findViewById(R.id.departureAirportEdit);
+                            departureEdit.setText(departureAirport.name);
+                            Log.i(TAG, "Selected Departure airport" + departureAirport.name);
+                            break;
+                        }
                     }
                 }
             }

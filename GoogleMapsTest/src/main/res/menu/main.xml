@@ -13,6 +13,17 @@
         android:title="@string/action_isnew"
         android:orderInCategory="98"
         app:showAsAction="never" />
+    <item android:id="@+id/action_loadaip"
+        android:title="@string/action_loadaip"
+        android:orderInCategory="99"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_loadchart"
+        android:title="@string/action_load_test_chart"
+        android:orderInCategory="99"
+        app:showAsAction="never"
+        android:visible="false"
+        />
     <item android:id="@+id/action_searchAirport"
         android:title="@string/action_searchairports"
         android:icon="@drawable/aerodromesearch"

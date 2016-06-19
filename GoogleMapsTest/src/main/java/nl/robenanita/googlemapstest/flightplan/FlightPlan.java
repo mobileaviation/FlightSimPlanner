@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineSegment;
 import com.vividsolutions.jts.operation.buffer.BufferOp;
 
 import java.io.Serializable;
@@ -299,18 +300,29 @@ public class FlightPlan implements Serializable {
 
     }
 
-    public void InsertWaypoint(Waypoint waypoint)
+    private class Point implements Comparable<Point>
     {
-        class Point implements Comparable<Point>
-        {
-            public int legIndex;
-            public double distance;
+        public int legIndex;
+        public double distance;
 
-            @Override
-            public int compareTo(Point point) {
-                return (int) Math.round(this.distance - point.distance);
-            }
+        @Override
+        public int compareTo(Point point) {
+            return (int) Math.round((this.distance * 10000) - (point.distance * 10000));
         }
+    }
+
+    public void InsertWaypoint2(Waypoint waypoint)
+    {
+//        class Point implements Comparable<Point>
+//        {
+//            public int legIndex;
+//            public double distance;
+//
+//            @Override
+//            public int compareTo(Point point) {
+//                return (int) Math.round((this.distance *10000) - (point.distance * 10000));
+//            }
+//        }
 
         ArrayList<Point> points = new ArrayList<Point>();
 
@@ -333,6 +345,44 @@ public class FlightPlan implements Serializable {
 
             Point p = new Point();
             p.distance = d3;
+            p.legIndex = i;
+            points.add(p);
+        }
+
+        Collections.sort(points);
+        Log.i(TAG, "leg closed to track: " + Integer.toString(points.get(0).legIndex) + " with distance: " + Double.toString(points.get(0).distance));
+
+        Waypoint p1 = this.Waypoints.get(points.get(0).legIndex);
+        Waypoint p2 = this.Waypoints.get(points.get(0).legIndex+1);
+
+        Integer s = Math.abs((p2.order - p1.order) / 2);
+        waypoint.order = p1.order + s;
+
+        Waypoints.add(waypoint);
+
+        Collections.sort(Waypoints);
+        UpdateWaypointsData();
+    }
+
+    public void InsertWaypoint(Waypoint waypoint)
+    {
+        ArrayList<Point> points = new ArrayList<Point>();
+
+        int legcount = this.Waypoints.size()-1;
+
+        for (int i=0; i<legcount; i++)
+        {
+            Waypoint from = this.Waypoints.get(i);
+            Waypoint to = this.Waypoints.get(i+1);
+            LineSegment lineSegment = new LineSegment(
+                    new Coordinate(from.location.getLongitude(), from.location.getLatitude()),
+                    new Coordinate(to.location.getLongitude(), to.location.getLatitude())
+            );
+            double distance = lineSegment.distance(new Coordinate(waypoint.location.getLongitude(),
+                    waypoint.location.getLatitude()));
+
+            Point p = new Point();
+            p.distance = distance;
             p.legIndex = i;
             points.add(p);
         }

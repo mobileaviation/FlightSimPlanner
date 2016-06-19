@@ -442,4 +442,11 @@
         </LinearLayout>
     </LinearLayout>
 
+    <com.joanzapata.pdfview.PDFView
+        android:id="@+id/pdfView"
+        android:layout_width="700dp"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:visibility="gone"/>
+
 </FrameLayout>

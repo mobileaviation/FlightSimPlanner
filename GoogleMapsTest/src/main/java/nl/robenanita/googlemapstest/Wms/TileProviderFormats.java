@@ -60,6 +60,10 @@ public class TileProviderFormats {
             "&format=image/png" +
             "&styles=";
 
+    // https://skylines.aero/mapproxy/tiles/1.0.0/airspace/5/16/10.png
+    public static final String SKYLINES_FORMAT_XYZ = "https://skylines.aero/mapproxy/tiles/1.0.0/airspace/" +
+            "{zoom}/{x}/{y}.png";
+
     public enum skylinesLayer
     {
         Airports,

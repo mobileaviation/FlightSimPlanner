@@ -1,6 +1,16 @@
 package nl.robenanita.googlemapstest;
 
+import android.app.LoaderManager;
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.vividsolutions.jts.geom.Coordinate;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import nl.robenanita.googlemapstest.openaip.AltitudeReference;
+import nl.robenanita.googlemapstest.openaip.AltitudeUnit;
 
 /**
  * Created by Rob Verhoef on 25-6-2015.
@@ -51,5 +61,87 @@ public class Helpers {
         }
 
         return latLng;
+    }
+
+    public static LatLng parseOpenAirLocation(String location)
+    {
+        location = location.toUpperCase();
+        // replace DP, DB, V X=
+        String l = location.replace("DP", "");
+        l = l.replace("DB", "");
+        l = l.replace("V X=", "");
+        l = l.trim();
+
+        // 53:40:00 N 006:30:00 E
+        String[] loc = l.split("[NS]");
+
+        LatLng latLng = null;
+        String lat[] = loc[0].split(":");
+        Double _lat = (Double.valueOf(lat[0]) +
+                (Double.valueOf(lat[1]) / 60) +
+                (Double.valueOf(Helpers.findRegex("[0-9]+\\w",lat[2])) / 3600))
+                        * ((l.indexOf("S")>3) ? -1d : 1d);
+        loc[1] = loc[1].replaceAll("[EW]", "");
+        String lon[] = loc[1].split(":");
+
+        Double _lon = (Double.valueOf(lon[0]) +
+                (Double.valueOf(lon[1]) / 60) +
+                (Double.valueOf(Helpers.findRegex("[0-9]+\\w",lon[2])) / 3600))
+                        * ((l.indexOf("W")>3) ? -1d : 1d);
+        latLng = new LatLng(_lat, _lon);
+
+        return latLng;
+
+    }
+
+    public static Location getLocation(LatLng latLng)
+    {
+        Location location = new Location("");
+        location.setLongitude(latLng.longitude);
+        location.setLatitude(latLng.latitude);
+        return location;
+    }
+
+    public static Coordinate getCoordinate(LatLng latLng)
+    {
+        return new Coordinate(latLng.longitude, latLng.latitude);
+    }
+
+    public static String findRegex(String pattern, String input)
+    {
+        try {
+            Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = p.matcher(input);
+            matcher.find();
+            return matcher.group();
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
+    }
+
+    public static AltitudeUnit parseUnit(String value)
+    {
+        value = value.toUpperCase();
+        if (value.equals("MSL")) return AltitudeUnit.F;
+        if (value.equals("AGL")) return AltitudeUnit.F;
+        if (value.equals("FT")) return AltitudeUnit.F;
+        if (value.equals("FL")) return AltitudeUnit.FL;
+        if (value.equals("GND") || value.equals("SFC")) return AltitudeUnit.F;
+
+        return AltitudeUnit.F;
+    }
+
+    public static AltitudeReference parseReference(String value)
+    {
+        value = value.toUpperCase();
+        if (value.equals("MSL")) return AltitudeReference.MSL;
+        if (value.equals("AGL")) return AltitudeReference.AGL;
+        if (value.equals("FT")) return AltitudeReference.MSL;
+        if (value.equals("FL")) return AltitudeReference.STD;
+        if (value.equals("GND")|| value.equals("SFC")) return AltitudeReference.GND;
+
+        return AltitudeReference.MSL;
     }
 }

@@ -3,6 +3,7 @@ package nl.robenanita.googlemapstest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,6 +63,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.robenanita.googlemapstest.Charts.PDFCharts;
 import nl.robenanita.googlemapstest.Instruments.AirspeedView;
 import nl.robenanita.googlemapstest.Instruments.AltimeterView;
 import nl.robenanita.googlemapstest.Instruments.CompassView;
@@ -73,6 +75,7 @@ import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.Weather.WeatherActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
+import nl.robenanita.googlemapstest.database.AirspacesDataSource;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
 import nl.robenanita.googlemapstest.database.FrequenciesDataSource;
@@ -89,6 +92,7 @@ import nl.robenanita.googlemapstest.flightplan.Leg;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
+import nl.robenanita.googlemapstest.openaip.Airspaces;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
@@ -99,6 +103,7 @@ public class NavigationActivity extends ActionBarActivity implements
         com.google.android.gms.location.LocationListener {
     public GoogleMap map;
     private PlaneMarker plane;
+
 
     private MarkerProperties markerProperties;
 
@@ -179,6 +184,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
         Log.i(TAG, "Starting Flightsim mapping tool with ID: " + Integer.toString(uniqueID));
 
+
         legInfoView = (LegInfoView) findViewById(R.id.legInfoPanel);
         legInfoView.setVisibility(View.GONE);
 
@@ -224,7 +230,7 @@ public class NavigationActivity extends ActionBarActivity implements
                         SetAirportMarkersByZoomAndBoundary();
                     }
 
-
+                    CheckAirspaces();
                 }
             });
 
@@ -320,6 +326,16 @@ public class NavigationActivity extends ActionBarActivity implements
 
 
 
+    }
+
+    private void CheckAirspaces() {
+        AirspacesDataSource airspacesDataSource = new AirspacesDataSource(this);
+        airspacesDataSource.open();
+
+        CameraPosition cameraPosition = map.getCameraPosition();
+        //cameraPosition.
+
+        airspacesDataSource.close();
     }
 
     @Override
@@ -512,6 +528,7 @@ public class NavigationActivity extends ActionBarActivity implements
             {
                 plane.setPosition(planePos);
                 plane.setRotation(d);
+                plane.UpdateDirectionLine();
 
                 Location l = new Location("plane");
                 l.setLatitude(planePos.latitude);
@@ -1102,7 +1119,6 @@ public class NavigationActivity extends ActionBarActivity implements
                 if ((waypoint.airport_id == 0) && (waypoint.navaid_id == 0) && (waypoint.fix_id == 0))
                 {
                     MarkerOptions m = new MarkerOptions();
-                    m.title(waypoint.name);
                     m.position(new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude()));
                     m.title(waypoint.name);
                     m.icon(waypoint.GetIcon());
@@ -1219,6 +1235,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
         plane.setPosition(planePosition);
         plane.setRotation(position.getBearing());
+        plane.UpdateDirectionLine();
 
     }
 
@@ -1328,6 +1345,63 @@ public class NavigationActivity extends ActionBarActivity implements
                 showIsNewPopup();
                 return true;
             }
+            case R.id.action_loadaip:
+            {
+                // Testing polygon create code ****************
+                Airspaces a = new Airspaces(this);
+//                a.TestDraw(map);
+                // Testing polygon create code ****************
+
+                // Loading airspace test code ************************
+//                ProgressDialog progressDialog = new ProgressDialog(this);
+//                Airspaces a = new Airspaces(this, progressDialog);
+//
+//                progressDialog.setTitle("Load Airspaces");
+//                progressDialog.setMessage("Loading Airspaces: .....");
+//                progressDialog.show();
+//                //a.OpenAipFile(this, "openaip_airspace_netherlands_nl.aip");
+                //a.OpenOpenAirTextFile(this, "EeldeCtrTest.txt");
+                //a.OpenOpenAirTextFile(this, "ED_CW14_2015.txt");
+                a.OpenOpenAirTextFile(this, "EHv15_3c.txt");
+//                a.OpenOpenAirTextFile(this, "test.txt");
+//                a.drawAirspace(a.get(0), map);
+//                a.drawAirspace(a.get(1), map);
+//                a.drawAirspace(a.get(2), map);
+//                a.drawAirspace(a.get(3), map);
+//                a.drawAirspace(a.get(4), map);
+//                a.drawAirspace(a.get(5), map);
+//                a.drawAirspace(a.get(6), map);
+
+//                a.OpenOpenAirTextFile(this, "allusa.v15.10-15.1.txt");
+//                a.drawAirspace(a.get(2110), map);
+//                a.drawAirspace(a.get(2111), map);
+//                a.drawAirspace(a.get(2112), map);
+//                a.drawAirspace(a.get(2113), map);
+//                a.drawAirspace(a.get(2114), map);
+//                a.drawAirspace(a.get(2115), map);
+//                a.drawAirspace(a.get(2116), map);
+
+                // Germany test items
+//                a.drawAirspace(a.get(124), map);
+//                a.drawAirspace(a.get(127), map);
+//                a.drawAirspace(a.get(131), map);
+//                a.drawAirspace(a.get(192), map);
+//                a.drawAirspace(a.get(267), map);
+//                a.drawAirspace(a.get(268), map);
+//                a.drawAirspace(a.get(238), map);
+
+                // Dutch test items
+                a.drawAirspace(a.get(94), map);
+                a.drawAirspace(a.get(13), map);
+                a.drawAirspace(a.get(59), map);
+                a.drawAirspace(a.get(80), map);
+                a.drawAirspace(a.get(105), map);
+                a.drawAirspace(a.get(12), map);
+                a.drawAirspace(a.get(83), map);
+//                progressDialog.dismiss();
+                // Loading airspace test code ************************
+                return true;
+            }
 
             case R.id.action_flightplan:
             {
@@ -1404,9 +1478,17 @@ public class NavigationActivity extends ActionBarActivity implements
 //                NavigationActivity.this.startActivityForResult(startTestIntent, 500);
 //                return true;
 //            }
+
+            case R.id.action_loadchart:
+            {
+                PDFCharts pdfCharts = new PDFCharts(this);
+                pdfCharts.LoadTestPDF();
+                return true;
+            }
             case R.id.action_DirectTo:
             {
                 ShowDirectToPopup();
+                return true;
             }
         }
         return super.onOptionsItemSelected(item);
@@ -1598,6 +1680,8 @@ public class NavigationActivity extends ActionBarActivity implements
         FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
         flightPlanDataSource.open();
         flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
+        flightPlanDataSource.updateWaypointSortOrder(selectedFlightplan);
+        flightPlanDataSource.updateWaypointSortOrderDB(selectedFlightplan);
         flightPlanDataSource.close();
 
 
@@ -2192,22 +2276,24 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void LoadRunwayMarkers(RunwaysList runways)
     {
-        for (Runway runway: runways) {
-            if (runway.le_latitude_deg > 0) {
-                MarkerOptions m = new MarkerOptions();
-                m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
-                m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
-                m.rotation((float) runway.le_heading_degT);
-                m.title(runway.le_ident);
-                runway.lowMarker = map.addMarker(m);
-            }
-            if (runway.he_latitude_deg > 0) {
-                MarkerOptions m1 = new MarkerOptions();
-                m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
-                m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
-                m1.rotation((float) runway.he_heading_degT);
-                m1.title(runway.he_ident);
-                runway.hiMarker = map.addMarker(m1);
+        if (runways != null) {
+            for (Runway runway : runways) {
+                if (runway.le_latitude_deg > 0) {
+                    MarkerOptions m = new MarkerOptions();
+                    m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
+                    m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+                    m.rotation((float) runway.le_heading_degT);
+                    m.title(runway.le_ident);
+                    runway.lowMarker = map.addMarker(m);
+                }
+                if (runway.he_latitude_deg > 0) {
+                    MarkerOptions m1 = new MarkerOptions();
+                    m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
+                    m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+                    m1.rotation((float) runway.he_heading_degT);
+                    m1.title(runway.he_ident);
+                    runway.hiMarker = map.addMarker(m1);
+                }
             }
         }
     }
@@ -2387,10 +2473,14 @@ public class NavigationActivity extends ActionBarActivity implements
             private Marker marker;
             private Airport airport;
             private Navaid navaid;
+            private Waypoint waypoint;
             @Override
             public View getInfoWindow(Marker marker) {
                 airport = airportMarkerMap.get(marker);
                 navaid = navaidMarkerMap.get(marker);
+                if (waypointMarkerMap != null)
+                    waypoint = waypointMarkerMap.get(marker);
+
                 this.marker = marker;
 
                 if (airport != null)
@@ -2406,12 +2496,28 @@ public class NavigationActivity extends ActionBarActivity implements
                             R.layout.navaid_info_window, null);
                     setUpNavaidWindow();
                 }
+                if (waypoint != null)
+                {
+                    this.view = getLayoutInflater().inflate(
+                            R.layout.navaid_info_window, null);
+                    setupWaypointWindow();
+                }
                 return view;
             }
 
             @Override
             public View getInfoContents(Marker marker) {
                 return null;
+            }
+
+            private void setupWaypointWindow()
+            {
+                if (waypoint != null)
+                {
+                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowNavaidInfoTxt);
+                    String info = waypoint.getWaypointInfo();
+                    infoTxt.setText(info);
+                }
             }
 
             private void setUpNavaidWindow()

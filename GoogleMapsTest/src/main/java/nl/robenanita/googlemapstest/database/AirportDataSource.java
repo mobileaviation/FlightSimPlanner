@@ -56,8 +56,6 @@ public class AirportDataSource {
             DBHelper.C_heading
     };
 
-
-
     public AirportDataSource(Context context) {
         dbHelper = new DBHelper(context);
     }

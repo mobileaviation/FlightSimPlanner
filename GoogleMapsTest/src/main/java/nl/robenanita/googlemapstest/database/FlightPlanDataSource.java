@@ -150,10 +150,12 @@ public class FlightPlanDataSource {
 
     public void UpdateInsertWaypoints(ArrayList<Waypoint> waypoints)
     {
+        Integer order = 10;
         for (Waypoint waypoint : waypoints)
         {
 //            String[] args = {airport_id.toString()};
 //            database.delete(DBHelper.RUNWAY_TABLE_NAME, DBHelper.C_airport_id + " =?", args);
+
             if (waypoint.id == null)
             {
                 long id = database.insert(UserDBHelper.USERWAYPOINT_TABLE_NAME, null,
@@ -195,6 +197,17 @@ public class FlightPlanDataSource {
         return count;
     }
 
+    public void DeleteFlightplan(FlightPlan flightPlan)
+    {
+        String q = "DELETE FROM " + UserDBHelper.USERWAYPOINT_TABLE_NAME +
+                " WHERE " + UserDBHelper.C_flightplan_id + "=" + Integer.toString(flightPlan.id);
+        database.execSQL(q);
+
+        String q1 = "DELETE FROM " + UserDBHelper.FLIGHTPLAN_TABLE_NAME +
+                " WHERE _id=" + Integer.toString(flightPlan.id) + ";";
+        database.execSQL(q1);
+    }
+
     public FlightPlan GetWaypointsByFlightPlan(FlightPlan flightPlan)
     {
         flightPlan.Waypoints = new ArrayList<Waypoint>();
@@ -219,21 +232,45 @@ public class FlightPlanDataSource {
             // update waypoint sortorder
             // update flightplan set date to today
 
-            int orderInc = 1000 / (flightPlan.Waypoints.size()-1);
-            int order = orderInc;
-            flightPlan.Waypoints.get(0).order = 1;
-            flightPlan.Waypoints.get(flightPlan.Waypoints.size()-1).order = 1000;
-            for (int i=1; i<flightPlan.Waypoints.size()-1; i++) {
-                flightPlan.Waypoints.get(i).order = order;
-                order = order + orderInc;
-            }
+            updateWaypointSortOrder(flightPlan);
 
             UpdateInsertWaypoints(flightPlan.Waypoints);
             flightPlan.date = new Date();
             UpdateFlightplanWind(flightPlan);
         }
+        else
+        {
+            updateWaypointSortOrder(flightPlan);
+            updateWaypointSortOrderDB(flightPlan);
+        }
+
 
         return flightPlan;
+    }
+
+    public void updateWaypointSortOrder(FlightPlan flightPlan)
+    {
+        int orderInc = 1000 / (flightPlan.Waypoints.size()-1);
+        int order = orderInc;
+        flightPlan.Waypoints.get(0).order = 1;
+        flightPlan.Waypoints.get(flightPlan.Waypoints.size()-1).order = 1000;
+        for (int i=1; i<flightPlan.Waypoints.size()-1; i++) {
+            flightPlan.Waypoints.get(i).order = order;
+            order = order + orderInc;
+        }
+    }
+
+    public void updateWaypointSortOrderDB(FlightPlan flightPlan)
+    {
+        for (Waypoint waypoint: flightPlan.Waypoints)
+        {
+            String q = "UPDATE " + UserDBHelper.USERWAYPOINT_TABLE_NAME +
+                    " SET " +UserDBHelper.C_sortorder + "=" + waypoint.order.toString() +
+                    " WHERE _id=" + waypoint.id.toString();
+
+            Log.i(TAG, "Update sortorder: " + q);
+            database.execSQL(q);
+        }
     }
 
     public void MoveWaypointDown(FlightPlan flightPlan, Waypoint waypoint)
