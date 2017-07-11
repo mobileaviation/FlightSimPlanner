@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="play-services-4.0.30">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/GoogleMapsTest/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.0.30/res" />
-      <root url="jar://$PROJECT_DIR$/GoogleMapsTest/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.0.30/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/09de9ec54f2aeb1a6495f14e72480ab0a749b7d9/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/09de9ec54f2aeb1a6495f14e72480ab0a749b7d9/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
