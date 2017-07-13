@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="nl.robenanita.googlemapstest.flightplan.FlightPlanActivity"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/libs/com.google.ads"
     tools:ignore="MergeRootFrame"
     android:orientation="vertical"
     android:background="#eeeeee">

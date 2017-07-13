@@ -3,7 +3,6 @@ package nl.robenanita.googlemapstest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,10 +35,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
+
+//import com.google.android.gms.common.GooglePlayServicesClient;
+
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+//import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -98,12 +103,11 @@ import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
 
 public class NavigationActivity extends ActionBarActivity implements
-        GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener,
-        com.google.android.gms.location.LocationListener {
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
     public GoogleMap map;
     private PlaneMarker plane;
-
 
     private MarkerProperties markerProperties;
 
@@ -197,133 +201,139 @@ public class NavigationActivity extends ActionBarActivity implements
         infoPanel = (InfoPanelFragment) getFragmentManager().findFragmentById(R.id.infoPanelFragment);
         //infoPanel.LoadAdd();
 
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        if (map != null) {
-            map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                @Override
-                public void onCameraChange(CameraPosition cameraPosition) {
-                    //Log.i(TAG, "onCameraChange fired: Zoom level: " + cameraPosition.zoom);
-                    Boolean redrawMarkers = false;
-                    if (Math.abs(cameraPosition.zoom - curZoom) > 1) {
-                        curZoom = cameraPosition.zoom;
-                        Log.i(TAG, "Zoom Difference > 1: " + cameraPosition.zoom);
-                        redrawMarkers = true;
-                    }
-
-                    Location curLoc = new Location("curLoc");
-                    curLoc.setLongitude(curPosition.longitude);
-                    curLoc.setLatitude(curPosition.latitude);
-                    Location camLoc = new Location("camLoc");
-                    camLoc.setLongitude(cameraPosition.target.longitude);
-                    camLoc.setLatitude(cameraPosition.target.latitude);
-
-                    SetupScaleBar();
-
-                    if (camLoc.distanceTo(curLoc) * cameraPosition.zoom > 200000) {
-                        Log.i(TAG, "Distance: " + Float.toString(camLoc.distanceTo(curLoc) * cameraPosition.zoom));
-                        curPosition = cameraPosition.target;
-                        redrawMarkers = true;
-                    }
-
-                    if (redrawMarkers) {
-                        //CreateMarkers();
-                        SetAirportMarkersByZoomAndBoundary();
-                    }
-
-                    CheckAirspaces();
-                }
-            });
-
-            map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-                @Override
-                public void onMapLongClick(LatLng latLng) {
-                    if (selectedFlightplan != null) {
-                        if (!selectedFlightplan.getFlightplanActive()) {
-                            Log.i(TAG, "Long click on " + Double.toString(latLng.latitude) + " : " + Double.toString(latLng.longitude));
-                            ShowNewWaypointPopup(latLng);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
-                                    , Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
-                                , Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-            map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                @Override
-                public void onMarkerDragStart(Marker marker) {
-
-                }
-
-                @Override
-                public void onMarkerDrag(Marker marker) {
-
-                }
-
-                @Override
-                public void onMarkerDragEnd(Marker marker) {
-                    Waypoint w = waypointMarkerMap.get(marker);
-                    if (w != null) {
-                        w.location.setLatitude(marker.getPosition().latitude);
-                        w.location.setLongitude(marker.getPosition().longitude);
-                        if (selectedFlightplan != null) {
-                            removeAllRunwayMarkers(selectedFlightplan);
-                            FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-                            flightPlanDataSource.open();
-                            flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
-                            flightPlanDataSource.close();
-                            LoadFlightplan(selectedFlightplan.id);
-                        }
-                    }
-                }
-            });
-
-
-            UiSettings settings = map.getUiSettings();
-            settings.setCompassEnabled(true);
-            settings.setRotateGesturesEnabled(false);
-            settings.setTiltGesturesEnabled(false);
-            settings.setScrollGesturesEnabled(true);
-            settings.setZoomControlsEnabled(true);
-            settings.setZoomGesturesEnabled(true);
-
-            mapController = new MapController(map, this);
-
-            mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
-
-            mapController.setUpTileProvider();
-        }
-
-        LoadProperties();
-
-        trackingEnabled = true;
-        connected = false;
-        tilesource = 3;
-
-
-        initInstruments();
-
-        airportMarkerMap = new HashMap<Marker, Airport>();
-        navaidMarkerMap = new HashMap<Marker, Navaid>();
-
-        SetupScaleBar();
-
-        setupWakeLock();
-
-        ImageButton closeTracksBtn = (ImageButton) findViewById(R.id.closeTracksBtn);
-        closeTracksBtn.setOnClickListener(new View.OnClickListener() {
+        ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onClick(View view) {
-                LinearLayout tracksLayout = (LinearLayout) findViewById(R.id.tracksLayout);
-                tracksLayout.setVisibility(View.GONE);
-                if (loadTrack != null) loadTrack.removeTrack();
+            public void onMapReady(GoogleMap googleMap) {
+                map = googleMap;
+
+                if (map != null) {
+                    map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                        @Override
+                        public void onCameraChange(CameraPosition cameraPosition) {
+                            //Log.i(TAG, "onCameraChange fired: Zoom level: " + cameraPosition.zoom);
+                            Boolean redrawMarkers = false;
+                            if (Math.abs(cameraPosition.zoom - curZoom) > 1) {
+                                curZoom = cameraPosition.zoom;
+                                Log.i(TAG, "Zoom Difference > 1: " + cameraPosition.zoom);
+                                redrawMarkers = true;
+                            }
+
+                            Location curLoc = new Location("curLoc");
+                            curLoc.setLongitude(curPosition.longitude);
+                            curLoc.setLatitude(curPosition.latitude);
+                            Location camLoc = new Location("camLoc");
+                            camLoc.setLongitude(cameraPosition.target.longitude);
+                            camLoc.setLatitude(cameraPosition.target.latitude);
+
+                            SetupScaleBar();
+
+                            if (camLoc.distanceTo(curLoc) * cameraPosition.zoom > 200000) {
+                                Log.i(TAG, "Distance: " + Float.toString(camLoc.distanceTo(curLoc) * cameraPosition.zoom));
+                                curPosition = cameraPosition.target;
+                                redrawMarkers = true;
+                            }
+
+                            if (redrawMarkers) {
+                                //CreateMarkers();
+                                SetAirportMarkersByZoomAndBoundary();
+                            }
+
+                            CheckAirspaces();
+                        }
+                    });
+
+                    map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                        @Override
+                        public void onMapLongClick(LatLng latLng) {
+                            if (selectedFlightplan != null) {
+                                if (!selectedFlightplan.getFlightplanActive()) {
+                                    Log.i(TAG, "Long click on " + Double.toString(latLng.latitude) + " : " + Double.toString(latLng.longitude));
+                                    ShowNewWaypointPopup(latLng);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
+                                            , Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
+                                        , Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+                    map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                        @Override
+                        public void onMarkerDragStart(Marker marker) {
+
+                        }
+
+                        @Override
+                        public void onMarkerDrag(Marker marker) {
+
+                        }
+
+                        @Override
+                        public void onMarkerDragEnd(Marker marker) {
+                            Waypoint w = waypointMarkerMap.get(marker);
+                            if (w != null) {
+                                w.location.setLatitude(marker.getPosition().latitude);
+                                w.location.setLongitude(marker.getPosition().longitude);
+                                if (selectedFlightplan != null) {
+                                    removeAllRunwayMarkers(selectedFlightplan);
+                                    FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+                                    flightPlanDataSource.open();
+                                    flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
+                                    flightPlanDataSource.close();
+                                    LoadFlightplan(selectedFlightplan.id);
+                                }
+                            }
+                        }
+                    });
+
+
+
+                    UiSettings settings = map.getUiSettings();
+                    settings.setCompassEnabled(true);
+                    settings.setRotateGesturesEnabled(false);
+                    settings.setTiltGesturesEnabled(false);
+                    settings.setScrollGesturesEnabled(true);
+                    settings.setZoomControlsEnabled(true);
+                    settings.setZoomGesturesEnabled(true);
+
+                    mapController = new MapController(map, NavigationActivity.this);
+
+                    mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
+
+                    mapController.setUpTileProvider();
+                }
+
+                LoadProperties();
+
+                trackingEnabled = true;
+                connected = false;
+                tilesource = 3;
+
+
+                initInstruments();
+
+                airportMarkerMap = new HashMap<Marker, Airport>();
+                navaidMarkerMap = new HashMap<Marker, Navaid>();
+
+                SetupScaleBar();
+
+                setupWakeLock();
+
+                ImageButton closeTracksBtn = (ImageButton) findViewById(R.id.closeTracksBtn);
+                closeTracksBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        LinearLayout tracksLayout = (LinearLayout) findViewById(R.id.tracksLayout);
+                        tracksLayout.setVisibility(View.GONE);
+                        if (loadTrack != null) loadTrack.removeTrack();
+                    }
+                });
+
             }
         });
-
-
 
 
     }
@@ -1499,15 +1509,17 @@ public class NavigationActivity extends ActionBarActivity implements
         NavigationActivity.this.startActivityForResult(startLoadTracksIntent, 500);
     }
 
-    private LocationClient mLocationClient;
+    private GoogleApiClient mLocationClient;
     private void connectToGps() {
         if(servicesConnected())
         {
             if (mLocationClient == null)
             {
-                mLocationClient = new LocationClient(
-                        this, this, this
-                );
+                mLocationClient = new GoogleApiClient.Builder(this)
+                        .addApi(LocationServices.API)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .build();
 
 
             }
@@ -2664,7 +2676,7 @@ public class NavigationActivity extends ActionBarActivity implements
     public void onConnected(Bundle bundle) {
         if (mLocationClient.isConnected()) {
             Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-            mCurrentLocation = mLocationClient.getLastLocation();
+            //mCurrentLocation = mLocationClient.getLastLocation();
 
             locationTracking = new LocationTracking(selectedFlightplan, this);
             connected = true;
@@ -2673,7 +2685,16 @@ public class NavigationActivity extends ActionBarActivity implements
 
             setupLocationRequest();
 
-            mLocationClient.requestLocationUpdates(mLocationRequest, this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, mLocationRequest, new com.google.android.gms.location.LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    NavigationActivity.this.onLocationChanged(location);
+                }
+            });
+
+            LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
+
+            //mLocationClient.requestLocationUpdates(mLocationRequest, this);
         }
         else
         {
@@ -2682,15 +2703,20 @@ public class NavigationActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onDisconnected() {
-        Toast.makeText(this, "Disconnected. Please re-connect.",
-                Toast.LENGTH_SHORT).show();
+    public void onConnectionSuspended(int i) {
 
-        locationTracking = null;
-        connected = false;
-
-        connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
     }
+
+//    @Override
+//    public void onDisconnected() {
+//        Toast.makeText(this, "Disconnected. Please re-connect.",
+//                Toast.LENGTH_SHORT).show();
+//
+//        locationTracking = null;
+//        connected = false;
+//
+//        connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
+//    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -2727,5 +2753,20 @@ public class NavigationActivity extends ActionBarActivity implements
             setPlaneMarker(location);
             SetInfoPanel(location);
         }
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
     }
 }

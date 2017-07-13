@@ -18,7 +18,7 @@ android {
     buildToolsVersion '25.0.0'
 
     defaultConfig {
-        minSdkVersion 11
+        minSdkVersion 19
         targetSdkVersion 19
     }
     sourceSets { main { aidl.srcDirs = ['src/main/aidl', 'src/main/aidl/'] } }
@@ -27,10 +27,16 @@ android {
 dependencies {
     compile files('libs/ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar')
     compile files('libs/jts-1.13.jar')
-//    compile files('libs/hibernate-spatial-4.3.jar')
+    //    compile files('libs/hibernate-spatial-4.3.jar')
     compile 'com.android.support:appcompat-v7:19.+'
-    compile 'com.google.android.gms:play-services:4.0.30'
+    //compile 'com.google.android.gms:play-services:4.0.30'
     compile 'com.andreabaccega:android-form-edittext:1.0.5@aar'
     compile 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
     compile 'com.android.support:support-v4:19.+'
+    //compile 'com.google.android.gms:play-services:11.0.2'
+    compile 'com.google.android.gms:play-services-maps:11.0.2'
+    //compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    //compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.google.android.gms:play-services-location:11.0.2'
+    compile 'com.google.android.gms:play-services-ads:11.0.2'
 }

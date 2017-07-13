@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     tools:context="nl.robenanita.googlemapstest.InfoPanelFragment"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/libs/com.google.ads"
     android:baselineAligned="false">
 
 
