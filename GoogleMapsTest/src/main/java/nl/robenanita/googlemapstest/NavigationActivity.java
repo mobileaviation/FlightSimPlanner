@@ -53,6 +53,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -205,6 +206,9 @@ public class NavigationActivity extends ActionBarActivity implements
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
+                MapStyleOptions style;
+                style = MapStyleOptions.loadRawResourceStyle(NavigationActivity.this, R.raw.icao_style);
+                map.setMapStyle(style);
 
                 if (map != null) {
                     map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
@@ -308,10 +312,12 @@ public class NavigationActivity extends ActionBarActivity implements
 
                     mapController = new MapController(map, NavigationActivity.this);
 
-                    mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    //mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
                     mapController.setUpTileProvider();
                 }
+
+
 
                 LoadProperties();
 
