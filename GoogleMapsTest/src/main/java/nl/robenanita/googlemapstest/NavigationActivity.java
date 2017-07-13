@@ -207,6 +207,13 @@ public class NavigationActivity extends ActionBarActivity implements
                 map = googleMap;
 
                 if (map != null) {
+                    map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+                        @Override
+                        public void onCameraMove() {
+                            CameraPosition cameraposition = map.getCameraPosition();
+                        }
+                    });
+
                     map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                         @Override
                         public void onCameraChange(CameraPosition cameraPosition) {

@@ -53,9 +53,14 @@
             <!--android:value="AIzaSyDavE-lD2S16hK_jZbhvDXzDDBAeOqIFZw" />-->
 
         <!-- debug key pc -->
+        <!--<meta-data-->
+            <!--android:name="com.google.android.maps.v2.API_KEY"-->
+            <!--android:value="AIzaSyABm4rXxmSonfmVBT7RysrGx4FhONpgBk8" />-->
+
+        <!-- laptop work debug key -->
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyABm4rXxmSonfmVBT7RysrGx4FhONpgBk8" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAJ9GeSgjpWb5iigW4z9z7Ff4OyHa92GM4"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

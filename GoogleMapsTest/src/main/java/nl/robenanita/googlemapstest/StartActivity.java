@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
@@ -513,6 +514,8 @@ public class StartActivity extends ActionBarActivity {
                     .addTestDevice("70F82DF4BD716E85F87B34C81B78C5ED")
                     .addTestDevice("B066A1E31D72FAD22CD44C97D2DAAFE6")
                     .build();
+            leftAd.setAdSize(AdSize.BANNER);
+            leftAd.setAdUnitId("ca-app-pub-5281313269938308/1228468278");
             leftAd.loadAd(leftRequest);
             leftAd.setAdListener(new AdListener() {
                 @Override
@@ -536,6 +539,8 @@ public class StartActivity extends ActionBarActivity {
                     .addTestDevice("70F82DF4BD716E85F87B34C81B78C5ED")
                     .addTestDevice("B066A1E31D72FAD22CD44C97D2DAAFE6")
                     .build();
+            rightAd.setAdSize(AdSize.BANNER);
+            rightAd.setAdUnitId("ca-app-pub-5281313269938308/5658667870");
             rightAd.loadAd(rightRequest);
             return true;
         }
