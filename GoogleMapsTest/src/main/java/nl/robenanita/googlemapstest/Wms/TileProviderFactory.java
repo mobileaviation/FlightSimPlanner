@@ -82,11 +82,12 @@ public class TileProviderFactory {
         return tileProvider;
     }
 
-    public static TileProvider getTileAirportMapProvider(String airportmap,
-                                                             int opacity)
+    public static TileProvider getTileAirportMapProvider(TileProviderFormats.airportLayer airportmap,
+                                                             int opacity, Context context)
     {
-        TileProvider tileProvider = new XYZTileProvider(TileProviderFormats.AIRPORTMAP_FORMAT,
-                airportmap, opacity);
+        TileProvider tileProvider = new QuadKeyTileProvider(TileProviderFormats.AIRPORTMAPQUADKEY_FORMAT,
+                TileProviderFormats.AIRPORTMAPMANIFEST_FORMAT,
+                airportmap, opacity, context);
         return tileProvider;
     }
 }

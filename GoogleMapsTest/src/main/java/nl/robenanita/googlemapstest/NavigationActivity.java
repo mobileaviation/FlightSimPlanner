@@ -206,9 +206,6 @@ public class NavigationActivity extends ActionBarActivity implements
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
-                MapStyleOptions style;
-                style = MapStyleOptions.loadRawResourceStyle(NavigationActivity.this, R.raw.icao_style);
-                map.setMapStyle(style);
 
                 if (map != null) {
                     map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
@@ -311,9 +308,7 @@ public class NavigationActivity extends ActionBarActivity implements
                     settings.setZoomGesturesEnabled(true);
 
                     mapController = new MapController(map, NavigationActivity.this);
-
-                    //mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
-
+                    mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
                     mapController.setUpTileProvider();
                 }
 

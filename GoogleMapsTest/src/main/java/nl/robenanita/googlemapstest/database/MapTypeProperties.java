@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import nl.robenanita.googlemapstest.Property;
+import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
 
 /**
  * Created by Rob Verhoef on 24-11-2014.
@@ -39,11 +40,13 @@ public class MapTypeProperties {
     public void ClearProperties()
     {
         properties.clear();
-        properties.put(GoogleMap.MAP_TYPE_HYBRID, false);
-        properties.put(GoogleMap.MAP_TYPE_NONE, false);
-        properties.put(GoogleMap.MAP_TYPE_NORMAL, false);
-        properties.put(GoogleMap.MAP_TYPE_SATELLITE, false);
-        properties.put(GoogleMap.MAP_TYPE_TERRAIN, false);
+        properties.put(MapStyle.MAP_TYPE_HYBRID, false);
+        properties.put(MapStyle.MAP_TYPE_NONE, false);
+        properties.put(MapStyle.MAP_TYPE_NORMAL, false);
+        properties.put(MapStyle.MAP_TYPE_SATELLITE, false);
+        properties.put(MapStyle.MAP_TYPE_TERRAIN, false);
+        properties.put(MapStyle.MAP_TYPE_AVIATION_DAY, false);
+        properties.put(MapStyle.MAP_TYPE_AVIATION_NIGHT, false);
     }
 
     public void LoadFromDatabase(Context context)
@@ -74,7 +77,7 @@ public class MapTypeProperties {
         }
         else
         {
-            SetValue(GoogleMap.MAP_TYPE_TERRAIN, true);
+            SetValue(MapStyle.MAP_TYPE_TERRAIN, true);
             Property pn = new Property();
             pn.value1 = "setup";
             pn.name = "MAPTYPE";

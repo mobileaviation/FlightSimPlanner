@@ -3,10 +3,12 @@ package nl.robenanita.googlemapstest;
 import android.content.Context;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 
+import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
 import nl.robenanita.googlemapstest.Wms.TileProviderFactory;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.ChartBundleProperties;
@@ -54,7 +56,9 @@ public class MapController
     }
     public Integer getGoogleMapType()
     {
-        return mapTypeProperties.GetSelected();
+        if (mapTypeProperties != null)
+            return mapTypeProperties.GetSelected();
+        else return 1;
     }
 
     private TileOverlay skylinesOverlay;            // Airspaces
@@ -68,6 +72,9 @@ public class MapController
     private TileOverlay canadaWeatherUSRadarOverlay;
 
     private TileOverlay airportTestOverlay;
+    private TileOverlay airport2TestOverlay;
+    private TileOverlay airport3TestOverlay;
+    private TileOverlay airport4TestOverlay;
 
     public void setUpTileProvider()
     {
@@ -117,10 +124,25 @@ public class MapController
                 TileProviderFactory.getCanadaWeatherProvider(TileProviderFormats.weathermapLayer.RADAR_RDBR, TileProviderFormats.canadamapStyle.RADAR);
         canadaWeatherUSRadarOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp12));
 
-//        TileProvider tp13 =
-//                TileProviderFactory.getTileAirportMapProvider("EHAM-VAC-1", 100);
-//        airportTestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp13));
-//        airportTestOverlay.setVisible(true);
+        TileProvider tp13 =
+                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHLE, 100, context);
+        airportTestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp13));
+        airportTestOverlay.setVisible(true);
+
+        TileProvider tp14 =
+                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEDWG, 100, context);
+        airport2TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp14));
+        airport2TestOverlay.setVisible(true);
+
+        TileProvider tp15 =
+                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHAL, 100, context);
+        airport3TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp15));
+        airport3TestOverlay.setVisible(true);
+
+        TileProvider tp16 =
+                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHTX, 100, context);
+        airport4TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp16));
+        airport4TestOverlay.setVisible(true);
 
         weatherProperties = new WeatherProperties();
         weatherProperties.ClearProperties();
@@ -159,14 +181,37 @@ public class MapController
         mapTypeProperties = new MapTypeProperties();
         mapTypeProperties.ClearProperties();
         mapTypeProperties.LoadFromDatabase(context);
-        map.setMapType(mapTypeProperties.GetSelected());
+        int t = mapTypeProperties.GetSelected();
+        if (t<1000)
+        {
+            map.setMapStyle(null);
+            map.setMapType(t);
+        } else
+        {
+            // Set a userdefined style
+            map.setMapType(MapStyle.MAP_TYPE_NORMAL);
+            MapStyleOptions style;
+            style = MapStyleOptions.loadRawResourceStyle(context, R.raw.icao_style);
+            map.setMapStyle(style);
+        }
     }
 
     public void setMapType(int mapType)
     {
         mapTypeProperties.ClearProperties();
         mapTypeProperties.SetValue(mapType, true);
-        map.setMapType(mapType);
+
+        if (mapType<1000) {
+            map.setMapStyle(null);
+            map.setMapType(mapType);
+        } else
+        {
+            // Set a userdefined style
+            map.setMapType(MapStyle.MAP_TYPE_NORMAL);
+            MapStyleOptions style;
+            style = MapStyleOptions.loadRawResourceStyle(context, R.raw.icao_style);
+            map.setMapStyle(style);
+        }
         mapTypeProperties.SaveToDatabase(context);
     }
 

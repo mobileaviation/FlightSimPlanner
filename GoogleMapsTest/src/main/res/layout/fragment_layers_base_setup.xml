@@ -64,6 +64,22 @@
                 android:layout_marginLeft="20dp"
                 android:checked="false"
                 android:id="@+id/layersBaseTerrainBtn" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aviation Style Day"
+                android:layout_marginLeft="20dp"
+                android:checked="false"
+                android:id="@+id/layersBaseAviationStyleDayBtn" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aviation Style Night"
+                android:layout_marginLeft="20dp"
+                android:checked="false"
+                android:id="@+id/layersBaseAviationStyleNightBtn" />
         </RadioGroup>
     </LinearLayout>
 

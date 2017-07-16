@@ -33,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PROPERTIES_TABLE_NAME = "tbl_Properties";
     public static final String FREQUENCIES_TABLE_NAME = "tbl_AirportFrequencies";
 
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
     private static final String TAG = "GooglemapsTest";
 
     public Boolean updated = false;
