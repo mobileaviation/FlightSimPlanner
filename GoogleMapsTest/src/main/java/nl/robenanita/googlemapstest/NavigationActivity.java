@@ -69,6 +69,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.robenanita.googlemapstest.Airspaces.LoadAirspacesAsync;
 import nl.robenanita.googlemapstest.Charts.PDFCharts;
 import nl.robenanita.googlemapstest.Instruments.AirspeedView;
 import nl.robenanita.googlemapstest.Instruments.AltimeterView;
@@ -81,7 +82,7 @@ import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.Weather.WeatherActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
-import nl.robenanita.googlemapstest.database.AirspacesDataSource;
+import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
 import nl.robenanita.googlemapstest.database.FrequenciesDataSource;
@@ -98,7 +99,6 @@ import nl.robenanita.googlemapstest.flightplan.Leg;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
-import nl.robenanita.googlemapstest.openaip.Airspaces;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
@@ -245,8 +245,6 @@ public class NavigationActivity extends ActionBarActivity implements
                                 //CreateMarkers();
                                 SetAirportMarkersByZoomAndBoundary();
                             }
-
-                            CheckAirspaces();
                         }
                     });
 
@@ -320,6 +318,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 connected = false;
                 tilesource = 3;
 
+                setupAirspaces();
 
                 initInstruments();
 
@@ -346,14 +345,19 @@ public class NavigationActivity extends ActionBarActivity implements
 
     }
 
-    private void CheckAirspaces() {
-        AirspacesDataSource airspacesDataSource = new AirspacesDataSource(this);
-        airspacesDataSource.open();
+    private void setupAirspaces()
+    {
+        ArrayList<String> airspacesdbFiles = DBFilesHelper.CopyDatabases(this.getApplicationContext(), true);
 
-        CameraPosition cameraPosition = map.getCameraPosition();
-        //cameraPosition.
-
-        airspacesDataSource.close();
+        for (String a : airspacesdbFiles)
+        {
+            LoadAirspacesAsync loadAirspacesAsync = new LoadAirspacesAsync();
+            loadAirspacesAsync.context = this;
+            loadAirspacesAsync.databaseName = a;
+            loadAirspacesAsync.mapView = map;
+            loadAirspacesAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            Log.i(TAG, "Airpace database: " + a + " loaded!");
+        }
     }
 
     @Override
@@ -1366,58 +1370,7 @@ public class NavigationActivity extends ActionBarActivity implements
             case R.id.action_loadaip:
             {
                 // Testing polygon create code ****************
-                Airspaces a = new Airspaces(this);
-//                a.TestDraw(map);
-                // Testing polygon create code ****************
 
-                // Loading airspace test code ************************
-//                ProgressDialog progressDialog = new ProgressDialog(this);
-//                Airspaces a = new Airspaces(this, progressDialog);
-//
-//                progressDialog.setTitle("Load Airspaces");
-//                progressDialog.setMessage("Loading Airspaces: .....");
-//                progressDialog.show();
-//                //a.OpenAipFile(this, "openaip_airspace_netherlands_nl.aip");
-                //a.OpenOpenAirTextFile(this, "EeldeCtrTest.txt");
-                //a.OpenOpenAirTextFile(this, "ED_CW14_2015.txt");
-                a.OpenOpenAirTextFile(this, "EHv15_3c.txt");
-//                a.OpenOpenAirTextFile(this, "test.txt");
-//                a.drawAirspace(a.get(0), map);
-//                a.drawAirspace(a.get(1), map);
-//                a.drawAirspace(a.get(2), map);
-//                a.drawAirspace(a.get(3), map);
-//                a.drawAirspace(a.get(4), map);
-//                a.drawAirspace(a.get(5), map);
-//                a.drawAirspace(a.get(6), map);
-
-//                a.OpenOpenAirTextFile(this, "allusa.v15.10-15.1.txt");
-//                a.drawAirspace(a.get(2110), map);
-//                a.drawAirspace(a.get(2111), map);
-//                a.drawAirspace(a.get(2112), map);
-//                a.drawAirspace(a.get(2113), map);
-//                a.drawAirspace(a.get(2114), map);
-//                a.drawAirspace(a.get(2115), map);
-//                a.drawAirspace(a.get(2116), map);
-
-                // Germany test items
-//                a.drawAirspace(a.get(124), map);
-//                a.drawAirspace(a.get(127), map);
-//                a.drawAirspace(a.get(131), map);
-//                a.drawAirspace(a.get(192), map);
-//                a.drawAirspace(a.get(267), map);
-//                a.drawAirspace(a.get(268), map);
-//                a.drawAirspace(a.get(238), map);
-
-                // Dutch test items
-                a.drawAirspace(a.get(94), map);
-                a.drawAirspace(a.get(13), map);
-                a.drawAirspace(a.get(59), map);
-                a.drawAirspace(a.get(80), map);
-                a.drawAirspace(a.get(105), map);
-                a.drawAirspace(a.get(12), map);
-                a.drawAirspace(a.get(83), map);
-//                progressDialog.dismiss();
-                // Loading airspace test code ************************
                 return true;
             }
 

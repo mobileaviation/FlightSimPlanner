@@ -1,8 +1,9 @@
-package nl.robenanita.googlemapstest.openaip;
+package nl.robenanita.googlemapstest.Airspaces;
 
 /**
- * Created by Rob Verhoef on 29-9-2015.
+ * Created by Rob Verhoef on 24-7-2017.
  */
+
 public enum AltitudeReference {
     GND,        // Ground
     MSL,        // Main sea level
@@ -14,5 +15,4 @@ public enum AltitudeReference {
     public String toString() {
         return super.toString();
     }
-
 }

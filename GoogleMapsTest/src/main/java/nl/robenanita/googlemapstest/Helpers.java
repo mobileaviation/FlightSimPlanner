@@ -1,7 +1,10 @@
 package nl.robenanita.googlemapstest;
 
 import android.app.LoaderManager;
+import android.content.Context;
+import android.content.res.Resources;
 import android.location.Location;
+import android.util.DisplayMetrics;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -9,8 +12,6 @@ import com.vividsolutions.jts.geom.Coordinate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import nl.robenanita.googlemapstest.openaip.AltitudeReference;
-import nl.robenanita.googlemapstest.openaip.AltitudeUnit;
 
 /**
  * Created by Rob Verhoef on 25-6-2015.
@@ -121,27 +122,25 @@ public class Helpers {
         }
     }
 
-    public static AltitudeUnit parseUnit(String value)
-    {
-        value = value.toUpperCase();
-        if (value.equals("MSL")) return AltitudeUnit.F;
-        if (value.equals("AGL")) return AltitudeUnit.F;
-        if (value.equals("FT")) return AltitudeUnit.F;
-        if (value.equals("FL")) return AltitudeUnit.FL;
-        if (value.equals("GND") || value.equals("SFC")) return AltitudeUnit.F;
-
-        return AltitudeUnit.F;
+    public static float convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
     }
 
-    public static AltitudeReference parseReference(String value)
-    {
-        value = value.toUpperCase();
-        if (value.equals("MSL")) return AltitudeReference.MSL;
-        if (value.equals("AGL")) return AltitudeReference.AGL;
-        if (value.equals("FT")) return AltitudeReference.MSL;
-        if (value.equals("FL")) return AltitudeReference.STD;
-        if (value.equals("GND")|| value.equals("SFC")) return AltitudeReference.GND;
-
-        return AltitudeReference.MSL;
+    /**
+     * This method converts device specific pixels to density independent pixels.
+     *
+     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @param context Context to get resources and device specific display metrics
+     * @return A float value to represent dp equivalent to px value
+     */
+    public static float convertPixelsToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return dp;
     }
+
 }
