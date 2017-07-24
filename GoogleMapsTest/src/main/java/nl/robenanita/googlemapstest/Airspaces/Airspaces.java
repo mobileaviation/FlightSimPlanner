@@ -52,7 +52,7 @@ public class Airspaces extends ArrayList<Airspace> {
             }
 
             polygonOptions.fillColor(airspace.Category.getFillColor());
-            polygonOptions.strokeColor(airspace.Category.getOutlineColor());
+            polygonOptions.strokeColor(airspace.Category.getStrokeColor());
             polygonOptions.strokeWidth(Helpers.convertDpToPixel(airspace.Category.getStrokeWidth(), context));
 
             mapView.addPolygon(polygonOptions);
