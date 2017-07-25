@@ -5,6 +5,9 @@ import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -17,6 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.LegInfoView;
@@ -37,7 +41,6 @@ public class FlightPlan implements Serializable {
         destination_airport = new Airport();
         alternate_airport = new Airport();
         Legs = new ArrayList<Leg>();
-        trackOptions = new PolylineOptions();
 
         legWaypointIndex = 0;
         distance = LegInfoView.Distance.larger2000Meters;
@@ -60,8 +63,6 @@ public class FlightPlan implements Serializable {
     public float wind_direction;
     public ArrayList<Waypoint> Waypoints;
     public ArrayList<Leg> Legs;
-    public PolylineOptions trackOptions;
-    public Polyline track;
     public LegInfoView.Distance distance;
     public Date date;
     public boolean endPlan;
@@ -127,6 +128,32 @@ public class FlightPlan implements Serializable {
     public Polyline bufferPolyline;
     public Property bufferProperty;
 
+    private void createLegs()
+    {
+        RemoveFlightplanTrack();
+        Legs.clear();
+        int c = 0;
+        Waypoint w1 = null;
+        Waypoint w2 = null;
+        for (Waypoint waypoint: this.Waypoints)
+        {
+            if (c==0)
+                // Get the first waypoint
+                w1 = waypoint;
+            if (c>0)
+            {
+                // Get the next waypoint
+                w2 = waypoint;
+                // Create and add the leg
+                Leg l = new Leg(w1, w2);
+                this.Legs.add(l);
+                // Set the endwaypoint as the startwaypoint for the next leg
+                w1 = waypoint;
+            }
+            c++;
+        }
+    }
+
     public void DrawFlightplan(GoogleMap map)
     {
         for (Leg leg: this.Legs)
@@ -152,6 +179,38 @@ public class FlightPlan implements Serializable {
             {
                 leg.track.remove();
                 leg.track = null;
+            }
+        }
+    }
+
+    public void removeOldFlightplanMarkers()
+    {
+        for (Waypoint w : this.Waypoints)
+        {
+            Marker m = w.marker;
+            if (m != null) {
+                m.remove();
+            }
+            if (w.activeCircle != null) w.activeCircle.remove();
+        }
+    }
+
+    public  HashMap<Marker, Waypoint> waypointMarkerMap;
+    public void ShowFlightplanMarkers(GoogleMap map)
+    {
+        waypointMarkerMap = new HashMap<Marker, Waypoint>();
+        for(Waypoint waypoint : this.Waypoints)
+        {
+            if ((waypoint.airport_id == 0) && (waypoint.navaid_id == 0) && (waypoint.fix_id == 0))
+            {
+                MarkerOptions m = new MarkerOptions();
+                m.position(new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude()));
+                m.title(waypoint.name);
+                m.icon(waypoint.GetIcon());
+                m.anchor(0.5f, 0.5f);
+                m.draggable(true);
+                waypoint.marker = map.addMarker(m);
+                waypointMarkerMap.put(waypoint.marker, waypoint);
             }
         }
     }
@@ -291,68 +350,6 @@ public class FlightPlan implements Serializable {
         return activeLeg;
     }
 
-    public void InsertWaypoint_old(Waypoint waypoint)
-    {
-        //InsertWaypoint2(waypoint);
-
-        class PointDistance
-        {
-            public Float distance;
-            public Integer sortorder;
-        }
-        // maak een lijst met afstanden tot het nieuwe waypoint en de bijbehorende sortorder
-
-        Float maxDis = 0f;
-        ArrayList<PointDistance> pdList = new ArrayList<PointDistance>();
-        for (Waypoint p : Waypoints)
-        {
-            PointDistance pp = new PointDistance();
-            pp.distance = p.location.distanceTo(waypoint.location);
-            if (pp.distance>maxDis) maxDis = pp.distance;
-            pp.sortorder = p.order;
-            pdList.add(pp);
-        }
-
-        // Loop vervolgens door deze waypoints heen en bepaal bij welke twee het nieuwe waypoint
-        // het dichts in de buurt ligt.
-
-        // Zoek het eerste punt
-        Float dis = maxDis + 1f;
-        PointDistance p1 = null;
-        for (PointDistance pd : pdList)
-        {
-            if (pd.distance<dis)
-            {
-                p1 = pd;
-                dis = pd.distance;
-            }
-        }
-
-        // Zoek het tweede punt
-        PointDistance p2 = null;
-        dis = maxDis + 1f;
-        for (PointDistance pd : pdList)
-        {
-            if ((pd.distance<dis) && pd!=p1)
-            {
-                p2 = pd;
-                dis = pd.distance;
-            }
-        }
-
-        Integer s = Math.abs((p1.sortorder - p2.sortorder) / 2);
-        if (p1.sortorder>p2.sortorder)
-            waypoint.order = p2.sortorder + s;
-        else
-            waypoint.order = p1.sortorder + s;
-
-        Waypoints.add(waypoint);
-
-        Collections.sort(Waypoints);
-        UpdateWaypointsData();
-
-    }
-
     private class Point implements Comparable<Point>
     {
         public int legIndex;
@@ -366,17 +363,6 @@ public class FlightPlan implements Serializable {
 
     public void InsertWaypoint2(Waypoint waypoint)
     {
-//        class Point implements Comparable<Point>
-//        {
-//            public int legIndex;
-//            public double distance;
-//
-//            @Override
-//            public int compareTo(Point point) {
-//                return (int) Math.round((this.distance *10000) - (point.distance * 10000));
-//            }
-//        }
-
         ArrayList<Point> points = new ArrayList<Point>();
 
         int legcount = this.Waypoints.size()-1;
@@ -506,6 +492,8 @@ public class FlightPlan implements Serializable {
             }
         }
         createBuffer();
+
+        createLegs();
     }
 
     public void setOnDistanceFromWaypoint( final OnDistanceFromWaypoint d) {onDistanceFromWaypoint = d; }

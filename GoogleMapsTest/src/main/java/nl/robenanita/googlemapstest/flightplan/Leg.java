@@ -29,7 +29,7 @@ public class Leg {
         LatLng p1 = new LatLng(from.location.getLatitude(), from.location.getLongitude());
         LatLng p2 = new LatLng(to.location.getLatitude(), to.location.getLongitude());
         trackoptions.color(Color.BLUE);
-        trackoptions.width(5);
+        trackoptions.width(7);
         trackoptions.add(p1);
         trackoptions.add(p2);
         trackoptions.clickable(true);
