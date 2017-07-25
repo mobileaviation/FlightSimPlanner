@@ -1,6 +1,12 @@
 package nl.robenanita.googlemapstest.flightplan;
 
+import android.graphics.Color;
 import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,12 +24,19 @@ public class Leg {
         distancesAchived = new HashSet<LegInfoView.Distance>();
         distance = LegInfoView.Distance.larger2000Meters;
         endPlan = false;
+
+        trackoptions = new PolylineOptions();
+        LatLng p1 = new LatLng(from.location.getLatitude(), from.location.getLongitude());
+        LatLng p2 = new LatLng(to.location.getLatitude(), to.location.getLongitude());
+        trackoptions.color(Color.BLUE);
+        trackoptions.width(5);
+        trackoptions.add(p1);
+        trackoptions.add(p2);
+        trackoptions.clickable(true);
     }
 
     private OnDistanceFromWaypoint onDistanceFromWaypoint = null;
-
     private Set<LegInfoView.Distance> distancesAchived;
-
     private Waypoint toWaypoint;
     public Waypoint getToWaypoint()
     {
@@ -42,6 +55,10 @@ public class Leg {
     private float courseTo;
     private float speed;
     private float deviationFromTrack;
+
+    public PolylineOptions trackoptions;
+    public Polyline track;
+
     public float getDeviationFromTrack()
     {
         return currectLocation.bearingTo(toWaypoint.location) - fromWaypoint.location.bearingTo(toWaypoint.location);

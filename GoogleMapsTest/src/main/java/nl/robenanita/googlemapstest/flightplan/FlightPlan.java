@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -35,6 +36,7 @@ public class FlightPlan implements Serializable {
         departure_airport = new Airport();
         destination_airport = new Airport();
         alternate_airport = new Airport();
+        Legs = new ArrayList<Leg>();
         trackOptions = new PolylineOptions();
 
         legWaypointIndex = 0;
@@ -57,6 +59,7 @@ public class FlightPlan implements Serializable {
     public Integer wind_speed;
     public float wind_direction;
     public ArrayList<Waypoint> Waypoints;
+    public ArrayList<Leg> Legs;
     public PolylineOptions trackOptions;
     public Polyline track;
     public LegInfoView.Distance distance;
@@ -90,6 +93,28 @@ public class FlightPlan implements Serializable {
         flightPlanDataSource.clearTimes(this, true);
         flightPlanDataSource.close();
 
+        // Create the legs of this flightplan
+        int c = 0;
+        Waypoint w1 = null;
+        Waypoint w2 = null;
+        for (Waypoint waypoint: this.Waypoints)
+        {
+            if (c==0)
+                // Get the first waypoint
+                w1 = waypoint;
+            if (c>0)
+            {
+                // Get the next waypoint
+                w2 = waypoint;
+                // Create and add the leg
+                Leg l = new Leg(w1, w2);
+                this.Legs.add(l);
+                // Set the endwaypoint as the startwaypoint for the next leg
+                w1 = waypoint;
+            }
+            c++;
+        }
+
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
         propertiesDataSource.open(true);
         bufferProperty = propertiesDataSource.GetProperty("BUFFER");
@@ -98,10 +123,38 @@ public class FlightPlan implements Serializable {
         createBuffer();
     }
 
-
     public Geometry buffer;
     public Polyline bufferPolyline;
     public Property bufferProperty;
+
+    public void DrawFlightplan(GoogleMap map)
+    {
+        for (Leg leg: this.Legs)
+        {
+            if (leg.track != null)
+            {
+                leg.track.remove();
+                leg.track = null;
+            }
+            leg.track = map.addPolyline(leg.trackoptions);
+            leg.track.setClickable(true);
+            leg.track.setVisible(true);
+            leg.track.setTag(leg);
+            leg.track.setZIndex(1000);
+        }
+    }
+
+    public void RemoveFlightplanTrack()
+    {
+        for (Leg leg: this.Legs)
+        {
+            if (leg.track != null)
+            {
+                leg.track.remove();
+                leg.track = null;
+            }
+        }
+    }
 
     public void CreateBuffer()
     {

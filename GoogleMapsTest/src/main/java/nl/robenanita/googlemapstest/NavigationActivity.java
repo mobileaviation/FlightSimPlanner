@@ -318,7 +318,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 connected = false;
                 tilesource = 3;
 
-                setupAirspaces();
+                //setupAirspaces();
 
                 initInstruments();
 
@@ -418,13 +418,14 @@ public class NavigationActivity extends ActionBarActivity implements
 
         if (selectedFlightplan != null)
         {
-            removeOldFlightplanTrack();
+            removeOldFlightplanMarkers();
+            selectedFlightplan.RemoveFlightplanTrack();
             removeAllRunwayMarkers(selectedFlightplan);
             removeBuffer(selectedFlightplan);
 
             legInfoView.setVisibility(View.GONE);
             selectedFlightplan = null;
-            if (track != null) track.RemoveTrack();
+            //if (track != null) track.RemoveTrack();
         }
     }
 
@@ -685,7 +686,7 @@ public class NavigationActivity extends ActionBarActivity implements
         if (selectedFlightplan != null)
         {
             removeAllRunwayMarkers(selectedFlightplan);
-            removeOldFlightplanTrack();
+            removeOldFlightplanMarkers();
             removeBuffer(selectedFlightplan);
             selectedFlightplan = null;
         }
@@ -703,7 +704,8 @@ public class NavigationActivity extends ActionBarActivity implements
         LoadRunways(selectedFlightplan.departure_airport);
         LoadRunways(selectedFlightplan.destination_airport);
         LoadRunways(selectedFlightplan.alternate_airport);
-        ShowFlightplanTrack();
+        ShowFlightplanMarkers();
+        selectedFlightplan.DrawFlightplan(map);
         SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
         PlaceFlightplanAirportMarkers();
@@ -968,7 +970,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void reloadFlightplan()
     {
-        removeOldFlightplanTrack();
+        removeOldFlightplanMarkers();
         removeAllRunwayMarkers(selectedFlightplan);
         removeBuffer(selectedFlightplan);
 
@@ -990,7 +992,8 @@ public class NavigationActivity extends ActionBarActivity implements
         LoadRunways(selectedFlightplan.departure_airport);
         LoadRunways(selectedFlightplan.destination_airport);
         LoadRunways(selectedFlightplan.alternate_airport);
-        ShowFlightplanTrack();
+        ShowFlightplanMarkers();
+        selectedFlightplan.DrawFlightplan(map);
         SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
 
@@ -1122,20 +1125,20 @@ public class NavigationActivity extends ActionBarActivity implements
         directToPopupPopup.showAtLocation(Layout, Gravity.CENTER_HORIZONTAL, 0, 0 );
     }
 
-    private void ShowFlightplanTrack()
+    private void ShowFlightplanMarkers()
     {
         if (selectedFlightplan != null)
         {
-            LatLng point = null;
-            Integer i = 0;
+            //LatLng point = null;
+            //Integer i = 0;
 
             waypointMarkerMap = new HashMap<Marker, Waypoint>();
             for(Waypoint waypoint : selectedFlightplan.Waypoints)
             {
-                point = new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude());
-                selectedFlightplan.trackOptions.color(Color.BLUE);
-                selectedFlightplan.trackOptions.width(5);
-                selectedFlightplan.trackOptions.add(point);
+//                point = new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude());
+//                selectedFlightplan.trackOptions.color(Color.BLUE);
+//                selectedFlightplan.trackOptions.width(5);
+//                selectedFlightplan.trackOptions.add(point);
 
 
                 if ((waypoint.airport_id == 0) && (waypoint.navaid_id == 0) && (waypoint.fix_id == 0))
@@ -1152,8 +1155,8 @@ public class NavigationActivity extends ActionBarActivity implements
 
             }
 
-            selectedFlightplan.track = map.addPolyline(selectedFlightplan.trackOptions);
-            selectedFlightplan.track.setZIndex(1000);
+//            selectedFlightplan.track = map.addPolyline(selectedFlightplan.trackOptions);
+//            selectedFlightplan.track.setZIndex(1000);
         }
     }
 
@@ -1584,7 +1587,8 @@ public class NavigationActivity extends ActionBarActivity implements
                 if (addWayPointPopup.Result)
                 {
                     removeAllRunwayMarkers(selectedFlightplan);
-                    removeOldFlightplanTrack();
+                    removeOldFlightplanMarkers();
+                    selectedFlightplan.RemoveFlightplanTrack();
                     removeBuffer(selectedFlightplan);
 
                     setupNewWaypointInFlightplan(addWayPointPopup.WaypointName,
@@ -1618,12 +1622,12 @@ public class NavigationActivity extends ActionBarActivity implements
         }
     }
 
-    private void removeOldFlightplanTrack()
+    private void removeOldFlightplanMarkers()
     {
         if (selectedFlightplan.track != null)
         {
-            selectedFlightplan.trackOptions = new PolylineOptions();
-            selectedFlightplan.track.remove();
+            //selectedFlightplan.trackOptions = new PolylineOptions();
+            //selectedFlightplan.track.remove();
 
             for (Waypoint w : selectedFlightplan.Waypoints)
             {
@@ -1664,7 +1668,8 @@ public class NavigationActivity extends ActionBarActivity implements
         drawBuffer(selectedFlightplan);
         PlaceFlightplanAirportMarkers();
         //LoadFlightplanRunways();
-        ShowFlightplanTrack();
+        selectedFlightplan.DrawFlightplan(map);
+        ShowFlightplanMarkers();
         LoadFlightplanGrid();
     }
 
@@ -1774,7 +1779,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 }
                 if (requestCode == 200)
                 {
-                    removeOldFlightplanTrack();
+                    removeOldFlightplanMarkers();
                     setupNewWaypointInFlightplan(airport.name,
                             airport.latitude_deg,
                             airport.longitude_deg,
@@ -1805,7 +1810,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 }
                 if (requestCode == 200)
                 {
-                    removeOldFlightplanTrack();
+                    removeOldFlightplanMarkers();
                     setupNewWaypointInFlightplan(navaid.name,
                             navaid.latitude_deg,
                             navaid.longitude_deg,
@@ -1836,7 +1841,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 }
                 if (requestCode == 200)
                 {
-                    removeOldFlightplanTrack();
+                    removeOldFlightplanMarkers();
                     setupNewWaypointInFlightplan(fix.name,
                             fix.latitude_deg,
                             fix.longitude_deg,
