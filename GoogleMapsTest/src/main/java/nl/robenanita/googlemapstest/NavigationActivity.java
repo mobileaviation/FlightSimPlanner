@@ -121,7 +121,9 @@ public class NavigationActivity extends ActionBarActivity implements
     private String ServerIPAddress;
     private int ServerPort;
 
-
+    private LatLng clickedPosition;
+    private Boolean routeLineClicked;
+    private Leg clickedLeg;
 
     private Timer testTimer;
 
@@ -159,7 +161,6 @@ public class NavigationActivity extends ActionBarActivity implements
 
     public HashMap<Marker, Airport> airportMarkerMap;
     public HashMap<Marker, Navaid> navaidMarkerMap;
-    //public HashMap<Marker, Waypoint> waypointMarkerMap;
 
     private SearchAirportsPopup searchAirportsPopup;
 
@@ -203,6 +204,8 @@ public class NavigationActivity extends ActionBarActivity implements
         infoPanel = (InfoPanelFragment) getFragmentManager().findFragmentById(R.id.infoPanelFragment);
         //infoPanel.LoadAdd();
 
+        routeLineClicked = false;
+
         ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -216,10 +219,37 @@ public class NavigationActivity extends ActionBarActivity implements
                         }
                     });
 
+                    map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                        @Override
+                        public void onMapClick(LatLng latLng) {
+                            clickedPosition = latLng;
+                            Log.i(TAG, "Position Lat: " + clickedPosition.latitude + " Lot: " + clickedPosition.longitude);
+//                            if (routeLineClicked)
+//                            {
+//                                routeLineClicked = false;
+//                                if (selectedFlightplan != null) {
+//                                    if (!selectedFlightplan.getFlightplanActive()) {
+//                                        ShowNewWaypointPopup(latLng);
+//                                    } else {
+//                                        Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
+//                                                , Toast.LENGTH_LONG).show();
+//                                    }
+//                                } else {
+//                                    Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
+//                                            , Toast.LENGTH_LONG).show();
+//                                }
+//                            }
+                        }
+                    });
+
                     map.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
                         @Override
                         public void onPolylineClick(Polyline polyline) {
                             Log.i(TAG, "Polyline clicked");
+                            routeLineClicked = true;
+                            clickedLeg = (Leg)polyline.getTag();
+                            LatLng midwaypoint = nl.robenanita.googlemapstest.Helpers.midPoint(polyline.getPoints().get(0), polyline.getPoints().get(1));
+                            Log.i(TAG, "Midway Position Lat: " + midwaypoint.latitude + " Lon: " + midwaypoint.longitude);
                         }
                     });
 
