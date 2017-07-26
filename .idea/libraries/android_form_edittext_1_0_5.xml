@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="android-form-edittext-1.0.5">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/2fb11c69da8e3fc70a931facf978bdf6d896ccec/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/2fb11c69da8e3fc70a931facf978bdf6d896ccec/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/d74265816a9cbb9421d87107cca99455bc6deffb/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/d74265816a9cbb9421d87107cca99455bc6deffb/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

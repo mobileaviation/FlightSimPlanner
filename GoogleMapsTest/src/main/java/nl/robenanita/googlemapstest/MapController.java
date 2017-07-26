@@ -191,7 +191,7 @@ public class MapController
             // Set a userdefined style
             map.setMapType(MapStyle.MAP_TYPE_NORMAL);
             MapStyleOptions style;
-            style = MapStyleOptions.loadRawResourceStyle(context, R.raw.icao_style);
+            style = MapStyleOptions.loadRawResourceStyle(context, R.raw.icao_style1);
             map.setMapStyle(style);
         }
     }
@@ -209,7 +209,7 @@ public class MapController
             // Set a userdefined style
             map.setMapType(MapStyle.MAP_TYPE_NORMAL);
             MapStyleOptions style;
-            style = MapStyleOptions.loadRawResourceStyle(context, R.raw.icao_style);
+            style = MapStyleOptions.loadRawResourceStyle(context, R.raw.icao_style1);
             map.setMapStyle(style);
         }
         mapTypeProperties.SaveToDatabase(context);
