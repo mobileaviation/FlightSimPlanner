@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -472,6 +473,8 @@ public class NavigationActivity extends ActionBarActivity implements
     {
         LinearLayout flightplanLayout = (LinearLayout) findViewById(R.id.flightplanLayout);
         flightplanLayout.setVisibility(View.GONE);
+        SlidingDrawer flightplanDrawer = (SlidingDrawer) findViewById(R.id.flightplandrawer);
+        flightplanDrawer.setVisibility(View.GONE);
 
         if (selectedFlightplan != null)
         {
@@ -817,6 +820,8 @@ public class NavigationActivity extends ActionBarActivity implements
     {
         LinearLayout flightplanLayout = (LinearLayout) findViewById(R.id.flightplanLayout);
         flightplanLayout.setVisibility(View.VISIBLE);
+        SlidingDrawer flightplanDrawer = (SlidingDrawer) findViewById(R.id.flightplandrawer);
+        flightplanDrawer.setVisibility(View.VISIBLE);
 
         FlightplanGrid flightplanGrid = (FlightplanGrid) getFragmentManager().findFragmentById(R.id.flightplanFragment);
         flightplanGrid.setOnFlightplanEvent(new FlightplanGrid.OnFlightplanEvent() {
