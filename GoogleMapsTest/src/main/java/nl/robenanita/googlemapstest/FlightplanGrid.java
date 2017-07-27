@@ -71,7 +71,7 @@ public class FlightplanGrid extends Fragment {
         onlyActiveCheckBox.setChecked(flightPlan.showOnlyActive);
 
         setUpAdapter();
-        setOnlyActiveinView(flightPlan.showOnlyActive);
+        //setOnlyActiveinView(flightPlan.showOnlyActive);
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +86,7 @@ public class FlightplanGrid extends Fragment {
                 boolean c = onlyActiveCheckBox.isChecked();
                 flightPlan.showOnlyActive = c;
                 setUpAdapter();
-                setOnlyActiveinView(c);
+                //setOnlyActiveinView(c);
             }
         });
 
@@ -158,16 +158,7 @@ public class FlightplanGrid extends Fragment {
     {
         FlightplanListAdapter adapter = (FlightplanListAdapter)flightplanItemsList.getAdapter();
         if (Onlyactive) {
-//            for (int i = 0; i < adapter.getCount(); i++) {
-//
-//                View item = null;
-//                item = adapter.getView(i, item, flightplanItemsList);
-//                int index = flightPlan.getActivetoWaypointIndex();
-//                if (index == i)
-//                    item.setVisibility(View.VISIBLE);
-//                else
-//                    item.setVisibility(View.GONE);
-//            }
+
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             flightplanItemsList.setLayoutParams(params);
         }

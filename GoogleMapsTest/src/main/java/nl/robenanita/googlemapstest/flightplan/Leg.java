@@ -3,7 +3,12 @@ package nl.robenanita.googlemapstest.flightplan;
 import android.graphics.Color;
 import android.location.Location;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -11,7 +16,9 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.HashSet;
 import java.util.Set;
 
+import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.LegInfoView;
+import nl.robenanita.googlemapstest.R;
 
 /**
  * Created by Rob Verhoef on 4-8-2014.
@@ -33,6 +40,41 @@ public class Leg {
         trackoptions.add(p1);
         trackoptions.add(p2);
         trackoptions.clickable(true);
+
+        halfwayPoint = Helpers.midPoint(new LatLng(from.location.getLatitude(), from.location.getLongitude()),
+                new LatLng(to.location.getLatitude(), to.location.getLongitude()));
+
+
+    }
+
+    public BitmapDescriptor GetIcon()
+    {
+        return BitmapDescriptorFactory.fromResource(R.drawable.direction_marker_square);
+    }
+
+    public void SetCoarseMarker(GoogleMap map)
+    {
+        coarseMarkerOptions = new MarkerOptions();
+        coarseMarkerOptions.position(halfwayPoint);
+        coarseMarkerOptions.title(Float.toString(toWaypoint.compass_heading));
+        coarseMarkerOptions.icon(this.GetIcon());
+        coarseMarkerOptions.anchor(0.5f, 0.5f);
+        coarseMarkerOptions.draggable(true);
+        coarseMarkerOptions.rotation(toWaypoint.compass_heading + 90);
+        coarseMarker = map.addMarker(coarseMarkerOptions);
+    }
+
+    public void RemoveLegFromMap() {
+        if (track != null) {
+            track.remove();
+            track = null;
+        }
+        if (coarseMarker != null)
+        {
+            coarseMarker.remove();
+            coarseMarker = null;
+        }
+
     }
 
     private OnDistanceFromWaypoint onDistanceFromWaypoint = null;
@@ -58,6 +100,9 @@ public class Leg {
 
     public PolylineOptions trackoptions;
     public Polyline track;
+    public MarkerOptions coarseMarkerOptions;
+    public Marker coarseMarker;
+    private LatLng halfwayPoint;
 
     public float getDeviationFromTrack()
     {

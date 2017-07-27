@@ -290,23 +290,23 @@ public class NavigationActivity extends ActionBarActivity implements
                         }
                     });
 
-                    map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-                        @Override
-                        public void onMapLongClick(LatLng latLng) {
-                            if (selectedFlightplan != null) {
-                                if (!selectedFlightplan.getFlightplanActive()) {
-                                    Log.i(TAG, "Long click on " + Double.toString(latLng.latitude) + " : " + Double.toString(latLng.longitude));
-                                    ShowNewWaypointPopup(latLng);
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
-                                            , Toast.LENGTH_LONG).show();
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
-                                        , Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
+//                    map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+//                        @Override
+//                        public void onMapLongClick(LatLng latLng) {
+//                            if (selectedFlightplan != null) {
+//                                if (!selectedFlightplan.getFlightplanActive()) {
+//                                    Log.i(TAG, "Long click on " + Double.toString(latLng.latitude) + " : " + Double.toString(latLng.longitude));
+//                                    ShowNewWaypointPopup(latLng);
+//                                } else {
+//                                    Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
+//                                            , Toast.LENGTH_LONG).show();
+//                                }
+//                            } else {
+//                                Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
+//                                        , Toast.LENGTH_LONG).show();
+//                            }
+//                        }
+//                    });
 
                     map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                         private Polyline dragLine;

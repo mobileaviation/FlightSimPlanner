@@ -175,11 +175,7 @@ public class FlightPlan implements Serializable {
     {
         for (Leg leg: this.Legs)
         {
-            if (leg.track != null)
-            {
-                leg.track.remove();
-                leg.track = null;
-            }
+            leg.RemoveLegFromMap();
         }
     }
 
@@ -187,11 +183,11 @@ public class FlightPlan implements Serializable {
     {
         for (Waypoint w : this.Waypoints)
         {
-            Marker m = w.marker;
-            if (m != null) {
-                m.remove();
-            }
-            if (w.activeCircle != null) w.activeCircle.remove();
+            w.RemoveWaypointMarker();
+        }
+        for (Leg leg: Legs)
+        {
+            leg.RemoveLegFromMap();
         }
     }
 
@@ -203,15 +199,15 @@ public class FlightPlan implements Serializable {
         {
             if ((waypoint.airport_id == 0) && (waypoint.navaid_id == 0) && (waypoint.fix_id == 0))
             {
-                MarkerOptions m = new MarkerOptions();
-                m.position(new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude()));
-                m.title(waypoint.name);
-                m.icon(waypoint.GetIcon());
-                m.anchor(0.5f, 0.5f);
-                m.draggable(true);
-                waypoint.marker = map.addMarker(m);
+                waypoint.SetwaypointMarker();
+                waypoint.marker = map.addMarker(waypoint.markerOptions);
                 waypointMarkerMap.put(waypoint.marker, waypoint);
             }
+        }
+
+        for (Leg leg: Legs)
+        {
+            leg.SetCoarseMarker(map);
         }
     }
 
@@ -272,7 +268,7 @@ public class FlightPlan implements Serializable {
                 onNewActiveWaypoint.onOldWaypoint(Waypoints.get(0));
                 onNewActiveWaypoint.onActiveWaypoint(Waypoints.get(1));
             }
-            showOnlyActive = true;
+            showOnlyActive = false;
         }
     }
 

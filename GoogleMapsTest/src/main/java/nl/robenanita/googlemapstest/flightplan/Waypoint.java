@@ -5,7 +5,9 @@ import android.location.Location;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,6 +24,8 @@ public class Waypoint  implements Comparable<Waypoint>, Serializable {
         fix_id = 0;
         navaid_id = 0;
         airport_id = 0;
+
+
     }
 
     public Integer id;
@@ -51,6 +55,7 @@ public class Waypoint  implements Comparable<Waypoint>, Serializable {
     public Circle activeCircle;
 
     public Marker marker;
+    public MarkerOptions markerOptions;
 
     public BitmapDescriptor GetIcon()
     {
@@ -77,5 +82,27 @@ public class Waypoint  implements Comparable<Waypoint>, Serializable {
                 "Longitude : " + Double.toString(this.location.getLongitude());
 
         return info;
+    }
+
+    public void SetwaypointMarker()
+    {
+        markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
+        markerOptions.title(name);
+        markerOptions.icon(GetIcon());
+        markerOptions.anchor(0.5f, 0.5f);
+        markerOptions.draggable(true);
+    }
+
+    public void RemoveWaypointMarker()
+    {
+        if (marker != null) {
+            marker.remove();
+            marker = null;
+        }
+        if (activeCircle != null) {
+            activeCircle.remove();
+            activeCircle = null;
+        }
     }
 }
