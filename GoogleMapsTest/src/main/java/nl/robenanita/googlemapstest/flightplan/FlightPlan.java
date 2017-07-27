@@ -496,6 +496,24 @@ public class FlightPlan implements Serializable {
         createLegs();
     }
 
+    public Waypoint getBeforeWaypoint(Waypoint waypoint)
+    {
+        int i = Waypoints.indexOf(waypoint);
+        if (i>0)
+            return Waypoints.get(i-1);
+        else
+            return null;
+    }
+
+    public Waypoint getAfterWaypoint(Waypoint waypoint)
+    {
+        int i = Waypoints.indexOf(waypoint);
+        if (i<Waypoints.size()-1)
+            return Waypoints.get(i+1);
+        else
+            return null;
+    }
+
     public void setOnDistanceFromWaypoint( final OnDistanceFromWaypoint d) {onDistanceFromWaypoint = d; }
     public interface OnDistanceFromWaypoint {
         public void on2000Meters(boolean firstHit);

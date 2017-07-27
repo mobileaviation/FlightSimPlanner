@@ -56,6 +56,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -66,6 +67,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -250,6 +252,7 @@ public class NavigationActivity extends ActionBarActivity implements
                             clickedLeg = (Leg)polyline.getTag();
                             LatLng midwaypoint = nl.robenanita.googlemapstest.Helpers.midPoint(polyline.getPoints().get(0), polyline.getPoints().get(1));
                             Log.i(TAG, "Midway Position Lat: " + midwaypoint.latitude + " Lon: " + midwaypoint.longitude);
+                            ShowNewWaypointPopup(midwaypoint);
                         }
                     });
 
@@ -305,18 +308,33 @@ public class NavigationActivity extends ActionBarActivity implements
                     });
 
                     map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                        private Polyline dragLine;
                         @Override
                         public void onMarkerDragStart(Marker marker) {
-
+                            Waypoint w = selectedFlightplan.waypointMarkerMap.get(marker);
+                            Waypoint beforeWaypoint = selectedFlightplan.getBeforeWaypoint(w);
+                            Waypoint afterWaypoint = selectedFlightplan.getAfterWaypoint(w);
+                            PolylineOptions options = new PolylineOptions();
+                            options.color(Color.RED);
+                            options.width(7);
+                            options.add(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()));
+                            options.add(new LatLng(w.location.getLatitude(), w.location.getLongitude()));
+                            options.add(new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()));
+                            dragLine = map.addPolyline(options);
                         }
-
                         @Override
                         public void onMarkerDrag(Marker marker) {
-
+                            List<LatLng> points = dragLine.getPoints();
+                            points.set(1, marker.getPosition());
+                            dragLine.setPoints(points);
                         }
 
                         @Override
                         public void onMarkerDragEnd(Marker marker) {
+                            if (dragLine != null) {
+                                dragLine.remove();
+                                dragLine = null;
+                            }
                             if (selectedFlightplan != null) {
                             Waypoint w = selectedFlightplan.waypointMarkerMap.get(marker);
                                 if (w != null) {
