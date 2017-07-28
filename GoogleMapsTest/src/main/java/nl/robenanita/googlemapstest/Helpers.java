@@ -159,4 +159,9 @@ public class Helpers {
         return dp;
     }
 
+    public static Float dp(Float px, Context context)
+    {
+        return context.getResources().getDisplayMetrics().density * px;
+    }
+
 }

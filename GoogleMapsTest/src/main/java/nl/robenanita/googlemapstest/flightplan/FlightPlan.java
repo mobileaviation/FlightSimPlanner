@@ -35,7 +35,7 @@ import nl.robenanita.googlemapstest.database.PropertiesDataSource;
  * Created by Rob Verhoef on 3-3-14.
  */
 public class FlightPlan implements Serializable {
-    public FlightPlan() {
+    public FlightPlan(Context context) {
         Waypoints = new ArrayList<Waypoint>();
         departure_airport = new Airport();
         destination_airport = new Airport();
@@ -48,10 +48,13 @@ public class FlightPlan implements Serializable {
         showOnlyActive = false;
 
         bufferPolyline = null;
+
+        this.context = context;
     }
 
     private String TAG = "GooglemapsTest";
 
+    private Context context;
     public Integer id;
     public String name;
     public Airport departure_airport;
@@ -108,7 +111,7 @@ public class FlightPlan implements Serializable {
                 // Get the next waypoint
                 w2 = waypoint;
                 // Create and add the leg
-                Leg l = new Leg(w1, w2);
+                Leg l = new Leg(w1, w2, context);
                 this.Legs.add(l);
                 // Set the endwaypoint as the startwaypoint for the next leg
                 w1 = waypoint;
@@ -145,7 +148,7 @@ public class FlightPlan implements Serializable {
                 // Get the next waypoint
                 w2 = waypoint;
                 // Create and add the leg
-                Leg l = new Leg(w1, w2);
+                Leg l = new Leg(w1, w2, context);
                 this.Legs.add(l);
                 // Set the endwaypoint as the startwaypoint for the next leg
                 w1 = waypoint;
@@ -192,7 +195,7 @@ public class FlightPlan implements Serializable {
     }
 
     public  HashMap<Marker, Waypoint> waypointMarkerMap;
-    public void ShowFlightplanMarkers(GoogleMap map)
+    public void ShowFlightplanMarkers(GoogleMap map, Context context)
     {
         waypointMarkerMap = new HashMap<Marker, Waypoint>();
         for(Waypoint waypoint : this.Waypoints)
@@ -207,7 +210,7 @@ public class FlightPlan implements Serializable {
 
         for (Leg leg: Legs)
         {
-            leg.SetCoarseMarker(map);
+            leg.SetCoarseMarker(map, context);
         }
     }
 
@@ -261,7 +264,7 @@ public class FlightPlan implements Serializable {
     {
         legWaypointIndex = 0;
         if (Waypoints.size()>1) {
-            activeLeg = new Leg(Waypoints.get(0), Waypoints.get(1));
+            activeLeg = new Leg(Waypoints.get(0), Waypoints.get(1), context);
             activeLeg.setCurrectLocation(currentLocation);
             if (onNewActiveWaypoint != null)
             {
@@ -277,7 +280,7 @@ public class FlightPlan implements Serializable {
         if (!endPlan) {
             if (legWaypointIndex < Waypoints.size() - 2) legWaypointIndex++;
 
-            activeLeg = new Leg(Waypoints.get(legWaypointIndex), Waypoints.get(legWaypointIndex + 1));
+            activeLeg = new Leg(Waypoints.get(legWaypointIndex), Waypoints.get(legWaypointIndex + 1), context);
             activeLeg.setCurrectLocation(currentLocation);
 
             if (onNewActiveWaypoint != null) {
@@ -437,6 +440,14 @@ public class FlightPlan implements Serializable {
         UpdateWaypointsData();
     }
 
+    public void UpdateVariation(Float variation)
+    {
+        for (Waypoint waypoint: Waypoints)
+        {
+            waypoint.SetVariation(variation);
+        }
+    }
+
     public void UpdateWaypointsData()
     {
         Waypoint fromWaypoint = null;
@@ -484,11 +495,14 @@ public class FlightPlan implements Serializable {
                     else
                         nextWaypoint.time_total = fromWaypoint.time_total + nextWaypoint.time_leg;
 
+                nextWaypoint.SetDeviation(nextWaypoint.deviation);
+                nextWaypoint.SetVariation(nextWaypoint.variation);
+
                 fromWaypoint = nextWaypoint;
             }
         }
-        createBuffer();
 
+        createBuffer();
         createLegs();
     }
 

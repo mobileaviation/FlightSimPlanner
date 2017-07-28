@@ -354,7 +354,7 @@ public class FlightPlanDataSource {
         cursor.moveToFirst();
         while (!cursor.isAfterLast())
         {
-            FlightPlan flightPlan = new FlightPlan();
+            FlightPlan flightPlan = new FlightPlan(null);
             cursorToFlightplan(cursor, flightPlan);
             flightPlans.add(flightPlan);
             cursor.moveToNext();
@@ -446,29 +446,6 @@ public class FlightPlanDataSource {
         return waypoint;
     }
 
-    public void calculateMagneticHeading(Integer variation, FlightPlan flightPlan)
-    {
-        for (Waypoint waypoint : flightPlan.Waypoints)
-        {
-            if (waypoint.order>1)
-            {
-                waypoint.magnetic_heading = waypoint.true_heading - (float)variation;
-                if (waypoint.magnetic_heading<0) waypoint.magnetic_heading = waypoint.magnetic_heading + 360f;
-                waypoint.compass_heading = waypoint.magnetic_heading;
-
-//                String query = "UPDATE " + DBHelper.USERWAYPOINT_TABLE_NAME + " SET " + DBHelper.C_magnetic_heading
-//                        + "=" + Float.toString(waypoint.magnetic_heading) +
-//                        ", " + DBHelper.C_compass_heading
-//                        + "=" + Float.toString(waypoint.magnetic_heading) +
-//                        " WHERE _id=" + Integer.toString(waypoint.id);
-//
-//                database.rawQuery(query, null);
-            }
-        }
-
-        UpdateInsertWaypoints(flightPlan.Waypoints);
-    }
-
     public void calculateETO(Date TakeoffDate, FlightPlan flightPlan)
     {
         for (Waypoint waypoint : flightPlan.Waypoints)
@@ -504,25 +481,6 @@ public class FlightPlanDataSource {
             }
 
             if (waypoint.id == w.id) update = true;
-        }
-
-        UpdateInsertWaypoints(flightPlan.Waypoints);
-    }
-
-    public void calculateCompassHeading(Integer deviation, Waypoint waypoint, FlightPlan flightPlan)
-    {
-        if (waypoint.order>1)
-        {
-            waypoint.compass_heading = waypoint.magnetic_heading - (float)deviation;
-            if (waypoint.compass_heading<0) waypoint.compass_heading = waypoint.compass_heading + 360f;
-
-//                String query = "UPDATE " + DBHelper.USERWAYPOINT_TABLE_NAME + " SET " + DBHelper.C_magnetic_heading
-//                        + "=" + Float.toString(waypoint.magnetic_heading) +
-//                        ", " + DBHelper.C_compass_heading
-//                        + "=" + Float.toString(waypoint.magnetic_heading) +
-//                        " WHERE _id=" + Integer.toString(waypoint.id);
-//
-//                database.rawQuery(query, null);
         }
 
         UpdateInsertWaypoints(flightPlan.Waypoints);

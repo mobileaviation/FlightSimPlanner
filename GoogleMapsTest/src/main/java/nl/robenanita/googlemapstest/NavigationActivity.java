@@ -227,21 +227,6 @@ public class NavigationActivity extends ActionBarActivity implements
                         public void onMapClick(LatLng latLng) {
                             clickedPosition = latLng;
                             Log.i(TAG, "Position Lat: " + clickedPosition.latitude + " Lot: " + clickedPosition.longitude);
-//                            if (routeLineClicked)
-//                            {
-//                                routeLineClicked = false;
-//                                if (selectedFlightplan != null) {
-//                                    if (!selectedFlightplan.getFlightplanActive()) {
-//                                        ShowNewWaypointPopup(latLng);
-//                                    } else {
-//                                        Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
-//                                                , Toast.LENGTH_LONG).show();
-//                                    }
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
-//                                            , Toast.LENGTH_LONG).show();
-//                                }
-//                            }
                         }
                     });
 
@@ -318,6 +303,7 @@ public class NavigationActivity extends ActionBarActivity implements
                             PolylineOptions options = new PolylineOptions();
                             options.color(Color.RED);
                             options.width(7);
+                            options.zIndex(1001);
                             options.add(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()));
                             options.add(new LatLng(w.location.getLatitude(), w.location.getLongitude()));
                             options.add(new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()));
@@ -341,8 +327,6 @@ public class NavigationActivity extends ActionBarActivity implements
                                 if (w != null) {
                                     w.location.setLatitude(marker.getPosition().latitude);
                                     w.location.setLongitude(marker.getPosition().longitude);
-                                    removeAllRunwayMarkers(selectedFlightplan);
-                                    selectedFlightplan.removeOldFlightplanMarkers();
                                     FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
                                     flightPlanDataSource.open();
                                     flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
@@ -595,7 +579,7 @@ public class NavigationActivity extends ActionBarActivity implements
 //                    .rotation(d)
 //                    .anchor(0.5f, 0.5f)
 //                    .flat(true));
-            plane = new PlaneMarker(map, planePos, d);
+            plane = new PlaneMarker(map, planePos, d, this);
 
             Location l = new Location("plane");
             l.setLatitude(planePos.latitude);
@@ -754,7 +738,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
         //if (track != null) track.RemoveTrack();
 
-        selectedFlightplan = new FlightPlan();
+        selectedFlightplan = new FlightPlan(this);
         selectedFlightplan.LoadFlightplan(this, flightplan_id, uniqueID);
 
         Log.i(TAG, "Selected flightplan: " + selectedFlightplan.name);
@@ -765,7 +749,8 @@ public class NavigationActivity extends ActionBarActivity implements
         LoadRunways(selectedFlightplan.departure_airport);
         LoadRunways(selectedFlightplan.destination_airport);
         LoadRunways(selectedFlightplan.alternate_airport);
-        selectedFlightplan.ShowFlightplanMarkers(map);
+
+        selectedFlightplan.ShowFlightplanMarkers(map, this);
         selectedFlightplan.DrawFlightplan(map);
         SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
@@ -896,7 +881,8 @@ public class NavigationActivity extends ActionBarActivity implements
                     Integer v = variationDeviationPopup.GetValue();
                     FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
                     flightPlanDataSource.open();
-                    flightPlanDataSource.calculateMagneticHeading(v, selectedFlightplan);
+                    selectedFlightplan.UpdateVariation((float)v);
+                    flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
                     flightPlanDataSource.close();
                     LoadFlightplanGrid();
                 }
@@ -983,7 +969,7 @@ public class NavigationActivity extends ActionBarActivity implements
         LoadRunways(selectedFlightplan.departure_airport);
         LoadRunways(selectedFlightplan.destination_airport);
         LoadRunways(selectedFlightplan.alternate_airport);
-        selectedFlightplan.ShowFlightplanMarkers(map);
+        selectedFlightplan.ShowFlightplanMarkers(map, this);
         selectedFlightplan.DrawFlightplan(map);
         SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
@@ -1017,7 +1003,8 @@ public class NavigationActivity extends ActionBarActivity implements
                     Integer v = deviationPopup.GetValue();
                     FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
                     flightPlanDataSource.open();
-                    flightPlanDataSource.calculateCompassHeading(v, waypoint, selectedFlightplan);
+                    waypoint.SetDeviation((float)v);
+                    flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
                     flightPlanDataSource.close();
                     LoadFlightplanGrid();
                 }
@@ -1622,7 +1609,7 @@ public class NavigationActivity extends ActionBarActivity implements
         PlaceFlightplanAirportMarkers();
         //LoadFlightplanRunways();
         selectedFlightplan.DrawFlightplan(map);
-        selectedFlightplan.ShowFlightplanMarkers(map);
+        selectedFlightplan.ShowFlightplanMarkers(map, this);
         LoadFlightplanGrid();
     }
 
@@ -2055,13 +2042,13 @@ public class NavigationActivity extends ActionBarActivity implements
             if (selectedFlightplan.getFlightplanActive()) {
                 selectedFlightplan.updateActiveLeg(mCurrentLocation);
                 legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg());
-                infoPanel.setActiveLeg((track != null) ? track.getDirecttoLeg(selectedFlightplan, mCurrentLocation)
+                infoPanel.setActiveLeg((track != null) ? track.getDirecttoLeg(selectedFlightplan, mCurrentLocation, this)
                         : selectedFlightplan.getActiveLeg());
             }
         }
         else
         {
-            if (track != null) infoPanel.setActiveLeg(track.getLeg(mCurrentLocation));
+            if (track != null) infoPanel.setActiveLeg(track.getLeg(mCurrentLocation, this));
         }
 
     }
@@ -2130,7 +2117,7 @@ public class NavigationActivity extends ActionBarActivity implements
                         m.snippet(val.ident);
 
 
-                        m.icon(val.GetIcon((float)val.heading, val.ident));
+                        m.icon(val.GetIcon((float)val.heading, val.ident, this));
 
                         m.anchor(0.5f, 0.5f);
                         val.marker = map.addMarker(m);
@@ -2187,7 +2174,7 @@ public class NavigationActivity extends ActionBarActivity implements
             m.snippet(airport.ident);
 
 
-            m.icon(airport.GetIcon((float)airport.heading, airport.ident));
+            m.icon(airport.GetIcon((float)airport.heading, airport.ident, this));
 
             m.anchor(0.5f, 0.5f);
             airport.marker = map.addMarker(m);
@@ -2513,7 +2500,7 @@ public class NavigationActivity extends ActionBarActivity implements
         l.setLatitude(planePosition.latitude);
 
         if (selectedFlightplan != null) {
-            Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l);
+            Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l, this);
             selectedFlightplan.setActiveLeg(alternateLeg);
         }
 

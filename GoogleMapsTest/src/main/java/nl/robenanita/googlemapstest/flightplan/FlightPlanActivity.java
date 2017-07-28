@@ -88,7 +88,7 @@ public class FlightPlanActivity extends ActionBarActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FlightPlan flightPlan = new FlightPlan();
+                FlightPlan flightPlan = new FlightPlan(null);
 
                 flightPlan.departure_airport = departureAirport;
                 flightPlan.destination_airport = destinationAirport;

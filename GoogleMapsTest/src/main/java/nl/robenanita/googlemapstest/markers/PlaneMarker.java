@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest.markers;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 
@@ -13,15 +14,19 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
+import org.ksoap2.HeaderProperty;
+
+import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.R;
 
 /**
  * Created by Rob Verhoef on 17-9-2015.
  */
 public class PlaneMarker {
-    public PlaneMarker(GoogleMap map, LatLng position, Float heading)
+    public PlaneMarker(GoogleMap map, LatLng position, Float heading, Context context)
     {
         this.map = map;
+        this.context = context;
         this.position = position;
         this.heading = heading;
         createPlaneMarker();
@@ -45,6 +50,7 @@ public class PlaneMarker {
     private Marker plane;
     private LatLng position;
     private Float heading;
+    private Context context;
 
     public void setPosition(LatLng position)
     {
@@ -70,7 +76,7 @@ public class PlaneMarker {
         options.add(newPos);
         options.zIndex(1100);
         options.color(Color.RED);
-        options.width(2);
+        options.width(Helpers.convertDpToPixel(2, context));
 
         options.add(position);
 

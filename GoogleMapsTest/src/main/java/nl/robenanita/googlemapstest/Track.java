@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 
@@ -71,7 +72,7 @@ public class Track {
         return ident;
     }
 
-    public Leg getLeg(Location currentLocation)
+    public Leg getLeg(Location currentLocation, Context context)
     {
         Waypoint from = new Waypoint();
         from.location = currentLocation;
@@ -84,15 +85,15 @@ public class Track {
         to.ground_speed = (int)currentLocation.getSpeed();
         if ((int)to.ground_speed<5) to.ground_speed = 100;
 
-        Leg l = new Leg(from, to);
+        Leg l = new Leg(from, to, context);
         l.setCurrectLocation(currentLocation);
 
         return l;
     }
 
-    public Leg getDirecttoLeg(FlightPlan flightPlan, Location fromLocation)
+    public Leg getDirecttoLeg(FlightPlan flightPlan, Location fromLocation, Context context)
     {
-        FlightPlan tempFlightplan = new FlightPlan();
+        FlightPlan tempFlightplan = new FlightPlan(context);
         tempFlightplan.name = "DirectTo Plan";
         tempFlightplan.destination_airport = flightPlan.alternate_airport;
         tempFlightplan.altitude = flightPlan.altitude;

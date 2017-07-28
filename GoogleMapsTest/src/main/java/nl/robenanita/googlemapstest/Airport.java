@@ -1,10 +1,12 @@
 package nl.robenanita.googlemapstest;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -66,18 +68,18 @@ public class Airport implements Serializable {
         return WKTWriter.toPoint(c);
     }
 
-    public BitmapDescriptor GetIcon(float angle, String iata_code)
+    public BitmapDescriptor GetIcon(float angle, String iata_code, Context context)
     {
         if (type == AirportType.large_airport) {
-            return getLargeAirportIcon(iata_code);
+            return getLargeAirportIcon(iata_code, context);
             //return BitmapDescriptorFactory.fromResource(R.drawable.large_airport);
         }
         if (type == AirportType.heliport) return BitmapDescriptorFactory.fromResource(R.drawable.heliport);
         //if (type == AirportType.small_airport) return BitmapDescriptorFactory.fromResource(R.drawable.small_airport);
         //if (type == AirportType.medium_airport) return BitmapDescriptorFactory.fromResource(R.drawable.medium_airport);
 
-        if (type == AirportType.medium_airport) return getSmallAirportIcon(angle, iata_code );
-        if (type == AirportType.small_airport) return getSmallAirportIcon(angle, iata_code );
+        if (type == AirportType.medium_airport) return getSmallAirportIcon(angle, iata_code, context );
+        if (type == AirportType.small_airport) return getSmallAirportIcon(angle, iata_code, context );
 
 
         //if (type == AirportType.closed) return null;
@@ -85,7 +87,7 @@ public class Airport implements Serializable {
         return null;
     }
 
-    private BitmapDescriptor getLargeAirportIcon(String iata_code)
+    private BitmapDescriptor getLargeAirportIcon(String iata_code, Context context)
     {
         Double width = 100d, height = 100d;
         Double centerX_deg = runways.getCenterX_deg();
@@ -154,10 +156,18 @@ public class Airport implements Serializable {
         textPaint.setColor(Color.argb(255,246,249,89));
         airportCanvas.drawText(iata_code, (width.intValue()/2),20,textPaint);
 
-        return BitmapDescriptorFactory.fromBitmap(airportBitmap);
+        Bitmap dstBitmap = Bitmap.createBitmap((int)Helpers.convertDpToPixel(100, context),
+                (int)Helpers.convertDpToPixel(100, context),
+                Bitmap.Config.ARGB_8888);
+        Canvas dstCanvas = new Canvas(dstBitmap);
+        Rect scrR = new Rect(0, 0, (int)airportBitmap.getWidth(), (int)airportBitmap.getHeight());
+        RectF dstR = new RectF(0f, 0f, (float)dstBitmap.getWidth(), (float)dstBitmap.getHeight());
+        dstCanvas.drawBitmap(airportBitmap, scrR, dstR, null);
+
+        return BitmapDescriptorFactory.fromBitmap(dstBitmap);
     }
 
-    private BitmapDescriptor getSmallAirportIcon(float angle, String ICAOCode)
+    private BitmapDescriptor getSmallAirportIcon(float angle, String ICAOCode, Context context)
     {
         Bitmap rotateBitmap = Bitmap.createBitmap(30, 30,
                 Bitmap.Config.ARGB_8888);
@@ -203,7 +213,16 @@ public class Airport implements Serializable {
         textPaint.setColor(Color.BLUE);
         textCanvas.drawText(ICAOCode, 30,13,textPaint);
 
-        return BitmapDescriptorFactory.fromBitmap(textBitmap);
+
+        Bitmap dstBitmap = Bitmap.createBitmap((int)Helpers.convertDpToPixel(60, context),
+                (int)Helpers.convertDpToPixel(45, context),
+                Bitmap.Config.ARGB_8888);
+        Canvas dstCanvas = new Canvas(dstBitmap);
+        Rect scrR = new Rect(0, 0, (int)textBitmap.getWidth(), (int)textBitmap.getHeight());
+        RectF dstR = new RectF(0f, 0f, (float)dstBitmap.getWidth(), (float)dstBitmap.getHeight());
+        dstCanvas.drawBitmap(textBitmap, scrR, dstR, null);
+
+        return BitmapDescriptorFactory.fromBitmap(dstBitmap);
 
         
     }

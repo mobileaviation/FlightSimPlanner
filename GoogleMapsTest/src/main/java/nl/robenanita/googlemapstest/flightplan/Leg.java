@@ -1,6 +1,11 @@
 package nl.robenanita.googlemapstest.flightplan;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -24,7 +29,7 @@ import nl.robenanita.googlemapstest.R;
  * Created by Rob Verhoef on 4-8-2014.
  */
 public class Leg {
-    public Leg(Waypoint from, Waypoint to)
+    public Leg(Waypoint from, Waypoint to, Context context)
     {
         this.toWaypoint = to;
         this.fromWaypoint = from;
@@ -36,7 +41,7 @@ public class Leg {
         LatLng p1 = new LatLng(from.location.getLatitude(), from.location.getLongitude());
         LatLng p2 = new LatLng(to.location.getLatitude(), to.location.getLongitude());
         trackoptions.color(Color.BLUE);
-        trackoptions.width(7);
+        trackoptions.width(Helpers.convertDpToPixel(7, context));
         trackoptions.add(p1);
         trackoptions.add(p2);
         trackoptions.clickable(true);
@@ -47,20 +52,37 @@ public class Leg {
 
     }
 
-    public BitmapDescriptor GetIcon()
+    public BitmapDescriptor GetIcon(Context context)
     {
-        return BitmapDescriptorFactory.fromResource(R.drawable.direction_marker_square);
+        BitmapFactory.Options op = new BitmapFactory.Options();
+        op.inMutable = true;
+        Bitmap courseBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.direction_marker_square, op);
+
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setAntiAlias(true);
+        textPaint.setTextSize(Helpers.convertDpToPixel(25f, context));
+        textPaint.setFakeBoldText(true);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+
+        Canvas aircourseCanvas = new Canvas(courseBitmap);
+        aircourseCanvas.drawText(Integer.toString(Math.round(toWaypoint.compass_heading)),
+                Helpers.convertDpToPixel(60f, context), Helpers.convertDpToPixel(60f, context), textPaint);
+
+        return BitmapDescriptorFactory.fromBitmap(courseBitmap);
+
+        //return BitmapDescriptorFactory.fromResource(R.drawable.direction_marker_square);
     }
 
-    public void SetCoarseMarker(GoogleMap map)
+    public void SetCoarseMarker(GoogleMap map, Context context)
     {
         coarseMarkerOptions = new MarkerOptions();
         coarseMarkerOptions.position(halfwayPoint);
         coarseMarkerOptions.title(Float.toString(toWaypoint.compass_heading));
-        coarseMarkerOptions.icon(this.GetIcon());
+        coarseMarkerOptions.icon(this.GetIcon(context));
         coarseMarkerOptions.anchor(0.5f, 0.5f);
         coarseMarkerOptions.draggable(true);
-        coarseMarkerOptions.rotation(toWaypoint.compass_heading + 90);
+        coarseMarkerOptions.rotation(toWaypoint.true_track + 90);
         coarseMarker = map.addMarker(coarseMarkerOptions);
     }
 
