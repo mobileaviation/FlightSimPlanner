@@ -11,6 +11,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GoogleMapsTest" />
+            <option value="$PROJECT_DIR$/interactive-info-window" />
             <option value="$PROJECT_DIR$/library" />
           </set>
         </option>

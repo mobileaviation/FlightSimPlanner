@@ -2,40 +2,112 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="C:\GitHub\FlightSimPlanner\GoogleMapsTest\libs\jts-1.13.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="1d7457bff1a63d8f2b2e0e0961300aa1831d0fb7">
-        <dex dex="C:\GitHub\FlightSimPlanner\GoogleMapsTest\build\intermediates\transforms\dex\debug\folders\1000\2\jts-1.13_6962b5cf92efc1a36d89034ba30db65736c20c6c\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\GitHub\FlightSimPlanner\GoogleMapsTest\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="C:\GitHub\FlightSimPlanner\GoogleMapsTest\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_b94fc6723eac66d36632098bf25f908d8fc00572\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\GitHub\FlightSimPlanner\GoogleMapsTest\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="35dad2661292605ceb68850068687823cb63c646">
-        <dex dex="C:\GitHub\FlightSimPlanner\GoogleMapsTest\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_8339b980dde0c5d371eee3f603849beeb04eed9b\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\GitHub\FlightSimPlanner\GoogleMapsTest\libs\ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="ddcd1698b4bc242e26bfd99e3779688ab311b918">
-        <dex dex="C:\GitHub\FlightSimPlanner\GoogleMapsTest\build\intermediates\transforms\dex\debug\folders\1000\2\ksoap2-android-assembly-3.1.1-jar-with-dependencies_e469a02571e3794a2e98999d229b3a3c4e6cc21b\classes.dex" />
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\ksoap2-android-assembly-3.1.1-jar-with-dependencies_61c7f19c4bcb2e5fcd7026d9194d3eef7b81320a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\abd4c6943388707eb13458af3b9dc20ba0610590\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_0d4346af0030a51d177374e0ee86b589063ba507.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\d369576e70fd7dbfe34f741aeffb50dca9c37ba8\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_0df298ebdbe98bf1bccb557ee3985a2f21b73c75.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\8af11fb407ea261e9eaa769fd083cca79543893e\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_b9a274d4336b27d99601e1f5bdeed8881cd6e198.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.1\support-annotations-25.3.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\support-annotations-25.3.1_654951c999a3dbbb90152834adbbda5a2d0d845f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\60131ef110261883c5b2d610aef65fe92016116e\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_a54ca07eb9398918b3ff25ae983fcfd382e943ba.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\libs\jts-1.13.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="1d7457bff1a63d8f2b2e0e0961300aa1831d0fb7">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\jts-1.13_400dbb4597f06f3bb2b5d22e9d33714be1991c51.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\3a318d725f620fdc3f24e8cab6d65367aef48e66\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_d0edc6f3bbceb622044c393332027312632a7e34.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\84927cbec84c832aef10dd7daa539cd8d986a659\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_633143ac64a75318f6ba96e35e9eed9d2317f42e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\d9ac06c5712e78f9ac21fd880f915262c5f31b22\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_8aeb135004a0891f9a3f46631510b01cdcded0eb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\6cebbc4621188dd8c1dc985d30154edb1f3b16db\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_1bbffba955049b0429617d53aabcfe43f6bba483.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.android\build-cache\4b0485efd2da4b6d73a8e55b7cd2d33c3d0021f3\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\GoogleMapsTestProject\GoogleMapsTest\build\intermediates\pre-dexed\debug\classes_fd09018d1689c7f0f21fd72404d3894c13395eb6.jar" />
     </item>
 
 </items>

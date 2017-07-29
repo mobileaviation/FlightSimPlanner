@@ -45,6 +45,15 @@ public class Leg {
         trackoptions.add(p1);
         trackoptions.add(p2);
         trackoptions.clickable(true);
+        trackoptions.zIndex(1000);
+
+        trackoptions1 = new PolylineOptions();
+        trackoptions1.color(Color.BLACK);
+        trackoptions1.width(Helpers.convertDpToPixel(9, context));
+        trackoptions1.add(p1);
+        trackoptions1.add(p2);
+        trackoptions1.clickable(false);
+        trackoptions1.zIndex(990);
 
         halfwayPoint = Helpers.midPoint(new LatLng(from.location.getLatitude(), from.location.getLongitude()),
                 new LatLng(to.location.getLatitude(), to.location.getLongitude()));
@@ -66,12 +75,27 @@ public class Leg {
         textPaint.setTextAlign(Paint.Align.CENTER);
 
         Canvas aircourseCanvas = new Canvas(courseBitmap);
-        aircourseCanvas.drawText(Integer.toString(Math.round(toWaypoint.compass_heading)),
-                Helpers.convertDpToPixel(60f, context), Helpers.convertDpToPixel(60f, context), textPaint);
+        String h = "000" + Integer.toString(Math.round(toWaypoint.compass_heading));
+        h = h.substring(h.length()-3);
+        aircourseCanvas.drawText(h, Helpers.convertDpToPixel(60f, context), Helpers.convertDpToPixel(60f, context), textPaint);
 
         return BitmapDescriptorFactory.fromBitmap(courseBitmap);
 
         //return BitmapDescriptorFactory.fromResource(R.drawable.direction_marker_square);
+    }
+
+    public void DrawLeg(GoogleMap map)
+    {
+        if (track != null) {
+            track.remove();
+            track = null;
+            track1.remove();
+            track1 = null;
+        }
+
+        track = map.addPolyline(trackoptions);
+        track1 = map.addPolyline(trackoptions1);
+        track.setTag(this);
     }
 
     public void SetCoarseMarker(GoogleMap map, Context context)
@@ -90,6 +114,8 @@ public class Leg {
         if (track != null) {
             track.remove();
             track = null;
+            track1.remove();
+            track1 = null;
         }
         if (coarseMarker != null)
         {
@@ -120,6 +146,8 @@ public class Leg {
     private float speed;
     private float deviationFromTrack;
 
+    public PolylineOptions trackoptions1;
+    public Polyline track1;
     public PolylineOptions trackoptions;
     public Polyline track;
     public MarkerOptions coarseMarkerOptions;

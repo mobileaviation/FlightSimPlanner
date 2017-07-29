@@ -1,1 +1,1 @@
-include ':GoogleMapsTest', ':library'
+include ':GoogleMapsTest', ':library', ':interactive-info-window'

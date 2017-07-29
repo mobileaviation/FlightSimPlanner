@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#EEEEEE"
+        android:layout_margin="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dit is een InfoWindow Test"
+            android:id="@+id/infoWindowWaypointInfoTxt"
+            android:layout_margin="10dp"
+            android:textIsSelectable="true"
+            android:textSize="12dp"
+            android:typeface="normal" />
+    </LinearLayout>
+</LinearLayout>

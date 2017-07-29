@@ -101,8 +101,7 @@
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/abc_ab_bottom_solid_light_holo">
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:layout_width="250dp"
@@ -164,8 +163,7 @@
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/abc_ab_bottom_solid_light_holo">
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:layout_width="250dp"
@@ -218,8 +216,7 @@
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/abc_ab_bottom_solid_light_holo">
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:layout_width="250dp"

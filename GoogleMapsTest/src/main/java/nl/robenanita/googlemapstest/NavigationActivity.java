@@ -35,6 +35,9 @@ import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//import com.appolica.interactiveinfowindow.InfoWindow;
+//import com.appolica.interactiveinfowindow.InfoWindowManager;
+//import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
 import com.google.android.gms.common.ConnectionResult;
 
 //import com.google.android.gms.common.GooglePlayServicesClient;
@@ -172,6 +175,10 @@ public class NavigationActivity extends ActionBarActivity implements
     private LocationTracking locationTracking;
     private LoadTrack loadTrack;
 
+//    private MapInfoWindowFragment mapInfoWindowFragment;
+//    private InfoWindow waypointInfoWindow;
+//    private InfoWindowManager infoWindowManager;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -208,6 +215,14 @@ public class NavigationActivity extends ActionBarActivity implements
         //infoPanel.LoadAdd();
 
         routeLineClicked = false;
+
+//        mapInfoWindowFragment =
+//        (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.infoWindowMap);
+//        infoWindowManager = mapInfoWindowFragment.infoWindowManager();
+
+//        mapInfoWindowFragment.getMapAsync(new OnMapReadyCallback() {
+//            @Override
+//            public void onMapReady(GoogleMap googleMap) {
 
         ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -350,6 +365,30 @@ public class NavigationActivity extends ActionBarActivity implements
                     mapController = new MapController(map, NavigationActivity.this);
                     mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
                     mapController.setUpTileProvider();
+
+//                    mapInfoWindowFragment =
+//                            (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.infoWindowMap);
+//                    infoWindowManager = mapInfoWindowFragment.infoWindowManager();
+//
+//                    map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//                        private Waypoint waypoint;
+//                        private WaypointInfoFragment infoFragment;
+//                        @Override
+//                        public boolean onMarkerClick(Marker marker) {
+//                            if (selectedFlightplan.waypointMarkerMap != null)
+//                                waypoint = selectedFlightplan.waypointMarkerMap.get(marker);
+//                            if (waypoint != null)
+//                            {
+//                                final InfoWindow.MarkerSpecification markerSpec =
+//                                        new InfoWindow.MarkerSpecification(10, 10);
+//                                infoFragment = new WaypointInfoFragment();
+//                                waypointInfoWindow = new InfoWindow(marker, markerSpec, new WaypointInfoFragment() );
+//                                infoWindowManager.toggle(waypointInfoWindow, true);
+//                                Log.i(TAG, "Show Info Window");
+//                            }
+//                            return false;
+//                        }
+//                    });
                 }
 
 
@@ -380,6 +419,8 @@ public class NavigationActivity extends ActionBarActivity implements
                         if (loadTrack != null) loadTrack.removeTrack();
                     }
                 });
+
+
 
             }
         });
@@ -2368,6 +2409,8 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void setInfoWindow()
     {
+
+
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             private Marker marker;
             private Airport airport;
@@ -2417,7 +2460,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 if (waypoint != null)
                 {
                     this.view = getLayoutInflater().inflate(
-                            R.layout.navaid_info_window, null);
+                            R.layout.waypoint_info_window, null);
                     setupWaypointWindow();
                 }
                 return view;
@@ -2432,7 +2475,7 @@ public class NavigationActivity extends ActionBarActivity implements
             {
                 if (waypoint != null)
                 {
-                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowNavaidInfoTxt);
+                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowWaypointInfoTxt);
                     String info = waypoint.getWaypointInfo();
                     infoTxt.setText(info);
                 }

@@ -1,25 +1,28 @@
 buildscript {
     repositories {
         mavenCentral()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+
     }
 }
 apply plugin: 'android'
 
 repositories {
     mavenCentral()
+    //jcenter()
 }
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 25
 //    buildToolsVersion "18.1.1"
     buildToolsVersion '25.0.0'
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 19
+        targetSdkVersion 25
     }
     sourceSets { main { aidl.srcDirs = ['src/main/aidl', 'src/main/aidl/'] } }
 
@@ -27,21 +30,25 @@ android {
         // Prevent OutOfMemory with MultiDex during the build phase
         javaMaxHeapSize "4g"
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
     compile files('libs/ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar')
     compile files('libs/jts-1.13.jar')
     //    compile files('libs/hibernate-spatial-4.3.jar')
-    compile 'com.android.support:appcompat-v7:19.+'
+    //compile 'com.android.support:appcompat-v7:19.+'
     //compile 'com.google.android.gms:play-services:4.0.30'
-    compile 'com.andreabaccega:android-form-edittext:1.0.5@aar'
-    compile 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
-    compile 'com.android.support:support-v4:19.+'
+    //compile 'com.android.support:support-v4:19.+'
     //compile 'com.google.android.gms:play-services:11.0.2'
-    compile 'com.google.android.gms:play-services-maps:11.0.2'
     //compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     //compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.andreabaccega:android-form-edittext:1.0.5@aar'
+    compile 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.google.android.gms:play-services-maps:11.0.2'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.google.android.gms:play-services-location:11.0.2'
     compile 'com.google.android.gms:play-services-ads:11.0.2'
+    //compile 'com.appolica:interactive-info-window:v1.0.6'
 }

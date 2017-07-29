@@ -161,16 +161,7 @@ public class FlightPlan implements Serializable {
     {
         for (Leg leg: this.Legs)
         {
-            if (leg.track != null)
-            {
-                leg.track.remove();
-                leg.track = null;
-            }
-            leg.track = map.addPolyline(leg.trackoptions);
-            leg.track.setClickable(true);
-            leg.track.setVisible(true);
-            leg.track.setTag(leg);
-            leg.track.setZIndex(1000);
+            leg.DrawLeg(map);
         }
     }
 

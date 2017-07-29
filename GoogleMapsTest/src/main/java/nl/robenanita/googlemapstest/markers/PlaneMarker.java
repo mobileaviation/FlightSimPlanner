@@ -6,15 +6,22 @@ import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
 import org.ksoap2.HeaderProperty;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.R;
@@ -65,33 +72,50 @@ public class PlaneMarker {
     }
 
     private Polyline directionLine;
+    private Polyline directionLineDash;
     private void setDirectionLine()
     {
         Log.i(TAG, "Heading: " + heading);
 
-        LatLngBounds b = map.getProjection().getVisibleRegion().latLngBounds;
-
         PolylineOptions options = new PolylineOptions();
-        LatLng newPos = calculatePoint(position, heading.doubleValue(), 100000d);
-        options.add(newPos);
         options.zIndex(1100);
-        options.color(Color.RED);
-        options.width(Helpers.convertDpToPixel(2, context));
+        options.color(Color.BLACK);
+        options.width(Helpers.convertDpToPixel(3, context));
 
-        options.add(position);
-
-        newPos = calculatePoint(position, heading.doubleValue() + 180d, 100000d);
-        options.add(newPos);
+        List<PatternItem> dashedPattern = Arrays.asList(new Dash(Helpers.convertDpToPixel(20, context)),
+                new Gap(Helpers.convertDpToPixel(20, context)));
+        PolylineOptions options2 = new PolylineOptions();
+        options2.zIndex(1101);
+        options2.color(Color.GREEN);
+        options2.pattern(dashedPattern);
+        options2.width(Helpers.convertDpToPixel(3, context));
 
         directionLine = map.addPolyline(options);
+        directionLineDash = map.addPolyline(options2);
+        setDirectionlinePosition();
+    }
+
+    private void setDirectionlinePosition()
+    {
+        if (directionLine != null)
+        {
+            ArrayList<LatLng> points = new ArrayList<LatLng>();
+            points.add(calculatePoint(position, heading.doubleValue(), 100000d));
+            points.add(position);
+            points.add(calculatePoint(position, heading.doubleValue() + 180d, 100000d));
+            directionLineDash.setPoints(points);
+            directionLine.setPoints(points);
+        }
     }
 
     public void UpdateDirectionLine()
     {
         if (directionLine != null)
         {
-            directionLine.remove();
-            setDirectionLine();
+            //directionLine.remove();
+            //directionLineDash.remove();
+            //setDirectionLine();
+            setDirectionlinePosition();
         }
     }
 
