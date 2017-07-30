@@ -22,7 +22,9 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SlidingDrawer;
+import android.widget.TextView;
 
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,9 +51,14 @@ import nl.robenanita.googlemapstest.MapController;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
+import nl.robenanita.googlemapstest.Tracks.LoadTrack;
+import nl.robenanita.googlemapstest.Weather.WeatherActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
+import nl.robenanita.googlemapstest.database.FrequenciesDataSource;
+import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
+import nl.robenanita.googlemapstest.database.RunwaysDataSource;
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 import nl.robenanita.googlemapstest.flightplan.Leg;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
@@ -87,8 +94,11 @@ public class FSPMapFragment extends Fragment {
     private Integer uniqueID;
 
     private FlightPlan selectedFlightplan;
+    private TrackingLine trackingLine;
 
     private Leg clickedLeg;
+
+    private LoadTrack loadTrack;
 
     public FSPMapFragment() {
         // Required empty public constructor
@@ -129,6 +139,7 @@ public class FSPMapFragment extends Fragment {
                 setOnCameraMoveListener();
                 setOnPolylineClickListeners();
                 setOnMarkerDragListeners();
+                setOnInfoWindowListeners();
                 FSPMapFragment.this.onMapReadyCallback.onMapReady(googleMap);
             }
         });
@@ -160,6 +171,13 @@ public class FSPMapFragment extends Fragment {
 
     public void SetMapPosition(LatLng position, Float zoom)
     {
+        curPosition = new CameraPosition(position, zoom,0,0);
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
+    }
+
+    public void SetMapPosition(LatLng position)
+    {
+        float zoom = googleMap.getCameraPosition().zoom;
         curPosition = new CameraPosition(position, zoom,0,0);
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
     }
@@ -284,6 +302,147 @@ public class FSPMapFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void setOnInfoWindowListeners()
+    {
+
+
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            private Marker marker;
+            private Airport airport;
+            private Navaid navaid;
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent startWeatherActivity = new Intent(mainActivity, WeatherActivity.class);
+                airport = airportMarkerMap.get(marker);
+                navaid = navaidMarkerMap.get(marker);
+                this.marker = marker;
+
+                if (airport !=null) {
+                    startWeatherActivity.putExtra("airport_id", (airport == null) ? -1 : airport.id);
+                    mainActivity.startActivityForResult(startWeatherActivity, 500);
+                }
+            }
+        });
+
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            private View view;
+            private Marker marker;
+            private Airport airport;
+            private Navaid navaid;
+            private Waypoint waypoint;
+            @Override
+            public View getInfoWindow(Marker marker) {
+                airport = airportMarkerMap.get(marker);
+                navaid = navaidMarkerMap.get(marker);
+                if (selectedFlightplan != null)
+                    if (selectedFlightplan.waypointMarkerMap != null)
+                        waypoint = selectedFlightplan.waypointMarkerMap.get(marker);
+
+                this.marker = marker;
+
+                if (airport != null)
+                {
+                    this.view = mainActivity.getLayoutInflater().inflate(
+                            R.layout.airport_info_window, null);
+                    setUpAirportWindow();
+                }
+
+                if (navaid != null)
+                {
+                    this.view = mainActivity.getLayoutInflater().inflate(
+                            R.layout.navaid_info_window, null);
+                    setUpNavaidWindow();
+                }
+                if (waypoint != null)
+                {
+                    this.view = mainActivity.getLayoutInflater().inflate(
+                            R.layout.waypoint_info_window, null);
+                    setupWaypointWindow();
+                }
+                return view;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null;
+            }
+
+            private void setupWaypointWindow()
+            {
+                if (waypoint != null)
+                {
+                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowWaypointInfoTxt);
+                    String info = waypoint.getWaypointInfo();
+                    infoTxt.setText(info);
+                }
+            }
+
+            private void setUpNavaidWindow()
+            {
+                if (navaid != null)
+                {
+                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowNavaidInfoTxt);
+                    String info = navaid.getNavaidInfo();
+                    infoTxt.setText(info);
+                }
+            }
+
+            private void setUpAirportWindow()
+            {
+                if (airport != null)
+                {
+                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowInfoTxt);
+                    TextView runwaysTxt = (TextView) view.findViewById(R.id.infoWindowRunwaysTxt);
+                    TextView frequenciesTxt = (TextView) view.findViewById(R.id.infoWindowFrequenciesTxt);
+
+                    RunwaysDataSource runwaysDataSource = new RunwaysDataSource(mainActivity);
+                    runwaysDataSource.open();
+                    airport.runways = runwaysDataSource.loadRunwaysByAirport(airport);
+                    runwaysDataSource.close();
+
+                    FrequenciesDataSource frequenciesDataSource = new FrequenciesDataSource(mainActivity);
+                    frequenciesDataSource.open();
+                    airport.frequencies = frequenciesDataSource.loadFrequenciesByAirport(airport);
+                    frequenciesDataSource.close();
+
+                    String info = airport.getAirportInfoString();
+                    infoTxt.setText(info);
+
+                    info = airport.getRunwaysInfo();
+                    runwaysTxt.setText(info);
+
+                    info = airport.getFrequenciesInfo();
+                    frequenciesTxt.setText(info);
+                }
+            }
+        });
+    }
+
+    public void SetupTrackingLine()
+    {
+        trackingLine = new TrackingLine(googleMap, selectedFlightplan, mainActivity);
+    }
+
+    public void SetNewTrackingLinePosition(Location location)
+    {
+        if (trackingLine != null)
+        {
+            trackingLine.SetTrackPoints(location);
+        }
+    }
+
+    public void LoadPreviousTrack(Integer trackId)
+    {
+        if (loadTrack != null) loadTrack.removeTrack();
+        loadTrack = new LoadTrack(mainActivity, googleMap, trackId);
+    }
+
+    public ArrayList<LocationTrackingDataSource.TrackPoint> GetPreviousTrackpoints()
+    {
+        if (loadTrack != null) return loadTrack.getTrackPoints();
+        else return null;
     }
 
     private void showNewWaypointPopup(LatLng Location)

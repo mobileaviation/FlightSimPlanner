@@ -86,6 +86,7 @@ import nl.robenanita.googlemapstest.Instruments.HorizonView;
 import nl.robenanita.googlemapstest.Instruments.TurnCoordinatorView;
 import nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView;
 import nl.robenanita.googlemapstest.MapFragment.FSPMapFragment;
+import nl.robenanita.googlemapstest.MapFragment.TrackingLine;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
@@ -176,7 +177,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private Boolean instrumentsVisible;
 
-    private LocationTracking locationTracking;
+    private TrackingLine locationTracking;
     private LoadTrack loadTrack;
 
     private FSPMapFragment fspMapFragment;
@@ -1294,7 +1295,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 connectDisconnectMenuItem.setIcon(R.drawable.connected);
 
                 connected = true;
-                locationTracking = new LocationTracking(selectedFlightplan, getBaseContext());
+                fspMapFragment.SetupTrackingLine();
 
                 setTestOffsets();
 
@@ -1693,12 +1694,11 @@ public class NavigationActivity extends ActionBarActivity implements
                 Integer id = data.getIntExtra("track_id", 0);
 
                 if (id>0) {
-                    if (loadTrack != null) loadTrack.removeTrack();
-                    loadTrack = new LoadTrack(this, map, id);
+                    fspMapFragment.LoadPreviousTrack(id);
                     LinearLayout tracksLayout = (LinearLayout) findViewById(R.id.tracksLayout);
                     tracksLayout.setVisibility(View.VISIBLE);
                     final ListView tracksListView = (ListView) findViewById(R.id.tracksListView);
-                    TrackItemAdapter trackItemAdapter = new TrackItemAdapter(loadTrack.getTrackPoints());
+                    TrackItemAdapter trackItemAdapter = new TrackItemAdapter(fspMapFragment.GetPreviousTrackpoints());
                     tracksListView.setAdapter(trackItemAdapter);
 
                     tracksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -1712,7 +1712,11 @@ public class NavigationActivity extends ActionBarActivity implements
                             Location selectedLocation;
                             selectedLocation = adapter1.getTrackpoint(i);
 
-                            setPlaneMarker(selectedLocation);
+                            fspMapFragment.SetPlaneMarker(new PlanePosition(selectedLocation.getLatitude(),
+                                    selectedLocation.getLongitude(), selectedLocation.getAltitude(),
+                                    selectedLocation.getBearing()));
+                            if (trackingEnabled) fspMapFragment.SetMapPosition(new LatLng(selectedLocation.getLatitude(),
+                                    selectedLocation.getLongitude()));
                             SetInfoPanel(selectedLocation);
                         }
                     });
@@ -2145,8 +2149,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 oldPoint = new LatLng(newPoint.getLatitude(), newPoint.getLongitude());
                 map.addPolyline(trackOptions);
 
-                if (locationTracking != null)
-                    locationTracking.SetLocationPoint(newPoint);
+                fspMapFragment.SetNewTrackingLinePosition(newPoint);
             }
 
             //if (locationTracking != null)
@@ -2648,7 +2651,7 @@ public class NavigationActivity extends ActionBarActivity implements
             Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
             //mCurrentLocation = mLocationClient.getLastLocation();
 
-            locationTracking = new LocationTracking(selectedFlightplan, this);
+            fspMapFragment.SetupTrackingLine();
             connected = true;
 
             connectDisconnectMenuItem.setIcon(R.drawable.connected);
@@ -2719,8 +2722,9 @@ public class NavigationActivity extends ActionBarActivity implements
             Log.i(TAG, "Location: " + Double.toString(location.getLatitude()) +
                     " : " + Double.toString(location.getLongitude()));
 
-            setTrackPoints(location);
-            setPlaneMarker(location);
+            fspMapFragment.SetNewTrackingLinePosition(location);
+            fspMapFragment.SetPlaneMarker(new PlanePosition(location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getBearing()));
+            if (trackingEnabled) fspMapFragment.SetMapPosition(new LatLng(location.getLatitude(), location.getLongitude()));
             SetInfoPanel(location);
         }
     }
