@@ -65,6 +65,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.impl.PackedCoordinateSequence;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,6 +85,7 @@ import nl.robenanita.googlemapstest.Instruments.CompassView;
 import nl.robenanita.googlemapstest.Instruments.HorizonView;
 import nl.robenanita.googlemapstest.Instruments.TurnCoordinatorView;
 import nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView;
+import nl.robenanita.googlemapstest.MapFragment.FSPMapFragment;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
@@ -108,6 +110,7 @@ import nl.robenanita.googlemapstest.flightplan.WaypointType;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
+import nl.robenanita.googlemapstest.Classes.PlanePosition;
 
 
 public class NavigationActivity extends ActionBarActivity implements
@@ -161,6 +164,7 @@ public class NavigationActivity extends ActionBarActivity implements
     public Float curZoom = 0f;
     public LatLng curPosition;
     public Location mCurrentLocation;
+    public PlanePosition curPlanePosition;
     public Airport initAirport;
     public Runway initRunway;
     public MapController mapController;
@@ -175,7 +179,7 @@ public class NavigationActivity extends ActionBarActivity implements
     private LocationTracking locationTracking;
     private LoadTrack loadTrack;
 
-//    private MapInfoWindowFragment mapInfoWindowFragment;
+    private FSPMapFragment fspMapFragment;
 //    private InfoWindow waypointInfoWindow;
 //    private InfoWindowManager infoWindowManager;
 
@@ -205,7 +209,7 @@ public class NavigationActivity extends ActionBarActivity implements
         legInfoView = (LegInfoView) findViewById(R.id.legInfoPanel);
         legInfoView.setVisibility(View.GONE);
 
-        LinearLayout flightplanLayout = (LinearLayout) findViewById(R.id.flightplanLayout);
+        final LinearLayout flightplanLayout = (LinearLayout) findViewById(R.id.flightplanLayout);
         flightplanLayout.setVisibility(View.GONE);
 
         LinearLayout tracksLayout = (LinearLayout) findViewById(R.id.tracksLayout);
@@ -216,13 +220,25 @@ public class NavigationActivity extends ActionBarActivity implements
 
         routeLineClicked = false;
 
-//        mapInfoWindowFragment =
-//        (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.infoWindowMap);
-//        infoWindowManager = mapInfoWindowFragment.infoWindowManager();
+        fspMapFragment =
+        (FSPMapFragment) getFragmentManager().findFragmentById(R.id.FspMap);
 
-//        mapInfoWindowFragment.getMapAsync(new OnMapReadyCallback() {
-//            @Override
-//            public void onMapReady(GoogleMap googleMap) {
+        LoadProperties();
+
+        fspMapFragment.SetOnMapReadyCallback(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                Log.i(TAG, "Found googlemap: " + googleMap.toString());
+
+                fspMapFragment.SetUniqueID(uniqueID);
+                fspMapFragment.SetMarkerProperties(markerProperties);
+                fspMapFragment.SetMapPosition(curPosition, curZoom);
+                fspMapFragment.SetPlaneMarker(curPlanePosition);
+                fspMapFragment.SetAviationMarkersByZoomAndBoundary();
+            }
+        });
+
+        fspMapFragment.InitializeMap(NavigationActivity.this);
 
         ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -394,6 +410,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
 
                 LoadProperties();
+                setupMap(curPosition, curZoom, curPlanePosition);
 
                 trackingEnabled = true;
                 connected = false;
@@ -570,12 +587,13 @@ public class NavigationActivity extends ActionBarActivity implements
 //        s.invalidate();
     }
 
+    Property bufferProperty;
     private void LoadProperties() {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
         propertiesDataSource.open(true);
         propertiesDataSource.FillProperties();
         markerProperties = propertiesDataSource.getMarkersProperties();
-        Property bufferProperty = propertiesDataSource.GetProperty("BUFFER");
+        bufferProperty = propertiesDataSource.GetProperty("BUFFER");
         propertiesDataSource.close(true);
 
         connectionType = propertiesDataSource.getConnectionType();
@@ -591,25 +609,27 @@ public class NavigationActivity extends ActionBarActivity implements
 
         LatLng planePos = null;
         float d = 0f;
-        if (propertiesDataSource.InitRunway != null)
-        {
-            if (propertiesDataSource.InitRunway.active.equals("le"))
-            {
+        if (propertiesDataSource.InitRunway != null) {
+            if (propertiesDataSource.InitRunway.active.equals("le")) {
                 planePos = new LatLng(propertiesDataSource.InitRunway.le_latitude_deg,
                         propertiesDataSource.InitRunway.le_longitude_deg);
-                d = (float)propertiesDataSource.InitRunway.le_heading_degT;
-            }
-            else
-            {
+                d = (float) propertiesDataSource.InitRunway.le_heading_degT;
+            } else {
                 planePos = new LatLng(propertiesDataSource.InitRunway.he_latitude_deg,
                         propertiesDataSource.InitRunway.he_longitude_deg);
-                d = (float)propertiesDataSource.InitRunway.he_heading_degT;
+                d = (float) propertiesDataSource.InitRunway.he_heading_degT;
             }
         }
 
         curPosition = planePos;
+        curZoom = Float.parseFloat(propertiesDataSource.InitZoom.value1);
         planePosition = planePos;
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(planePos, Float.parseFloat(propertiesDataSource.InitZoom.value1)));
+        curPlanePosition = new PlanePosition(planePos.latitude, planePos.longitude, 0d, d);
+    }
+
+    private void setupMap(LatLng position, Float zoom, PlanePosition planePos)
+    {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, zoom));
 
         if (plane == null)
         {
@@ -620,12 +640,12 @@ public class NavigationActivity extends ActionBarActivity implements
 //                    .rotation(d)
 //                    .anchor(0.5f, 0.5f)
 //                    .flat(true));
-            plane = new PlaneMarker(map, planePos, d, this);
+            plane = new PlaneMarker(map, new LatLng(planePos.Latitude, planePos.Longitude), (float)planePos.Heading, this);
 
             Location l = new Location("plane");
-            l.setLatitude(planePos.latitude);
-            l.setLongitude(planePos.longitude);
-            l.setBearing(d);
+            l.setLatitude(planePos.Latitude);
+            l.setLongitude(planePos.Longitude);
+            l.setBearing((float)planePos.Heading);
             l.setSpeed(0f);
             l.setAltitude(0d);
             SetInfoPanel(l);
@@ -634,14 +654,14 @@ public class NavigationActivity extends ActionBarActivity implements
         {
             if (selectedFlightplan == null)
             {
-                plane.setPosition(planePos);
-                plane.setRotation(d);
+                plane.setPosition(new LatLng(planePos.Latitude, planePos.Longitude));
+                plane.setRotation((float)planePos.Heading);
                 plane.UpdateDirectionLine();
 
                 Location l = new Location("plane");
-                l.setLatitude(planePos.latitude);
-                l.setLongitude(planePos.longitude);
-                l.setBearing(d);
+                l.setLatitude(planePos.Latitude);
+                l.setLongitude(planePos.Longitude);
+                l.setBearing((float)planePos.Heading);
                 l.setSpeed(0f);
                 SetInfoPanel(l);
             }
@@ -1722,7 +1742,8 @@ public class NavigationActivity extends ActionBarActivity implements
 
             if (requestCode == 300)
             {
-                LoadFlightplan(id);
+                fspMapFragment.LoadFlightplan(id);
+                //LoadFlightplan(id);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(NavigationActivity.this);
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

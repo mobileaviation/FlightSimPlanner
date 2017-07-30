@@ -1,10 +1,12 @@
 package nl.robenanita.googlemapstest.flightplan;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -25,9 +27,13 @@ import java.util.HashMap;
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.LegInfoView;
 import nl.robenanita.googlemapstest.Property;
+import nl.robenanita.googlemapstest.R;
+import nl.robenanita.googlemapstest.Runway;
+import nl.robenanita.googlemapstest.RunwaysList;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
+import nl.robenanita.googlemapstest.database.RunwaysDataSource;
 
 //import com.google.maps.android.MarkerManager;
 
@@ -231,6 +237,91 @@ public class FlightPlan implements Serializable {
         buffer = bufOp.getResultGeometry(Double.parseDouble(bufferProperty.value1));
 
         //Geometry e = buffer.getEnvelope();
+    }
+
+    public void LoadRunways(GoogleMap map)
+    {
+        loadRunwaysperAirport(this.departure_airport, map);
+        loadRunwaysperAirport(this.destination_airport, map);
+        loadRunwaysperAirport(this.alternate_airport, map);
+    }
+
+    public void RemoveAllRunwayMarkers()
+    {
+        removeRunwayMarkers(this.departure_airport);
+        removeRunwayMarkers(this.destination_airport);
+        removeRunwayMarkers(this.alternate_airport);
+    }
+
+    private void removeRunwayMarkers(Airport airport)
+    {
+        if (airport.runways != null) {
+            for (Runway r : airport.runways) {
+                if (r.hiMarker!=null) r.hiMarker.remove();
+                if (r.lowMarker!=null) r.lowMarker.remove();
+            }
+        }
+    }
+
+    public void DrawBuffer(GoogleMap map)
+    {
+        Geometry buffer = this.buffer;
+        Coordinate[] coordinates = buffer.getCoordinates();
+        PolylineOptions o = new PolylineOptions();
+        o.color(Color.RED);
+        o.width(2);
+        o.zIndex(1000);
+        for (Coordinate c : coordinates)
+        {
+            LatLng p = new LatLng(c.y, c.x);
+            o.add(p);
+
+        }
+
+        this.bufferPolyline = map.addPolyline(o);
+        this.bufferPolyline.setVisible(Boolean.parseBoolean(this.bufferProperty.value2));
+    }
+
+    public void RemoveBuffer()
+    {
+        if (this.bufferPolyline != null)
+        {
+            this.bufferPolyline.remove();
+            this.bufferPolyline = null;
+        }
+    }
+
+    private void loadRunwaysperAirport(Airport airport, GoogleMap map)
+    {
+        RunwaysDataSource runwaysDataSource = new RunwaysDataSource(context);
+        runwaysDataSource.open();
+        airport.runways = runwaysDataSource.loadRunwaysByAirport(airport);
+        runwaysDataSource.close();
+        loadRunwayMarkers(airport.runways, map);
+    }
+
+    private void loadRunwayMarkers(RunwaysList runways, GoogleMap map)
+    {
+        if (runways != null) {
+            for (Runway runway : runways) {
+                if (runway.le_latitude_deg > 0) {
+                    MarkerOptions m = new MarkerOptions();
+                    m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
+                    m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+                    m.rotation((float) runway.le_heading_degT);
+                    m.title(runway.le_ident);
+                    runway.lowMarker = map.addMarker(m);
+                }
+                if (runway.he_latitude_deg > 0) {
+                    MarkerOptions m1 = new MarkerOptions();
+                    m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
+                    m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
+                    m1.rotation((float) runway.he_heading_degT);
+                    m1.title(runway.he_ident);
+                    runway.hiMarker = map.addMarker(m1);
+                }
+            }
+        }
     }
 
     private OnDistanceFromWaypoint onDistanceFromWaypoint = null;
