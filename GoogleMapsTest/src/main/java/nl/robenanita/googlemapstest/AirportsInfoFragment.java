@@ -36,6 +36,7 @@ import nl.robenanita.googlemapstest.Weather.WeatherWebService;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.AirportInfoDataSource;
 import nl.robenanita.googlemapstest.database.FirDataSource;
+import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 
 
 public class AirportsInfoFragment extends Fragment {
@@ -236,9 +237,11 @@ public class AirportsInfoFragment extends Fragment {
         //StationsWebService s = new StationsWebService();
         Geometry g2 = null;
         NavigationActivity activity = (NavigationActivity)getActivity();
-        if (activity.selectedFlightplan != null)
+        FlightPlan selectedFlightplan = activity.GetSelectedFlightplan();
+
+        if (selectedFlightplan != null)
         {
-            g2 = activity.selectedFlightplan.buffer;
+            g2 = selectedFlightplan.buffer;
         }
         else
         {

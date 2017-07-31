@@ -195,10 +195,6 @@ public class NavigationActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        PropertiesDataSource p = new PropertiesDataSource(this);
-//        p.open();
-//        boolean noads  = p.checkNoAdvertisements();
-//        p.close();
         setContentView(R.layout.activity_navigation_noadds);
 
         uniqueID = Helpers.generateUniqueId();
@@ -217,14 +213,28 @@ public class NavigationActivity extends ActionBarActivity implements
         tracksLayout.setVisibility(View.GONE);
 
         infoPanel = (InfoPanelFragment) getFragmentManager().findFragmentById(R.id.infoPanelFragment);
-        //infoPanel.LoadAdd();
 
         routeLineClicked = false;
 
         fspMapFragment =
         (FSPMapFragment) getFragmentManager().findFragmentById(R.id.FspMap);
 
+        trackingEnabled = true;
+        connected = false;
+
         LoadProperties();
+
+        setupWakeLock();
+
+        ImageButton closeTracksBtn = (ImageButton) findViewById(R.id.closeTracksBtn);
+        closeTracksBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LinearLayout tracksLayout = (LinearLayout) findViewById(R.id.tracksLayout);
+                tracksLayout.setVisibility(View.GONE);
+                fspMapFragment.RemovePreviousTrack();
+            }
+        });
 
         fspMapFragment.SetOnMapReadyCallback(new OnMapReadyCallback() {
             @Override
@@ -236,214 +246,25 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMapFragment.SetMapPosition(curPosition, curZoom);
                 fspMapFragment.SetPlaneMarker(curPlanePosition);
                 fspMapFragment.SetAviationMarkersByZoomAndBoundary();
+
+                initInstruments();
+                SetupScaleBar();
+
+                fspMapFragment.SetOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                    @Override
+                    public void onCameraIdle() {
+                        SetupScaleBar();
+                    }
+                });
             }
         });
 
         fspMapFragment.InitializeMap(NavigationActivity.this);
+    }
 
-        ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                map = googleMap;
-
-                if (map != null) {
-                    map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
-                        @Override
-                        public void onCameraMove() {
-                            CameraPosition cameraposition = map.getCameraPosition();
-                        }
-                    });
-
-                    map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                        @Override
-                        public void onMapClick(LatLng latLng) {
-                            clickedPosition = latLng;
-                            Log.i(TAG, "Position Lat: " + clickedPosition.latitude + " Lot: " + clickedPosition.longitude);
-                        }
-                    });
-
-                    map.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
-                        @Override
-                        public void onPolylineClick(Polyline polyline) {
-                            Log.i(TAG, "Polyline clicked");
-                            routeLineClicked = true;
-                            clickedLeg = (Leg)polyline.getTag();
-                            LatLng midwaypoint = nl.robenanita.googlemapstest.Helpers.midPoint(polyline.getPoints().get(0), polyline.getPoints().get(1));
-                            Log.i(TAG, "Midway Position Lat: " + midwaypoint.latitude + " Lon: " + midwaypoint.longitude);
-                            ShowNewWaypointPopup(midwaypoint);
-                        }
-                    });
-
-                    map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                        @Override
-                        public void onCameraChange(CameraPosition cameraPosition) {
-                            //Log.i(TAG, "onCameraChange fired: Zoom level: " + cameraPosition.zoom);
-                            Boolean redrawMarkers = false;
-                            if (Math.abs(cameraPosition.zoom - curZoom) > 1) {
-                                curZoom = cameraPosition.zoom;
-                                Log.i(TAG, "Zoom Difference > 1: " + cameraPosition.zoom);
-                                redrawMarkers = true;
-                            }
-
-                            Location curLoc = new Location("curLoc");
-                            curLoc.setLongitude(curPosition.longitude);
-                            curLoc.setLatitude(curPosition.latitude);
-                            Location camLoc = new Location("camLoc");
-                            camLoc.setLongitude(cameraPosition.target.longitude);
-                            camLoc.setLatitude(cameraPosition.target.latitude);
-
-                            SetupScaleBar();
-
-                            if (camLoc.distanceTo(curLoc) * cameraPosition.zoom > 200000) {
-                                Log.i(TAG, "Distance: " + Float.toString(camLoc.distanceTo(curLoc) * cameraPosition.zoom));
-                                curPosition = cameraPosition.target;
-                                redrawMarkers = true;
-                            }
-
-                            if (redrawMarkers) {
-                                //CreateMarkers();
-                                SetAirportMarkersByZoomAndBoundary();
-                            }
-                        }
-                    });
-
-//                    map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-//                        @Override
-//                        public void onMapLongClick(LatLng latLng) {
-//                            if (selectedFlightplan != null) {
-//                                if (!selectedFlightplan.getFlightplanActive()) {
-//                                    Log.i(TAG, "Long click on " + Double.toString(latLng.latitude) + " : " + Double.toString(latLng.longitude));
-//                                    ShowNewWaypointPopup(latLng);
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "You can not make any changes to an active flightplan"
-//                                            , Toast.LENGTH_LONG).show();
-//                                }
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "Before adding waypoint, please create and load a flightplan!"
-//                                        , Toast.LENGTH_LONG).show();
-//                            }
-//                        }
-//                    });
-
-                    map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                        private Polyline dragLine;
-                        @Override
-                        public void onMarkerDragStart(Marker marker) {
-                            Waypoint w = selectedFlightplan.waypointMarkerMap.get(marker);
-                            Waypoint beforeWaypoint = selectedFlightplan.getBeforeWaypoint(w);
-                            Waypoint afterWaypoint = selectedFlightplan.getAfterWaypoint(w);
-                            PolylineOptions options = new PolylineOptions();
-                            options.color(Color.RED);
-                            options.width(7);
-                            options.zIndex(1001);
-                            options.add(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()));
-                            options.add(new LatLng(w.location.getLatitude(), w.location.getLongitude()));
-                            options.add(new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()));
-                            dragLine = map.addPolyline(options);
-                        }
-                        @Override
-                        public void onMarkerDrag(Marker marker) {
-                            List<LatLng> points = dragLine.getPoints();
-                            points.set(1, marker.getPosition());
-                            dragLine.setPoints(points);
-                        }
-
-                        @Override
-                        public void onMarkerDragEnd(Marker marker) {
-                            if (dragLine != null) {
-                                dragLine.remove();
-                                dragLine = null;
-                            }
-                            if (selectedFlightplan != null) {
-                            Waypoint w = selectedFlightplan.waypointMarkerMap.get(marker);
-                                if (w != null) {
-                                    w.location.setLatitude(marker.getPosition().latitude);
-                                    w.location.setLongitude(marker.getPosition().longitude);
-                                    FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-                                    flightPlanDataSource.open();
-                                    flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
-                                    flightPlanDataSource.close();
-                                    LoadFlightplan(selectedFlightplan.id);
-                                }
-                            }
-                        }
-                    });
-
-
-
-                    UiSettings settings = map.getUiSettings();
-                    settings.setCompassEnabled(true);
-                    settings.setRotateGesturesEnabled(false);
-                    settings.setTiltGesturesEnabled(false);
-                    settings.setScrollGesturesEnabled(true);
-                    settings.setZoomControlsEnabled(true);
-                    settings.setZoomGesturesEnabled(true);
-
-                    mapController = new MapController(map, NavigationActivity.this);
-                    mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                    mapController.setUpTileProvider();
-
-//                    mapInfoWindowFragment =
-//                            (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.infoWindowMap);
-//                    infoWindowManager = mapInfoWindowFragment.infoWindowManager();
-//
-//                    map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//                        private Waypoint waypoint;
-//                        private WaypointInfoFragment infoFragment;
-//                        @Override
-//                        public boolean onMarkerClick(Marker marker) {
-//                            if (selectedFlightplan.waypointMarkerMap != null)
-//                                waypoint = selectedFlightplan.waypointMarkerMap.get(marker);
-//                            if (waypoint != null)
-//                            {
-//                                final InfoWindow.MarkerSpecification markerSpec =
-//                                        new InfoWindow.MarkerSpecification(10, 10);
-//                                infoFragment = new WaypointInfoFragment();
-//                                waypointInfoWindow = new InfoWindow(marker, markerSpec, new WaypointInfoFragment() );
-//                                infoWindowManager.toggle(waypointInfoWindow, true);
-//                                Log.i(TAG, "Show Info Window");
-//                            }
-//                            return false;
-//                        }
-//                    });
-                }
-
-
-
-                LoadProperties();
-                setupMap(curPosition, curZoom, curPlanePosition);
-
-                trackingEnabled = true;
-                connected = false;
-                tilesource = 3;
-
-                //setupAirspaces();
-
-                initInstruments();
-
-                airportMarkerMap = new HashMap<Marker, Airport>();
-                navaidMarkerMap = new HashMap<Marker, Navaid>();
-
-                SetupScaleBar();
-
-                setupWakeLock();
-
-                ImageButton closeTracksBtn = (ImageButton) findViewById(R.id.closeTracksBtn);
-                closeTracksBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        LinearLayout tracksLayout = (LinearLayout) findViewById(R.id.tracksLayout);
-                        tracksLayout.setVisibility(View.GONE);
-                        if (loadTrack != null) loadTrack.removeTrack();
-                    }
-                });
-
-
-
-            }
-        });
-
-
+    public FlightPlan GetSelectedFlightplan()
+    {
+        return fspMapFragment.GetCurrentFlightplan();
     }
 
     private void setupAirspaces()
@@ -480,29 +301,6 @@ public class NavigationActivity extends ActionBarActivity implements
         alert.show();
     }
 
-    private void closeFlightplanShowAlert()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(NavigationActivity.this);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-                closeFlightplan();
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-                dialog.dismiss();
-            }
-        });
-
-        builder.setMessage("Are you sure you want to close this FlightPlan?");
-        builder.setTitle("Close Flightplan?");
-
-        AlertDialog closePlanDialog = builder.create();
-        closePlanDialog.show();
-    }
 
     private void setUniqueIDtoDatabase()
     {
@@ -510,33 +308,6 @@ public class NavigationActivity extends ActionBarActivity implements
         airportDataSource.open(uniqueID);
         airportDataSource.setProgramID(uniqueID);
         airportDataSource.close();
-    }
-
-    private void closeFlightplan()
-    {
-        LinearLayout flightplanLayout = (LinearLayout) findViewById(R.id.flightplanLayout);
-        flightplanLayout.setVisibility(View.GONE);
-        SlidingDrawer flightplanDrawer = (SlidingDrawer) findViewById(R.id.flightplandrawer);
-        flightplanDrawer.setVisibility(View.GONE);
-
-        if (selectedFlightplan != null)
-        {
-            selectedFlightplan.removeOldFlightplanMarkers();
-            selectedFlightplan.RemoveFlightplanTrack();
-            removeAllRunwayMarkers(selectedFlightplan);
-            removeBuffer(selectedFlightplan);
-
-            legInfoView.setVisibility(View.GONE);
-            selectedFlightplan = null;
-            //if (track != null) track.RemoveTrack();
-        }
-    }
-
-    private void removeAllRunwayMarkers(FlightPlan flightPlan)
-    {
-        removeRunwayMarkers(flightPlan.departure_airport);
-        removeRunwayMarkers(flightPlan.destination_airport);
-        removeRunwayMarkers(flightPlan.alternate_airport);
     }
 
     private void RunQuery()
@@ -581,11 +352,9 @@ public class NavigationActivity extends ActionBarActivity implements
         ImageView s = (ImageView) findViewById(R.id.scaleBarView);
         scaleBar = new ScaleBar(this);
 
-        LatLngBounds b = map.getProjection().getVisibleRegion().latLngBounds;
+        LatLngBounds b = fspMapFragment.GetGooglemap().getProjection().getVisibleRegion().latLngBounds;
 
         scaleBar.DrawScaleBar(s, true, b);
-//        ScaleBar2 s = (ScaleBar2) findViewById(R.id.scaleBarView);
-//        s.invalidate();
     }
 
     Property bufferProperty;
@@ -624,132 +393,14 @@ public class NavigationActivity extends ActionBarActivity implements
 
         curPosition = planePos;
         curZoom = Float.parseFloat(propertiesDataSource.InitZoom.value1);
-        planePosition = planePos;
+//        planePosition = planePos;
         curPlanePosition = new PlanePosition(planePos.latitude, planePos.longitude, 0d, d);
     }
 
-    private void setupMap(LatLng position, Float zoom, PlanePosition planePos)
-    {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, zoom));
-
-        if (plane == null)
-        {
-//            plane = map.addMarker(new MarkerOptions()
-//                    .position(planePos)
-//                    .title("Plane Position")
-//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.blackaircrafticonsmall))
-//                    .rotation(d)
-//                    .anchor(0.5f, 0.5f)
-//                    .flat(true));
-            plane = new PlaneMarker(map, new LatLng(planePos.Latitude, planePos.Longitude), (float)planePos.Heading, this);
-
-            Location l = new Location("plane");
-            l.setLatitude(planePos.Latitude);
-            l.setLongitude(planePos.Longitude);
-            l.setBearing((float)planePos.Heading);
-            l.setSpeed(0f);
-            l.setAltitude(0d);
-            SetInfoPanel(l);
-        }
-        else
-        {
-            if (selectedFlightplan == null)
-            {
-                plane.setPosition(new LatLng(planePos.Latitude, planePos.Longitude));
-                plane.setRotation((float)planePos.Heading);
-                plane.UpdateDirectionLine();
-
-                Location l = new Location("plane");
-                l.setLatitude(planePos.Latitude);
-                l.setLongitude(planePos.Longitude);
-                l.setBearing((float)planePos.Heading);
-                l.setSpeed(0f);
-                SetInfoPanel(l);
-            }
-
-            SetAirportMarkersByZoomAndBoundary();
-        }
-
-        if (selectedFlightplan != null)
-        {
-            removeBuffer(selectedFlightplan);
-            selectedFlightplan.bufferProperty = bufferProperty;
-            selectedFlightplan.CreateBuffer();
-            drawBuffer(selectedFlightplan);
-        }
-
-    }
 
     private void setupWakeLock()
     {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-
-    ASyncAirportMarker aSyncAirportMarker;
-    private void SetAirportMarkersByZoomAndBoundary()
-    {
-        if (aSyncAirportMarker == null) {
-            aSyncAirportMarker = new ASyncAirportMarker();
-            aSyncAirportMarker.curScreen = map.getProjection().getVisibleRegion().latLngBounds;
-            aSyncAirportMarker.cameraPosition = map.getCameraPosition();
-            aSyncAirportMarker.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-        else {
-            aSyncAirportMarker.cancel(true);
-            aSyncAirportMarker = new ASyncAirportMarker();
-            aSyncAirportMarker.curScreen = map.getProjection().getVisibleRegion().latLngBounds;
-            aSyncAirportMarker.cameraPosition = map.getCameraPosition();
-            aSyncAirportMarker.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-    }
-
-    private class ASyncAirportMarker extends AsyncTask<String, Integer, Void>
-    {
-        public LatLngBounds curScreen;
-        public CameraPosition cameraPosition;
-        AirportDataSource airportSource;
-        ArrayList<Integer> iDs;
-        boolean cancelled = false;
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            cancelled = true;
-            if (airportSource != null) airportSource.close();
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            airportSource = new AirportDataSource(getBaseContext());
-            airportSource.open(uniqueID);
-            airports = airportSource.getAirportsByCoordinateAndZoomLevel(this.curScreen,
-                    this.cameraPosition.zoom, airports, markerProperties);
-            //iDs = airportSource.getMapLocationIDsByBoundary(this.curScreen);
-            //airportsLocs = airportSource.getAirportsByMapLocationID(airportsLocs, iDs);
-            airportSource.close();
-
-            NavaidsDataSource navaidsDataSource = new NavaidsDataSource(getBaseContext());
-            navaidsDataSource.open(uniqueID);
-            navaids = navaidsDataSource.GetNaviadsByCoordinateAndZoomLevel(this.curScreen, this.cameraPosition.zoom, navaids);
-            navaidsDataSource.close();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if (!cancelled) {
-                PlaceAirportMarkers(this.cameraPosition.zoom, map.getProjection().getVisibleRegion().latLngBounds);
-                //PlaceAirportMarkersByMapLocationIDs(this.cameraPosition.zoom, map.getProjection().getVisibleRegion().latLngBounds, iDs);
-                PlaceNavaidsMarkers(this.cameraPosition.zoom);
-                setInfoWindow();
-            }
-            super.onPostExecute(aVoid);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
     }
 
     @Override
@@ -761,19 +412,8 @@ public class NavigationActivity extends ActionBarActivity implements
         if (mLocationClient != null) mLocationClient.disconnect();
     }
 
-    int tilesource;
     private void setMapSource()
     {
-//        final int[] tileSources = new int[4];
-//        tileSources[0] = GoogleMap.MAP_TYPE_NORMAL;
-//        tileSources[1] = GoogleMap.MAP_TYPE_SATELLITE;
-//        tileSources[2] = GoogleMap.MAP_TYPE_HYBRID;
-//        tileSources[3] = GoogleMap.MAP_TYPE_TERRAIN;
-//
-//        tilesource++;
-//        if (tilesource==4) tilesource = 0;
-//        map.setMapType(tileSources[tilesource]);
-
         LinearLayout layersSetupLayout = (LinearLayout) findViewById(R.id.layersSetupLayout);
         if (layersSetupLayout.getVisibility() == View.GONE) layersSetupLayout.setVisibility(View.VISIBLE);
         else layersSetupLayout.setVisibility(View.GONE);
@@ -784,48 +424,6 @@ public class NavigationActivity extends ActionBarActivity implements
         Intent activateFlightplanIntent = new Intent(NavigationActivity.this, FlightPlanActivateActivity.class);
         activateFlightplanIntent.putExtra("key", 1);
         NavigationActivity.this.startActivityForResult(activateFlightplanIntent, 300);
-    }
-
-    public FlightPlan selectedFlightplan;
-    private void LoadFlightplan(Integer flightplan_id)
-    {
-        if (selectedFlightplan != null)
-        {
-            removeAllRunwayMarkers(selectedFlightplan);
-            selectedFlightplan.removeOldFlightplanMarkers();
-            removeBuffer(selectedFlightplan);
-            selectedFlightplan.RemoveFlightplanTrack();
-            selectedFlightplan = null;
-        }
-
-        //if (track != null) track.RemoveTrack();
-
-        selectedFlightplan = new FlightPlan(this);
-        selectedFlightplan.LoadFlightplan(this, flightplan_id, uniqueID);
-
-        Log.i(TAG, "Selected flightplan: " + selectedFlightplan.name);
-
-        selectedFlightplan.UpdateWaypointsData();
-
-        //LoadFlightplanRunways();
-        LoadRunways(selectedFlightplan.departure_airport);
-        LoadRunways(selectedFlightplan.destination_airport);
-        LoadRunways(selectedFlightplan.alternate_airport);
-
-        selectedFlightplan.ShowFlightplanMarkers(map, this);
-        selectedFlightplan.DrawFlightplan(map);
-        SetupFlightplanListeners(selectedFlightplan);
-        LoadFlightplanGrid();
-        PlaceFlightplanAirportMarkers();
-
-
-        // Buffer test
-        drawBuffer(selectedFlightplan);
-
-        AirportDataSource airportDataSource = new AirportDataSource(this);
-        airportDataSource.open(uniqueID);
-        airportDataSource.getAirportsInBuffer(selectedFlightplan.buffer);
-        airportDataSource.close();
     }
 
     private void SetupFlightplanListeners(FlightPlan flightPlan)
@@ -861,257 +459,162 @@ public class NavigationActivity extends ActionBarActivity implements
         });
     }
 
+//    public void VariationClick(Waypoint waypoint)
+//    {
+//        Log.i(TAG, "Variation Button clicked: " + waypoint.name);
+//        int popupWidth = 200;
+//        int popupHeight = 300;
+//
+//        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.variationDeviationPopup);
+//        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View Layout = layoutInflater.inflate(R.layout.variation_deviation_popup, viewGroup);
+//
+//        final VariationDeviationPopup variationDeviationPopup = new VariationDeviationPopup(this, Layout, HeadingError.variation);
+//        variationDeviationPopup.setContentView(Layout);
+//        variationDeviationPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//        variationDeviationPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//        variationDeviationPopup.setFocusable(true);
+//        variationDeviationPopup.SetValue(0);
+//
+//        variationDeviationPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                if(variationDeviationPopup.result)
+//                {
+//                    Integer v = variationDeviationPopup.GetValue();
+//                    FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+//                    flightPlanDataSource.open();
+//                    selectedFlightplan.UpdateVariation((float)v);
+//                    flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
+//                    flightPlanDataSource.close();
+//                    LoadFlightplanGrid();
+//                }
+//            }
+//        });
+//
+//        variationDeviationPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
+//    }
+//
+//    public void deleteWaypoint(final Waypoint waypoint)
+//    {
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+//                this);
+//        alertDialogBuilder.setTitle("Delete waypoint?");
+//        alertDialogBuilder
+//                .setMessage("Delete waypoint: " + waypoint.name + ", are you sure??")
+//                .setCancelable(false)
+//                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        dialogInterface.cancel();
+//                    }
+//                })
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+//                        flightPlanDataSource.open();
+//                        flightPlanDataSource.deleteWaypoint(waypoint);
+//                        flightPlanDataSource.close();
+//                        if (waypoint.marker != null) waypoint.marker.remove();
+//                        selectedFlightplan.Waypoints.remove(waypoint);
+//                        reloadFlightplan();
+//                        dialog.cancel();
+//
+//                    }
+//
+//                });
+//
+//        // create alert dialog
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//        // show it
+//        alertDialog.show();
+//
+//    }
+//
+//    public void moveWaypoint(FlightPlan flightPlan, Waypoint waypoint, Boolean down) {
+//        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+//        flightPlanDataSource.open();
+//
+//        if (down) {
+//            // Move this waypoint one position down, so move the waypoint following this one, one position up
+//            flightPlanDataSource.MoveWaypointDown(flightPlan, waypoint);
+//        }
+//        else
+//        {
+//            flightPlanDataSource.MoveWaypointUp(flightPlan, waypoint);
+//        }
+//
+//        flightPlanDataSource.close();
+//
+//        reloadFlightplan();
+//    }
 
 
-    private void LoadFlightplanGrid()
-    {
-        LinearLayout flightplanLayout = (LinearLayout) findViewById(R.id.flightplanLayout);
-        flightplanLayout.setVisibility(View.VISIBLE);
-        SlidingDrawer flightplanDrawer = (SlidingDrawer) findViewById(R.id.flightplandrawer);
-        flightplanDrawer.setVisibility(View.VISIBLE);
-
-        FlightplanGrid flightplanGrid = (FlightplanGrid) getFragmentManager().findFragmentById(R.id.flightplanFragment);
-        flightplanGrid.setOnFlightplanEvent(new FlightplanGrid.OnFlightplanEvent() {
-            @Override
-            public void onVariationClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                VariationClick(waypoint);
-            }
-
-            @Override
-            public void onDeviationClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                DeviationClick(waypoint);
-            }
-
-            @Override
-            public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                ETOClick(waypoint);
-            }
-
-            @Override
-            public void onAtoClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                ATOClick(waypoint);
-            }
-
-            @Override
-            public void onMoveUpClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                moveWaypoint(flightPlan,waypoint, false);
-            }
-
-            @Override
-            public void onMoveDownClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                moveWaypoint(flightPlan,waypoint, true);
-            }
-
-            @Override
-            public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                deleteWaypoint(waypoint);
-            }
-
-            @Override
-            public void onClosePlanClicked(FlightPlan flightPlan) {
-                closeFlightplanShowAlert();
-            }
-
-
-        });
-
-        flightplanGrid.LoadFlightplanGrid(selectedFlightplan);
-    }
-
-    public void VariationClick(Waypoint waypoint)
-    {
-        Log.i(TAG, "Variation Button clicked: " + waypoint.name);
-        int popupWidth = 200;
-        int popupHeight = 300;
-
-        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.variationDeviationPopup);
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View Layout = layoutInflater.inflate(R.layout.variation_deviation_popup, viewGroup);
-
-        final VariationDeviationPopup variationDeviationPopup = new VariationDeviationPopup(this, Layout, HeadingError.variation);
-        variationDeviationPopup.setContentView(Layout);
-        variationDeviationPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        variationDeviationPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        variationDeviationPopup.setFocusable(true);
-        variationDeviationPopup.SetValue(0);
-
-        variationDeviationPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                if(variationDeviationPopup.result)
-                {
-                    Integer v = variationDeviationPopup.GetValue();
-                    FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-                    flightPlanDataSource.open();
-                    selectedFlightplan.UpdateVariation((float)v);
-                    flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
-                    flightPlanDataSource.close();
-                    LoadFlightplanGrid();
-                }
-            }
-        });
-
-        variationDeviationPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
-    }
-
-    public void deleteWaypoint(final Waypoint waypoint)
-    {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                this);
-        alertDialogBuilder.setTitle("Delete waypoint?");
-        alertDialogBuilder
-                .setMessage("Delete waypoint: " + waypoint.name + ", are you sure??")
-                .setCancelable(false)
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                })
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-                        flightPlanDataSource.open();
-                        flightPlanDataSource.deleteWaypoint(waypoint);
-                        flightPlanDataSource.close();
-                        if (waypoint.marker != null) waypoint.marker.remove();
-                        selectedFlightplan.Waypoints.remove(waypoint);
-                        reloadFlightplan();
-                        dialog.cancel();
-
-                    }
-
-                });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-
-    }
-
-    public void moveWaypoint(FlightPlan flightPlan, Waypoint waypoint, Boolean down) {
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-        flightPlanDataSource.open();
-
-        if (down) {
-            // Move this waypoint one position down, so move the waypoint following this one, one position up
-            flightPlanDataSource.MoveWaypointDown(flightPlan, waypoint);
-        }
-        else
-        {
-            flightPlanDataSource.MoveWaypointUp(flightPlan, waypoint);
-        }
-
-        flightPlanDataSource.close();
-
-        reloadFlightplan();
-    }
-
-    private void reloadFlightplan()
-    {
-        selectedFlightplan.removeOldFlightplanMarkers();
-        removeAllRunwayMarkers(selectedFlightplan);
-        removeBuffer(selectedFlightplan);
-
-        Collections.sort(selectedFlightplan.Waypoints);
-        selectedFlightplan.UpdateWaypointsData();
-
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(this);
-
-        flightPlanDataSource.open();
-
-        flightPlanDataSource.clearTimes(selectedFlightplan, false);
-        flightPlanDataSource.resetCourses(selectedFlightplan, false);
-        flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
-
-        flightPlanDataSource.close();
-
-        LoadRunways(selectedFlightplan.departure_airport);
-        LoadRunways(selectedFlightplan.destination_airport);
-        LoadRunways(selectedFlightplan.alternate_airport);
-        selectedFlightplan.ShowFlightplanMarkers(map, this);
-        selectedFlightplan.DrawFlightplan(map);
-        SetupFlightplanListeners(selectedFlightplan);
-        LoadFlightplanGrid();
-
-
-        drawBuffer(selectedFlightplan);
-    }
-
-    public void DeviationClick(final Waypoint waypoint)
-    {
-        Log.i(TAG, "Deviation Button clicked: " + waypoint.name);
-        int popupWidth = 200;
-        int popupHeight = 300;
-
-        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.variationDeviationPopup);
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View Layout = layoutInflater.inflate(R.layout.variation_deviation_popup, viewGroup);
-
-        final VariationDeviationPopup deviationPopup = new VariationDeviationPopup(this, Layout, HeadingError.deviation);
-        deviationPopup.setContentView(Layout);
-        deviationPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        deviationPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        deviationPopup.setFocusable(true);
-        deviationPopup.SetValue(0);
-
-        deviationPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                if(deviationPopup.result)
-                {
-                    Integer v = deviationPopup.GetValue();
-                    FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-                    flightPlanDataSource.open();
-                    waypoint.SetDeviation((float)v);
-                    flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
-                    flightPlanDataSource.close();
-                    LoadFlightplanGrid();
-                }
-            }
-        });
-
-        deviationPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
-    }
-
-    public void ETOClick(final Waypoint waypoint)
-    {
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-        flightPlanDataSource.open();
-        flightPlanDataSource.calculateETO(new Date(), selectedFlightplan);
-        flightPlanDataSource.close();
-
-        legInfoView.setVisibility(View.VISIBLE);
-        selectedFlightplan.startFlightplan(mCurrentLocation);
-        LoadFlightplanGrid();
-
-        legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
-        infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
-
-    }
-
-    public void ATOClick(final Waypoint waypoint)
-    {
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-        flightPlanDataSource.open();
-        flightPlanDataSource.setATOcalculateRETO(waypoint, selectedFlightplan);
-        flightPlanDataSource.close();
-
-        selectedFlightplan.nextLeg(mCurrentLocation);
-        LoadFlightplanGrid();
-
-        legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
-        infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
-    }
-
-//    private void LoadWaypointForFlightplan(FlightPlan flightPlan)
+//    public void DeviationClick(final Waypoint waypoint)
+//    {
+//        Log.i(TAG, "Deviation Button clicked: " + waypoint.name);
+//        int popupWidth = 200;
+//        int popupHeight = 300;
+//
+//        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.variationDeviationPopup);
+//        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View Layout = layoutInflater.inflate(R.layout.variation_deviation_popup, viewGroup);
+//
+//        final VariationDeviationPopup deviationPopup = new VariationDeviationPopup(this, Layout, HeadingError.deviation);
+//        deviationPopup.setContentView(Layout);
+//        deviationPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//        deviationPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//        deviationPopup.setFocusable(true);
+//        deviationPopup.SetValue(0);
+//
+//        deviationPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                if(deviationPopup.result)
+//                {
+//                    Integer v = deviationPopup.GetValue();
+//                    FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+//                    flightPlanDataSource.open();
+//                    waypoint.SetDeviation((float)v);
+//                    flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
+//                    flightPlanDataSource.close();
+//                    LoadFlightplanGrid();
+//                }
+//            }
+//        });
+//
+//        deviationPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
+//    }
+//
+//    public void ETOClick(final Waypoint waypoint)
 //    {
 //        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
 //        flightPlanDataSource.open();
-//        flightPlan = flightPlanDataSource.GetWaypointsByFlightPlan(selectedFlightplan);
+//        flightPlanDataSource.calculateETO(new Date(), selectedFlightplan);
 //        flightPlanDataSource.close();
+//
+//        legInfoView.setVisibility(View.VISIBLE);
+//        selectedFlightplan.startFlightplan(mCurrentLocation);
+//        LoadFlightplanGrid();
+//
+//        legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
+//        infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
+//
+//    }
+//
+//    public void ATOClick(final Waypoint waypoint)
+//    {
+//        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+//        flightPlanDataSource.open();
+//        flightPlanDataSource.setATOcalculateRETO(waypoint, selectedFlightplan);
+//        flightPlanDataSource.close();
+//
+//        selectedFlightplan.nextLeg(mCurrentLocation);
+//        LoadFlightplanGrid();
+//
+//        legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
+//        infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
 //    }
 
     private void ShowDirectToPopup()
@@ -1121,7 +624,7 @@ public class NavigationActivity extends ActionBarActivity implements
         View Layout = layoutInflater.inflate(R.layout.directto_popup, viewGroup);
 
         final DirectToPopup directToPopupPopup = new DirectToPopup(this, Layout,
-                (selectedFlightplan == null) ? null : selectedFlightplan.alternate_airport, this);
+                (fspMapFragment.GetCurrentFlightplan() == null) ? null : fspMapFragment.GetCurrentFlightplan().alternate_airport, this);
         directToPopupPopup.setContentView(Layout);
         directToPopupPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         directToPopupPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -1140,7 +643,7 @@ public class NavigationActivity extends ActionBarActivity implements
                                 : directToPopupPopup.selectedAirport.name;
                         Toloc = new LatLng(directToPopupPopup.selectedAirport.latitude_deg,
                                 directToPopupPopup.selectedAirport.longitude_deg);
-                        setupTrack(planePosition, Toloc, ident);
+//                        setupTrack(planePosition, Toloc, ident);
                     }
                     if (directToPopupPopup.selectedNavaid != null)
                     {
@@ -1148,7 +651,7 @@ public class NavigationActivity extends ActionBarActivity implements
                                 : directToPopupPopup.selectedNavaid.name;
                         Toloc = new LatLng(directToPopupPopup.selectedNavaid.latitude_deg,
                                 directToPopupPopup.selectedNavaid.longitude_deg);
-                        setupTrack(planePosition, Toloc, ident);
+//                        setupTrack(planePosition, Toloc, ident);
                     }
                     if (directToPopupPopup.selectedFix != null)
                     {
@@ -1156,7 +659,7 @@ public class NavigationActivity extends ActionBarActivity implements
                                 : directToPopupPopup.selectedFix.name;
                         Toloc = new LatLng(directToPopupPopup.selectedFix.latitude_deg,
                                 directToPopupPopup.selectedFix.longitude_deg);
-                        setupTrack(planePosition, Toloc, ident);
+//                        setupTrack(planePosition, Toloc, ident);
                     }
                 }
             }
@@ -1164,37 +667,6 @@ public class NavigationActivity extends ActionBarActivity implements
 
         directToPopupPopup.showAtLocation(Layout, Gravity.CENTER_HORIZONTAL, 0, 0 );
     }
-
-
-
-    private void removeBuffer(FlightPlan flightPlan)
-    {
-        if (flightPlan.bufferPolyline != null)
-        {
-            flightPlan.bufferPolyline.remove();
-            flightPlan.bufferPolyline = null;
-        }
-    }
-
-    private void drawBuffer(FlightPlan flightPlan)
-    {
-        Geometry buffer = flightPlan.buffer;
-        Coordinate[] coordinates = buffer.getCoordinates();
-        PolylineOptions o = new PolylineOptions();
-        o.color(Color.RED);
-        o.width(2);
-        o.zIndex(1000);
-        for (Coordinate c : coordinates)
-        {
-            LatLng p = new LatLng(c.y, c.x);
-            o.add(p);
-
-        }
-
-        flightPlan.bufferPolyline = map.addPolyline(o);
-        flightPlan.bufferPolyline.setVisible(Boolean.parseBoolean(flightPlan.bufferProperty.value2));
-    }
-
 
     private void setCompass(double Heading)
     {
@@ -1256,19 +728,6 @@ public class NavigationActivity extends ActionBarActivity implements
             HorizonView h = (HorizonView) findViewById(R.id.horizonView);
             h.setHorizon((float)bank, (float)pitch);
         }
-    }
-
-    public LatLng planePosition;
-    private void setPlaneMarker(Location position)
-    {
-        LatLng planePosition = new LatLng(position.getLatitude(), position.getLongitude());
-        if (trackingEnabled)
-            map.moveCamera(CameraUpdateFactory.newLatLng(planePosition));
-
-        plane.setPosition(planePosition);
-        plane.setRotation(position.getBearing());
-        plane.UpdateDirectionLine();
-
     }
 
     private void connectToServer()
@@ -1573,108 +1032,6 @@ public class NavigationActivity extends ActionBarActivity implements
         }
     }
 
-    private void ShowNewWaypointPopup(LatLng Location)
-    {
-        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.addWaypointPopup);
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View Layout = layoutInflater.inflate(R.layout.add_waypoint, viewGroup);
-
-        final AddWayPointPopup addWayPointPopup = new AddWayPointPopup(this, Layout);
-
-        addWayPointPopup.Location = Location;
-        addWayPointPopup.setContentView(Layout);
-        addWayPointPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        addWayPointPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        addWayPointPopup.setFocusable(true);
-
-        addWayPointPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                Log.i(TAG, "AddWayPoint popup dismissed");
-                if (addWayPointPopup.Result)
-                {
-                    removeAllRunwayMarkers(selectedFlightplan);
-                    selectedFlightplan.removeOldFlightplanMarkers();
-                    selectedFlightplan.RemoveFlightplanTrack();
-                    removeBuffer(selectedFlightplan);
-
-                    setupNewWaypointInFlightplan(addWayPointPopup.WaypointName,
-                            addWayPointPopup.Location.latitude,
-                            addWayPointPopup.Location.longitude,
-                            WaypointType.userwaypoint,
-                            -1);
-                }
-                if (addWayPointPopup.Search)
-                {
-                    Intent searchIntent = new Intent(NavigationActivity.this, SearchActivity.class);
-                    searchIntent.putExtra("key", 1);
-                    Bundle b = new Bundle();
-                    b.putParcelable("location", curPosition);
-                    searchIntent.putExtra("location", b);
-                    NavigationActivity.this.startActivityForResult(searchIntent, 200);
-                }
-            }
-        });
-
-        addWayPointPopup.showAtLocation(Layout, Gravity.TOP, 0, 10);
-    }
-
-    private void removeRunwayMarkers(Airport airport)
-    {
-        if (airport.runways != null) {
-            for (Runway r : airport.runways) {
-                if (r.hiMarker!=null) r.hiMarker.remove();
-                if (r.lowMarker!=null) r.lowMarker.remove();
-            }
-        }
-    }
-
-//    private void removeOldFlightplanMarkers()
-//    {
-//        for (Waypoint w : selectedFlightplan.Waypoints)
-//        {
-//            Marker m = w.marker;
-//            if (m != null) {
-//                m.remove();
-//            }
-//            if (w.activeCircle != null) w.activeCircle.remove();
-//        }
-//    }
-
-    private void setupNewWaypointInFlightplan(String name, Double latitude, Double longitude, WaypointType type, Integer id)
-    {
-        Waypoint waypoint = new Waypoint();
-        waypoint.name = name;
-        waypoint.location.setLatitude(latitude);
-        waypoint.location.setLongitude(longitude);
-        waypoint.flightplan_id = selectedFlightplan.id;
-
-        if(type==WaypointType.Airport) waypoint.airport_id = id;
-        if(type==WaypointType.navaid) waypoint.navaid_id = id;
-        if(type==WaypointType.fix) waypoint.fix_id = id;
-
-        selectedFlightplan.removeOldFlightplanMarkers();
-        selectedFlightplan.InsertWaypoint(waypoint);
-
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
-        flightPlanDataSource.open();
-        flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
-        flightPlanDataSource.updateWaypointSortOrder(selectedFlightplan);
-        flightPlanDataSource.updateWaypointSortOrderDB(selectedFlightplan);
-        flightPlanDataSource.close();
-
-
-        LoadRunways(selectedFlightplan.departure_airport);
-        LoadRunways(selectedFlightplan.destination_airport);
-        LoadRunways(selectedFlightplan.alternate_airport);
-        drawBuffer(selectedFlightplan);
-        PlaceFlightplanAirportMarkers();
-        //LoadFlightplanRunways();
-        selectedFlightplan.DrawFlightplan(map);
-        selectedFlightplan.ShowFlightplanMarkers(map, this);
-        LoadFlightplanGrid();
-    }
-
     private void ShowCreateFlightPlanActivity()
     {
         Intent startFlightplanIntent = new Intent(NavigationActivity.this, FlightPlanActivity.class);
@@ -1777,20 +1134,20 @@ public class NavigationActivity extends ActionBarActivity implements
             {
                 if (requestCode == 100)
                 {
-                    LatLng searchPos = new LatLng(airport.latitude_deg, airport.longitude_deg);
-                    curPosition = searchPos;
-                    map.moveCamera( CameraUpdateFactory.newLatLng(searchPos));
-                    setCompassroseMarker(searchPos);
-                    SetAirportMarkersByZoomAndBoundary();
+//                    LatLng searchPos = new LatLng(airport.latitude_deg, airport.longitude_deg);
+//                    curPosition = searchPos;
+//                    map.moveCamera( CameraUpdateFactory.newLatLng(searchPos));
+//                    setCompassroseMarker(searchPos);
+//                    SetAirportMarkersByZoomAndBoundary();
                 }
                 if (requestCode == 200)
                 {
-                    selectedFlightplan.removeOldFlightplanMarkers();
-                    setupNewWaypointInFlightplan(airport.name,
-                            airport.latitude_deg,
-                            airport.longitude_deg,
-                            WaypointType.Airport,
-                            airport.id);
+//                    selectedFlightplan.removeOldFlightplanMarkers();
+//                    setupNewWaypointInFlightplan(airport.name,
+//                            airport.latitude_deg,
+//                            airport.longitude_deg,
+//                            WaypointType.Airport,
+//                            airport.id);
                 }
 
             }
@@ -1808,20 +1165,20 @@ public class NavigationActivity extends ActionBarActivity implements
             {
                 if (requestCode == 100)
                 {
-                    LatLng searchPos = new LatLng(navaid.latitude_deg, navaid.longitude_deg);
-                    curPosition = searchPos;
-                    map.moveCamera( CameraUpdateFactory.newLatLng(searchPos));
-                    setCompassroseMarker(searchPos);
-                    SetAirportMarkersByZoomAndBoundary();
+//                    LatLng searchPos = new LatLng(navaid.latitude_deg, navaid.longitude_deg);
+//                    curPosition = searchPos;
+//                    map.moveCamera( CameraUpdateFactory.newLatLng(searchPos));
+//                    setCompassroseMarker(searchPos);
+//                    SetAirportMarkersByZoomAndBoundary();
                 }
                 if (requestCode == 200)
                 {
-                    selectedFlightplan.removeOldFlightplanMarkers();
-                    setupNewWaypointInFlightplan(navaid.name,
-                            navaid.latitude_deg,
-                            navaid.longitude_deg,
-                            WaypointType.navaid,
-                            navaid.id);
+//                    selectedFlightplan.removeOldFlightplanMarkers();
+//                    setupNewWaypointInFlightplan(navaid.name,
+//                            navaid.latitude_deg,
+//                            navaid.longitude_deg,
+//                            WaypointType.navaid,
+//                            navaid.id);
                 }
             }
         }
@@ -1839,20 +1196,20 @@ public class NavigationActivity extends ActionBarActivity implements
             {
                 if (requestCode == 100)
                 {
-                    LatLng searchPos = new LatLng(fix.latitude_deg, fix.longitude_deg);
-                    curPosition = searchPos;
-                    map.moveCamera( CameraUpdateFactory.newLatLng(searchPos));
-                    setCompassroseMarker(searchPos);
-                    SetAirportMarkersByZoomAndBoundary();
+//                    LatLng searchPos = new LatLng(fix.latitude_deg, fix.longitude_deg);
+//                    curPosition = searchPos;
+//                    map.moveCamera( CameraUpdateFactory.newLatLng(searchPos));
+//                    setCompassroseMarker(searchPos);
+//                    SetAirportMarkersByZoomAndBoundary();
                 }
                 if (requestCode == 200)
                 {
-                    selectedFlightplan.removeOldFlightplanMarkers();
-                    setupNewWaypointInFlightplan(fix.name,
-                            fix.latitude_deg,
-                            fix.longitude_deg,
-                            WaypointType.fix,
-                            fix.id);
+//                    selectedFlightplan.removeOldFlightplanMarkers();
+//                    setupNewWaypointInFlightplan(fix.name,
+//                            fix.latitude_deg,
+//                            fix.longitude_deg,
+//                            WaypointType.fix,
+//                            fix.id);
                 }
             }
 
@@ -1869,38 +1226,38 @@ public class NavigationActivity extends ActionBarActivity implements
         NavigationActivity.this.startActivityForResult(startSearchIntent, 100);
     }
 
-    private void ShowSearchAirportPopup()
-    {
-        int popupWidth = 800;
-        int popupHeight = 350;
-
-        LinearLayout viewGroup = null;
-        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View Layout = layoutInflater.inflate(R.layout.searchairports_popup, viewGroup);
-
-        searchAirportsPopup = new SearchAirportsPopup(this, Layout);
-
-        searchAirportsPopup.setContentView(Layout);
-        searchAirportsPopup.setWidth(popupWidth);
-        searchAirportsPopup.setHeight(popupHeight);
-        searchAirportsPopup.setFocusable(true);
-
-        searchAirportsPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                if (searchAirportsPopup.Result)
-                {
-                    Airport a = searchAirportsPopup.SelectedAirport;
-                    LatLng planePos = new LatLng(a.latitude_deg, a.longitude_deg);
-                    curPosition = planePos;
-                    map.moveCamera( CameraUpdateFactory.newLatLng(planePos));
-                    SetAirportMarkersByZoomAndBoundary();
-                }
-            }
-        });
-
-        searchAirportsPopup.showAtLocation(Layout, Gravity.TOP, 0, 10);
-    }
+//    private void ShowSearchAirportPopup()
+//    {
+//        int popupWidth = 800;
+//        int popupHeight = 350;
+//
+//        LinearLayout viewGroup = null;
+//        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View Layout = layoutInflater.inflate(R.layout.searchairports_popup, viewGroup);
+//
+//        searchAirportsPopup = new SearchAirportsPopup(this, Layout);
+//
+//        searchAirportsPopup.setContentView(Layout);
+//        searchAirportsPopup.setWidth(popupWidth);
+//        searchAirportsPopup.setHeight(popupHeight);
+//        searchAirportsPopup.setFocusable(true);
+//
+//        searchAirportsPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                if (searchAirportsPopup.Result)
+//                {
+//                    Airport a = searchAirportsPopup.SelectedAirport;
+//                    LatLng planePos = new LatLng(a.latitude_deg, a.longitude_deg);
+//                    curPosition = planePos;
+//                    map.moveCamera( CameraUpdateFactory.newLatLng(planePos));
+//                    SetAirportMarkersByZoomAndBoundary();
+//                }
+//            }
+//        });
+//
+//        searchAirportsPopup.showAtLocation(Layout, Gravity.TOP, 0, 10);
+//    }
 
     private void setTestOffsets()
     {
@@ -2048,6 +1405,7 @@ public class NavigationActivity extends ActionBarActivity implements
     private Track track;
     private void SetInfoPanel(Location location)
     {
+        final FlightPlan selectedFlightplan = fspMapFragment.GetCurrentFlightplan();
         mCurrentLocation = location;
         infoPanel.setLocation(location);
 
@@ -2076,7 +1434,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 public void on500Meters(boolean firstHit) {
                     if (!selectedFlightplan.endPlan) {
                         if (firstHit) {
-                            ATOClick(selectedFlightplan.getActiveLeg().getToWaypoint());
+//                            ATOClick(selectedFlightplan.getActiveLeg().getToWaypoint());
 
                             Toast.makeText(NavigationActivity.this, "Activated next waypoint: "
                                     + selectedFlightplan.getActiveLeg().getToWaypoint().name
@@ -2094,7 +1452,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 @Override
                 public void onArrivedDestination(Waypoint waypoint, boolean firstHit) {
                     if (firstHit) {
-                        ATOClick(selectedFlightplan.getActiveLeg().getToWaypoint());
+//                        ATOClick(selectedFlightplan.getActiveLeg().getToWaypoint());
                         Toast.makeText(NavigationActivity.this, "You've arrived at your destination: "
                                 + selectedFlightplan.getActiveLeg().getToWaypoint().name
                                 + "\nThe flightplan is now ended.."
@@ -2119,125 +1477,14 @@ public class NavigationActivity extends ActionBarActivity implements
 
     }
 
-    private LatLng oldPoint;
-    private float pointDistance = 0;
-    private float setTrackPoints(Location newPoint)
-    {
-        float b = newPoint.getBearing();
-        if (oldPoint != null)
-        {
-            Location loc = new Location("loc old");
-            loc.setLatitude(oldPoint.latitude);
-            loc.setLongitude(oldPoint.longitude);
-
-            Location locnew = new Location("loc new");
-            locnew.setLatitude(newPoint.getLatitude());
-            locnew.setLongitude(newPoint.getLongitude());
-
-            float v = loc.distanceTo(locnew);
-
-            if (v>100)
-            {
-                b = loc.bearingTo(locnew);
-
-                PolylineOptions trackOptions = new PolylineOptions();
-                trackOptions.color(Color.GREEN);
-                trackOptions.width(5);
-                trackOptions.zIndex(1000);
-                trackOptions.add(oldPoint);
-                trackOptions.add(new LatLng(newPoint.getLatitude(), newPoint.getLongitude()));
-                oldPoint = new LatLng(newPoint.getLatitude(), newPoint.getLongitude());
-                map.addPolyline(trackOptions);
-
-                fspMapFragment.SetNewTrackingLinePosition(newPoint);
-            }
-
-            //if (locationTracking != null)
-            //    locationTracking.SetLocationPoint(newPoint);
-        }
-        else
-        {
-            oldPoint = new LatLng(newPoint.getLatitude(), newPoint.getLongitude());
-        }
-
-        return b;
-    }
-
-    private void PlaceAirportMarkersByMapLocationIDs(Float zoom, LatLngBounds latLngBounds, ArrayList<Integer> iDs)
-    {
-        if (airportsLocs != null)
-        {
-            for (Integer id : iDs)
-            {
-                ArrayList<Airport> a = airportsLocs.get(id);
-                Log.i(TAG, "Trying to place " + Integer.toString(a.size()) + " airport markers for LocationID: " + Integer.toString(id));
-                for (Airport val : a)
-                {
-                    if (val.marker == null)
-                    {
-                        MarkerOptions m = new MarkerOptions();
-                        m.position(new LatLng(val.latitude_deg, val.longitude_deg));
-                        //m.rotation((float) val.heading);
-                        m.title(val.ident);
-                        m.snippet(val.ident);
-
-
-                        m.icon(val.GetIcon((float)val.heading, val.ident, this));
-
-                        m.anchor(0.5f, 0.5f);
-                        val.marker = map.addMarker(m);
-
-                        airportMarkerMap.put(val.marker, val);
-                    }
-
-                    if (latLngBounds.contains(val.marker.getPosition())) {
-
-                        switch (val.type) {
-                            case large_airport: {
-                                val.marker.setVisible((true));
-                                break;
-                            }
-                            case medium_airport: {
-                                val.marker.setVisible(zoom >= 7);
-                                break;
-                            }
-                            case small_airport: {
-                                val.marker.setVisible(zoom >= 9);
-                                break;
-                            }
-                            case heliport: {
-                                val.marker.setVisible(zoom >= 10);
-                                break;
-                            }
-                            case balloonport: {
-                                val.marker.setVisible(zoom >= 10);
-                                break;
-                            }
-                            case seaplane_base: {
-                                val.marker.setVisible(zoom >= 9);
-                                break;
-                            }
-                            case closed: {
-                                val.marker.setVisible(false);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private void setupAirportMarker(Airport airport)
     {
         if (airport.marker == null)
         {
             MarkerOptions m = new MarkerOptions();
             m.position(airport.getLatLng());
-            //m.rotation((float) val.heading);
             m.title(airport.ident);
             m.snippet(airport.ident);
-
 
             m.icon(airport.GetIcon((float)airport.heading, airport.ident, this));
 
@@ -2248,179 +1495,39 @@ public class NavigationActivity extends ActionBarActivity implements
         }
     }
 
-    private void LoadRunways(Airport airport)
-    {
-        RunwaysDataSource runwaysDataSource = new RunwaysDataSource(this);
-        runwaysDataSource.open();
-        airport.runways = runwaysDataSource.loadRunwaysByAirport(airport);
-        runwaysDataSource.close();
-        LoadRunwayMarkers(airport.runways);
-    }
 
-    private void LoadRunwayMarkers(RunwaysList runways)
-    {
-        if (runways != null) {
-            for (Runway runway : runways) {
-                if (runway.le_latitude_deg > 0) {
-                    MarkerOptions m = new MarkerOptions();
-                    m.position(new LatLng(runway.le_latitude_deg, runway.le_longitude_deg));
-                    m.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
-                    m.rotation((float) runway.le_heading_degT);
-                    m.title(runway.le_ident);
-                    runway.lowMarker = map.addMarker(m);
-                }
-                if (runway.he_latitude_deg > 0) {
-                    MarkerOptions m1 = new MarkerOptions();
-                    m1.position(new LatLng(runway.he_latitude_deg, runway.he_longitude_deg));
-                    m1.icon(BitmapDescriptorFactory.fromResource(R.drawable.runwayarrow));
-                    m1.rotation((float) runway.he_heading_degT);
-                    m1.title(runway.he_ident);
-                    runway.hiMarker = map.addMarker(m1);
-                }
-            }
-        }
-    }
-
-    private void PlaceFlightplanAirportMarkers()
-    {
-        if (selectedFlightplan != null)
-        {
-            Airport dep = airports.get(selectedFlightplan.departure_airport.id);
-            if (dep == null) {
-                dep = selectedFlightplan.departure_airport;
-                //if (dep.runways.size()==0) LoadRunways(dep);
-                airports.put(dep.id, dep);
-            }
-            setupAirportMarker(dep);
-            dep.marker.setVisible(true);
-
-            Airport des = airports.get(selectedFlightplan.destination_airport.id);
-            if (des == null) {
-                des = selectedFlightplan.destination_airport;
-                //if (des.runways.size()==0) LoadRunways(des);
-                airports.put(des.id, des);
-            }
-            setupAirportMarker(des);
-            des.marker.setVisible(true);
-
-            Airport alt = airports.get(selectedFlightplan.alternate_airport.id);
-            if (alt == null) {
-                alt = selectedFlightplan.alternate_airport;
-                //if (alt.runways.size()==0) LoadRunways(alt);
-                airports.put(alt.id, alt);
-            }
-            setupAirportMarker(alt);
-            alt.marker.setVisible(true);
-        }
-    }
-
-    private void PlaceAirportMarkers(Float zoom, LatLngBounds latLngBounds)
-    {
-        Log.i(TAG, "Trying to place airport markers: " + Integer.toString(airports.size()));
-
-        if (airports != null)
-        {
-            //Set<Integer> keys = airports.keySet();
-            Iterator<Integer> it = airports.keySet().iterator();
-
-            while(it.hasNext())
-            {
-                Integer key = it.next();
-                Airport val = airports.get(key);
-
-                if (latLngBounds.contains(val.getLatLng())) {
-                    if (val.marker == null)
-                    {
-                        setupAirportMarker(val);
-                    }
-
-                    switch (val.type) {
-                        case large_airport: {
-                            val.marker.setVisible((true));
-                            break;
-                        }
-                        case medium_airport: {
-                            val.marker.setVisible(zoom >= 7);
-                            break;
-                        }
-                        case small_airport: {
-                            val.marker.setVisible(zoom >= 9);
-                            break;
-                        }
-                        case heliport: {
-                            val.marker.setVisible(zoom >= 10);
-                            break;
-                        }
-                        case balloonport: {
-                            val.marker.setVisible(zoom >= 10);
-                            break;
-                        }
-                        case seaplane_base: {
-                            val.marker.setVisible(zoom >= 9);
-                            break;
-                        }
-                        case closed: {
-                            val.marker.setVisible(false);
-                            break;
-                        }
-                    }
-
-                    if (!val.marker.isVisible())
-                    {
-                        val.marker.remove();
-                        val.marker = null;
-                    }
-                }
-                else
-                {
-                    if (val.marker != null) {
-                        val.marker.remove();
-                        val.marker = null;
-                    }
-                }
-            }
-
-            PlaceFlightplanAirportMarkers();
-        }
-    }
-
-    private void PlaceNavaidsMarkers(Float zoom)
-    {
-        Log.i(TAG, "Trying to place navaids markers: " + Integer.toString(navaids.size()));
-
-        if (navaids != null)
-        {
-            Boolean visible = true;
-            visible = (zoom>7);
-
-            if (curVisible!=visible)
-            {
-                curVisible = visible;
-            }
-
-            //Set<Integer> keys = airports.keySet();
-            Iterator<Integer> it = navaids.keySet().iterator();
-
-            while(it.hasNext())
-            {
-                Integer key = it.next();
-                Navaid val = navaids.get(key);
-                if (val.marker == null)
-                {
-                    MarkerOptions m = new MarkerOptions();
-                    m.position(new LatLng(val.latitude_deg, val.longitude_deg));
-                    m.title(val.ident);
-                    m.icon(val.GetIcon());
-                    m.anchor(0.5f, 0.5f);
-                    val.marker = map.addMarker(m);
-
-                    navaidMarkerMap.put(val.marker, val);
-                }
-
-                val.marker.setVisible(visible);
-            }
-        }
-    }
+//    private void PlaceFlightplanAirportMarkers()
+//    {
+//        if (selectedFlightplan != null)
+//        {
+//            Airport dep = airports.get(selectedFlightplan.departure_airport.id);
+//            if (dep == null) {
+//                dep = selectedFlightplan.departure_airport;
+//                //if (dep.runways.size()==0) LoadRunways(dep);
+//                airports.put(dep.id, dep);
+//            }
+//            setupAirportMarker(dep);
+//            dep.marker.setVisible(true);
+//
+//            Airport des = airports.get(selectedFlightplan.destination_airport.id);
+//            if (des == null) {
+//                des = selectedFlightplan.destination_airport;
+//                //if (des.runways.size()==0) LoadRunways(des);
+//                airports.put(des.id, des);
+//            }
+//            setupAirportMarker(des);
+//            des.marker.setVisible(true);
+//
+//            Airport alt = airports.get(selectedFlightplan.alternate_airport.id);
+//            if (alt == null) {
+//                alt = selectedFlightplan.alternate_airport;
+//                //if (alt.runways.size()==0) LoadRunways(alt);
+//                airports.put(alt.id, alt);
+//            }
+//            setupAirportMarker(alt);
+//            alt.marker.setVisible(true);
+//        }
+//    }
 
     private void setCompassroseMarker(LatLng location)
     {
@@ -2431,148 +1538,35 @@ public class NavigationActivity extends ActionBarActivity implements
         map.addMarker(m);
     }
 
-    private void setInfoWindow()
-    {
 
 
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            private Marker marker;
-            private Airport airport;
-            private Navaid navaid;
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                Intent startWeatherActivity = new Intent(NavigationActivity.this, WeatherActivity.class);
-                airport = airportMarkerMap.get(marker);
-                navaid = navaidMarkerMap.get(marker);
-                this.marker = marker;
-
-                if (airport !=null) {
-                    startWeatherActivity.putExtra("airport_id", (airport == null) ? -1 : airport.id);
-                    NavigationActivity.this.startActivityForResult(startWeatherActivity, 500);
-                }
-            }
-        });
-
-        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            private View view;
-            private Marker marker;
-            private Airport airport;
-            private Navaid navaid;
-            private Waypoint waypoint;
-            @Override
-            public View getInfoWindow(Marker marker) {
-                airport = airportMarkerMap.get(marker);
-                navaid = navaidMarkerMap.get(marker);
-                if (selectedFlightplan.waypointMarkerMap != null)
-                    waypoint = selectedFlightplan.waypointMarkerMap.get(marker);
-
-                this.marker = marker;
-
-                if (airport != null)
-                {
-                    this.view = getLayoutInflater().inflate(
-                            R.layout.airport_info_window, null);
-                    setUpAirportWindow();
-                }
-
-                if (navaid != null)
-                {
-                    this.view = getLayoutInflater().inflate(
-                            R.layout.navaid_info_window, null);
-                    setUpNavaidWindow();
-                }
-                if (waypoint != null)
-                {
-                    this.view = getLayoutInflater().inflate(
-                            R.layout.waypoint_info_window, null);
-                    setupWaypointWindow();
-                }
-                return view;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                return null;
-            }
-
-            private void setupWaypointWindow()
-            {
-                if (waypoint != null)
-                {
-                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowWaypointInfoTxt);
-                    String info = waypoint.getWaypointInfo();
-                    infoTxt.setText(info);
-                }
-            }
-
-            private void setUpNavaidWindow()
-            {
-                if (navaid != null)
-                {
-                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowNavaidInfoTxt);
-                    String info = navaid.getNavaidInfo();
-                    infoTxt.setText(info);
-                }
-            }
-
-            private void setUpAirportWindow()
-            {
-                if (airport != null)
-                {
-                    TextView infoTxt = (TextView) view.findViewById(R.id.infoWindowInfoTxt);
-                    TextView runwaysTxt = (TextView) view.findViewById(R.id.infoWindowRunwaysTxt);
-                    TextView frequenciesTxt = (TextView) view.findViewById(R.id.infoWindowFrequenciesTxt);
-
-                    RunwaysDataSource runwaysDataSource = new RunwaysDataSource(getBaseContext());
-                    runwaysDataSource.open();
-                    airport.runways = runwaysDataSource.loadRunwaysByAirport(airport);
-                    runwaysDataSource.close();
-
-                    FrequenciesDataSource frequenciesDataSource = new FrequenciesDataSource(getBaseContext());
-                    frequenciesDataSource.open();
-                    airport.frequencies = frequenciesDataSource.loadFrequenciesByAirport(airport);
-                    frequenciesDataSource.close();
-
-                    String info = airport.getAirportInfoString();
-                    infoTxt.setText(info);
-
-                    info = airport.getRunwaysInfo();
-                    runwaysTxt.setText(info);
-
-                    info = airport.getFrequenciesInfo();
-                    frequenciesTxt.setText(info);
-                }
-            }
-        });
-    }
-
-    public void setupTrack(LatLng from, LatLng To, String ident)
-    {
-        if (track != null)
-        {
-            track.RemoveTrack();
-            track = null;
-        }
-
-        track = new Track();
-        track.setFromToLocation(from, To, ident);
-
-
-        infoPanel.setTrack(track);
-        track.DrawTrack(map);
-
-
-        Location l = new Location("loc");
-        l.setLongitude(planePosition.longitude);
-        l.setLatitude(planePosition.latitude);
-
-        if (selectedFlightplan != null) {
-            Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l, this);
-            selectedFlightplan.setActiveLeg(alternateLeg);
-        }
-
-        SetInfoPanel(l);
-    }
+//    public void setupTrack(LatLng from, LatLng To, String ident)
+//    {
+//        if (track != null)
+//        {
+//            track.RemoveTrack();
+//            track = null;
+//        }
+//
+//        track = new Track();
+//        track.setFromToLocation(from, To, ident);
+//
+//
+//        infoPanel.setTrack(track);
+//        track.DrawTrack(map);
+//
+//
+//        Location l = new Location("loc");
+//        l.setLongitude(planePosition.longitude);
+//        l.setLatitude(planePosition.latitude);
+//
+//        if (selectedFlightplan != null) {
+//            Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l, this);
+//            selectedFlightplan.setActiveLeg(alternateLeg);
+//        }
+//
+//        SetInfoPanel(l);
+//    }
 
     private final static int
             CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;

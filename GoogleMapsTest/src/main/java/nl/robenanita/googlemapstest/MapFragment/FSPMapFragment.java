@@ -79,6 +79,10 @@ public class FSPMapFragment extends Fragment {
     public void SetOnMapReadyCallback(OnMapReadyCallback onMapReadyCallback)
     { this.onMapReadyCallback = onMapReadyCallback; }
 
+    private GoogleMap.OnCameraIdleListener onCameraIdleListener;
+    public void SetOnCameraIdleListener(GoogleMap.OnCameraIdleListener onCameraIdleListener)
+    { this.onCameraIdleListener = onCameraIdleListener; }
+
     private Activity mainActivity;
 
     private CameraPosition curPosition;
@@ -124,10 +128,22 @@ public class FSPMapFragment extends Fragment {
         setupMap();
     }
 
+    public GoogleMap GetGooglemap()
+    {
+        return googleMap;
+    }
+
+    public FlightPlan GetCurrentFlightplan()
+    {
+        return selectedFlightplan;
+    }
+
     private void setupMap()
     {
-        final MapFragment mapFragment =
-                (MapFragment) getFragmentManager().findFragmentById(R.id.fragment_fsp_map);
+        //final MapFragment mapFragment =
+        //        (MapFragment) getFragmentManager().findFragmentById(R.id.fragment_fsp_map);
+        final MapFragment mapFragment = (MapFragment) this.getChildFragmentManager().findFragmentById(R.id.fragment_fsp_map);
+
 
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -140,7 +156,8 @@ public class FSPMapFragment extends Fragment {
                 setOnPolylineClickListeners();
                 setOnMarkerDragListeners();
                 setOnInfoWindowListeners();
-                FSPMapFragment.this.onMapReadyCallback.onMapReady(googleMap);
+                if (onMapReadyCallback != null)
+                    FSPMapFragment.this.onMapReadyCallback.onMapReady(googleMap);
             }
         });
     }
@@ -230,6 +247,9 @@ public class FSPMapFragment extends Fragment {
             public void onCameraIdle() {
                 Log.i(TAG, "Moved Idle");
                 SetAviationMarkersByZoomAndBoundary();
+
+                if (onCameraIdleListener != null)
+                    FSPMapFragment.this.onCameraIdleListener.onCameraIdle();
             }
         });
 
@@ -445,6 +465,12 @@ public class FSPMapFragment extends Fragment {
         else return null;
     }
 
+    public void RemovePreviousTrack()
+    {
+        loadTrack.removeTrack();
+        loadTrack = null;
+    }
+
     private void showNewWaypointPopup(LatLng Location)
     {
         LinearLayout viewGroup = (LinearLayout) mainActivity.findViewById(R.id.addWaypointPopup);
@@ -624,7 +650,7 @@ public class FSPMapFragment extends Fragment {
         SlidingDrawer flightplanDrawer = (SlidingDrawer) getView().findViewById(R.id.fspflightplandrawer);
         flightplanDrawer.setVisibility(View.VISIBLE);
 
-        FlightplanGrid flightplanGrid = (FlightplanGrid) getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+        FlightplanGrid flightplanGrid = (FlightplanGrid) getChildFragmentManager().findFragmentById(R.id.fspflightplanFragment);
         flightplanGrid.setOnFlightplanEvent(new FlightplanGrid.OnFlightplanEvent() {
             @Override
             public void onVariationClicked(Waypoint waypoint, FlightPlan flightPlan) {
