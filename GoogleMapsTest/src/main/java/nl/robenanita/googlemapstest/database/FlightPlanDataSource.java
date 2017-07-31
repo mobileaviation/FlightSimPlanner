@@ -175,6 +175,7 @@ public class FlightPlanDataSource {
         database.update(UserDBHelper.USERWAYPOINT_TABLE_NAME,
                 createWayPointContentValues(waypoint),
                 "_id=?", args);
+        Log.i(TAG, "Update waypoint: " + waypoint.compass_heading);
     }
 
     public void deleteWaypoint(Waypoint waypoint)

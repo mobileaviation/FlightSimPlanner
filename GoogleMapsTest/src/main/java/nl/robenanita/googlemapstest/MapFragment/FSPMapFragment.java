@@ -60,6 +60,7 @@ import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
 import nl.robenanita.googlemapstest.database.RunwaysDataSource;
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
+import nl.robenanita.googlemapstest.flightplan.FlightplanController;
 import nl.robenanita.googlemapstest.flightplan.Leg;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
@@ -140,9 +141,11 @@ public class FSPMapFragment extends Fragment {
 
     private void setupMap()
     {
-        //final MapFragment mapFragment =
-        //        (MapFragment) getFragmentManager().findFragmentById(R.id.fragment_fsp_map);
-        final MapFragment mapFragment = (MapFragment) this.getChildFragmentManager().findFragmentById(R.id.fragment_fsp_map);
+        MapFragment tmpFragment =
+                (MapFragment) getFragmentManager().findFragmentById(R.id.fragment_fsp_map);
+        if (tmpFragment == null)
+            tmpFragment = (MapFragment) this.getChildFragmentManager().findFragmentById(R.id.fragment_fsp_map);
+        final MapFragment mapFragment = tmpFragment;
 
 
         mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -643,48 +646,56 @@ public class FSPMapFragment extends Fragment {
         closePlanDialog.show();
     }
 
+    private FlightplanGrid flightplanGrid;
     private void LoadFlightplanGrid()
     {
+        final FlightplanController flightplanController = new FlightplanController(mainActivity, this.selectedFlightplan);
         LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
         flightplanLayout.setVisibility(View.VISIBLE);
         SlidingDrawer flightplanDrawer = (SlidingDrawer) getView().findViewById(R.id.fspflightplandrawer);
         flightplanDrawer.setVisibility(View.VISIBLE);
 
-        FlightplanGrid flightplanGrid = (FlightplanGrid) getChildFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+        FlightplanGrid tempGrid = (FlightplanGrid) getChildFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+        if (tempGrid==null) tempGrid = (FlightplanGrid) getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+
+        flightplanGrid = tempGrid;
+
         flightplanGrid.setOnFlightplanEvent(new FlightplanGrid.OnFlightplanEvent() {
             @Override
             public void onVariationClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                //VariationClick(waypoint);
+                flightplanController.SetVariation(waypoint);
+                flightplanGrid.LoadFlightplanGrid(flightPlan);
             }
-
             @Override
             public void onDeviationClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                //DeviationClick(waypoint);
+                flightplanController.SetDeviation(waypoint);
+                flightplanGrid.LoadFlightplanGrid(flightPlan);
             }
-
             @Override
             public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                //ETOClick(waypoint);
+                flightplanController.SetETO(waypoint);
             }
 
             @Override
             public void onAtoClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                //ATOClick(waypoint);
+                flightplanController.SetATO(waypoint);
             }
 
             @Override
             public void onMoveUpClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 //moveWaypoint(flightPlan,waypoint, false);
+                flightplanController.MoveWaypoint(flightPlan, waypoint, false);
             }
 
             @Override
             public void onMoveDownClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 //moveWaypoint(flightPlan,waypoint, true);
+                flightplanController.MoveWaypoint(flightPlan, waypoint, true);
             }
 
             @Override
             public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                //deleteWaypoint(waypoint);
+                flightplanController.DeleteWaypoint(waypoint);
             }
 
             @Override

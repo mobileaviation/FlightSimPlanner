@@ -63,7 +63,7 @@ public class FlightplanGrid extends Fragment {
 
 
     private FlightPlan flightPlan;
-    public void LoadFlightplanGrid(final FlightPlan flightPlan)
+    public void LoadFlightplanGrid(FlightPlan flightPlan)
     {
         this.flightPlan = flightPlan;
 
@@ -76,7 +76,7 @@ public class FlightplanGrid extends Fragment {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onFlightplanEvent != null) onFlightplanEvent.onClosePlanClicked(flightPlan);
+                if (onFlightplanEvent != null) onFlightplanEvent.onClosePlanClicked(FlightplanGrid.this.flightPlan);
             }
         });
 
@@ -84,12 +84,11 @@ public class FlightplanGrid extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean c = onlyActiveCheckBox.isChecked();
-                flightPlan.showOnlyActive = c;
+                FlightplanGrid.this.flightPlan.showOnlyActive = c;
                 setUpAdapter();
                 //setOnlyActiveinView(c);
             }
         });
-
 
     }
 
@@ -138,6 +137,7 @@ public class FlightplanGrid extends Fragment {
             }
         });
 
+        flightplanItemsList.setAdapter(null);
         flightplanItemsList.setAdapter(adapter);
         flightplanItemsList.setVerticalScrollbarPosition(p);
 

@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +127,8 @@ public class FlightplanListAdapter extends BaseAdapter {
             setAtoBtn.setEnabled((flightPlan.getActivetoWaypointIndex() == index) && flightPlan.getFlightplanActive());
 
             setVariationBtn.setEnabled((waypoint.waypointType == WaypointType.departudeAirport));
+
+            Log.i(TAG, "Magnetic heading: " + waypoint.magnetic_heading );
             if ((waypoint.waypointType != WaypointType.departudeAirport))
                 setVariationBtn.setText((waypoint.magnetic_heading == 0d) ? "" : Integer.toString(Math.round(waypoint.magnetic_heading)));
 
