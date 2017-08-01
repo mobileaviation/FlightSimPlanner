@@ -32,6 +32,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -47,6 +48,8 @@ import nl.robenanita.googlemapstest.AddWayPointPopup;
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.FlightplanGrid;
+import nl.robenanita.googlemapstest.InfoPanelFragment;
+import nl.robenanita.googlemapstest.LegInfoView;
 import nl.robenanita.googlemapstest.MapController;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.NavigationActivity;
@@ -89,6 +92,7 @@ public class FSPMapFragment extends Fragment {
 
     private CameraPosition curPosition;
     private PlaneMarker planeMarker;
+    private Location curPlaneLocation;
 
     private MapController mapController;
 
@@ -108,6 +112,9 @@ public class FSPMapFragment extends Fragment {
 
     private FlightplanController flightplanController;
 
+    private LegInfoView legInfoView;
+    private InfoPanelFragment infoPanel;
+
     public FSPMapFragment() {
         // Required empty public constructor
     }
@@ -126,9 +133,11 @@ public class FSPMapFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void InitializeMap(Activity mainActivity)
+    public void InitializeMap(Activity mainActivity, LegInfoView legInfoView, InfoPanelFragment infoPanelFragment)
     {
         this.mainActivity = mainActivity;
+        this.legInfoView = legInfoView;
+        this.infoPanel = infoPanelFragment;
         setupMap();
     }
 
@@ -207,6 +216,12 @@ public class FSPMapFragment extends Fragment {
 
     public void SetPlaneMarker(PlanePosition planePosition)
     {
+        curPlaneLocation = new Location("PlaneLocation");
+        curPlaneLocation.setLatitude(planePosition.Latitude);
+        curPlaneLocation.setLongitude(planePosition.Longitude);
+        curPlaneLocation.setBearing((float)planePosition.Heading);
+        curPlaneLocation.setAltitude(planePosition.Height);
+
         if (planeMarker == null)
         {
             planeMarker = new PlaneMarker(googleMap, new LatLng(planePosition.Latitude,
@@ -607,6 +622,41 @@ public class FSPMapFragment extends Fragment {
 
         flightplanController = new FlightplanController(mainActivity, selectedFlightplan);
         setupFlightplanControllerListeners();
+
+        setupFlightplanListeners(selectedFlightplan);
+    }
+
+    private void setupFlightplanListeners(FlightPlan flightPlan)
+    {
+        flightPlan.setOnNewActiveWaypoint(new FlightPlan.OnNewActiveWaypoint() {
+            @Override
+            public void onOldWaypoint(Waypoint waypoint) {
+                if (waypoint.activeCircle != null) {
+                    waypoint.activeCircle.remove();
+                    waypoint.activeCircle = null;
+                }
+            }
+
+            @Override
+            public void onActiveWaypoint(Waypoint waypoint) {
+                if (waypoint.activeCircle != null) {
+                    waypoint.activeCircle.remove();
+                    waypoint.activeCircle = null;
+                }
+
+                LatLng center = new LatLng(waypoint.location.getLatitude(),
+                        waypoint.location.getLongitude());
+
+
+                CircleOptions circleOptions = new CircleOptions();
+                circleOptions.strokeColor(Color.RED);
+                circleOptions.strokeWidth(5);
+                circleOptions.fillColor(Color.argb(50,100,100,100));
+                circleOptions.radius(2000d);
+                circleOptions.center(center);
+                waypoint.activeCircle = googleMap.addCircle(circleOptions);
+            }
+        });
     }
 
     private void setupFlightplanControllerListeners()
@@ -628,12 +678,17 @@ public class FSPMapFragment extends Fragment {
 
             @Override
             public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
-
+                flightplanGrid.ReloadFlightplan();
+                //legInfoView.setVisibility(View.VISIBLE);
+                legInfoView.setActiveLeg(flightPlan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
+                infoPanel.setActiveLeg(flightPlan.getActiveLeg());
             }
 
             @Override
             public void onAtoClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 flightplanGrid.ReloadFlightplan();
+                legInfoView.setActiveLeg(flightPlan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
+                infoPanel.setActiveLeg(flightPlan.getActiveLeg());
             }
 
             @Override
@@ -733,12 +788,12 @@ public class FSPMapFragment extends Fragment {
             }
             @Override
             public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                flightplanController.SetETO(waypoint);
+                flightplanController.SetETO(waypoint, curPlaneLocation);
             }
 
             @Override
             public void onAtoClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                flightplanController.SetATO(waypoint);
+                flightplanController.SetATO(waypoint, curPlaneLocation);
             }
 
             @Override

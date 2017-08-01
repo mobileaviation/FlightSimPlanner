@@ -185,6 +185,7 @@ public class FlightPlan implements Serializable {
         for (Waypoint w : this.Waypoints)
         {
             w.RemoveWaypointMarker();
+            if (w.activeCircle != null)  w.activeCircle.remove();
         }
     }
 
@@ -343,12 +344,12 @@ public class FlightPlan implements Serializable {
     {
         legWaypointIndex = 0;
         if (Waypoints.size()>1) {
-            activeLeg = new Leg(Waypoints.get(0), Waypoints.get(1), context);
+            activeLeg = Legs.get(0);//  new Leg(Waypoints.get(0), Waypoints.get(1), context);
             activeLeg.setCurrectLocation(currentLocation);
             if (onNewActiveWaypoint != null)
             {
-                onNewActiveWaypoint.onOldWaypoint(Waypoints.get(0));
-                onNewActiveWaypoint.onActiveWaypoint(Waypoints.get(1));
+                onNewActiveWaypoint.onOldWaypoint(activeLeg.getFromWaypoint());
+                onNewActiveWaypoint.onActiveWaypoint(activeLeg.getToWaypoint());
             }
             showOnlyActive = false;
         }
@@ -357,14 +358,14 @@ public class FlightPlan implements Serializable {
     public void nextLeg(Location currentLocation)
     {
         if (!endPlan) {
-            if (legWaypointIndex < Waypoints.size() - 2) legWaypointIndex++;
+            if (legWaypointIndex < Legs.size()-1) legWaypointIndex++;
 
-            activeLeg = new Leg(Waypoints.get(legWaypointIndex), Waypoints.get(legWaypointIndex + 1), context);
+            activeLeg = Legs.get(legWaypointIndex); //new Leg(Waypoints.get(legWaypointIndex), Waypoints.get(legWaypointIndex + 1), context);
             activeLeg.setCurrectLocation(currentLocation);
 
             if (onNewActiveWaypoint != null) {
-                onNewActiveWaypoint.onOldWaypoint(Waypoints.get(legWaypointIndex));
-                onNewActiveWaypoint.onActiveWaypoint(Waypoints.get(legWaypointIndex + 1));
+                onNewActiveWaypoint.onOldWaypoint(activeLeg.getFromWaypoint());
+                onNewActiveWaypoint.onActiveWaypoint(activeLeg.getToWaypoint());
             }
         }
     }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Location;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -173,34 +174,28 @@ public class FlightplanController {
         deviationPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
     }
 
-    public void SetETO(final Waypoint waypoint)
+    public void SetETO(final Waypoint waypoint, Location curPlaneLocation)
     {
         FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(activity);
         flightPlanDataSource.open();
         flightPlanDataSource.calculateETO(new Date(), flightPlan);
         flightPlanDataSource.close();
 
-        //legInfoView.setVisibility(View.VISIBLE);
-        //flightPlan.startFlightplan(mCurrentLocation);
-        //LoadFlightplanGrid();
 
-        //legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
-        //infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
+        flightPlan.startFlightplan(curPlaneLocation);
+
         if (onFlightplanEvent != null) onFlightplanEvent.onTakeoffClicked(waypoint, flightPlan);
     }
 
-    public void SetATO(final Waypoint waypoint)
+    public void SetATO(final Waypoint waypoint, Location curPlaneLocation)
     {
         FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(activity);
         flightPlanDataSource.open();
         flightPlanDataSource.setATOcalculateRETO(waypoint, flightPlan);
         flightPlanDataSource.close();
 
-        //flightPlan.nextLeg(mCurrentLocation);
-        //LoadFlightplanGrid();
+        flightPlan.nextLeg(curPlaneLocation);
 
-        //legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
-        //infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
         if (onFlightplanEvent != null) onFlightplanEvent.onAtoClicked(waypoint, flightPlan);
     }
 }
