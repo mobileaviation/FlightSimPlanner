@@ -62,6 +62,7 @@ import nl.robenanita.googlemapstest.database.RunwaysDataSource;
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 import nl.robenanita.googlemapstest.flightplan.FlightplanController;
 import nl.robenanita.googlemapstest.flightplan.Leg;
+import nl.robenanita.googlemapstest.flightplan.OnFlightplanEvent;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
 import nl.robenanita.googlemapstest.markers.AviationMarkers;
@@ -104,6 +105,8 @@ public class FSPMapFragment extends Fragment {
     private Leg clickedLeg;
 
     private LoadTrack loadTrack;
+
+    private FlightplanController flightplanController;
 
     public FSPMapFragment() {
         // Required empty public constructor
@@ -577,6 +580,7 @@ public class FSPMapFragment extends Fragment {
             selectedFlightplan.RemoveBuffer();
             selectedFlightplan.RemoveFlightplanTrack();
             selectedFlightplan = null;
+            flightplanController = null;
         }
 
         selectedFlightplan = new FlightPlan(mainActivity);
@@ -600,6 +604,64 @@ public class FSPMapFragment extends Fragment {
         airportDataSource.open(uniqueID);
         airportDataSource.getAirportsInBuffer(selectedFlightplan.buffer);
         airportDataSource.close();
+
+        flightplanController = new FlightplanController(mainActivity, selectedFlightplan);
+        setupFlightplanControllerListeners();
+    }
+
+    private void setupFlightplanControllerListeners()
+    {
+        flightplanController.SetOnFlightplanEvent(new OnFlightplanEvent() {
+            @Override
+            public void onVariationClicked(Waypoint waypoint, FlightPlan flightPlan) {
+                flightplanGrid.ReloadFlightplan();
+                flightPlan.RemoveFlightplanTrack();
+                flightPlan.DrawFlightplan(googleMap);
+            }
+
+            @Override
+            public void onDeviationClicked(Waypoint waypoint, FlightPlan flightPlan) {
+                flightplanGrid.ReloadFlightplan();
+                flightPlan.RemoveFlightplanTrack();
+                flightPlan.DrawFlightplan(googleMap);
+            }
+
+            @Override
+            public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
+
+            }
+
+            @Override
+            public void onAtoClicked(Waypoint waypoint, FlightPlan flightPlan) {
+                flightplanGrid.ReloadFlightplan();
+            }
+
+            @Override
+            public void onMoveUpClicked(Waypoint waypoint, FlightPlan flightPlan) {
+                Integer id = flightPlan.id;
+                FSPMapFragment.this.closeFlightplan();
+                FSPMapFragment.this.LoadFlightplan(id);
+            }
+
+            @Override
+            public void onMoveDownClicked(Waypoint waypoint, FlightPlan flightPlan) {
+                Integer id = flightPlan.id;
+                FSPMapFragment.this.closeFlightplan();
+                FSPMapFragment.this.LoadFlightplan(id);
+            }
+
+            @Override
+            public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan) {
+                Integer id = flightPlan.id;
+                FSPMapFragment.this.closeFlightplan();
+                FSPMapFragment.this.LoadFlightplan(id);
+            }
+
+            @Override
+            public void onClosePlanClicked(FlightPlan flightPlan) {
+                FSPMapFragment.this.closeFlightplan();
+            }
+        });
     }
 
     private void closeFlightplan()
@@ -649,7 +711,6 @@ public class FSPMapFragment extends Fragment {
     private FlightplanGrid flightplanGrid;
     private void LoadFlightplanGrid()
     {
-        final FlightplanController flightplanController = new FlightplanController(mainActivity, this.selectedFlightplan);
         LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
         flightplanLayout.setVisibility(View.VISIBLE);
         SlidingDrawer flightplanDrawer = (SlidingDrawer) getView().findViewById(R.id.fspflightplandrawer);
@@ -660,16 +721,15 @@ public class FSPMapFragment extends Fragment {
 
         flightplanGrid = tempGrid;
 
-        flightplanGrid.setOnFlightplanEvent(new FlightplanGrid.OnFlightplanEvent() {
+        flightplanGrid.setOnFlightplanEvent(new OnFlightplanEvent() {
             @Override
             public void onVariationClicked(Waypoint waypoint, FlightPlan flightPlan) {
+                LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
                 flightplanController.SetVariation(waypoint);
-                flightplanGrid.LoadFlightplanGrid(flightPlan);
             }
             @Override
             public void onDeviationClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 flightplanController.SetDeviation(waypoint);
-                flightplanGrid.LoadFlightplanGrid(flightPlan);
             }
             @Override
             public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
@@ -684,12 +744,15 @@ public class FSPMapFragment extends Fragment {
             @Override
             public void onMoveUpClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 //moveWaypoint(flightPlan,waypoint, false);
+                Log.i(TAG, "Move Up Clicked");
+                flightPlan.RemoveFlightplanTrack();
                 flightplanController.MoveWaypoint(flightPlan, waypoint, false);
             }
 
             @Override
             public void onMoveDownClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 //moveWaypoint(flightPlan,waypoint, true);
+                flightPlan.RemoveFlightplanTrack();
                 flightplanController.MoveWaypoint(flightPlan, waypoint, true);
             }
 

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
+import nl.robenanita.googlemapstest.flightplan.OnFlightplanEvent;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 
 public class FlightplanGrid extends Fragment {
@@ -89,15 +90,20 @@ public class FlightplanGrid extends Fragment {
                 //setOnlyActiveinView(c);
             }
         });
-
     }
 
+    public void ReloadFlightplan()
+    {
+        flightplanItemsList.invalidateViews();
+    }
+
+    private FlightplanListAdapter adapter;
     private void setUpAdapter()
     {
         int p = flightplanItemsList.getVerticalScrollbarPosition();
         Log.i(TAG, "Flightplan vertical grid position = " + Integer.toString(p));
 
-        FlightplanListAdapter adapter = new FlightplanListAdapter(flightPlan);
+        adapter = new FlightplanListAdapter(flightPlan);
         //adapter.navigationActivity = this;
 
         adapter.setOnFlightplanEvent(new FlightplanListAdapter.OnWaypointEvent() {
@@ -137,9 +143,9 @@ public class FlightplanGrid extends Fragment {
             }
         });
 
-        flightplanItemsList.setAdapter(null);
         flightplanItemsList.setAdapter(adapter);
         flightplanItemsList.setVerticalScrollbarPosition(p);
+        adapter.notifyDataSetChanged();
 
         setGridHeight(adapter);
     }
@@ -171,14 +177,4 @@ public class FlightplanGrid extends Fragment {
 
     private OnFlightplanEvent onFlightplanEvent = null;
     public void setOnFlightplanEvent( final OnFlightplanEvent d) {onFlightplanEvent = d; }
-    public interface OnFlightplanEvent {
-        public void onVariationClicked(Waypoint waypoint, FlightPlan flightPlan);
-        public void onDeviationClicked(Waypoint waypoint, FlightPlan flightPlan);
-        public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan);
-        public void onAtoClicked(Waypoint waypoint, FlightPlan flightPlan);
-        public void onMoveUpClicked(Waypoint waypoint, FlightPlan flightPlan);
-        public void onMoveDownClicked(Waypoint waypoint, FlightPlan flightPlan);
-        public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan);
-        public void onClosePlanClicked(FlightPlan flightPlan);
-    }
 }

@@ -168,6 +168,7 @@ public class FlightPlan implements Serializable {
         for (Leg leg: this.Legs)
         {
             leg.DrawLeg(map);
+            leg.SetCoarseMarker(map, context);
         }
     }
 
@@ -185,10 +186,6 @@ public class FlightPlan implements Serializable {
         {
             w.RemoveWaypointMarker();
         }
-        for (Leg leg: Legs)
-        {
-            leg.RemoveLegFromMap();
-        }
     }
 
     public  HashMap<Marker, Waypoint> waypointMarkerMap;
@@ -205,10 +202,10 @@ public class FlightPlan implements Serializable {
             }
         }
 
-        for (Leg leg: Legs)
-        {
-            leg.SetCoarseMarker(map, context);
-        }
+//        for (Leg leg: Legs)
+//        {
+//            leg.SetCoarseMarker(map, context);
+//        }
     }
 
     public void CreateBuffer()

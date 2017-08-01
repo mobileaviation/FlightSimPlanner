@@ -430,6 +430,8 @@ public class FlightPlanDataSource {
         waypoint.ground_speed = cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_ground_speed_kt));
         waypoint.wind_speed = cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_wind_speed_kt));
         waypoint.wind_direction = cursor.getFloat(cursor.getColumnIndex(UserDBHelper.C_wind_direction_deg));
+        waypoint.SetVariation(waypoint.true_heading - waypoint.magnetic_heading);
+        waypoint.SetDeviation(waypoint.magnetic_heading - waypoint.compass_heading);
 
         waypoint.location.setLatitude(cursor.getDouble(cursor.getColumnIndex(UserDBHelper.C_latitude_deg)));
         waypoint.location.setLongitude(cursor.getDouble(cursor.getColumnIndex(UserDBHelper.C_longitude_deg)));

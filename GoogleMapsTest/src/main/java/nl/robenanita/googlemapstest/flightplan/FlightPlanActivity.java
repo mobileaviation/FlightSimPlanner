@@ -88,7 +88,7 @@ public class FlightPlanActivity extends ActionBarActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FlightPlan flightPlan = new FlightPlan(null);
+                FlightPlan flightPlan = new FlightPlan(FlightPlanActivity.this);
 
                 flightPlan.departure_airport = departureAirport;
                 flightPlan.destination_airport = destinationAirport;
@@ -178,7 +178,7 @@ public class FlightPlanActivity extends ActionBarActivity {
                     flightPlan.Waypoints.add(endWaypoint);
                     flightPlan.UpdateWaypointsData();
 
-                    FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(getBaseContext());
+                    FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(FlightPlanActivity.this);
                     flightPlanDataSource.open();
                     flightPlanDataSource.InsertnewFlightPlan(flightPlan);
                     flightPlanDataSource.close();

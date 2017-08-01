@@ -35,7 +35,11 @@ public class FlightplanController {
     private FlightPlan flightPlan;
     private final String TAG = "FlightplanController";
 
-    public void SetVariation(Waypoint waypoint)
+    private OnFlightplanEvent onFlightplanEvent;
+    public void SetOnFlightplanEvent(OnFlightplanEvent onFlightplanEvent)
+    { this.onFlightplanEvent = onFlightplanEvent; }
+
+    public void SetVariation(final Waypoint waypoint)
     {
         Log.i(TAG, "Variation Button clicked: " + waypoint.name);
         int popupWidth = 200;
@@ -66,6 +70,7 @@ public class FlightplanController {
                     //LoadFlightplanGrid();
 
                     // Reload flightplan event...
+                    if (onFlightplanEvent != null) onFlightplanEvent.onVariationClicked(waypoint, flightPlan);
                 }
             }
         });
@@ -96,7 +101,7 @@ public class FlightplanController {
                         flightPlan.Waypoints.remove(waypoint);
                         //reloadFlightplan();
                         dialog.cancel();
-
+                        if (onFlightplanEvent != null) onFlightplanEvent.onDeleteClickedClicked(waypoint, flightPlan);
                     }
 
                 });
@@ -116,12 +121,15 @@ public class FlightplanController {
         if (down) {
             // Move this waypoint one position down, so move the waypoint following this one, one position up
             flightPlanDataSource.MoveWaypointDown(flightPlan, waypoint);
+            if (onFlightplanEvent != null) onFlightplanEvent.onMoveDownClicked(waypoint, flightPlan);
         }
         else
         {
             flightPlanDataSource.MoveWaypointUp(flightPlan, waypoint);
+            if (onFlightplanEvent != null) onFlightplanEvent.onMoveUpClicked(waypoint, flightPlan);
         }
 
+        flightPlanDataSource.GetWaypointsByFlightPlan(flightPlan);
         flightPlanDataSource.close();
 
         //reloadFlightplan();
@@ -157,6 +165,7 @@ public class FlightplanController {
                     flightPlanDataSource.UpdateInsertWaypoints(flightPlan.Waypoints);
                     flightPlanDataSource.close();
                     //LoadFlightplanGrid();
+                    if (onFlightplanEvent != null) onFlightplanEvent.onDeviationClicked(waypoint, flightPlan);
                 }
             }
         });
@@ -177,7 +186,7 @@ public class FlightplanController {
 
         //legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
         //infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
-
+        if (onFlightplanEvent != null) onFlightplanEvent.onTakeoffClicked(waypoint, flightPlan);
     }
 
     public void SetATO(final Waypoint waypoint)
@@ -192,5 +201,6 @@ public class FlightplanController {
 
         //legInfoView.setActiveLeg(selectedFlightplan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
         //infoPanel.setActiveLeg(selectedFlightplan.getActiveLeg());
+        if (onFlightplanEvent != null) onFlightplanEvent.onAtoClicked(waypoint, flightPlan);
     }
 }
