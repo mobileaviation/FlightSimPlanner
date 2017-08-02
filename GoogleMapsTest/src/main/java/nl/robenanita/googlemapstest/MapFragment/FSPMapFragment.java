@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Location;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,25 +18,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -53,10 +46,10 @@ import nl.robenanita.googlemapstest.AirportsInfoFragment;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.FlightplanGrid;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
+import nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment;
 import nl.robenanita.googlemapstest.LegInfoView;
 import nl.robenanita.googlemapstest.MapController;
 import nl.robenanita.googlemapstest.Navaid;
-import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
@@ -371,8 +364,15 @@ public class FSPMapFragment extends Fragment {
                     infoWindow = null;
                 }
 
-                infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, new AirportsInfoFragment());
-                infoWindow.MapPositionChanged();
+                Airport airport = airportMarkerMap.get(marker);
+
+                if (airport != null) {
+                    AirportInfoWndFragment airportInfoFragment = new AirportInfoWndFragment();
+                    airportInfoFragment.SetAirport(airport, mainActivity);
+                    infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, airportInfoFragment);
+                    infoWindow.MapPositionChanged();
+
+                }
 
                 return true;
             }

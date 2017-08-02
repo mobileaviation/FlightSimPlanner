@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context="nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment"
+    >
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="1dp"
+    android:layout_weight="50">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:background="#EEEEEE"
+        android:layout_marginBottom="1dp"
+        android:minHeight="160dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dit is een InfoWindow Test"
+            android:id="@+id/infoWindowInfoTxt"
+            android:layout_margin="10dp"
+            android:textIsSelectable="true"
+            android:textSize="12dp"
+            android:typeface="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:background="#EEEEEE">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dit is een InfoWindow Test"
+            android:id="@+id/infoWindowFrequenciesTxt"
+            android:layout_margin="10dp"
+            android:textIsSelectable="true"
+            android:textSize="12dp"
+            android:typeface="normal" />
+    </LinearLayout>
+
+</LinearLayout>
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginRight="1dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="1dp"
+    android:background="#EEEEEE"
+    android:layout_weight="50">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dit is een InfoWindow Test"
+        android:id="@+id/infoWindowRunwaysTxt"
+        android:layout_margin="10dp"
+        android:textIsSelectable="true"
+        android:textSize="12dp"
+        android:typeface="normal" />
+</LinearLayout>
+</LinearLayout>

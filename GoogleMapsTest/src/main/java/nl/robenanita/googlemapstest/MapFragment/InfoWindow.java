@@ -26,6 +26,7 @@ public class InfoWindow {
         this.infoWindowContentLayout = (LinearLayout)parentfragent.getView().findViewById(R.id.fspInfoWindowContentLayout);
         this.infoWindowContent = (LinearLayout)parentfragent.getView().findViewById(R.id.fspInfoWindowContent);
         this.fragment = fragment;
+
         setupWindow();
     }
 
@@ -40,9 +41,10 @@ public class InfoWindow {
     {
         Projection projection = googleMap.getProjection();
         Point screenpoint = projection.toScreenLocation(position);
+        //infoWindowContentLayout.measure(10,10);
         FrameLayout.LayoutParams  layoutParams = (FrameLayout.LayoutParams) infoWindowContentLayout.getLayoutParams();
-        Integer width = layoutParams.width;
-        Integer height = layoutParams.height;
+        Integer width = infoWindowContentLayout.getMeasuredWidth();//layoutParams.width;
+        Integer height = infoWindowContentLayout.getMeasuredHeight();//layoutParams.height;
         layoutParams.setMargins(screenpoint.x - (width / 2), screenpoint.y - height, 0, 0);
         infoWindowContentLayout.setLayoutParams(layoutParams);
     }
