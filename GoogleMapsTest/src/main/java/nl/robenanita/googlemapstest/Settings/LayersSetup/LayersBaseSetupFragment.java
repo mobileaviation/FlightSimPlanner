@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
+import nl.robenanita.googlemapstest.database.MapTypeProperties;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,28 +41,32 @@ public class LayersBaseSetupFragment extends Fragment {
 
         n = (NavigationActivity)container.getContext();
 
+        MapTypeProperties properties = new MapTypeProperties();
+        properties.LoadFromDatabase(n);
+
+
         RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.baseBtnGroup);
 
-        if (n.mapController != null) {
-            Integer typeMap = n.mapController.getGoogleMapType();
-            Log.i(TAG, "Current Set Maptype: " + typeMap);
-            if (typeMap != null) {
-                if (typeMap == MapStyle.MAP_TYPE_HYBRID)
-                    radioGroup.check(R.id.layersBaseHybridBtn);
-                if (typeMap == MapStyle.MAP_TYPE_NONE)
-                    radioGroup.check(R.id.layersBaseNoneBtn);
-                if (typeMap == MapStyle.MAP_TYPE_NORMAL)
-                    radioGroup.check(R.id.layersBaseNormalBtn);
-                if (typeMap == MapStyle.MAP_TYPE_SATELLITE)
-                    radioGroup.check(R.id.layersBaseSatelliteBtn);
-                if (typeMap == MapStyle.MAP_TYPE_TERRAIN)
-                    radioGroup.check(R.id.layersBaseTerrainBtn);
-                if (typeMap == MapStyle.MAP_TYPE_AVIATION_DAY)
-                    radioGroup.check(R.id.layersBaseAviationStyleDayBtn);
-                if (typeMap == MapStyle.MAP_TYPE_AVIATION_NIGHT)
-                    radioGroup.check(R.id.layersBaseAviationStyleNightBtn);
-            }
+
+        Integer typeMap = properties.GetSelected();
+        Log.i(TAG, "Current Set Maptype: " + typeMap);
+        if (typeMap != null) {
+            if (typeMap == MapStyle.MAP_TYPE_HYBRID)
+                radioGroup.check(R.id.layersBaseHybridBtn);
+            if (typeMap == MapStyle.MAP_TYPE_NONE)
+                radioGroup.check(R.id.layersBaseNoneBtn);
+            if (typeMap == MapStyle.MAP_TYPE_NORMAL)
+                radioGroup.check(R.id.layersBaseNormalBtn);
+            if (typeMap == MapStyle.MAP_TYPE_SATELLITE)
+                radioGroup.check(R.id.layersBaseSatelliteBtn);
+            if (typeMap == MapStyle.MAP_TYPE_TERRAIN)
+                radioGroup.check(R.id.layersBaseTerrainBtn);
+            if (typeMap == MapStyle.MAP_TYPE_AVIATION_DAY)
+                radioGroup.check(R.id.layersBaseAviationStyleDayBtn);
+            if (typeMap == MapStyle.MAP_TYPE_AVIATION_NIGHT)
+                radioGroup.check(R.id.layersBaseAviationStyleNightBtn);
         }
+
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

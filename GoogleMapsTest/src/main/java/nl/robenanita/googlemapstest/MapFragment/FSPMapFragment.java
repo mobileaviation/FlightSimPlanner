@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Location;
 import android.media.Image;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SlidingDrawer;
@@ -30,6 +32,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -46,6 +49,7 @@ import java.util.Map;
 
 import nl.robenanita.googlemapstest.AddWayPointPopup;
 import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.AirportsInfoFragment;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.FlightplanGrid;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
@@ -54,6 +58,7 @@ import nl.robenanita.googlemapstest.MapController;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
+import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Weather.WeatherActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
@@ -115,6 +120,8 @@ public class FSPMapFragment extends Fragment {
     private LegInfoView legInfoView;
     private InfoPanelFragment infoPanel;
 
+    private InfoWindow infoWindow;
+
     public FSPMapFragment() {
         // Required empty public constructor
     }
@@ -170,6 +177,7 @@ public class FSPMapFragment extends Fragment {
                 setOnCameraMoveListener();
                 setOnPolylineClickListeners();
                 setOnMarkerDragListeners();
+                setOnMarkerClickListeners();
                 setOnInfoWindowListeners();
                 if (onMapReadyCallback != null)
                     FSPMapFragment.this.onMapReadyCallback.onMapReady(googleMap);
@@ -197,8 +205,13 @@ public class FSPMapFragment extends Fragment {
     private void setMapController()
     {
         mapController = new MapController(googleMap, mainActivity);
-        mapController.setBaseMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        mapController.setBaseMapType(MapStyle.MAP_TYPE_AVIATION_DAY);
         mapController.setUpTileProvider();
+    }
+
+    public MapController GetMapcontroller()
+    {
+        return mapController;
     }
 
     public void SetMapPosition(LatLng position, Float zoom)
@@ -253,6 +266,9 @@ public class FSPMapFragment extends Fragment {
             public void onCameraMove() {
                 Log.i(TAG, "Camera Moved to: " + googleMap.getCameraPosition().target.latitude + " : " + googleMap.getCameraPosition().target.longitude);
                 curPosition = googleMap.getCameraPosition();
+                if (infoWindow != null){
+                    infoWindow.MapPositionChanged();
+                }
             }
         });
 
@@ -341,6 +357,24 @@ public class FSPMapFragment extends Fragment {
                         LoadFlightplan(selectedFlightplan.id);
                     }
                 }
+            }
+        });
+    }
+
+    private void setOnMarkerClickListeners()
+    {
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (infoWindow != null){
+                    infoWindow.RemoveInfoWindow();
+                    infoWindow = null;
+                }
+
+                infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, new AirportsInfoFragment());
+                infoWindow.MapPositionChanged();
+
+                return true;
             }
         });
     }

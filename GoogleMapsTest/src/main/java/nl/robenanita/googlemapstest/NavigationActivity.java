@@ -250,6 +250,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
                 initInstruments();
                 SetupScaleBar();
+                mapController = fspMapFragment.GetMapcontroller();
 
                 fspMapFragment.SetOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                     @Override
@@ -934,6 +935,7 @@ public class NavigationActivity extends ActionBarActivity implements
                     LatLng searchPos = new LatLng(airport.latitude_deg, airport.longitude_deg);
                     curPosition = searchPos;
                     fspMapFragment.SetMapPosition(searchPos);
+
 //                    setCompassroseMarker(searchPos);
 //                    SetAirportMarkersByZoomAndBoundary();
                 }
