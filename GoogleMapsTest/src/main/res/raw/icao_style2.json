@@ -22,5 +22,6 @@
   {"featureType":"poi.business","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#e8bd4f"}]},
   {"featureType":"poi.sports_complex","elementType":"labels.text","stylers":[{"visibility":"off"}]},
   {"featureType":"poi.sports_complex","elementType":"labels.icon","stylers":[{"visibility":"on"}]},
-  {"featureType":"road.highway.controlled_access","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#fc0000"},{"weight":1}]}
+  {"featureType":"road.highway.controlled_access","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#fc0000"},{"weight":1}]},
+  {"featureType":"road.arterial","elementType":"all","stylers":[{"visibility":"off"}]}
 ]
