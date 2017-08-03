@@ -3,6 +3,7 @@ package nl.robenanita.googlemapstest.MapFragment;
 import android.app.Fragment;
 import android.graphics.Point;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -24,28 +25,37 @@ public class InfoWindow {
         this.googleMap = googleMap;
         this.parentFragment = parentfragent;
         this.infoWindowContentLayout = (LinearLayout)parentfragent.getView().findViewById(R.id.fspInfoWindowContentLayout);
+
         this.infoWindowContent = (LinearLayout)parentfragent.getView().findViewById(R.id.fspInfoWindowContent);
         this.fragment = fragment;
 
         setupWindow();
+        infoWindowContentLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                setPosition();
+            }
+        });
     }
 
     private void setupWindow()
     {
-        parentFragment.getFragmentManager().beginTransaction().add(infoWindowContent.getId(), fragment).commit();
+        parentFragment.getFragmentManager().beginTransaction().replace(infoWindowContent.getId(), fragment).commit();
         infoWindowContentLayout.setVisibility(View.VISIBLE);
-        setPosition();
+        //setPosition();
     }
 
     private void setPosition()
     {
         Projection projection = googleMap.getProjection();
         Point screenpoint = projection.toScreenLocation(position);
-        //infoWindowContentLayout.measure(10,10);
         FrameLayout.LayoutParams  layoutParams = (FrameLayout.LayoutParams) infoWindowContentLayout.getLayoutParams();
-        Integer width = infoWindowContentLayout.getMeasuredWidth();//layoutParams.width;
-        Integer height = infoWindowContentLayout.getMeasuredHeight();//layoutParams.height;
-        layoutParams.setMargins(screenpoint.x - (width / 2), screenpoint.y - height, 0, 0);
+        Integer width = infoWindowContentLayout.getMeasuredWidth();
+        Integer height = infoWindowContentLayout.getMeasuredHeight();
+        Integer x = screenpoint.x - (width / 2);
+        Integer y = screenpoint.y - height;
+
+        layoutParams.setMargins(x, y, 0, 0);
         infoWindowContentLayout.setLayoutParams(layoutParams);
     }
 
@@ -56,7 +66,7 @@ public class InfoWindow {
 
     public void RemoveInfoWindow()
     {
-        infoWindowContentLayout.setVisibility(View.GONE);
+        infoWindowContentLayout.setVisibility(View.INVISIBLE);
     }
 
     private final LatLng position;

@@ -377,12 +377,20 @@ public class FSPMapFragment extends Fragment {
                 return true;
             }
         });
+
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (infoWindow != null){
+                    infoWindow.RemoveInfoWindow();
+                    infoWindow = null;
+                }
+            }
+        });
     }
 
     private void setOnInfoWindowListeners()
     {
-
-
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             private Marker marker;
             private Airport airport;

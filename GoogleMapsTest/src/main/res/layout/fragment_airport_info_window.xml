@@ -1,77 +1,154 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    tools:context="nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment"
-    >
-
-<LinearLayout
+    android:background="@android:color/transparent"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="1dp"
-    android:layout_weight="50">
+    tools:context="nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="50"
+        android:id="@+id/airportRunwayFreqLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="41dp"
+        android:background="@android:color/darker_gray"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="50"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:layout_weight="50"
+                android:background="#EEEEEE"
+                android:minHeight="160dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/infoWindowInfoTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Dit is een InfoWindow Test"
+                    android:textIsSelectable="false"
+                    android:textSize="12dp"
+                    android:typeface="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:background="#EEEEEE"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/infoWindowFrequenciesTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Dit is een InfoWindow Test"
+                    android:textIsSelectable="false"
+                    android:textSize="12dp"
+                    android:typeface="normal" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_weight="50"
+            android:background="#EEEEEE"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/infoWindowRunwaysTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Dit is een InfoWindow Test"
+                android:textIsSelectable="false"
+                android:textSize="12dp"
+                android:typeface="normal" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/NotamMetarTafbuttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
         android:background="#EEEEEE"
-        android:layout_marginBottom="1dp"
-        android:minHeight="160dp">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <TextView
+        <Button
+            android:id="@+id/airportInfoNotamBtn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dit is een InfoWindow Test"
-            android:id="@+id/infoWindowInfoTxt"
-            android:layout_margin="10dp"
-            android:textIsSelectable="true"
-            android:textSize="12dp"
-            android:typeface="normal" />
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:backgroundTint="#FFBDBDBD"
+            android:text="NOTAM"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/airportInfoMetarBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:backgroundTint="#FFBDBDBD"
+            android:text="METAR"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/airportInfoTafBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:backgroundTint="#FFBDBDBD"
+            android:text="TAF"
+            android:textSize="17sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="50"
-        android:background="#EEEEEE">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dit is een InfoWindow Test"
-            android:id="@+id/infoWindowFrequenciesTxt"
-            android:layout_margin="10dp"
-            android:textIsSelectable="true"
-            android:textSize="12dp"
-            android:typeface="normal" />
-    </LinearLayout>
-
-</LinearLayout>
-
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginRight="1dp"
-    android:layout_marginTop="1dp"
-    android:layout_marginBottom="1dp"
-    android:background="#EEEEEE"
-    android:layout_weight="50">
-
-    <TextView
+    <FrameLayout
+        android:id="@+id/airpotrtInfoNotamMetarTafLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dit is een InfoWindow Test"
-        android:id="@+id/infoWindowRunwaysTxt"
-        android:layout_margin="10dp"
-        android:textIsSelectable="true"
-        android:textSize="12dp"
-        android:typeface="normal" />
-</LinearLayout>
-</LinearLayout>
+        android:layout_height="200dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/border"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <ListView
+            android:id="@+id/airportsInfoWindowListView"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_blue_light" />
+
+        <ProgressBar
+            android:id="@+id/InfoWindowProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+</FrameLayout>
