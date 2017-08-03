@@ -18,6 +18,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String FLIGHTPLAN_TABLE_NAME = "tbl_Flightplans";
     public static final String USERWAYPOINT_TABLE_NAME = "tbl_Userwaypoints";
     public static final String AIRPORTINFO_TABLE_NAME = "tbl_AirportInfo";
+    public static final String AIRPORTCHARTS_TABLE_NAME = "tbl_AirportCharts";
 
     private static final String TAG = "GooglemapsTest";
 
@@ -69,6 +70,21 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_fir_id = "fir_id";
     public static final String C_ident = "ident";
     public static final String C_latest = "latest";
+
+    public static final String C_url = "url";
+    public static final String C_version = "version";
+    public static final String C_created_date = "created_date";
+    public static final String C_active = "äctive";
+
+    private static final String AIRPORTCHARTS_TABLE = "create table "
+            + AIRPORTCHARTS_TABLE_NAME + " (_id integer primary key autoincrement, "
+            + C_airport_id + " integer, "
+            + C_name + " text, "
+            + C_url + " text, "
+            + C_version + " text, "
+            + C_created_date + " integer, "
+            + C_active + " integer"
+            + " );";
 
     // Database creation sql statement
     private static final String AIRPORTINFO_TABLE = "create table "
@@ -259,6 +275,24 @@ public class UserDBHelper extends SQLiteOpenHelper {
             db.execSQL(i + "'BUFFER', '0.3', 'true');");
         }
 
+        if (oldVersion<10){
+            db.execSQL(AIRPORTCHARTS_TABLE);
+            Log.i(TAG, "Created AirportCharts table");
+
+        }
+
         updated = true;
+    }
+
+    private void insertStandaardChartsData(SQLiteDatabase db)
+    {
+        String i = "INSERT INTO " + AIRPORTCHARTS_TABLE_NAME + " (" +
+                 C_airport_id + ", "
+                + C_name + ", "
+                + C_url + ", "
+                + C_version + ", "
+                + C_created_date + ", "
+                + C_active + ") VALUES("
+                + " );";
     }
 }
