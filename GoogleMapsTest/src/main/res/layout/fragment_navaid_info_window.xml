@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="nl.robenanita.googlemapstest.InfoWindows.NavaidInfoWindowFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="50"
+        android:background="#EEEEEE"
+        android:minHeight="160dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/navaidInfoWindowInfoTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Dit is een InfoWindow Test"
+            android:textIsSelectable="false"
+            android:textSize="12dp"
+            android:typeface="normal" />
+    </LinearLayout>
+
+</FrameLayout>

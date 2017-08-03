@@ -47,6 +47,7 @@ import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.FlightplanGrid;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
 import nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment;
+import nl.robenanita.googlemapstest.InfoWindows.NavaidInfoWindowFragment;
 import nl.robenanita.googlemapstest.LegInfoView;
 import nl.robenanita.googlemapstest.MapController;
 import nl.robenanita.googlemapstest.Navaid;
@@ -365,13 +366,20 @@ public class FSPMapFragment extends Fragment {
                 }
 
                 Airport airport = airportMarkerMap.get(marker);
+                Navaid navaid = navaidMarkerMap.get(marker);
 
                 if (airport != null) {
                     AirportInfoWndFragment airportInfoFragment = new AirportInfoWndFragment();
                     airportInfoFragment.SetAirport(airport, mainActivity);
                     infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, airportInfoFragment);
                     infoWindow.MapPositionChanged();
+                }
 
+                if (navaid != null) {
+                    NavaidInfoWindowFragment navaidInfoFragment = new NavaidInfoWindowFragment();
+                    navaidInfoFragment.SetNavaid(navaid, mainActivity);
+                    infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, navaidInfoFragment);
+                    infoWindow.MapPositionChanged();
                 }
 
                 return true;
