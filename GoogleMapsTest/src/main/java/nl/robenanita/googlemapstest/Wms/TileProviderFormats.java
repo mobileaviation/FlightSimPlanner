@@ -186,6 +186,8 @@ public class TileProviderFormats {
 
     public static final String AIRPORTMAPQUADKEY_FORMAT = "http://www.mobileaviationtools.com/maps/Layer_#LAYER#/#QUADKEY#.png";
     public static final String AIRPORTMAPMANIFEST_FORMAT = "http://www.mobileaviationtools.com/maps/manifests/0.xml";
+    public static final String AIRPORTMAPMETADATA_FORMAT = "http://www.mobileaviationtools.com/maps/MapCruncherMetadata.xml";
+    public static final String AIRPORTMAPBASE_FORMAT = "http://www.mobileaviationtools.com/maps/";
 
     public enum airportLayer {
         VACEDWG,

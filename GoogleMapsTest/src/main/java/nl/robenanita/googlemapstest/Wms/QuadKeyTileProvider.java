@@ -62,9 +62,9 @@ public class QuadKeyTileProvider implements TileProvider {
         // set boundary
         // download manifest
 
-        readManifest readManifest = new readManifest();
-        readManifest.Url = manifestUrl;
-        readManifest.execute();
+//        readManifest readManifest = new readManifest();
+//        readManifest.Url = manifestUrl;
+//        readManifest.execute();
 
         this.url = url.replace("#LAYER#", layer.toString());
         setOpacity(opacity);

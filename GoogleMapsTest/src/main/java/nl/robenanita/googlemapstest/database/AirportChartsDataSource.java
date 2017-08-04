@@ -39,12 +39,20 @@ public class AirportChartsDataSource {
     private ContentValues createAirportChartValues(AirportChart airportChart)
     {
         ContentValues values = new ContentValues();
-        values.put(UserDBHelper.C_name, airportChart.name);
         values.put(UserDBHelper.C_airport_id, airportChart.airport_id);
         values.put(UserDBHelper.C_url, airportChart.url);
+        values.put(UserDBHelper.C_thumbnail_url, airportChart.thumbnail_url);
         values.put(UserDBHelper.C_version, airportChart.version);
         values.put(UserDBHelper.C_created_date, (airportChart.created_date==null)? -1 : airportChart.created_date.getTime());
         values.put(UserDBHelper.C_active, (airportChart.active)? 1 : 0);
+        values.put(UserDBHelper.C_display_name, airportChart.display_name);
+        values.put(UserDBHelper.C_reference_name, airportChart.reference_name);
+        values.put(UserDBHelper.C_file_prefix, airportChart.file_prefix);
+        values.put(UserDBHelper.C_file_suffix, airportChart.file_suffix);
+        values.put(UserDBHelper.C_latitude1_deg, airportChart.latitude_1_deg);
+        values.put(UserDBHelper.C_longitude1_deg, airportChart.longitude_1_deg);
+        values.put(UserDBHelper.C_latitude2_deg, airportChart.latitude_2_deg);
+        values.put(UserDBHelper.C_longitude2_deg, airportChart.longitude_2_deg);
         return values;
     }
 
@@ -54,6 +62,7 @@ public class AirportChartsDataSource {
         airportChart.id = cursor.getInt(cursor.getColumnIndex("_id"));
         airportChart.airport_id = cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_airport_id));
         airportChart.url = cursor.getString(cursor.getColumnIndex(UserDBHelper.C_url));
+        airportChart.thumbnail_url = cursor.getString(cursor.getColumnIndex(UserDBHelper.C_thumbnail_url));
         airportChart.version = cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_version));
         long t = (cursor.isNull(cursor.getColumnIndex(UserDBHelper.C_created_date))) ? 0 :
                 cursor.getLong(cursor.getColumnIndex(UserDBHelper.C_created_date));
@@ -63,6 +72,17 @@ public class AirportChartsDataSource {
         }
         Integer active = cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_active));
         airportChart.active = (active==1)? true : false;
+
+        airportChart.display_name = cursor.getString(cursor.getColumnIndex(UserDBHelper.C_display_name));
+        airportChart.reference_name = cursor.getString(cursor.getColumnIndex(UserDBHelper.C_reference_name));
+        airportChart.file_prefix = cursor.getString(cursor.getColumnIndex(UserDBHelper.C_file_prefix));
+        airportChart.file_suffix = cursor.getString(cursor.getColumnIndex(UserDBHelper.C_file_suffix));
+
+        airportChart.latitude_1_deg = cursor.getDouble(cursor.getColumnIndex(UserDBHelper.C_latitude1_deg));
+        airportChart.latitude_2_deg = cursor.getDouble(cursor.getColumnIndex(UserDBHelper.C_latitude2_deg));
+        airportChart.longitude_1_deg = cursor.getDouble(cursor.getColumnIndex(UserDBHelper.C_longitude1_deg));
+        airportChart.longitude_2_deg = cursor.getDouble(cursor.getColumnIndex(UserDBHelper.C_longitude2_deg));
+
         return  airportChart;
     }
 

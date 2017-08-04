@@ -78,6 +78,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.robenanita.googlemapstest.Airspaces.LoadAirspacesAsync;
+import nl.robenanita.googlemapstest.Charts.AirportCharts;
+import nl.robenanita.googlemapstest.Charts.MapCruncherMetadataReader;
 import nl.robenanita.googlemapstest.Charts.PDFCharts;
 import nl.robenanita.googlemapstest.Instruments.AirspeedView;
 import nl.robenanita.googlemapstest.Instruments.AltimeterView;
@@ -91,6 +93,7 @@ import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.Weather.WeatherActivity;
+import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
@@ -182,8 +185,8 @@ public class NavigationActivity extends ActionBarActivity implements
     private LoadTrack loadTrack;
 
     private FSPMapFragment fspMapFragment;
-//    private InfoWindow waypointInfoWindow;
-//    private InfoWindowManager infoWindowManager;
+
+    private AirportCharts airportCharts;
 
     @Override
     protected void onResume() {
@@ -719,8 +722,11 @@ public class NavigationActivity extends ActionBarActivity implements
 
             case R.id.action_loadchart:
             {
-                PDFCharts pdfCharts = new PDFCharts(this);
-                pdfCharts.LoadTestPDF();
+//                PDFCharts pdfCharts = new PDFCharts(this);
+//                pdfCharts.LoadTestPDF();
+                airportCharts = new AirportCharts();
+                MapCruncherMetadataReader mapCruncherMetadataReader = new MapCruncherMetadataReader();
+                mapCruncherMetadataReader.Read(TileProviderFormats.AIRPORTMAPBASE_FORMAT, airportCharts, this);
                 return true;
             }
             case R.id.action_DirectTo:

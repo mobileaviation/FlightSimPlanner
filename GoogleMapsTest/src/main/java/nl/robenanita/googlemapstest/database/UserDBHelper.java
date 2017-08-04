@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class UserDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "userairnav.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
     public static final String TRACKPOINTS_TABLE_NAME = "tbl_Trackpoints";
@@ -28,6 +28,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_time = "time";
     public static final String C_date = "date";
     public static final String C_trackid = "track_id";
+    public static final String C_latitude1_deg = "latitude1_deg";
+    public static final String C_longitude1_deg = "longitude1_deg";
+    public static final String C_latitude2_deg = "latitude2_deg";
+    public static final String C_longitude2_deg = "longitude2_deg";
     public static final String C_latitude_deg = "latitude_deg";
     public static final String C_longitude_deg = "longitude_deg";
     public static final String C_altitude_ft = "altitude_ft";
@@ -72,18 +76,32 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_latest = "latest";
 
     public static final String C_url = "url";
+    public static final String C_thumbnail_url = "thumbnail_url";
     public static final String C_version = "version";
     public static final String C_created_date = "created_date";
     public static final String C_active = "äctive";
+    public static final String C_display_name = "display_name";
+    public static final String C_reference_name = "reference_name";
+    public static final String C_file_prefix = "file_prefix";
+    public static final String C_file_suffix = "file_suffix";
+
 
     private static final String AIRPORTCHARTS_TABLE = "create table "
             + AIRPORTCHARTS_TABLE_NAME + " (_id integer primary key autoincrement, "
             + C_airport_id + " integer, "
-            + C_name + " text, "
             + C_url + " text, "
+            + C_thumbnail_url + " text, "
             + C_version + " text, "
             + C_created_date + " integer, "
-            + C_active + " integer"
+            + C_active + " integer, "
+            + C_latitude1_deg + " real, "
+            + C_longitude1_deg + " real, "
+            + C_latitude2_deg + " real, "
+            + C_longitude2_deg + " real, "
+            + C_display_name + " text, "
+            + C_reference_name + " text, "
+            + C_file_prefix + " text, "
+            + C_file_suffix + " text"
             + " );";
 
     // Database creation sql statement
@@ -290,6 +308,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
                  C_airport_id + ", "
                 + C_name + ", "
                 + C_url + ", "
+                + C_thumbnail_url + ", "
                 + C_version + ", "
                 + C_created_date + ", "
                 + C_active + ") VALUES("
