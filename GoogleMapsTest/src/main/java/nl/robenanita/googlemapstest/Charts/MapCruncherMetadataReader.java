@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest.Charts;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -26,6 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
+import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 
 /**
@@ -49,6 +51,8 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
     private Document document;
     private AirportCharts airportCharts;
     private Context context;
+
+    private final String TAG = "MapMetadataReader";
 
     @Override
     protected void onPreExecute() {
@@ -173,6 +177,7 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
 
                 airportChart.active = true;
                 airportChart.created_date = new Date();
+                airportChart.version = 1;
 
                 airportChart.airport_ident = airportChart.reference_name.substring(airportChart.reference_name.length()-4,
                         airportChart.reference_name.length());
@@ -181,9 +186,15 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
                 Airport airport = airportDataSource.GetAirportByIDENT(airportChart.airport_ident);
                 airportChart.airport_id = airport.id;
                 airportDataSource.close();
+
+                AirportChartsDataSource airportChartsDataSource = new AirportChartsDataSource(context);
+                airportChartsDataSource.open();
+                airportChartsDataSource.InsertChart(airportChart);
+                airportChartsDataSource.close();
             }
 
             airportCharts.add(airportChart);
+            Log.i(TAG, "Charts inserted in database: " + airportCharts.size());
         }
     }
 }

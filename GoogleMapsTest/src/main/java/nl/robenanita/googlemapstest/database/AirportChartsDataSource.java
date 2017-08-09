@@ -86,4 +86,42 @@ public class AirportChartsDataSource {
         return  airportChart;
     }
 
+    public Boolean ChartExists(AirportChart airportChart)
+    {
+        Integer count = 0;
+        String query = "SELECT COUNT(*) C FROM " + UserDBHelper.AIRPORTCHARTS_TABLE_NAME +
+                " WHERE " + UserDBHelper.C_reference_name  + "='" + airportChart.reference_name + "';";
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst())
+        {
+            count = cursor.getInt(cursor.getColumnIndex("C"));
+        }
+        return (count>0);
+    }
+
+    public Integer GetChartCount()
+    {
+        Integer count = 0;
+        String query = "SELECT COUNT(*) C FROM " + UserDBHelper.AIRPORTCHARTS_TABLE_NAME +";";
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst())
+        {
+            count = cursor.getInt(cursor.getColumnIndex("C"));
+        }
+        return count;
+    }
+
+    public void InsertChart(AirportChart airportChart)
+    {
+        if (ChartExists(airportChart))
+        {
+            ContentValues values = createAirportChartValues(airportChart);
+
+            long insertId = database.insert(UserDBHelper.AIRPORTCHARTS_TABLE_NAME, null,
+                    values);
+        }
+    }
+
 }

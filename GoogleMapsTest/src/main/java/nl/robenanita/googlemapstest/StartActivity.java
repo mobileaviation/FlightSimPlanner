@@ -21,6 +21,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
+import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.CheckDatabaseSource;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
@@ -47,6 +48,7 @@ public class StartActivity extends ActionBarActivity {
     TextView fsuipcTextView;
     TextView xpuipcTextView;
     TextView installationTextView;
+    TextView airportChartCountTxt;
 
     CountDownTimer adLoadTimer;
 
@@ -403,16 +405,23 @@ public class StartActivity extends ActionBarActivity {
         Integer fiCount = fixesDataSource.GetFixesCount();
         fixesDataSource.close();
 
+        AirportChartsDataSource airportChartsDataSource = new AirportChartsDataSource(this);
+        airportChartsDataSource.open();
+        Integer chartCount = airportChartsDataSource.GetChartCount();
+        airportChartsDataSource.close();
+
         airportCountTxt = (TextView) findViewById(R.id.airportCountTxt);
         flightplanCountTxt = (TextView) findViewById(R.id.flightplanCountTxt);
         navaidsCountTxt = (TextView) findViewById(R.id.navaidsCountTxt);
         runwaysCountTxt = (TextView) findViewById(R.id.runwaysCountTxt);
         fixesCountTxt = (TextView) findViewById(R.id.fixesCountTxt);
+        airportChartCountTxt = (TextView) findViewById(R.id.chartsCountTxt);
         airportCountTxt.setText(Integer.toString(apCount));
         flightplanCountTxt.setText(Integer.toString(fpCount));
         navaidsCountTxt.setText(Integer.toString(naCount));
         runwaysCountTxt.setText(Integer.toString(ruCount));
         fixesCountTxt.setText(Integer.toString(fiCount));
+        airportChartCountTxt.setText(Integer.toString(chartCount));
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
         propertiesDataSource.open(false);
