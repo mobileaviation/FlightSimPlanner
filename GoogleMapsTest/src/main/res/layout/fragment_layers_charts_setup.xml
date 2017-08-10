@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    tools:context="nl.robenanita.googlemapstest.Settings.LayersSetup.LayersChartsSetupFragment">
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="Airport Charts"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:visibility="visible" />
+
+    <ListView
+        android:id="@+id/airportChartsSetupList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_weight="3"></ListView>
+
+    <ImageView
+        android:id="@+id/chartImageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:adjustViewBounds="false"
+        app:srcCompat="@android:color/transparent" />
+</LinearLayout>

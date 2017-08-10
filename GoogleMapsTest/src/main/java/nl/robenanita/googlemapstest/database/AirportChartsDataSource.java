@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.Date;
 
 import nl.robenanita.googlemapstest.Charts.AirportChart;
+import nl.robenanita.googlemapstest.Charts.AirportCharts;
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 
 /**
@@ -115,13 +116,30 @@ public class AirportChartsDataSource {
 
     public void InsertChart(AirportChart airportChart)
     {
-        if (ChartExists(airportChart))
+        if (!ChartExists(airportChart))
         {
             ContentValues values = createAirportChartValues(airportChart);
 
             long insertId = database.insert(UserDBHelper.AIRPORTCHARTS_TABLE_NAME, null,
                     values);
         }
+    }
+
+    public AirportCharts GetAllCharts()
+    {
+        AirportCharts airportCharts = new AirportCharts();
+        String query = "SELECT * FROM " + UserDBHelper.AIRPORTCHARTS_TABLE_NAME  + ";";
+        Cursor cursor = database.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast())
+        {
+            AirportChart airportChart = cursorToAirportChart(cursor);
+            airportCharts.add(airportChart);
+            cursor.moveToNext();
+        }
+
+        return airportCharts;
     }
 
 }

@@ -51,6 +51,8 @@ public class MapLayersFragment extends Fragment {
                 LayersAirspacesSetupFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec("Weather").setIndicator("Weather"),
                 LayersWeatherSetupFragment.class, null);
+        tabHost.addTab(tabHost.newTabSpec("Charts").setIndicator("Charts"),
+                LayersChartsSetupFragment.class, null);
 
 
 
