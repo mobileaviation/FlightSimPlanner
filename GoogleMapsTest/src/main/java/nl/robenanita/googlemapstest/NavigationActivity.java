@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -174,6 +175,8 @@ public class NavigationActivity extends ActionBarActivity implements
     public Runway initRunway;
     public MapController mapController;
 
+    private SlidingDrawer flightplanDrawer;
+
     public HashMap<Marker, Airport> airportMarkerMap;
     public HashMap<Marker, Navaid> navaidMarkerMap;
 
@@ -217,6 +220,9 @@ public class NavigationActivity extends ActionBarActivity implements
         tracksLayout.setVisibility(View.GONE);
 
         infoPanel = (InfoPanelFragment) getFragmentManager().findFragmentById(R.id.infoPanelFragment);
+
+        flightplanDrawer = (SlidingDrawer) findViewById(R.id.flightplandrawer);
+        SetupDrawerListeners();
 
         routeLineClicked = false;
 
@@ -265,6 +271,24 @@ public class NavigationActivity extends ActionBarActivity implements
         });
 
         fspMapFragment.InitializeMap(NavigationActivity.this, legInfoView, infoPanel);
+    }
+
+    private void SetupDrawerListeners() {
+        flightplanDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+            @Override
+            public void onDrawerOpened() {
+                FlightplanGrid flightplanFragment = (FlightplanGrid)NavigationActivity.this.getFragmentManager().findFragmentById(R.id.flightplanFragment);
+                Log.i(TAG, "grid height : " + flightplanFragment.getView().getMeasuredHeight());
+            }
+        });
+
+        flightplanDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FlightplanGrid flightplanFragment = (FlightplanGrid)NavigationActivity.this.getFragmentManager().findFragmentById(R.id.flightplanFragment);
+                Log.i(TAG, "grid height : " + flightplanFragment.getView().getMeasuredHeight());
+            }
+        });
     }
 
     public FlightPlan GetSelectedFlightplan()
@@ -444,7 +468,7 @@ public class NavigationActivity extends ActionBarActivity implements
                                 : directToPopupPopup.selectedAirport.name;
                         Toloc = new LatLng(directToPopupPopup.selectedAirport.latitude_deg,
                                 directToPopupPopup.selectedAirport.longitude_deg);
-//                        setupTrack(planePosition, Toloc, ident);
+                        fspMapFragment.SetupDirectToTrack(Toloc, ident, NavigationActivity.this);
                     }
                     if (directToPopupPopup.selectedNavaid != null)
                     {
@@ -452,7 +476,7 @@ public class NavigationActivity extends ActionBarActivity implements
                                 : directToPopupPopup.selectedNavaid.name;
                         Toloc = new LatLng(directToPopupPopup.selectedNavaid.latitude_deg,
                                 directToPopupPopup.selectedNavaid.longitude_deg);
-//                        setupTrack(planePosition, Toloc, ident);
+                        fspMapFragment.SetupDirectToTrack(Toloc, ident, NavigationActivity.this);
                     }
                     if (directToPopupPopup.selectedFix != null)
                     {
@@ -460,7 +484,7 @@ public class NavigationActivity extends ActionBarActivity implements
                                 : directToPopupPopup.selectedFix.name;
                         Toloc = new LatLng(directToPopupPopup.selectedFix.latitude_deg,
                                 directToPopupPopup.selectedFix.longitude_deg);
-//                        setupTrack(planePosition, Toloc, ident);
+                        fspMapFragment.SetupDirectToTrack(Toloc, ident, NavigationActivity.this);
                     }
                 }
             }
@@ -1359,19 +1383,19 @@ public class NavigationActivity extends ActionBarActivity implements
 //
 //
 //        infoPanel.setTrack(track);
-//        track.DrawTrack(map);
-//
-//
-//        Location l = new Location("loc");
-//        l.setLongitude(planePosition.longitude);
-//        l.setLatitude(planePosition.latitude);
-//
-//        if (selectedFlightplan != null) {
-//            Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l, this);
-//            selectedFlightplan.setActiveLeg(alternateLeg);
-//        }
-//
-//        SetInfoPanel(l);
+////        track.DrawTrack(map);
+////
+////
+////        Location l = new Location("loc");
+////        l.setLongitude(planePosition.longitude);
+////        l.setLatitude(planePosition.latitude);
+////
+////        if (selectedFlightplan != null) {
+////            Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l, this);
+////            selectedFlightplan.setActiveLeg(alternateLeg);
+////        }
+////
+////        SetInfoPanel(l);
 //    }
 
     private final static int

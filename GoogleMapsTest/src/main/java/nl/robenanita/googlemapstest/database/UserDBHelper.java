@@ -241,7 +241,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL(AIRPORTINFO_NOTAMDATE_INDEX);
         Log.i(TAG, "Creating Index AirportInfo notamnumber");
         db.execSQL(AIRPORTINFO_NOTAMNUMBER_INDEX);
-
+        Log.i(TAG, "Created AirportCharts table");
+        db.execSQL(AIRPORTCHARTS_TABLE);
     }
 
     private void insertBasicPropertiesData(SQLiteDatabase db)

@@ -73,6 +73,14 @@ public class QuadKeyTileProvider implements TileProvider {
         this.layer = layer.toString();
     }
 
+    public QuadKeyTileProvider(String url, String layer, int opacity, Context context)
+    {
+        this.url = url;
+        this.context = context;
+        this.layer = layer;
+        setOpacity(opacity);
+    }
+
     private String readFromInputStream(InputStream inputStream)
     {
         if(inputStream != null)

@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 
+import nl.robenanita.googlemapstest.Charts.AirportChart;
 import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
 import nl.robenanita.googlemapstest.Wms.TileProviderFactory;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
@@ -124,25 +125,25 @@ public class MapController
                 TileProviderFactory.getCanadaWeatherProvider(TileProviderFormats.weathermapLayer.RADAR_RDBR, TileProviderFormats.canadamapStyle.RADAR);
         canadaWeatherUSRadarOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp12));
 
-        TileProvider tp13 =
-                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHLE, 100, context);
-        airportTestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp13));
-        airportTestOverlay.setVisible(true);
-
-        TileProvider tp14 =
-                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEDWG, 100, context);
-        airport2TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp14));
-        airport2TestOverlay.setVisible(true);
-
-        TileProvider tp15 =
-                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHAL, 100, context);
-        airport3TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp15));
-        airport3TestOverlay.setVisible(true);
-
-        TileProvider tp16 =
-                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHTX, 100, context);
-        airport4TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp16));
-        airport4TestOverlay.setVisible(true);
+//        TileProvider tp13 =
+//                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHLE, 100, context);
+//        airportTestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp13));
+//        airportTestOverlay.setVisible(true);
+//
+//        TileProvider tp14 =
+//                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEDWG, 100, context);
+//        airport2TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp14));
+//        airport2TestOverlay.setVisible(true);
+//
+//        TileProvider tp15 =
+//                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHAL, 100, context);
+//        airport3TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp15));
+//        airport3TestOverlay.setVisible(true);
+//
+//        TileProvider tp16 =
+//                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHTX, 100, context);
+//        airport4TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp16));
+//        airport4TestOverlay.setVisible(true);
 
         weatherProperties = new WeatherProperties();
         weatherProperties.ClearProperties();
@@ -153,6 +154,46 @@ public class MapController
         SetChartBundle();
 
         skylinesOverlay.setVisible(airspacesVisible);
+    }
+
+    private TileOverlayOptions chartoverlayOptions;
+    public void SetAirportChart(AirportChart airportChart)
+    {
+        TileProvider tp13 = TileProviderFactory.getTileAirportChartProvider(airportChart, 100, context);
+
+        if (airportTestOverlay == null)
+        {
+            chartoverlayOptions = new TileOverlayOptions().tileProvider(tp13);
+            airportTestOverlay = map.addTileOverlay(chartoverlayOptions);
+            airportTestOverlay.setVisible(true);
+        }
+        else
+        {
+            airportTestOverlay.remove();
+            chartoverlayOptions = new TileOverlayOptions().tileProvider(tp13);
+            airportTestOverlay = map.addTileOverlay(chartoverlayOptions);
+            airportTestOverlay.setVisible(true);
+        }
+
+//        TileProvider tp13 =
+//                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHLE, 100, context);
+//        airportTestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp13));
+//        airportTestOverlay.setVisible(true);
+//
+//        TileProvider tp14 =
+//                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEDWG, 100, context);
+//        airport2TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp14));
+//        airport2TestOverlay.setVisible(true);
+//
+//        TileProvider tp15 =
+//                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHAL, 100, context);
+//        airport3TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp15));
+//        airport3TestOverlay.setVisible(true);
+//
+//        TileProvider tp16 =
+//                TileProviderFactory.getTileAirportMapProvider(TileProviderFormats.airportLayer.VACEHTX, 100, context);
+//        airport4TestOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp16));
+//        airport4TestOverlay.setVisible(true);
     }
 
     private void SetChartBundle()

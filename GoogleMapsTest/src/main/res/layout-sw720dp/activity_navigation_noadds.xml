@@ -127,43 +127,42 @@
         </LinearLayout>
 
         <SlidingDrawer
+            android:id="@+id/flightplandrawer"
             android:layout_width="fill_parent"
             android:layout_height="300dp"
-            android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginRight="2dp"
             android:background="#00000000"
-            android:visibility="gone"
-            android:layout_marginBottom="2dp"
-            android:id="@+id/flightplandrawer"
             android:content="@+id/flightplanLayout"
             android:handle="@+id/flightplanhandle"
-            >
+            android:orientation="vertical"
+            android:visibility="gone">
+
             <Button
+                android:id="@+id/flightplanhandle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#0f0"
                 android:text="Open"
-                android:textColor="#fff"
-                android:id="@+id/flightplanhandle"/>
+                android:textColor="#fff" />
 
             <LinearLayout
-                android:orientation="vertical"
+                android:id="@+id/flightplanLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
                 android:background="#00000000"
-                android:id="@+id/flightplanLayout"
-                android:visibility="visible"
-                android:layout_marginBottom="2dp">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:map="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/flightplanFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:name="nl.robenanita.googlemapstest.FlightplanGrid"
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
             </LinearLayout>

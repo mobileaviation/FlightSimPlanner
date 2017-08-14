@@ -29,21 +29,23 @@
                 android:gravity="center_horizontal|bottom" />
 
             <TextView
+                android:id="@+id/textView3"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
+                android:gravity="center|bottom"
                 android:text="Station"
-                android:id="@+id/textView3"
                 android:textColor="#383838"
-                android:gravity="center|bottom" />
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/textView4"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:text="Frequency"
-                android:id="@+id/textView4"
-                android:textColor="#383838"
+                android:gravity="center|bottom"
                 android:phoneNumber="false"
-                android:gravity="center|bottom" />
+                android:text="Frequency"
+                android:textColor="#383838"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="60dp"

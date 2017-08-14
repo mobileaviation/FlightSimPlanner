@@ -22,10 +22,22 @@ public class Track {
     private Location toLocation;
     private String ident;
     private Polyline track;
+    private Polyline track1;
+
+    private PolylineOptions trackoptions;
+    private PolylineOptions trackoptions1;
+
+    private Context context;
+
+    public Track(Context context)
+    {
+        this.context = context;
+    }
 
     public void RemoveTrack()
     {
         if (track != null) track.remove();
+        if (track1 != null) track1.remove();
     }
 
     public void setFromToLocation(LatLng from, LatLng to, String ident)
@@ -39,6 +51,25 @@ public class Track {
         toLocation.setLongitude(to.longitude);
     }
 
+    private void createPolylineOptions()
+    {
+        trackoptions = new PolylineOptions();
+        trackoptions.color(Color.RED);
+        trackoptions.width(Helpers.convertDpToPixel(7, context));
+        trackoptions.add(new LatLng(fromLocation.getLatitude(), fromLocation.getLongitude()));
+        trackoptions.add(new LatLng(toLocation.getLatitude(), toLocation.getLongitude()));
+        trackoptions.clickable(true);
+        trackoptions.zIndex(1000);
+
+        trackoptions1 = new PolylineOptions();
+        trackoptions1.color(Color.BLACK);
+        trackoptions1.width(Helpers.convertDpToPixel(11, context));
+        trackoptions1.add(new LatLng(fromLocation.getLatitude(), fromLocation.getLongitude()));
+        trackoptions1.add(new LatLng(toLocation.getLatitude(), toLocation.getLongitude()));
+        trackoptions1.clickable(false);
+        trackoptions1.zIndex(990);
+    }
+
     public void DrawTrack(GoogleMap map)
     {
         DrawTrack(map, fromLocation);
@@ -48,12 +79,9 @@ public class Track {
         fromLocation = newLoc;
         RemoveTrack();
 
-        PolylineOptions trackOptions = new PolylineOptions();
-        trackOptions.color(Color.RED);
-        trackOptions.width(5);
-        trackOptions.add(new LatLng(fromLocation.getLatitude(), fromLocation.getLongitude()));
-        trackOptions.add(new LatLng(toLocation.getLatitude(), toLocation.getLongitude()));
-        track = map.addPolyline(trackOptions);
+        createPolylineOptions();
+        track = map.addPolyline(trackoptions);
+        track1 = map.addPolyline(trackoptions1);
     }
 
     public Integer getBearing()

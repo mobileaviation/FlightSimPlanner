@@ -2,11 +2,14 @@ package nl.robenanita.googlemapstest.Wms;
 
 import android.content.Context;
 
+import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
+
+import nl.robenanita.googlemapstest.Charts.AirportChart;
 
 /**
  * Created by Rob Verhoef on 2-10-2014.
@@ -88,6 +91,12 @@ public class TileProviderFactory {
         TileProvider tileProvider = new QuadKeyTileProvider(TileProviderFormats.AIRPORTMAPQUADKEY_FORMAT,
                 TileProviderFormats.AIRPORTMAPMANIFEST_FORMAT,
                 airportmap, opacity, context);
+        return tileProvider;
+    }
+
+    public static TileProvider getTileAirportChartProvider(AirportChart airportChart,int opacity, Context context)
+    {
+        TileProvider tileProvider = new QuadKeyTileProvider(airportChart.url, airportChart.reference_name, opacity, context);
         return tileProvider;
     }
 }

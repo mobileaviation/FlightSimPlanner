@@ -19,6 +19,7 @@ import java.io.InputStream;
 
 import nl.robenanita.googlemapstest.Charts.AirportChart;
 import nl.robenanita.googlemapstest.Charts.AirportCharts;
+import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
 
@@ -29,6 +30,7 @@ public class LayersChartsSetupFragment extends Fragment {
     }
 
     private View view;
+    private NavigationActivity n;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +38,9 @@ public class LayersChartsSetupFragment extends Fragment {
         // Inflate the layout for this fragment
 
         view = inflater.inflate(R.layout.fragment_layers_charts_setup, container, false);
+
+        n = (NavigationActivity)container.getContext();
+
         return view;
     }
 
@@ -62,6 +67,7 @@ public class LayersChartsSetupFragment extends Fragment {
                 downloadTask = new DownloadImageTask();
                 downloadTask.execute(chart.thumbnail_url);
 
+                n.mapController.SetAirportChart(chart);
             }
         });
     }

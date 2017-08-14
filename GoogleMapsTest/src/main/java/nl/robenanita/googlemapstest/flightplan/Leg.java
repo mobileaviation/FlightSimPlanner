@@ -49,7 +49,7 @@ public class Leg {
 
         trackoptions1 = new PolylineOptions();
         trackoptions1.color(Color.BLACK);
-        trackoptions1.width(Helpers.convertDpToPixel(9, context));
+        trackoptions1.width(Helpers.convertDpToPixel(11, context));
         trackoptions1.add(p1);
         trackoptions1.add(p2);
         trackoptions1.clickable(false);

@@ -53,6 +53,7 @@ import nl.robenanita.googlemapstest.MapController;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
+import nl.robenanita.googlemapstest.Track;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Weather.WeatherActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
@@ -115,6 +116,8 @@ public class FSPMapFragment extends Fragment {
     private InfoPanelFragment infoPanel;
 
     private InfoWindow infoWindow;
+
+    private Track track;
 
     public FSPMapFragment() {
         // Required empty public constructor
@@ -875,5 +878,33 @@ public class FSPMapFragment extends Fragment {
         });
 
         flightplanGrid.LoadFlightplanGrid(selectedFlightplan);
+    }
+
+    public void SetupDirectToTrack(LatLng To, String ident, Context context)
+    {
+        LatLng from = new LatLng(curPlaneLocation.getLatitude(), curPlaneLocation.getLongitude());
+
+        if (track != null)
+        {
+            track.RemoveTrack();
+            track = null;
+        }
+
+        track = new Track(context);
+        track.setFromToLocation(from, To, ident);
+
+
+        infoPanel.setTrack(track);
+        track.DrawTrack(googleMap);
+
+
+        Location l = curPlaneLocation;
+
+        if (selectedFlightplan != null) {
+            Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l, context);
+            selectedFlightplan.setActiveLeg(alternateLeg);
+        }
+
+        //SetInfoPanel(l);
     }
 }

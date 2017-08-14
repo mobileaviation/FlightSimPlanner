@@ -45,21 +45,23 @@
         android:textSize="14dp" />
 
     <TextView
+        android:id="@+id/flightplanStationTxt"
         android:layout_width="60dp"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:text="Station"
-        android:id="@+id/flightplanStationTxt"
         android:textColor="#383838"
-        android:gravity="center" />
+        android:visibility="gone" />
 
     <TextView
+        android:id="@+id/flightplanFrequencyTxt"
         android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:text="Frequency"
-        android:id="@+id/flightplanFrequencyTxt"
-        android:textColor="#383838"
+        android:gravity="center"
         android:phoneNumber="false"
-        android:gravity="center" />
+        android:text="Frequency"
+        android:textColor="#383838"
+        android:visibility="gone" />
 
     <LinearLayout
         android:orientation="horizontal"
