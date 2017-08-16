@@ -128,17 +128,17 @@
 
         <SlidingDrawer
             android:id="@+id/flightplandrawer"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:background="#00000000"
             android:content="@+id/flightplanLayout"
             android:handle="@+id/flightplanhandle"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="invisible">
 
             <Button
                 android:id="@+id/flightplanhandle"
@@ -150,7 +150,7 @@
 
             <LinearLayout
                 android:id="@+id/flightplanLayout"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:background="#00000000"
@@ -162,7 +162,8 @@
                     android:id="@+id/flightplanFragment"
                     android:name="nl.robenanita.googlemapstest.FlightplanGrid"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp" />
 
 
             </LinearLayout>
@@ -254,12 +255,12 @@
             android:layout_below="@+id/scaleBarView"
             android:layout_alignLeft="@+id/map"
             android:layout_marginBottom="10dp">
-            <fragment
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/airportNatomWeatherLayout"
                 android:name="nl.robenanita.googlemapstest.AirportsInfoFragment"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent" />
         </LinearLayout>
 
     </RelativeLayout>

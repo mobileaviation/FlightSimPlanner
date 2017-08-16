@@ -147,7 +147,7 @@ public class FlightplanGrid extends Fragment {
         flightplanItemsList.setVerticalScrollbarPosition(p);
         adapter.notifyDataSetChanged();
 
-        setGridHeight(adapter);
+        //setGridHeight(adapter);
     }
 
     private void setGridHeight(FlightplanListAdapter adapter)
