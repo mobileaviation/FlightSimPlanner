@@ -32,8 +32,7 @@
             android:id="@+id/instrumentsLayout"
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:visibility="gone">
+            android:layout_marginRight="5dp">
 
             <TableLayout
                 android:layout_width="wrap_content"
@@ -126,53 +125,54 @@
             android:name="nl.robenanita.googlemapstest.InfoPanelFragment"
             android:layout_toLeftOf="@+id/instrumentsLayout" />
 
-        <SlidingDrawer
-            android:id="@+id/flightplandrawer"
-            android:layout_width="fill_parent"
-            android:layout_height="300dp"
-            android:layout_alignLeft="@+id/airportInfoLayout"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:background="#00000000"
-            android:content="@+id/flightplanLayout"
-            android:handle="@+id/flightplanhandle"
-            android:orientation="vertical"
-            android:visibility="gone">
+        <!--<SlidingDrawer-->
+            <!--android:id="@+id/flightplandrawer"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="300dp"-->
+            <!--android:layout_alignLeft="@+id/airportInfoLayout"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginLeft="2dp"-->
+            <!--android:layout_marginRight="2dp"-->
+            <!--android:background="#00000000"-->
+            <!--android:content="@+id/flightplanLayout"-->
+            <!--android:handle="@+id/flightplanhandle"-->
+            <!--android:orientation="vertical"-->
+            <!--android:visibility="gone">-->
 
-            <Button
-                android:id="@+id/flightplanhandle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#0f0"
-                android:text="Open"
-                android:textColor="#fff" />
+            <!--<Button-->
+                <!--android:id="@+id/flightplanhandle"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="#0f0"-->
+                <!--android:text="Open"-->
+                <!--android:textColor="#fff" />-->
 
-            <LinearLayout
-                android:id="@+id/flightplanLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="#00000000"
-                android:orientation="vertical"
-                android:visibility="visible">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/flightplanLayout"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:background="#00000000"-->
+            <!--android:orientation="vertical"-->
+            <!--android:visibility="visible">-->
 
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:map="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/flightplanFragment"
-                    android:name="nl.robenanita.googlemapstest.FlightplanGrid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp" />
+            <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--xmlns:map="http://schemas.android.com/apk/res-auto"-->
+                <!--android:id="@+id/flightplanFragment"-->
+                <!--android:name="nl.robenanita.googlemapstest.FlightplanGrid"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="40dp" />-->
 
 
-            </LinearLayout>
-        </SlidingDrawer>
+        <!--</LinearLayout>-->
+        <!--</SlidingDrawer>-->
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="250dp"
+            android:layout_width="327dp"
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
             android:layout_alignLeft="@+id/instrumentsLayout"

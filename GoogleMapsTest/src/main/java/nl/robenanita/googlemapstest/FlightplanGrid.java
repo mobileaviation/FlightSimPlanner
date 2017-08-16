@@ -156,7 +156,7 @@ public class FlightplanGrid extends Fragment {
             View item = adapter.getView(0, null, flightplanItemsList);
             item.measure(0, 0);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (3.5 * item.getMeasuredHeight()));
-            //flightplanItemsList.setLayoutParams(params);
+            flightplanItemsList.setLayoutParams(params);
         }
     }
 

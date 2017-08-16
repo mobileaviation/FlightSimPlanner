@@ -17,22 +17,31 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom">
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="60"
+            android:orientation="horizontal"></LinearLayout>
 
         <SlidingDrawer
             android:id="@+id/fspflightplandrawer"
             android:layout_width="fill_parent"
-            android:layout_height="300dp"
+            android:layout_height="0dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginRight="2dp"
+            android:layout_weight="40"
             android:background="#00000000"
             android:content="@+id/fspflightplanLayout"
             android:handle="@+id/fspflightplanhandle"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="invisible">
+
 
             <Button
                 android:id="@+id/fspflightplanhandle"
@@ -42,10 +51,11 @@
                 android:text="Open"
                 android:textColor="#fff" />
 
+
             <LinearLayout
                 android:id="@+id/fspflightplanLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:background="#00000000"
                 android:orientation="vertical"
@@ -56,7 +66,7 @@
                     android:id="@+id/fspflightplanFragment"
                     android:name="nl.robenanita.googlemapstest.FlightplanGrid"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content" />
 
 
             </LinearLayout>

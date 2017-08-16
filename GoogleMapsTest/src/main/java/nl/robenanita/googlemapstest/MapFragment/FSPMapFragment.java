@@ -116,6 +116,7 @@ public class FSPMapFragment extends Fragment {
     private InfoPanelFragment infoPanel;
 
     private InfoWindow infoWindow;
+    private SlidingDrawer flightplangriddrawer;
 
     private Track track;
 
@@ -128,6 +129,8 @@ public class FSPMapFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_fspmap, container, false);
+
+
 
         return view;
     }
@@ -143,6 +146,27 @@ public class FSPMapFragment extends Fragment {
         this.legInfoView = legInfoView;
         this.infoPanel = infoPanelFragment;
         setupMap();
+    }
+
+    private void SetupDrawerListeners() {
+
+        flightplangriddrawer = (SlidingDrawer) this.getView().findViewById(R.id.fspflightplandrawer);
+
+        flightplangriddrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+            @Override
+            public void onDrawerOpened() {
+                FlightplanGrid flightplanggrid = (FlightplanGrid)FSPMapFragment.this.getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+                Log.i(TAG, "grid height : ");
+            }
+        });
+
+//        flightplangriddrawer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FlightplanGrid flightplanggrid = (FlightplanGrid)FSPMapFragment.this.getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+//                Log.i(TAG, "grid height : " + flightplanggrid.getView().getMeasuredHeight());
+//            }
+//        });
     }
 
     public GoogleMap GetGooglemap()
@@ -176,6 +200,7 @@ public class FSPMapFragment extends Fragment {
                 setOnMarkerDragListeners();
                 setOnMarkerClickListeners();
                 setOnInfoWindowListeners();
+                SetupDrawerListeners();
                 if (onMapReadyCallback != null)
                     FSPMapFragment.this.onMapReadyCallback.onMapReady(googleMap);
             }
@@ -882,6 +907,12 @@ public class FSPMapFragment extends Fragment {
 
     public void SetupDirectToTrack(LatLng To, String ident, Context context)
     {
+        Waypoint from = new Waypoint(new LatLng(curPlaneLocation.getLatitude(), curPlaneLocation.getLongitude()));
+        Waypoint to = new Waypoint(To);
+        Leg directToLeg = new Leg(from, to, context);
+
+        directToLeg.DrawLeg(googleMap);
+
         LatLng from = new LatLng(curPlaneLocation.getLatitude(), curPlaneLocation.getLongitude());
 
         if (track != null)

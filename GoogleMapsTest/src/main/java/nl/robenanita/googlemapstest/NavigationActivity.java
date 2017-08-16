@@ -9,14 +9,12 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SlidingDrawer;
-import android.widget.TextView;
 import android.widget.Toast;
 
 //import com.appolica.interactiveinfowindow.InfoWindow;
@@ -49,31 +46,16 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.impl.PackedCoordinateSequence;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -81,7 +63,6 @@ import java.util.TimerTask;
 import nl.robenanita.googlemapstest.Airspaces.LoadAirspacesAsync;
 import nl.robenanita.googlemapstest.Charts.AirportCharts;
 import nl.robenanita.googlemapstest.Charts.MapCruncherMetadataReader;
-import nl.robenanita.googlemapstest.Charts.PDFCharts;
 import nl.robenanita.googlemapstest.Instruments.AirspeedView;
 import nl.robenanita.googlemapstest.Instruments.AltimeterView;
 import nl.robenanita.googlemapstest.Instruments.CompassView;
@@ -93,25 +74,20 @@ import nl.robenanita.googlemapstest.MapFragment.TrackingLine;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
-import nl.robenanita.googlemapstest.Weather.WeatherActivity;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
-import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
-import nl.robenanita.googlemapstest.database.FrequenciesDataSource;
 import nl.robenanita.googlemapstest.database.Helpers;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
 import nl.robenanita.googlemapstest.database.NavaidsDataSource;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
-import nl.robenanita.googlemapstest.database.RunwaysDataSource;
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 import nl.robenanita.googlemapstest.flightplan.FlightPlanActivateActivity;
 import nl.robenanita.googlemapstest.flightplan.FlightPlanActivity;
 import nl.robenanita.googlemapstest.flightplan.Leg;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
-import nl.robenanita.googlemapstest.flightplan.WaypointType;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
@@ -202,7 +178,7 @@ public class NavigationActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_noadds);
+        setContentView(R.layout.activity_navigation);
 
         uniqueID = Helpers.generateUniqueId();
         flightplanLoaded = false;
@@ -213,16 +189,10 @@ public class NavigationActivity extends ActionBarActivity implements
         legInfoView = (LegInfoView) findViewById(R.id.legInfoPanel);
         legInfoView.setVisibility(View.GONE);
 
-        final LinearLayout flightplanLayout = (LinearLayout) findViewById(R.id.flightplanLayout);
-        flightplanLayout.setVisibility(View.GONE);
-
         LinearLayout tracksLayout = (LinearLayout) findViewById(R.id.tracksLayout);
         tracksLayout.setVisibility(View.GONE);
 
         infoPanel = (InfoPanelFragment) getFragmentManager().findFragmentById(R.id.infoPanelFragment);
-
-        flightplanDrawer = (SlidingDrawer) findViewById(R.id.flightplandrawer);
-        SetupDrawerListeners();
 
         routeLineClicked = false;
 
@@ -271,24 +241,6 @@ public class NavigationActivity extends ActionBarActivity implements
         });
 
         fspMapFragment.InitializeMap(NavigationActivity.this, legInfoView, infoPanel);
-    }
-
-    private void SetupDrawerListeners() {
-        flightplanDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
-            @Override
-            public void onDrawerOpened() {
-                FlightplanGrid flightplanFragment = (FlightplanGrid)NavigationActivity.this.getFragmentManager().findFragmentById(R.id.flightplanFragment);
-                Log.i(TAG, "grid height : " + flightplanFragment.getView().getMeasuredHeight());
-            }
-        });
-
-        flightplanDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FlightplanGrid flightplanFragment = (FlightplanGrid)NavigationActivity.this.getFragmentManager().findFragmentById(R.id.flightplanFragment);
-                Log.i(TAG, "grid height : " + flightplanFragment.getView().getMeasuredHeight());
-            }
-        });
     }
 
     public FlightPlan GetSelectedFlightplan()

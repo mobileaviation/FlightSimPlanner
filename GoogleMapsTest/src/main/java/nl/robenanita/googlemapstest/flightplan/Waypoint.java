@@ -31,6 +31,19 @@ public class Waypoint  implements Comparable<Waypoint>, Serializable {
         deviation = 0f;
     }
 
+    public Waypoint(LatLng loc)
+    {
+        location = new Location("waypoint");
+        location.setLatitude(loc.latitude);
+        location.setLongitude(loc.longitude);
+        fix_id = 0;
+        navaid_id = 0;
+        airport_id = 0;
+
+        variation = 0f;
+        deviation = 0f;
+    }
+
     public Integer id;
     public Integer flightplan_id;
     public Integer order;
