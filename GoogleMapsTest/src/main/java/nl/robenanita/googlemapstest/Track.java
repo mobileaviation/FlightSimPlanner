@@ -27,6 +27,8 @@ public class Track {
     private PolylineOptions trackoptions;
     private PolylineOptions trackoptions1;
 
+    private Leg directToLeg;
+
     private Context context;
 
     public Track(Context context)
@@ -38,6 +40,7 @@ public class Track {
     {
         if (track != null) track.remove();
         if (track1 != null) track1.remove();
+        if (directToLeg != null) directToLeg.RemoveLegFromMap();
     }
 
     public void setFromToLocation(LatLng from, LatLng to, String ident)
@@ -119,37 +122,85 @@ public class Track {
         return l;
     }
 
-    public Leg getDirecttoLeg(FlightPlan flightPlan, Location fromLocation, Context context)
+    private FlightPlan createFlightplan(Waypoint start, Waypoint destination)
     {
         FlightPlan tempFlightplan = new FlightPlan(context);
         tempFlightplan.name = "DirectTo Plan";
-        tempFlightplan.destination_airport = flightPlan.alternate_airport;
-        tempFlightplan.altitude = flightPlan.altitude;
-        tempFlightplan.wind_direction = flightPlan.wind_direction;
-        tempFlightplan.wind_speed = flightPlan.wind_speed;
-        tempFlightplan.indicated_airspeed = flightPlan.indicated_airspeed;
-
-        Waypoint start = new Waypoint();
-        start.waypointType = WaypointType.userwaypoint;
-        start.name = "Current Location";
-        start.order = 1;
-        start.location = fromLocation;
-
-        Waypoint destination = new Waypoint();
-        destination.waypointType = WaypointType.destinationAirport;
-        destination.name = tempFlightplan.destination_airport.name;
-        destination.order = 1000;
-        Location l = new Location("Alternate");
-        l.setLatitude(tempFlightplan.destination_airport.latitude_deg);
-        l.setLongitude(tempFlightplan.destination_airport.longitude_deg);
-        destination.location = l;
+        tempFlightplan.altitude = 1000;
+        tempFlightplan.wind_direction = 0;
+        tempFlightplan.wind_speed = 0;
+        tempFlightplan.indicated_airspeed = 0;
 
         tempFlightplan.Waypoints.add(start);
         tempFlightplan.Waypoints.add(destination);
         tempFlightplan.UpdateWaypointsData();
 
         tempFlightplan.startFlightplan(fromLocation);
-        return tempFlightplan.getActiveLeg();
+
+        return tempFlightplan;
+    }
+
+    private Waypoint createWaypoint(String name, Integer order, Location location)
+    {
+        Waypoint waypoint = new Waypoint();
+        waypoint.name = name;
+        waypoint.order = order;
+        waypoint.location = fromLocation;
+        return waypoint;
+    }
+
+    public Leg getDirecttoLeg(Location fromLocation, Airport toAirport, Context context)
+    {
+        Waypoint start = createWaypoint("Current Location", 1, fromLocation);
+        start.waypointType = WaypointType.userwaypoint;
+
+        Location l = new Location("DirectToAirport");
+        l.setLatitude(toAirport.latitude_deg);
+        l.setLongitude(toAirport.longitude_deg);
+        Waypoint destination = createWaypoint(toAirport.name, 1000, l);
+        destination.waypointType = WaypointType.destinationAirport;
+
+        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        tempFlightplan.destination_airport = toAirport;
+
+        directToLeg = tempFlightplan.getActiveLeg();
+        return directToLeg;
+    }
+
+    public Leg getDirecttoLeg(Location fromLocation, Location toLocation, Context context)
+    {
+        Waypoint start = createWaypoint("Current Location", 1, fromLocation);
+        start.waypointType = WaypointType.userwaypoint;
+
+        Waypoint destination = createWaypoint("to Location", 1000, toLocation);
+        destination.waypointType = WaypointType.userwaypoint;
+
+        FlightPlan tempFlightplan = createFlightplan(start, destination);
+
+        directToLeg = tempFlightplan.getActiveLeg();
+        return directToLeg;
+    }
+
+    public Leg getDirecttoLeg(FlightPlan flightPlan, Location fromLocation, Context context)
+    {
+        Waypoint start = createWaypoint("Current Location", 1, fromLocation);
+        start.waypointType = WaypointType.userwaypoint;
+
+        Location l = new Location("Alternate");
+        l.setLatitude(flightPlan.alternate_airport.latitude_deg);
+        l.setLongitude(flightPlan.alternate_airport.longitude_deg);
+        Waypoint destination = createWaypoint(flightPlan.alternate_airport.name, 1000, l);
+        destination.waypointType = WaypointType.destinationAirport;
+
+        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        tempFlightplan.destination_airport = flightPlan.alternate_airport;
+        tempFlightplan.altitude = flightPlan.altitude;
+        tempFlightplan.wind_direction = flightPlan.wind_direction;
+        tempFlightplan.wind_speed = flightPlan.wind_speed;
+        tempFlightplan.indicated_airspeed = flightPlan.indicated_airspeed;
+
+        directToLeg = tempFlightplan.getActiveLeg();
+        return directToLeg;
     }
 
 }
