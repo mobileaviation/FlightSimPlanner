@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
+import android.text.Html;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -70,14 +71,19 @@ public class Leg {
         Paint textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
         textPaint.setAntiAlias(true);
-        textPaint.setTextSize(Helpers.convertDpToPixel(25f, context));
+        textPaint.setTextSize(Helpers.convertDpToPixel(16f, context));
         textPaint.setFakeBoldText(true);
-        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTextAlign(Paint.Align.LEFT);
 
         Canvas aircourseCanvas = new Canvas(courseBitmap);
         String h = "000" + Integer.toString(Math.round(toWaypoint.compass_heading));
-        h = h.substring(h.length()-3);
-        aircourseCanvas.drawText(h, Helpers.convertDpToPixel(60f, context), Helpers.convertDpToPixel(60f, context), textPaint);
+        String d = Integer.toString(Math.round(this.getDistanceLegNM()));
+        h = h.substring(h.length()-3) + "\u00b0";
+        aircourseCanvas.drawText(h, Helpers.convertDpToPixel(40f, context), Helpers.convertDpToPixel(50f, context), textPaint);
+        textPaint.setTextSize(Helpers.convertDpToPixel(14f, context));
+        aircourseCanvas.drawText(d, Helpers.convertDpToPixel(40f, context), Helpers.convertDpToPixel(62f, context), textPaint);
+        textPaint.setTextSize(Helpers.convertDpToPixel(10f, context));
+        aircourseCanvas.drawText("NM", Helpers.convertDpToPixel(60f, context), Helpers.convertDpToPixel(62f, context), textPaint);
 
         return BitmapDescriptorFactory.fromBitmap(courseBitmap);
 
@@ -98,6 +104,12 @@ public class Leg {
         track.setTag(this);
     }
 
+    public void DrawLeg(GoogleMap map, Integer color)
+    {
+        trackoptions.color(color);
+        DrawLeg(map);
+    }
+
     public void SetCoarseMarker(GoogleMap map, Context context)
     {
         coarseMarkerOptions = new MarkerOptions();
@@ -105,7 +117,7 @@ public class Leg {
         coarseMarkerOptions.title(Float.toString(toWaypoint.compass_heading));
         coarseMarkerOptions.icon(this.GetIcon(context));
         coarseMarkerOptions.anchor(0.5f, 0.5f);
-        coarseMarkerOptions.draggable(true);
+        coarseMarkerOptions.draggable(false);
         coarseMarkerOptions.rotation(toWaypoint.true_track + 90);
         coarseMarker = map.addMarker(coarseMarkerOptions);
     }
@@ -176,6 +188,11 @@ public class Leg {
     public float getDistanceNM()
     {
         return distanceTo / 1852f;
+    }
+
+    public float getDistanceLegNM()
+    {
+        return fromWaypoint.location.distanceTo(toWaypoint.location) / 1852f;
     }
 
     public int getSecondsToGo() {

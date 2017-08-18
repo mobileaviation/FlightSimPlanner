@@ -905,16 +905,8 @@ public class FSPMapFragment extends Fragment {
         flightplanGrid.LoadFlightplanGrid(selectedFlightplan);
     }
 
-    public void SetupDirectToTrack(LatLng To, String ident, Context context)
+    public void SetupDirectToTrack(Airport airport, Context context)
     {
-//        Waypoint from = new Waypoint(new LatLng(curPlaneLocation.getLatitude(), curPlaneLocation.getLongitude()));
-//        Waypoint to = new Waypoint(To);
-//        Leg directToLeg = new Leg(from, to, context);
-//
-//        directToLeg.DrawLeg(googleMap);
-
-//        LatLng from = new LatLng(curPlaneLocation.getLatitude(), curPlaneLocation.getLongitude());
-//
         if (track != null)
         {
             track.RemoveTrack();
@@ -922,28 +914,22 @@ public class FSPMapFragment extends Fragment {
         }
 
         track = new Track(context);
-//        track.setFromToLocation(from, To, ident);
-//
-//
-//        infoPanel.setTrack(track);
-//        track.DrawTrack(googleMap);
-
 
         Location l = curPlaneLocation;
 
         if (selectedFlightplan != null) {
             Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l, context);
             selectedFlightplan.setActiveLeg(alternateLeg);
-            alternateLeg.DrawLeg(googleMap);
+            alternateLeg.DrawLeg(googleMap, Color.RED);
         }
         else
         {
-            Location to = new Location("AlternateTo");
-            to.setLatitude(To.latitude);
-            to.setLongitude(To.longitude);
-            Leg alternateLeg = track.getDirecttoLeg(l, to, context);
-            alternateLeg.DrawLeg(googleMap);
+            Leg alternateLeg = track.getDirecttoLeg(l, airport, context);
+            alternateLeg.DrawLeg(googleMap, Color.RED);
+            alternateLeg.SetCoarseMarker(googleMap, context);
         }
+
+        infoPanel.setTrack(track);
 
         //SetInfoPanel(l);
     }

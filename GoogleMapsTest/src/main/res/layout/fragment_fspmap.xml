@@ -16,26 +16,45 @@
         />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/fspInfoWindowContentLayout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/infowindow_background"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:id="@+id/fspInfoWindowContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            tools:background="#FF000000"></LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="bottom"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="60"
+            android:layout_height="0dip"
+            android:layout_weight="6"
             android:orientation="horizontal"></LinearLayout>
 
         <SlidingDrawer
             android:id="@+id/fspflightplandrawer"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
+            android:layout_height="0dip"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="2dp"
-            android:layout_weight="40"
+            android:layout_weight="4"
             android:background="#00000000"
             android:content="@+id/fspflightplanLayout"
             android:handle="@+id/fspflightplanhandle"
@@ -71,25 +90,6 @@
 
             </LinearLayout>
         </SlidingDrawer>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/fspInfoWindowContentLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/infowindow_background"
-        android:orientation="horizontal"
-        android:visibility="invisible">
-
-        <LinearLayout
-            android:id="@+id/fspInfoWindowContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="horizontal"
-            tools:background="#FF000000"></LinearLayout>
     </LinearLayout>
 
 </nl.robenanita.googlemapstest.MapFragment.TouchInterceptFrameLayout>

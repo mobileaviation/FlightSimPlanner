@@ -89,13 +89,12 @@ public class Track {
 
     public Integer getBearing()
     {
-        Integer b = Math.round(fromLocation.bearingTo(toLocation));
-        return (b<0) ? 360+b : b ;
+        return directToLeg.getBearing();
     }
 
     public Integer getDistanceNM()
     {
-        return Math.round(fromLocation.distanceTo(toLocation) / 1852f);
+        return Math.round(directToLeg.getDistanceNM());
     }
 
     public String getIdent()
@@ -135,8 +134,6 @@ public class Track {
         tempFlightplan.Waypoints.add(destination);
         tempFlightplan.UpdateWaypointsData();
 
-        tempFlightplan.startFlightplan(fromLocation);
-
         return tempFlightplan;
     }
 
@@ -145,7 +142,7 @@ public class Track {
         Waypoint waypoint = new Waypoint();
         waypoint.name = name;
         waypoint.order = order;
-        waypoint.location = fromLocation;
+        waypoint.location = location;
         return waypoint;
     }
 
@@ -162,6 +159,7 @@ public class Track {
 
         FlightPlan tempFlightplan = createFlightplan(start, destination);
         tempFlightplan.destination_airport = toAirport;
+        tempFlightplan.startFlightplan(fromLocation);
 
         directToLeg = tempFlightplan.getActiveLeg();
         return directToLeg;
@@ -176,6 +174,7 @@ public class Track {
         destination.waypointType = WaypointType.userwaypoint;
 
         FlightPlan tempFlightplan = createFlightplan(start, destination);
+        tempFlightplan.startFlightplan(fromLocation);
 
         directToLeg = tempFlightplan.getActiveLeg();
         return directToLeg;
@@ -198,6 +197,7 @@ public class Track {
         tempFlightplan.wind_direction = flightPlan.wind_direction;
         tempFlightplan.wind_speed = flightPlan.wind_speed;
         tempFlightplan.indicated_airspeed = flightPlan.indicated_airspeed;
+        tempFlightplan.startFlightplan(fromLocation);
 
         directToLeg = tempFlightplan.getActiveLeg();
         return directToLeg;
