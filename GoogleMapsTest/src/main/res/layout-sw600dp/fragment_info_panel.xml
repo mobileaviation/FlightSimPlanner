@@ -25,13 +25,14 @@
             android:layout_marginLeft="3dp">
 
             <TextView
+                android:id="@+id/InfoPanelLocationText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Location:"
-                android:id="@+id/textView"
                 android:singleLine="true"
+                android:text="Location:"
                 android:textColor="#000000"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -40,31 +41,33 @@
                 android:gravity="bottom">
 
                 <TextView
+                    android:id="@+id/latitudeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="..."
-                    android:id="@+id/latitudeTxt"
-                    android:singleLine="true"
-                    android:textColor="#fff2ec12"
+                    android:layout_marginTop="5dp"
                     android:shadowColor="#ff000000"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20dp" />
+                    android:singleLine="true"
+                    android:text="..."
+                    android:textColor="#fff2ec12"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/longitudeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="..."
-                    android:id="@+id/longitudeTxt"
-                    android:singleLine="true"
-                    android:textColor="#fff2ec12"
                     android:shadowColor="#ff000000"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
-                    android:textSize="20dp" />
+                    android:singleLine="true"
+                    android:text="..."
+                    android:textColor="#fff2ec12"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
@@ -78,13 +81,14 @@
             android:layout_marginLeft="3dp">
 
             <TextView
+                android:id="@+id/textView18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="GS:"
-                android:id="@+id/textView18"
                 android:singleLine="true"
+                android:text="GS:"
                 android:textColor="#000000"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -93,18 +97,19 @@
                 android:gravity="bottom">
 
                 <TextView
+                    android:id="@+id/groundspeedTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="..."
-                    android:id="@+id/groundspeedTxt"
-                    android:singleLine="true"
-                    android:textColor="#fff2ec12"
+                    android:layout_marginTop="5dp"
                     android:shadowColor="#ff000000"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20dp" />
+                    android:singleLine="true"
+                    android:text="..."
+                    android:textColor="#fff2ec12"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
@@ -118,15 +123,16 @@
             android:layout_marginLeft="3dp">
 
             <TextView
+                android:id="@+id/headingInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="HDG:"
-                android:id="@+id/textView19"
-                android:singleLine="true"
-                android:textColor="#000000"
                 android:focusableInTouchMode="false"
+                android:singleLine="true"
+                android:text="HDG:"
+                android:textColor="#000000"
+                android:textIsSelectable="false"
                 android:textSize="20dp"
-                android:textIsSelectable="false" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -135,18 +141,19 @@
                 android:gravity="bottom">
 
                 <TextView
+                    android:id="@+id/headingTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="..."
-                    android:id="@+id/headingTxt"
-                    android:singleLine="true"
-                    android:textColor="#fff2ec12"
+                    android:layout_marginTop="5dp"
                     android:shadowColor="#ff000000"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20dp" />
+                    android:singleLine="true"
+                    android:text="..."
+                    android:textColor="#fff2ec12"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
@@ -160,15 +167,16 @@
             android:layout_marginLeft="3dp" >
 
             <TextView
+                android:id="@+id/altitudeInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Altitude:"
-                android:id="@+id/textView29"
-                android:singleLine="true"
-                android:textColor="#000000"
                 android:focusableInTouchMode="false"
+                android:singleLine="true"
+                android:text="Altitude:"
+                android:textColor="#000000"
+                android:textIsSelectable="false"
                 android:textSize="20dp"
-                android:textIsSelectable="false" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -177,18 +185,19 @@
                 android:gravity="bottom" >
 
                 <TextView
+                    android:id="@+id/infoAltitudeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="..."
-                    android:id="@+id/infoAltitudeTxt"
-                    android:singleLine="true"
-                    android:textColor="#fff2ec12"
+                    android:layout_marginTop="5dp"
                     android:shadowColor="#ff000000"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20dp" />
+                    android:singleLine="true"
+                    android:text="..."
+                    android:textColor="#fff2ec12"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
@@ -202,30 +211,32 @@
             android:layout_marginLeft="3dp">
 
             <TextView
+                android:id="@+id/trackInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Track:"
-                android:id="@+id/textView20"
-                android:singleLine="true"
-                android:textColor="#000000"
                 android:focusableInTouchMode="true"
-                android:textSize="20dp" />
+                android:singleLine="true"
+                android:text="Track:"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/toWaypointTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="To: ..."
-                android:id="@+id/toWaypointTxt"
-                android:singleLine="true"
-                android:textColor="#fff2ec12"
+                android:layout_weight="1"
                 android:shadowColor="#ff000000"
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:shadowRadius="0.01"
-                android:textSize="20dp"
-                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="To: ..."
+                android:textColor="#fff2ec12"
                 android:textColorHighlight="#ffffffff"
-                android:textIsSelectable="false" />
+                android:textIsSelectable="false"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -235,33 +246,35 @@
                 android:gravity="bottom">
 
                 <TextView
+                    android:id="@+id/distanceToTxt"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="Dis: 500NM"
-                    android:id="@+id/distanceToTxt"
-                    android:singleLine="true"
-                    android:textSize="20dp"
-                    android:textIsSelectable="false"
-                    android:textColor="#fff2ec12"
+                    android:password="false"
                     android:shadowColor="#ff000000"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
-                    android:password="false" />
+                    android:singleLine="true"
+                    android:text="Dis: 500NM"
+                    android:textColor="#fff2ec12"
+                    android:textIsSelectable="false"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/hdgToTxt"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Hdg: 050"
-                    android:id="@+id/hdgToTxt"
-                    android:singleLine="true"
-                    android:textColor="#fff2ec12"
                     android:shadowColor="#ff000000"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="0.01"
+                    android:singleLine="true"
+                    android:text="Hdg: 050"
+                    android:textColor="#fff2ec12"
+                    android:textIsSelectable="false"
                     android:textSize="20dp"
-                    android:textIsSelectable="false" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

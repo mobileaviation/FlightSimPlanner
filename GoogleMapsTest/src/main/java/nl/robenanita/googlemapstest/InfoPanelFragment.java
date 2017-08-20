@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest;
 
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -135,7 +136,33 @@ public class InfoPanelFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_info_panel, container, false);
         setTrack(null);
 
-//        setupDirectToBtn();
+        TextView Txt = (TextView) view.findViewById(R.id.InfoPanelLocationText);
+        Txt.setShadowLayer(2,2,2, Color.WHITE);
+        Txt = (TextView) view.findViewById(R.id.groundspeedInfoText);
+        Txt.setShadowLayer(2,2,2, Color.WHITE);
+        Txt = (TextView) view.findViewById(R.id.headingInfoText);
+        Txt.setShadowLayer(2,2,2, Color.WHITE);
+        Txt = (TextView) view.findViewById(R.id.altitudeInfoText);
+        Txt.setShadowLayer(2,2,2, Color.WHITE);
+        Txt = (TextView) view.findViewById(R.id.trackInfoText);
+        Txt.setShadowLayer(2,2,2, Color.WHITE);
+
+        Txt = (TextView) view.findViewById(R.id.toWaypointTxt);
+        Txt.setShadowLayer(2,2,2, Color.BLACK);
+        Txt = (TextView) view.findViewById(R.id.distanceToTxt);
+        Txt.setShadowLayer(2,2,2, Color.BLACK);
+        Txt = (TextView) view.findViewById(R.id.hdgToTxt);
+        Txt.setShadowLayer(2,2,2, Color.BLACK);
+        Txt = (TextView) view.findViewById(R.id.latitudeTxt);
+        Txt.setShadowLayer(2,2,2, Color.BLACK);
+        Txt = (TextView) view.findViewById(R.id.longitudeTxt);
+        Txt.setShadowLayer(2,2,2, Color.BLACK);
+        Txt = (TextView) view.findViewById(R.id.headingTxt);
+        Txt.setShadowLayer(2,2,2, Color.BLACK);
+        Txt = (TextView) view.findViewById(R.id.groundspeedTxt);
+        Txt.setShadowLayer(2,2,2, Color.BLACK);
+        Txt = (TextView) view.findViewById(R.id.infoAltitudeTxt);
+        Txt.setShadowLayer(2,2,2, Color.BLACK);
 
         return view;
     }
