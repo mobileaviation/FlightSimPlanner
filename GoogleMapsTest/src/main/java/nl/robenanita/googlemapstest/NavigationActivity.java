@@ -416,27 +416,15 @@ public class NavigationActivity extends ActionBarActivity implements
                     LatLng Toloc;
                     if (directToPopupPopup.selectedAirport != null)
                     {
-//                        ident = (directToPopupPopup.selectedAirport.ident != null) ? directToPopupPopup.selectedAirport.ident
-//                                : directToPopupPopup.selectedAirport.name;
-//                        Toloc = new LatLng(directToPopupPopup.selectedAirport.latitude_deg,
-//                                directToPopupPopup.selectedAirport.longitude_deg);
                         fspMapFragment.SetupDirectToTrack(directToPopupPopup.selectedAirport, NavigationActivity.this);
                     }
                     if (directToPopupPopup.selectedNavaid != null)
                     {
-//                        ident = (directToPopupPopup.selectedNavaid.ident != null) ? directToPopupPopup.selectedNavaid.ident
-//                                : directToPopupPopup.selectedNavaid.name;
-//                        Toloc = new LatLng(directToPopupPopup.selectedNavaid.latitude_deg,
-//                                directToPopupPopup.selectedNavaid.longitude_deg);
-//                        fspMapFragment.SetupDirectToTrack(Toloc, ident, NavigationActivity.this);
+                        fspMapFragment.SetupDirectToTrack(directToPopupPopup.selectedNavaid, NavigationActivity.this);
                     }
                     if (directToPopupPopup.selectedFix != null)
                     {
-//                        ident = (directToPopupPopup.selectedFix.ident != null) ? directToPopupPopup.selectedFix.ident
-//                                : directToPopupPopup.selectedFix.name;
-//                        Toloc = new LatLng(directToPopupPopup.selectedFix.latitude_deg,
-//                                directToPopupPopup.selectedFix.longitude_deg);
-//                        fspMapFragment.SetupDirectToTrack(Toloc, ident, NavigationActivity.this);
+                        fspMapFragment.SetupDirectToTrack(directToPopupPopup.selectedFix, NavigationActivity.this);
                     }
                 }
             }

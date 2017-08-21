@@ -62,33 +62,6 @@ public class Leg {
 
     }
 
-    public BitmapDescriptor GetIcon(Context context)
-    {
-        BitmapFactory.Options op = new BitmapFactory.Options();
-        op.inMutable = true;
-        Bitmap courseBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.direction_marker_square, op);
-
-        Paint textPaint = new Paint();
-        textPaint.setColor(Color.BLACK);
-        textPaint.setAntiAlias(true);
-        textPaint.setTextSize(Helpers.convertDpToPixel(16f, context));
-        textPaint.setFakeBoldText(true);
-        textPaint.setTextAlign(Paint.Align.LEFT);
-
-        Canvas aircourseCanvas = new Canvas(courseBitmap);
-        String h = "000" + Integer.toString(Math.round(toWaypoint.compass_heading));
-        String d = Integer.toString(Math.round(this.getDistanceLegNM()));
-        h = h.substring(h.length()-3) + "\u00b0";
-        aircourseCanvas.drawText(h, Helpers.convertDpToPixel(40f, context), Helpers.convertDpToPixel(50f, context), textPaint);
-        textPaint.setTextSize(Helpers.convertDpToPixel(14f, context));
-        aircourseCanvas.drawText(d, Helpers.convertDpToPixel(40f, context), Helpers.convertDpToPixel(62f, context), textPaint);
-        textPaint.setTextSize(Helpers.convertDpToPixel(10f, context));
-        aircourseCanvas.drawText("NM", Helpers.convertDpToPixel(60f, context), Helpers.convertDpToPixel(62f, context), textPaint);
-
-        return BitmapDescriptorFactory.fromBitmap(courseBitmap);
-
-        //return BitmapDescriptorFactory.fromResource(R.drawable.direction_marker_square);
-    }
 
     public void DrawLeg(GoogleMap map)
     {
@@ -112,14 +85,9 @@ public class Leg {
 
     public void SetCoarseMarker(GoogleMap map, Context context)
     {
-        coarseMarkerOptions = new MarkerOptions();
-        coarseMarkerOptions.position(halfwayPoint);
-        coarseMarkerOptions.title(Float.toString(toWaypoint.compass_heading));
-        coarseMarkerOptions.icon(this.GetIcon(context));
-        coarseMarkerOptions.anchor(0.5f, 0.5f);
-        coarseMarkerOptions.draggable(false);
-        coarseMarkerOptions.rotation(toWaypoint.true_track + 90);
-        coarseMarker = map.addMarker(coarseMarkerOptions);
+        coarseMarkerObject = new CoarseMarker(fromWaypoint.location, toWaypoint.location,
+                toWaypoint.compass_heading, toWaypoint.true_heading, this.getDistanceLegNM());
+        coarseMarker = coarseMarkerObject.setCoarseMarker(map,context, halfwayPoint);
     }
 
     public void RemoveLegFromMap() {
@@ -164,6 +132,7 @@ public class Leg {
     public Polyline track;
     public MarkerOptions coarseMarkerOptions;
     public Marker coarseMarker;
+    private CoarseMarker coarseMarkerObject;
     private LatLng halfwayPoint;
 
     public float getDeviationFromTrack()

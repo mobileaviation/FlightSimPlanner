@@ -165,6 +165,42 @@ public class Track {
         return directToLeg;
     }
 
+    public Leg getDirecttoLeg(Location fromLocation, Navaid toNavaid, Context context)
+    {
+        Waypoint start = createWaypoint("Current Location", 1, fromLocation);
+        start.waypointType = WaypointType.userwaypoint;
+
+        Location l = new Location("DirectToAirport");
+        l.setLatitude(toNavaid.latitude_deg);
+        l.setLongitude(toNavaid.longitude_deg);
+        Waypoint destination = createWaypoint(toNavaid.name, 1000, l);
+        destination.waypointType = WaypointType.navaid;
+
+        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        tempFlightplan.startFlightplan(fromLocation);
+
+        directToLeg = tempFlightplan.getActiveLeg();
+        return directToLeg;
+    }
+
+    public Leg getDirecttoLeg(Location fromLocation, Fix toFix, Context context)
+    {
+        Waypoint start = createWaypoint("Current Location", 1, fromLocation);
+        start.waypointType = WaypointType.userwaypoint;
+
+        Location l = new Location("DirectToAirport");
+        l.setLatitude(toFix.latitude_deg);
+        l.setLongitude(toFix.longitude_deg);
+        Waypoint destination = createWaypoint(toFix.name, 1000, l);
+        destination.waypointType = WaypointType.fix;
+
+        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        tempFlightplan.startFlightplan(fromLocation);
+
+        directToLeg = tempFlightplan.getActiveLeg();
+        return directToLeg;
+    }
+
     public Leg getDirecttoLeg(Location fromLocation, Location toLocation, Context context)
     {
         Waypoint start = createWaypoint("Current Location", 1, fromLocation);

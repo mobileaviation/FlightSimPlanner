@@ -44,6 +44,7 @@ import nl.robenanita.googlemapstest.AddWayPointPopup;
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.AirportsInfoFragment;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
+import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.FlightplanGrid;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
 import nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment;
@@ -62,6 +63,7 @@ import nl.robenanita.googlemapstest.database.FrequenciesDataSource;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
 import nl.robenanita.googlemapstest.database.RunwaysDataSource;
+import nl.robenanita.googlemapstest.flightplan.DragLine;
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 import nl.robenanita.googlemapstest.flightplan.FlightplanController;
 import nl.robenanita.googlemapstest.flightplan.Leg;
@@ -339,32 +341,38 @@ public class FSPMapFragment extends Fragment {
     private void setOnMarkerDragListeners()
     {
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            private Polyline dragLine;
+            //private Polyline dragLine;
+            private DragLine dragLine;
             @Override
             public void onMarkerDragStart(Marker marker) {
                 Waypoint w = selectedFlightplan.waypointMarkerMap.get(marker);
                 Waypoint beforeWaypoint = selectedFlightplan.getBeforeWaypoint(w);
                 Waypoint afterWaypoint = selectedFlightplan.getAfterWaypoint(w);
-                PolylineOptions options = new PolylineOptions();
-                options.color(Color.RED);
-                options.width(7);
-                options.zIndex(1001);
-                options.add(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()));
-                options.add(new LatLng(w.location.getLatitude(), w.location.getLongitude()));
-                options.add(new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()));
-                dragLine = googleMap.addPolyline(options);
+//                PolylineOptions options = new PolylineOptions();
+//                options.color(Color.RED);
+//                options.width(7);
+//                options.zIndex(1001);
+//                options.add(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()));
+//                options.add(new LatLng(w.location.getLatitude(), w.location.getLongitude()));
+//                options.add(new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()));
+//                dragLine = googleMap.addPolyline(options);
+                dragLine = new DragLine(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()),
+                        new LatLng(w.location.getLatitude(), w.location.getLongitude()),
+                        new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()),
+                        googleMap, mainActivity);
             }
             @Override
             public void onMarkerDrag(Marker marker) {
-                List<LatLng> points = dragLine.getPoints();
-                points.set(1, marker.getPosition());
-                dragLine.setPoints(points);
+//                List<LatLng> points = dragLine.getPoints();
+//                points.set(1, marker.getPosition());
+//                dragLine.setPoints(points);
+                dragLine.setMidPoint(marker.getPosition());
             }
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 if (dragLine != null) {
-                    dragLine.remove();
+                    dragLine.removeDragLine();
                     dragLine = null;
                 }
                 if (selectedFlightplan != null) {
@@ -933,4 +941,47 @@ public class FSPMapFragment extends Fragment {
 
         //SetInfoPanel(l);
     }
+
+    public void SetupDirectToTrack(Navaid navaid, Context context)
+    {
+        if (track != null)
+        {
+            track.RemoveTrack();
+            track = null;
+        }
+
+        track = new Track(context);
+
+        Location l = curPlaneLocation;
+
+        Leg alternateLeg = track.getDirecttoLeg(l, navaid, context);
+        alternateLeg.DrawLeg(googleMap, Color.RED);
+        alternateLeg.SetCoarseMarker(googleMap, context);
+
+        infoPanel.setTrack(track);
+
+        //SetInfoPanel(l);
+    }
+
+    public void SetupDirectToTrack(Fix fix, Context context)
+    {
+        if (track != null)
+        {
+            track.RemoveTrack();
+            track = null;
+        }
+
+        track = new Track(context);
+
+        Location l = curPlaneLocation;
+
+        Leg alternateLeg = track.getDirecttoLeg(l, fix, context);
+        alternateLeg.DrawLeg(googleMap, Color.RED);
+        alternateLeg.SetCoarseMarker(googleMap, context);
+
+        infoPanel.setTrack(track);
+
+        //SetInfoPanel(l);
+    }
+
 }
