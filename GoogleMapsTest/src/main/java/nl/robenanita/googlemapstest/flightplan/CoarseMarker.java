@@ -27,18 +27,42 @@ public class CoarseMarker {
     {
         this.from = from;
         this.to = to;
-        distance = from.distanceTo(to) / 1852f;
-        true_heading = from.bearingTo(to);
-        compass_heading = true_heading;
+        this.true_heading = from.bearingTo(to);
+        if (this.true_heading<0) this.true_heading = this.true_heading + 360;
+        this.compass_heading = this.true_heading;
+        this.distance = from.distanceTo(to) / 1852f;
     }
 
-    public CoarseMarker(Location from, Location to, Float compass_heading, Float true_heading, Float distance)
+    public CoarseMarker(Location from, Location to, Float compass_heading, Float true_heading,
+                        Float distance)
     {
         this.from = from;
         this.to = to;
         this.true_heading = true_heading;
         this.compass_heading = compass_heading;
         this.distance = distance;
+    }
+
+    public void UpdateMarker(Location from, Location to, Context context, LatLng halfwayPoint)
+    {
+        this.true_heading = from.bearingTo(to);
+        if (this.true_heading<0) this.true_heading = this.true_heading + 360;
+        this.compass_heading = this.true_heading;
+        UpdateMarker(to, from, this.true_heading ,this.true_heading, from.distanceTo(to) / 1852f, context, halfwayPoint);
+    }
+
+    public void UpdateMarker(Location from, Location to, Float compass_heading, Float true_heading,
+                             Float distance, Context context, LatLng halfwayPoint)
+    {
+        this.from = from;
+        this.to = to;
+        this.true_heading = true_heading;
+        this.compass_heading = compass_heading;
+        this.distance = distance;
+
+        coarseMarker.setRotation(true_heading + 90);
+        coarseMarker.setIcon(GetIcon(context));
+        coarseMarker.setPosition(halfwayPoint);
     }
 
     private Location from;

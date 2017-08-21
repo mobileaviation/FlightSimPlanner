@@ -34,13 +34,28 @@ public class DragLine {
         bottomLine = map.addPolyline(bottomLineOptions);
 
         setMidPoint(mid);
+        setCoarseMarkers();
     }
 
     private void setCoarseMarkers()
     {
+        List<LatLng> points = topLine.getPoints();
+
+        Location l1 = Helpers.getLocation(points.get(0));
+        Location l2 = Helpers.getLocation(points.get(1));
+        Location l3 = Helpers.getLocation(points.get(2));
+
         if (topMarker == null)
         {
-            //topMarker = new CoarseMarker()
+            topMarker = new CoarseMarker(l1, l2);
+            topMarker.setCoarseMarker(map, context, topHalfwayPoint);
+            bottomMarker = new CoarseMarker(l2, l3);
+            bottomMarker.setCoarseMarker(map, context, bottomHalfwayPoint);
+        }
+        else
+        {
+            topMarker.UpdateMarker(l1, l2, context, topHalfwayPoint );
+            bottomMarker.UpdateMarker(l2, l3, context, bottomHalfwayPoint);
         }
     }
 
@@ -77,22 +92,17 @@ public class DragLine {
         topHalfwayPoint = Helpers.midPoint(points.get(0),points.get(1));
         bottomHalfwayPoint = Helpers.midPoint(points.get(1),points.get(2));
 
-        Location l1 = Helpers.getLocation(points.get(0));
-        Location l2 = Helpers.getLocation(points.get(1));
-        Location l3 = Helpers.getLocation(points.get(2));
-
-        Float topBearing = l1.bearingTo(l2);
-        Float bottomBearing = l2.bearingTo(l3);
-        Float topDistance = l1.distanceTo(l2);
-        Float bottomDistance = l2.distanceTo(l3);
-
         topLine.setPoints(points);
         bottomLine.setPoints(points);
+
+        setCoarseMarkers();
     }
 
     public void removeDragLine()
     {
         topLine.remove();
         bottomLine.remove();
+        topMarker.RemoveCoarseMarker();
+        bottomMarker.RemoveCoarseMarker();
     }
 }
