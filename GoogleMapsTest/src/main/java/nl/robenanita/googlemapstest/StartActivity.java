@@ -1,10 +1,13 @@
 package nl.robenanita.googlemapstest;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -14,11 +17,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.kishan.askpermission.AskPermission;
+import com.kishan.askpermission.ErrorCallback;
+import com.kishan.askpermission.PermissionCallback;
+import com.kishan.askpermission.PermissionInterface;
 
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
@@ -37,6 +45,7 @@ import nl.robenanita.googlemapstest.inappbilling.util.Purchase;
 public class StartActivity extends ActionBarActivity {
     private String TAG = "GooglemapsTest";
     final String ITEM_SKU = "com.mobileaviationtools.noadds";
+    private final int REQUEST_PERMISSION = 20;
 
     Button startNavigationBtn;
     TextView airportCountTxt;
@@ -81,8 +90,6 @@ public class StartActivity extends ActionBarActivity {
             }
         });
 
-        //ipAddressTxt = (EditText) findViewById(R.id.ipAddressEdit);
-        //setupIpAddressEdit();
 
         fsuipcTextView = (TextView) findViewById(R.id.fsuipcTextView);
         fsuipcTextView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -95,28 +102,9 @@ public class StartActivity extends ActionBarActivity {
 
         GetCounts();
 
-        //testSimBtn = (Button) findViewById(R.id.testSimServerBtn);
-        //testSimBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                TestServer("www.google.nl");
-//            }
-//        });
+        checkPermissions();
 
         if (adds) {
-//            adLoadTimer = new CountDownTimer(5000, 1000) {
-//
-//                public void onTick(long millisUntilFinished) {
-//                    countDownTxt.setText(Long.toString(millisUntilFinished / 1000) + " Sec..");
-//                }
-//
-//                public void onFinish() {
-//                    countDownTxt.setText("");
-//                    startNavigationBtn.setEnabled(true);
-//                }
-//            };
-
-            //adLoadTimer.start();
             startNavigationBtn.setEnabled(true);
             setupInAppBilling();
         }
@@ -124,6 +112,54 @@ public class StartActivity extends ActionBarActivity {
         {
             startNavigationBtn.setEnabled(true);
         }
+    }
+
+    private void checkPermissions()
+    {
+        new AskPermission.Builder(this).setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.WAKE_LOCK).setCallback(new PermissionCallback() {
+            @Override
+            public void onPermissionsGranted(int requestCode) {
+                Toast.makeText(StartActivity.this, "Permission Received!", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onPermissionsDenied(int requestCode) {
+                Toast.makeText(StartActivity.this, "Permission Denied!", Toast.LENGTH_LONG).show();
+            }
+        }).setErrorCallback(new ErrorCallback() {
+            @Override
+            public void onShowRationalDialog(final PermissionInterface permissionInterface, int requestCode) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
+                builder.setMessage("We need extra permissions set for FlightSim Planner to work correctly!");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        permissionInterface.onDialogShown();
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.show();
+            }
+
+            @Override
+            public void onShowSettings(final PermissionInterface permissionInterface, int requestCode) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
+                builder.setMessage("We need extra permissions set for FlightSim Planner to work correctly!, Open the settings Screen");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        permissionInterface.onSettingsShown();
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.show();
+            }
+        }).request(REQUEST_PERMISSION);
     }
 
     private void SetupLinkbutton() {
@@ -197,13 +233,7 @@ public class StartActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data)
     {
-//        if (mHelper != null)
-//            if (!mHelper.handleActivityResult(requestCode,
-//                    resultCode, data)) {
-//                super.onActivityResult(requestCode, resultCode, data);
-//            }
-//        else
-                super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void goToUrl (String url) {
@@ -339,42 +369,6 @@ public class StartActivity extends ActionBarActivity {
         adRight.setVisibility(View.GONE);
     }
 
-//    private Boolean TestServer(final String ip) {
-//        Boolean res = true;
-//
-//        class Ping extends AsyncTask<String, Integer, Void> {
-//
-//            @Override
-//            protected Void doInBackground(String... strings) {
-//                InetAddress in;
-//                in = null;
-//
-//                try {
-//                    in = InetAddress.getByName(ip);
-//
-//                } catch (UnknownHostException e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    if (in.isReachable(5000)) {
-//                        Log.i(TAG, "Responde OK");
-//                    } else {
-//                        Log.i(TAG, "No responde: Time out");
-//                    }
-//                } catch (Exception e) {
-//                    // TODO Auto-generated catch block
-//                    Log.i(TAG, e.toString());
-//                }
-//                return null;
-//            }
-//        }
-//
-//        Ping ping = new Ping();
-//        ping.execute();
-//
-//        return res;
-//    }
 
     Country selectedCounry;
     Continent selectedContinent;
@@ -438,75 +432,7 @@ public class StartActivity extends ActionBarActivity {
         CheckDatabaseSource checkDatabaseSource = new CheckDatabaseSource(this);
         checkDatabaseSource.open();
         checkDatabaseSource.checkVersion();
-
-//        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
-//        propertiesDataSource.open();
-//        propertiesDataSource.checkVersion();
     }
-
-//    private void SetupSpinners() {
-//        CountryDataSource countryDb = new CountryDataSource(this);
-//        ContinentDataSource continentDb = new ContinentDataSource(this);
-//
-//        countryDb.open();
-//        ArrayList<Country> countries = countryDb.getAllCountries(true);
-//        countryDb.close();
-//
-//        continentDb.open();
-//        ArrayList<Continent> continents = continentDb.getAllContinents(true);
-//        continentDb.close();
-//
-//        CountryAdapter adapter = new CountryAdapter(countries);
-//        countrySpinnerStart.setAdapter(adapter);
-//
-//        ContinentAdapter continentAdapter = new ContinentAdapter(continents);
-//        continentSpinnerStart.setAdapter(continentAdapter);
-//
-//        countrySpinnerStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                CountryAdapter adapter = (CountryAdapter) adapterView.getAdapter();
-//                if (adapter != null) {
-//                    selectedCounry = adapter.GetCountry(i);
-//                    Log.i(TAG, "OnItemSelected: " + selectedCounry.name);
-//                    downloadCountryAirportsBtn.setEnabled((selectedCounry != null));
-//                    downloadContinentAirportsBtn.setEnabled(false);
-//                } else {
-//                    selectedCounry = null;
-//                    downloadCountryAirportsBtn.setEnabled(false);
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//                selectedCounry = null;
-//                downloadCountryAirportsBtn.setEnabled(false);
-//            }
-//        });
-//
-//        continentSpinnerStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                ContinentAdapter adapter1 = (ContinentAdapter) adapterView.getAdapter();
-//                if (adapter1 != null) {
-//                    selectedContinent = adapter1.GetContinent(i);
-//                    Log.i(TAG, "OnItemSelected: " + selectedContinent.name);
-//                    downloadContinentAirportsBtn.setEnabled((selectedContinent != null));
-//                    downloadCountryAirportsBtn.setEnabled(false);
-//                } else {
-//                    selectedContinent = null;
-//                    downloadContinentAirportsBtn.setEnabled(false);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//                selectedContinent = null;
-//                downloadContinentAirportsBtn.setEnabled(false);
-//            }
-//        });
-//    }
 
     public boolean loadAds()
     {
@@ -560,102 +486,6 @@ public class StartActivity extends ActionBarActivity {
         }
 
     }
-
-
-//    public void SetButtonState(Boolean Enabled)
-//    {
-//        if (!Enabled)
-//        {
-//            downloadContinentAirportsBtn.setEnabled(Enabled);
-//            downloadCountryAirportsBtn.setEnabled(Enabled);
-//        }
-//        startNavigationBtn.setEnabled(Enabled);
-//        if (Enabled) GetCounts();
-//    }
-
-//    private void SetupLoadButtons()
-//    {
-//        downloadContinentAirportsBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (selectedContinent != null)
-//                {
-//                    SetButtonState(false);
-//                    airportLoadProgress.setVisibility(View.VISIBLE);
-//                    airportLoadProgressText.setVisibility(View.VISIBLE);
-//                    LoadAirportsByContinentCode(selectedContinent.code, getBaseContext());
-//                }
-//            }
-//        });
-//
-//        downloadCountryAirportsBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (selectedCounry != null)
-//                {
-//                    SetButtonState(false);
-//                    airportLoadProgress.setVisibility(View.VISIBLE);
-//                    airportLoadProgressText.setVisibility(View.VISIBLE);
-//                    LoadAirportsByCountryCode(selectedCounry.code, getBaseContext());
-//                }
-//            }
-//        });
-//    }
-
-//    private void LoadAirportsByCountryCode(String countryCode, Context context)
-//    {
-//        AsyncXMLAirports loadAirports = new AsyncXMLAirports();
-//        loadAirports.CountryCode = countryCode;
-//        loadAirports.ContinentCode = "";
-//        loadAirports.context = this;
-//        loadAirports.startActivity = this;
-//        loadAirports.progressBar = airportLoadProgress;
-//        loadAirports.progressText = airportLoadProgressText;
-//        loadAirports.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//    }
-//
-//    private void LoadAirportsByContinentCode(String code, Context context)
-//    {
-//        AsyncXMLAirports loadAirports = new AsyncXMLAirports();
-//        loadAirports.CountryCode = "";
-//        loadAirports.ContinentCode = code;
-//        loadAirports.context = this;
-//        loadAirports.startActivity = this;
-//        loadAirports.progressBar = airportLoadProgress;
-//        loadAirports.progressText = airportLoadProgressText;
-//        loadAirports.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//    }
-//
-//    private void setupIpAddressEdit()
-//    {
-//        InputFilter[] filters = new InputFilter[1];
-//        filters[0] = new InputFilter() {
-//            @Override
-//            public CharSequence filter(CharSequence source, int start,
-//                                       int end, Spanned dest, int dstart, int dend) {
-//                if (end > start) {
-//                    String destTxt = dest.toString();
-//                    String resultingTxt = destTxt.substring(0, dstart) +
-//                            source.subSequence(start, end) +
-//                            destTxt.substring(dend);
-//                    if (!resultingTxt.matches ("^\\d{1,3}(\\." +
-//                            "(\\d{1,3}(\\.(\\d{1,3}(\\.(\\d{1,3})?)?)?)?)?)?")) {
-//                        return "";
-//                    } else {
-//                        String[] splits = resultingTxt.split("\\.");
-//                        for (int i=0; i<splits.length; i++) {
-//                            if (Integer.valueOf(splits[i]) > 255) {
-//                                return "";
-//                            }
-//                        }
-//                    }
-//                }
-//                return null;
-//            }
-//        };
-//        ipAddressTxt.setFilters(filters);
-//    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

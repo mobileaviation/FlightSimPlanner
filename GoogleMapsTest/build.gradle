@@ -12,7 +12,7 @@ apply plugin: 'android'
 
 repositories {
     mavenCentral()
-    //jcenter()
+    jcenter()
 }
 
 android {
@@ -51,4 +51,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.google.android.gms:play-services-location:11.0.2'
     compile 'com.google.android.gms:play-services-ads:11.0.2'
+    compile 'com.kishan.askpermission:askpermission:1.0.3'
 }
