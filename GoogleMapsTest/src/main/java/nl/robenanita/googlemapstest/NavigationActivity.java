@@ -1204,8 +1204,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 public void on500Meters(boolean firstHit) {
                     if (!selectedFlightplan.endPlan) {
                         if (firstHit) {
-//                            ATOClick(selectedFlightplan.getActiveLeg().getToWaypoint());
-
+                            fspMapFragment.SetATO(selectedFlightplan.getActiveLeg().getToWaypoint(), mCurrentLocation);
                             Toast.makeText(NavigationActivity.this, "Activated next waypoint: "
                                     + selectedFlightplan.getActiveLeg().getToWaypoint().name
                                     + String.format("\nYour next course is : %03d degree", Math.round(selectedFlightplan.getActiveLeg().getToWaypoint().true_track))
@@ -1222,7 +1221,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 @Override
                 public void onArrivedDestination(Waypoint waypoint, boolean firstHit) {
                     if (firstHit) {
-//                        ATOClick(selectedFlightplan.getActiveLeg().getToWaypoint());
+                        fspMapFragment.SetATO(selectedFlightplan.getActiveLeg().getToWaypoint(), mCurrentLocation);
                         Toast.makeText(NavigationActivity.this, "You've arrived at your destination: "
                                 + selectedFlightplan.getActiveLeg().getToWaypoint().name
                                 + "\nThe flightplan is now ended.."

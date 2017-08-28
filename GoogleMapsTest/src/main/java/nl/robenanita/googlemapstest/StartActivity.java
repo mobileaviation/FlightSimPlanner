@@ -1,6 +1,7 @@
 package nl.robenanita.googlemapstest;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,10 +24,14 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
+
+import java.util.logging.Logger;
 
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
@@ -104,6 +109,11 @@ public class StartActivity extends ActionBarActivity {
 
         checkPermissions();
 
+        if (!checkPlayServices(this))
+        {
+            Toast.makeText(this, "There is a problem with the installed version of GooglePlay Services!", Toast.LENGTH_LONG).show();
+        }
+
         if (adds) {
             startNavigationBtn.setEnabled(true);
             setupInAppBilling();
@@ -112,6 +122,22 @@ public class StartActivity extends ActionBarActivity {
         {
             startNavigationBtn.setEnabled(true);
         }
+    }
+
+    public boolean checkPlayServices(Activity activity) {
+        final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+            }
+            return false;
+        }
+        return true;
     }
 
     private void checkPermissions()

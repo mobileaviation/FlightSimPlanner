@@ -1,12 +1,18 @@
 package nl.robenanita.googlemapstest;
 
 import android.content.Context;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
+import nl.robenanita.googlemapstest.search.SearchPopup;
 
 /**
  * Created by Rob Verhoef on 25-3-14.
@@ -16,6 +22,7 @@ public class AddWayPointPopup extends PopupWindow{
     public Boolean Search;
     public String WaypointName;
     public LatLng Location;
+    private Context context;
 
     EditText textEdit;
     public AddWayPointPopup(Context context, View layout)
@@ -23,6 +30,7 @@ public class AddWayPointPopup extends PopupWindow{
         super(context);
         Result = false;
         Search = false;
+        this.context = context;
 
 
         Button SaveBtn = (Button) layout.findViewById(R.id.addWayPointSaveBtn);

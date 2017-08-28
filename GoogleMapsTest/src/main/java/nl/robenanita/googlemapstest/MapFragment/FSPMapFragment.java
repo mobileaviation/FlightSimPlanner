@@ -73,6 +73,8 @@ import nl.robenanita.googlemapstest.flightplan.WaypointType;
 import nl.robenanita.googlemapstest.markers.AviationMarkers;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
 import nl.robenanita.googlemapstest.search.SearchActivity;
+import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
+import nl.robenanita.googlemapstest.search.SearchPopup;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -348,14 +350,6 @@ public class FSPMapFragment extends Fragment {
                 Waypoint w = selectedFlightplan.waypointMarkerMap.get(marker);
                 Waypoint beforeWaypoint = selectedFlightplan.getBeforeWaypoint(w);
                 Waypoint afterWaypoint = selectedFlightplan.getAfterWaypoint(w);
-//                PolylineOptions options = new PolylineOptions();
-//                options.color(Color.RED);
-//                options.width(7);
-//                options.zIndex(1001);
-//                options.add(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()));
-//                options.add(new LatLng(w.location.getLatitude(), w.location.getLongitude()));
-//                options.add(new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()));
-//                dragLine = googleMap.addPolyline(options);
                 dragLine = new DragLine(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()),
                         new LatLng(w.location.getLatitude(), w.location.getLongitude()),
                         new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()),
@@ -363,9 +357,6 @@ public class FSPMapFragment extends Fragment {
             }
             @Override
             public void onMarkerDrag(Marker marker) {
-//                List<LatLng> points = dragLine.getPoints();
-//                points.set(1, marker.getPosition());
-//                dragLine.setPoints(points);
                 dragLine.setMidPoint(marker.getPosition());
             }
 
@@ -611,17 +602,44 @@ public class FSPMapFragment extends Fragment {
                 }
                 if (addWayPointPopup.Search)
                 {
-                    Intent searchIntent = new Intent(mainActivity, SearchActivity.class);
-                    searchIntent.putExtra("key", 1);
-                    Bundle b = new Bundle();
-                    b.putParcelable("location", curPosition);
-                    searchIntent.putExtra("location", b);
-                    mainActivity.startActivityForResult(searchIntent, 200);
+                    showSearchPopup();
                 }
             }
         });
 
         addWayPointPopup.showAtLocation(Layout, Gravity.TOP, 0, 10);
+    }
+
+    private void showSearchPopup()
+    {
+        int popupWidth = (int) nl.robenanita.googlemapstest.Helpers.convertPixelsToDp(800f, mainActivity);
+        int popupHeight = (int) nl.robenanita.googlemapstest.Helpers.convertPixelsToDp(350f, mainActivity);
+
+        LinearLayout viewGroup = null;
+        LayoutInflater layoutInflater = (LayoutInflater) mainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View Layout = layoutInflater.inflate(R.layout.searchpopup, viewGroup);
+
+        final SearchPopup searchPopup = new SearchPopup(mainActivity, Layout);
+
+        searchPopup.setContentView(Layout);
+        searchPopup.setWidth(popupWidth);
+        searchPopup.setHeight(popupHeight);
+        searchPopup.setFocusable(true);
+
+        searchPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                if (searchPopup.Result)
+                {
+//                    Airport a = searchAirportsPopup.SelectedAirport;
+//                    LatLng planePos = new LatLng(a.latitude_deg, a.longitude_deg);
+//                    curPosition = planePos;
+//                    fspMapFragment.SetMapPosition(planePos);
+                }
+            }
+        });
+
+        searchPopup.showAtLocation(Layout, Gravity.TOP, 0, 10);
     }
 
     private void setupNewWaypointInFlightplan(String name, Double latitude, Double longitude, WaypointType type, Integer id)
@@ -911,6 +929,11 @@ public class FSPMapFragment extends Fragment {
         });
 
         flightplanGrid.LoadFlightplanGrid(selectedFlightplan);
+    }
+
+    public void SetATO(Waypoint waypoint, Location curPlaneLocation)
+    {
+        flightplanController.SetATO(waypoint, curPlaneLocation);
     }
 
     public void SetupDirectToTrack(Airport airport, Context context)
