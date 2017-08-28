@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,10 +37,13 @@ public class AddWaypointAdapter extends BaseAdapter {
         TextView airportIdentTxt = (TextView) view.findViewById(R.id.addWaypointAirportIdentTxt);
         TextView airportNameTxt = (TextView) view.findViewById(R.id.addWaypointAirportNameTxt);
         LinearLayout addWaypointLayout = (LinearLayout) view.findViewById(R.id.addWaypointAdapterLayout);
+        ImageView iconView = (ImageView) view.findViewById(R.id.addWaypointIconImage);
 
         Airport airport = (Airport)airports.get(i);
         airportIdentTxt.setText(airport.ident);
         airportNameTxt.setText(airport.name);
+
+        iconView.setImageBitmap(airport.GetSmallIcon(((float) airport.heading), airport.ident, viewGroup.getContext()));
 
         if ( (i & 1) == 0 ) {
             addWaypointLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));

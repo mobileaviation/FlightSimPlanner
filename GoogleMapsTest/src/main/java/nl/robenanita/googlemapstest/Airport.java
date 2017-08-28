@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -66,6 +67,13 @@ public class Airport implements Serializable {
     {
         Coordinate c = new Coordinate(longitude_deg, latitude_deg);
         return WKTWriter.toPoint(c);
+    }
+
+    public Bitmap GetSmallIcon(float angle, String iata_code, Context context)
+    {
+        if (type == AirportType.heliport) return BitmapFactory.decodeResource(context.getResources(), R.drawable.heliport);
+        else
+        return _getSmallAirportIcon(angle, iata_code, context );
     }
 
     public BitmapDescriptor GetIcon(float angle, String iata_code, Context context)
@@ -169,6 +177,11 @@ public class Airport implements Serializable {
 
     private BitmapDescriptor getSmallAirportIcon(float angle, String ICAOCode, Context context)
     {
+        return BitmapDescriptorFactory.fromBitmap(_getSmallAirportIcon(angle, ICAOCode, context));
+    }
+
+    private Bitmap _getSmallAirportIcon(float angle, String ICAOCode, Context context)
+    {
         Bitmap rotateBitmap = Bitmap.createBitmap(30, 30,
                 Bitmap.Config.ARGB_8888);
         Canvas rotateCanvas = new Canvas(rotateBitmap);
@@ -222,8 +235,7 @@ public class Airport implements Serializable {
         RectF dstR = new RectF(0f, 0f, (float)dstBitmap.getWidth(), (float)dstBitmap.getHeight());
         dstCanvas.drawBitmap(textBitmap, scrR, dstR, null);
 
-        return BitmapDescriptorFactory.fromBitmap(dstBitmap);
-
+        return dstBitmap;
         
     }
 
