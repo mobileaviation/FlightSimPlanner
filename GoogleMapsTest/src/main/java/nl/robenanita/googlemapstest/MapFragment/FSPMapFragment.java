@@ -4,6 +4,7 @@ package nl.robenanita.googlemapstest.MapFragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -124,6 +125,8 @@ public class FSPMapFragment extends Fragment {
 
     private Track track;
 
+    private NewWaypointFragment newWaypointFragment;
+
     public FSPMapFragment() {
         // Required empty public constructor
     }
@@ -133,9 +136,7 @@ public class FSPMapFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_fspmap, container, false);
-
-
-
+        setupAddWaypointLayout();
         return view;
     }
 
@@ -150,6 +151,7 @@ public class FSPMapFragment extends Fragment {
         this.legInfoView = legInfoView;
         this.infoPanel = infoPanelFragment;
         setupMap();
+
     }
 
     private void SetupDrawerListeners() {
@@ -183,6 +185,32 @@ public class FSPMapFragment extends Fragment {
         return selectedFlightplan;
     }
 
+    private void setupAddWaypointLayout()
+    {
+        newWaypointFragment = (NewWaypointFragment) getFragmentManager().findFragmentById(R.id.newwpFragment);
+
+        newWaypointFragment =
+                (NewWaypointFragment) getFragmentManager().findFragmentById(R.id.newwpFragment);
+        if (newWaypointFragment == null)
+            newWaypointFragment = (NewWaypointFragment) this.getChildFragmentManager().findFragmentById(R.id.newwpFragment);
+
+        setNewWaypointFragmentVisibility(false);
+    }
+
+    private void setNewWaypointFragmentVisibility(boolean visibility)
+    {
+        if (visibility) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.show(newWaypointFragment);
+            ft.commit();
+        } else
+        {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.hide(newWaypointFragment);
+            ft.commit();
+        }
+    }
+
     private void setupMap()
     {
         MapFragment tmpFragment =
@@ -205,6 +233,7 @@ public class FSPMapFragment extends Fragment {
                 setOnMarkerClickListeners();
                 setOnInfoWindowListeners();
                 SetupDrawerListeners();
+                setOnMapClickListeners();
                 if (onMapReadyCallback != null)
                     FSPMapFragment.this.onMapReadyCallback.onMapReady(googleMap);
             }
@@ -290,7 +319,7 @@ public class FSPMapFragment extends Fragment {
         googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
             public void onCameraMove() {
-                Log.i(TAG, "Camera Moved to: " + googleMap.getCameraPosition().target.latitude + " : " + googleMap.getCameraPosition().target.longitude);
+                //Log.i(TAG, "Camera Moved to: " + googleMap.getCameraPosition().target.latitude + " : " + googleMap.getCameraPosition().target.longitude);
                 curPosition = googleMap.getCameraPosition();
                 if (infoWindow != null){
                     infoWindow.MapPositionChanged();
@@ -310,6 +339,11 @@ public class FSPMapFragment extends Fragment {
             public void onCameraIdle() {
                 Log.i(TAG, "Moved Idle");
                 SetAviationMarkersByZoomAndBoundary();
+
+                if (newWaypointFragment.isVisible())
+                {
+                    newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
+                }
 
                 if (onCameraIdleListener != null)
                     FSPMapFragment.this.onCameraIdleListener.onCameraIdle();
@@ -336,6 +370,27 @@ public class FSPMapFragment extends Fragment {
                 LatLng midwaypoint = nl.robenanita.googlemapstest.Helpers.midPoint(polyline.getPoints().get(0), polyline.getPoints().get(1));
                 Log.i(TAG, "Midway Position Lat: " + midwaypoint.latitude + " Lon: " + midwaypoint.longitude);
                 showNewWaypointPopup(midwaypoint);
+            }
+        });
+    }
+
+    private void setOnMapClickListeners()
+    {
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+            }
+        });
+
+        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                Log.i(TAG, "Map Long Click clicked");
+                Log.i(TAG, "Midway Position Lat: " + latLng.latitude + " Lon: " + latLng.longitude);
+                //showNewWaypointPopup(latLng);
+                setNewWaypointFragmentVisibility(true);
+                newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
             }
         });
     }
