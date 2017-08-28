@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -459,6 +460,46 @@ public class AirportDataSource {
     private void UpdateProgramID(String query)
     {
 
+    }
+
+    public ArrayList<Airport> getAirportsByBoundary(LatLngBounds boundary)
+    {
+        ArrayList<Airport> _airports = new ArrayList<>();
+        String latBetween = "";
+        latBetween = "latitude_deg BETWEEN " + Double.toString(boundary.southwest.latitude)
+                + " AND " + Double.toString(boundary.northeast.latitude);
+
+        String lonBetween = "";
+        lonBetween = "longitude_deg BETWEEN " + Double.toString(boundary.southwest.longitude)
+                + " AND " + Double.toString(boundary.northeast.longitude);
+
+        String where = " WHERE " + latBetween + " AND " + lonBetween;
+
+        String query = "SELECT A." + dbHelper.C_id + ","
+                + "A." + dbHelper.C_ident + ","
+                + "A." + dbHelper.C_name + ","
+                + "A." + dbHelper.C_latitude_deg + ","
+                + "A." + dbHelper.C_longitude_deg + ","
+                + "A." + dbHelper.C_type + ","
+                + "A._id"
+                + " FROM " + DBHelper.AIRPORT_TABLE_NAME + " A " +
+                " " + where
+                + ";";
+
+        Log.i(TAG, "Airports Query: " + query);
+
+        Cursor cursor = database.rawQuery(query, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Airport airport = cursorToPartAirport(cursor);
+            _airports.add(airport);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+
+        return _airports;
     }
 
     public ArrayList<Station> getAirportsInBuffer(Geometry buffer)

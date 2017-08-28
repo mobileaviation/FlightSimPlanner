@@ -15,6 +15,14 @@
         android:name="com.google.android.gms.maps.MapFragment"
         />
 
+    <fragment
+        android:id="@+id/newwpFragment"
+        android:name="nl.robenanita.googlemapstest.MapFragment.NewWaypointFragment"
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="150dp" />
+
     <LinearLayout
         android:id="@+id/fspInfoWindowContentLayout"
         android:layout_width="wrap_content"

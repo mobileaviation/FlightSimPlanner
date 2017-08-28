@@ -4,6 +4,7 @@ package nl.robenanita.googlemapstest.MapFragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -122,6 +123,8 @@ public class FSPMapFragment extends Fragment {
 
     private Track track;
 
+    private NewWaypointFragment newWaypointFragment;
+
     public FSPMapFragment() {
         // Required empty public constructor
     }
@@ -131,9 +134,7 @@ public class FSPMapFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_fspmap, container, false);
-
-
-
+        setupAddWaypointLayout();
         return view;
     }
 
@@ -148,6 +149,7 @@ public class FSPMapFragment extends Fragment {
         this.legInfoView = legInfoView;
         this.infoPanel = infoPanelFragment;
         setupMap();
+
     }
 
     private void SetupDrawerListeners() {
@@ -181,6 +183,32 @@ public class FSPMapFragment extends Fragment {
         return selectedFlightplan;
     }
 
+    private void setupAddWaypointLayout()
+    {
+        newWaypointFragment = (NewWaypointFragment) getFragmentManager().findFragmentById(R.id.newwpFragment);
+
+        newWaypointFragment =
+                (NewWaypointFragment) getFragmentManager().findFragmentById(R.id.newwpFragment);
+        if (newWaypointFragment == null)
+            newWaypointFragment = (NewWaypointFragment) this.getChildFragmentManager().findFragmentById(R.id.newwpFragment);
+
+        setNewWaypointFragmentVisibility(false);
+    }
+
+    private void setNewWaypointFragmentVisibility(boolean visibility)
+    {
+        if (visibility) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.show(newWaypointFragment);
+            ft.commit();
+        } else
+        {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.hide(newWaypointFragment);
+            ft.commit();
+        }
+    }
+
     private void setupMap()
     {
         MapFragment tmpFragment =
@@ -203,6 +231,7 @@ public class FSPMapFragment extends Fragment {
                 setOnMarkerClickListeners();
                 setOnInfoWindowListeners();
                 SetupDrawerListeners();
+                setOnMapClickListeners();
                 if (onMapReadyCallback != null)
                     FSPMapFragment.this.onMapReadyCallback.onMapReady(googleMap);
             }
@@ -288,7 +317,7 @@ public class FSPMapFragment extends Fragment {
         googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
             public void onCameraMove() {
-                Log.i(TAG, "Camera Moved to: " + googleMap.getCameraPosition().target.latitude + " : " + googleMap.getCameraPosition().target.longitude);
+                //Log.i(TAG, "Camera Moved to: " + googleMap.getCameraPosition().target.latitude + " : " + googleMap.getCameraPosition().target.longitude);
                 curPosition = googleMap.getCameraPosition();
                 if (infoWindow != null){
                     infoWindow.MapPositionChanged();
@@ -308,6 +337,11 @@ public class FSPMapFragment extends Fragment {
             public void onCameraIdle() {
                 Log.i(TAG, "Moved Idle");
                 SetAviationMarkersByZoomAndBoundary();
+
+                if (newWaypointFragment.isVisible())
+                {
+                    newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
+                }
 
                 if (onCameraIdleListener != null)
                     FSPMapFragment.this.onCameraIdleListener.onCameraIdle();
@@ -338,6 +372,27 @@ public class FSPMapFragment extends Fragment {
         });
     }
 
+    private void setOnMapClickListeners()
+    {
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+            }
+        });
+
+        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                Log.i(TAG, "Map Long Click clicked");
+                Log.i(TAG, "Midway Position Lat: " + latLng.latitude + " Lon: " + latLng.longitude);
+                //showNewWaypointPopup(latLng);
+                setNewWaypointFragmentVisibility(true);
+                newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
+            }
+        });
+    }
+
     private void setOnMarkerDragListeners()
     {
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -348,14 +403,6 @@ public class FSPMapFragment extends Fragment {
                 Waypoint w = selectedFlightplan.waypointMarkerMap.get(marker);
                 Waypoint beforeWaypoint = selectedFlightplan.getBeforeWaypoint(w);
                 Waypoint afterWaypoint = selectedFlightplan.getAfterWaypoint(w);
-//                PolylineOptions options = new PolylineOptions();
-//                options.color(Color.RED);
-//                options.width(7);
-//                options.zIndex(1001);
-//                options.add(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()));
-//                options.add(new LatLng(w.location.getLatitude(), w.location.getLongitude()));
-//                options.add(new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()));
-//                dragLine = googleMap.addPolyline(options);
                 dragLine = new DragLine(new LatLng(beforeWaypoint.location.getLatitude(), beforeWaypoint.location.getLongitude()),
                         new LatLng(w.location.getLatitude(), w.location.getLongitude()),
                         new LatLng(afterWaypoint.location.getLatitude(), afterWaypoint.location.getLongitude()),
@@ -363,9 +410,6 @@ public class FSPMapFragment extends Fragment {
             }
             @Override
             public void onMarkerDrag(Marker marker) {
-//                List<LatLng> points = dragLine.getPoints();
-//                points.set(1, marker.getPosition());
-//                dragLine.setPoints(points);
                 dragLine.setMidPoint(marker.getPosition());
             }
 
