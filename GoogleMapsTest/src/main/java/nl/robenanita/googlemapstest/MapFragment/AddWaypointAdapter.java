@@ -8,12 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.Map;
-
-import nl.robenanita.googlemapstest.Airport;
-import nl.robenanita.googlemapstest.AirportAdapter;
 import nl.robenanita.googlemapstest.R;
 
 /**
@@ -22,11 +17,11 @@ import nl.robenanita.googlemapstest.R;
 
 public class AddWaypointAdapter extends BaseAdapter {
     private static int selectedIndex = -1;
-    public ArrayList<Airport> airports;
+    public ArrayList<SelectableWaypoint> waypoints;
 
-    public AddWaypointAdapter(ArrayList<Airport> airports)
+    public AddWaypointAdapter(ArrayList<SelectableWaypoint> waypoints)
     {
-        this.airports = airports;
+        this.waypoints = waypoints;
     }
 
     @Override
@@ -39,11 +34,11 @@ public class AddWaypointAdapter extends BaseAdapter {
         LinearLayout addWaypointLayout = (LinearLayout) view.findViewById(R.id.addWaypointAdapterLayout);
         ImageView iconView = (ImageView) view.findViewById(R.id.addWaypointIconImage);
 
-        Airport airport = (Airport)airports.get(i);
-        airportIdentTxt.setText(airport.ident);
-        airportNameTxt.setText(airport.name);
+        SelectableWaypoint waypoint = waypoints.get(i);
+        airportIdentTxt.setText(waypoint.GetIdent());
+        airportNameTxt.setText(waypoint.GetName());
 
-        iconView.setImageBitmap(airport.GetSmallIcon(((float) airport.heading), airport.ident, viewGroup.getContext()));
+        iconView.setImageBitmap(waypoint.GetIcon(viewGroup.getContext()));
 
         if ( (i & 1) == 0 ) {
             addWaypointLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));
@@ -62,13 +57,13 @@ public class AddWaypointAdapter extends BaseAdapter {
         return getItem(i);
     }
 
-    public Airport GetAirport(int i)
+    public SelectableWaypoint GetSelectedWaypoint(int i)
     {
-        return (Airport)airports.get(i);
+        return (SelectableWaypoint) waypoints.get(i);
     }
 
     @Override
     public int getCount() {
-        return airports.size();
+        return waypoints.size();
     }
 }

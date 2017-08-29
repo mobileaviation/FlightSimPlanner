@@ -8,7 +8,9 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#20000000"
+        android:backgroundTintMode="screen">
 
         <ImageView
             android:id="@+id/imageView3"
@@ -18,7 +20,7 @@
             app:srcCompat="@drawable/newwaypoint" />
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp">
@@ -28,6 +30,13 @@
             android:layout_width="300dp"
             android:layout_height="200dp"
             android:background="@color/black_overlay"></ListView>
-    </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/addWaypointCloseBtn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/closebutton" />
+    </FrameLayout>
 
 </FrameLayout>

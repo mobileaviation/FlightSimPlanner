@@ -1,7 +1,12 @@
 package nl.robenanita.googlemapstest;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 /**
@@ -49,6 +54,11 @@ public class Navaid {
         return a;
     }
 
+    public LatLng getLatLng()
+    {
+        return new LatLng(latitude_deg, longitude_deg);
+    }
+
     public BitmapDescriptor GetIcon()
     {
         if (type == NavaidType.DME) return BitmapDescriptorFactory.fromResource(R.drawable.dme);
@@ -58,6 +68,19 @@ public class Navaid {
         if (type == NavaidType.VOR) return BitmapDescriptorFactory.fromResource(R.drawable.vor);
         if (type == NavaidType.VOR_DME) return BitmapDescriptorFactory.fromResource(R.drawable.vordme);
         if (type == NavaidType.VORTAC) return BitmapDescriptorFactory.fromResource(R.drawable.vortac);
+
+        return null;
+    }
+
+    public Bitmap GetSmallIcon(Context context)
+    {
+        if (type == NavaidType.DME) return BitmapFactory.decodeResource(context.getResources(),R.drawable.dme);
+        if (type == NavaidType.NDB) return BitmapFactory.decodeResource(context.getResources(),R.drawable.ndb);
+        if (type == NavaidType.NDB_DME) BitmapFactory.decodeResource(context.getResources(),R.drawable.ndb);
+        if (type == NavaidType.TACAN) BitmapFactory.decodeResource(context.getResources(),R.drawable.tacan);
+        if (type == NavaidType.VOR) BitmapFactory.decodeResource(context.getResources(),R.drawable.vor);
+        if (type == NavaidType.VOR_DME) BitmapFactory.decodeResource(context.getResources(),R.drawable.vordme);
+        if (type == NavaidType.VORTAC) BitmapFactory.decodeResource(context.getResources(),R.drawable.vortac);
 
         return null;
     }

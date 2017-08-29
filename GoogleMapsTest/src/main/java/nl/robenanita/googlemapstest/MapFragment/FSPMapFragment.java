@@ -49,7 +49,9 @@ import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.FlightplanGrid;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
 import nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment;
+import nl.robenanita.googlemapstest.InfoWindows.DeleteWaypointListener;
 import nl.robenanita.googlemapstest.InfoWindows.NavaidInfoWindowFragment;
+import nl.robenanita.googlemapstest.InfoWindows.WaypointFragment;
 import nl.robenanita.googlemapstest.LegInfoView;
 import nl.robenanita.googlemapstest.MapController;
 import nl.robenanita.googlemapstest.Navaid;
@@ -366,33 +368,68 @@ public class FSPMapFragment extends Fragment {
             @Override
             public void onPolylineClick(Polyline polyline) {
                 Log.i(TAG, "Polyline clicked");
-                clickedLeg = (Leg)polyline.getTag();
-                LatLng midwaypoint = nl.robenanita.googlemapstest.Helpers.midPoint(polyline.getPoints().get(0), polyline.getPoints().get(1));
-                Log.i(TAG, "Midway Position Lat: " + midwaypoint.latitude + " Lon: " + midwaypoint.longitude);
-                showNewWaypointPopup(midwaypoint);
+                LatLng latLng = googleMap.getCameraPosition().target;
+                Log.i(TAG, "Clicked Position Lat: " + latLng.latitude + " Lon: " + latLng.longitude);
+                setNewWaypointFragmentVisibility(true);
+                newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
+                newWaypointFragment.SetOnNewWaypointSelectedListener(new NewWapointSelectedListener() {
+                    @Override
+                    public void NewWaypointSelected(SelectableWaypoint waypoint) {
+                        setNewWaypointFragmentVisibility(false);
+                        setNewWaypointInFlightplan(waypoint);
+                    }
+                    @Override
+                    public void NewWaypointCanceled()
+                    {
+                        setNewWaypointFragmentVisibility(false);
+                    }
+                });
             }
         });
     }
 
     private void setOnMapClickListeners()
     {
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-            }
-        });
-
         googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
                 Log.i(TAG, "Map Long Click clicked");
-                Log.i(TAG, "Midway Position Lat: " + latLng.latitude + " Lon: " + latLng.longitude);
-                //showNewWaypointPopup(latLng);
+                Log.i(TAG, "Clicked Position Lat: " + latLng.latitude + " Lon: " + latLng.longitude);
                 setNewWaypointFragmentVisibility(true);
                 newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
+                newWaypointFragment.SetOnNewWaypointSelectedListener(new NewWapointSelectedListener() {
+                    @Override
+                    public void NewWaypointSelected(SelectableWaypoint waypoint) {
+                        setNewWaypointFragmentVisibility(false);
+                        setNewWaypointInFlightplan(waypoint);
+                    }
+                    @Override
+                    public void NewWaypointCanceled()
+                    {
+                        setNewWaypointFragmentVisibility(false);
+                    }
+                });
             }
         });
+    }
+
+    private void setNewWaypointInFlightplan(SelectableWaypoint waypoint)
+    {
+        if (selectedFlightplan != null){
+            if (!selectedFlightplan.getFlightplanActive())
+            {
+                selectedFlightplan.RemoveAllRunwayMarkers();
+                selectedFlightplan.removeOldFlightplanMarkers();
+                selectedFlightplan.RemoveFlightplanTrack();
+                selectedFlightplan.RemoveBuffer();
+
+                setupNewWaypointInFlightplan(waypoint.GetName(),
+                        waypoint.GetLatLng().latitude,
+                        waypoint.GetLatLng().longitude,
+                        WaypointType.userwaypoint,
+                        -1);
+            }
+        }
     }
 
     private void setOnMarkerDragListeners()
@@ -449,6 +486,7 @@ public class FSPMapFragment extends Fragment {
 
                 Airport airport = airportMarkerMap.get(marker);
                 Navaid navaid = navaidMarkerMap.get(marker);
+                Waypoint waypoint = selectedFlightplan.waypointMarkerMap.get(marker);
 
                 if (airport != null) {
                     AirportInfoWndFragment airportInfoFragment = new AirportInfoWndFragment();
@@ -461,6 +499,22 @@ public class FSPMapFragment extends Fragment {
                     NavaidInfoWindowFragment navaidInfoFragment = new NavaidInfoWindowFragment();
                     navaidInfoFragment.SetNavaid(navaid, mainActivity);
                     infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, navaidInfoFragment);
+                    infoWindow.MapPositionChanged();
+                }
+
+                if (waypoint != null){
+                    Log.i(TAG, "Waypoint: " + waypoint.toString());
+                    WaypointFragment waypointFragment = new WaypointFragment();
+                    waypointFragment.setupWaypoint(waypoint);
+                    waypointFragment.SetOnDeleteWaypointListener(new DeleteWaypointListener() {
+                        @Override
+                        public void OnDeleteWaypoint(Waypoint waypoint) {
+                            Log.i(TAG, "Delete waypoint clicked");
+                            infoWindow.RemoveInfoWindow();
+                            infoWindow = null;
+                        }
+                    });
+                    infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, waypointFragment);
                     infoWindow.MapPositionChanged();
                 }
 

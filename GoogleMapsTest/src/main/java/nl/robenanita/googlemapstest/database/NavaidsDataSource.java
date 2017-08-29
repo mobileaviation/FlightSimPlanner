@@ -8,6 +8,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +69,41 @@ public class NavaidsDataSource {
         }
 
         return navaid;
+    }
+
+    public ArrayList<Navaid> GetNaviadsByBoundary(LatLngBounds boundary)
+    {
+        ArrayList<Navaid> navaids = new ArrayList<>();
+
+            String where = "WHERE ";
+
+            String latBetween = "";
+            latBetween = "latitude_deg BETWEEN " + Double.toString(boundary.southwest.latitude)
+                    + " AND " + Double.toString(boundary.northeast.latitude);
+
+            String lonBetween = "";
+            lonBetween = "longitude_deg BETWEEN " + Double.toString(boundary.southwest.longitude)
+                    + " AND " + Double.toString(boundary.northeast.longitude);
+
+            where = where + " " + latBetween + " AND " + lonBetween;
+
+            String query = "SELECT * FROM tbl_Navaids " + where;
+
+            Log.i(TAG, "Navaids Query: " + query);
+
+            Cursor cursor = database.rawQuery(query, null);
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast())
+            {
+                Navaid navaid = cursorToNavaid(cursor);
+                navaids.add(navaid);
+                cursor.moveToNext();
+            }
+            // make sure to close the cursor
+            cursor.close();
+
+        return navaids;
     }
 
     public Map<Integer, Navaid> GetNaviadsByCoordinateAndZoomLevel(LatLngBounds boundary, Float zoomLevel, Map<Integer, Navaid> curNavaids)
