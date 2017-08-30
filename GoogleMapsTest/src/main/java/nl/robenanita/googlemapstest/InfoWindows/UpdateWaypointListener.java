@@ -11,4 +11,5 @@ public interface UpdateWaypointListener {
     public void OnMoveUpWaypoint(Waypoint waypoint);
     public void OnMoveDownWaypoint(Waypoint waypoint);
     public void OnRenameWaypoint(Waypoint waypoint, String newName);
+    public void OnCloseWaypointWindow();
 }

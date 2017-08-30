@@ -501,7 +501,7 @@ public class FSPMapFragment extends Fragment {
                     Log.i(TAG, "Waypoint: " + waypoint.toString());
                     WaypointFragment waypointFragment = new WaypointFragment();
                     waypointFragment.setupWaypoint(waypoint);
-                    waypointFragment.SetOnDeleteWaypointListener(new UpdateWaypointListener() {
+                    waypointFragment.SetOnWaypointListener(new UpdateWaypointListener() {
                         @Override
                         public void OnDeleteWaypoint(Waypoint waypoint) {
                             Log.i(TAG, "Delete waypoint clicked");
@@ -522,6 +522,13 @@ public class FSPMapFragment extends Fragment {
                         @Override
                         public void OnRenameWaypoint(Waypoint waypoint, String newName) {
 
+                        }
+
+                        @Override
+                        public void OnCloseWaypointWindow()
+                        {
+                            infoWindow.RemoveInfoWindow();
+                            infoWindow = null;
                         }
                     });
                     infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, waypointFragment);

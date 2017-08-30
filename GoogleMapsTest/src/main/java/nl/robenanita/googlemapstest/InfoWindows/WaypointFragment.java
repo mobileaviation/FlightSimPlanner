@@ -1,6 +1,8 @@
 package nl.robenanita.googlemapstest.InfoWindows;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
@@ -24,10 +26,10 @@ public class WaypointFragment extends Fragment {
 
     private View view;
     private Waypoint waypoint;
-    private UpdateWaypointListener deleteWaypointListener;
-    public void SetOnDeleteWaypointListener(UpdateWaypointListener deleteWaypointListener)
+    private UpdateWaypointListener waypointListener;
+    public void SetOnWaypointListener(UpdateWaypointListener waypointListener)
     {
-        this.deleteWaypointListener = deleteWaypointListener;
+        this.waypointListener = waypointListener;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class WaypointFragment extends Fragment {
 
     private ImageButton deleteWaypointBtn;
     private ImageButton moveupBtn;
-    private ImageButton modedownBtn;
+    private ImageButton movedownBtn;
     private TextView wapoinyTitleTxt;
     private TextView headingTxt;
     private TextView distanceTxt;
@@ -58,7 +60,7 @@ public class WaypointFragment extends Fragment {
 
         deleteWaypointBtn = (ImageButton) view.findViewById(R.id.waypointDelBtn);
         moveupBtn = (ImageButton) view.findViewById(R.id.waypointUpBtn);
-        modedownBtn = (ImageButton) view.findViewById(R.id.waypointDownBtn);
+        movedownBtn = (ImageButton) view.findViewById(R.id.waypointDownBtn);
         wapoinyTitleTxt = (TextView) view.findViewById(R.id.wapointTitleTxt);
         headingTxt = (TextView) view.findViewById(R.id.waypointHeadingTxt);
         distanceTxt = (TextView) view.findViewById(R.id.waypointDistanceTxt);
@@ -80,7 +82,21 @@ public class WaypointFragment extends Fragment {
         deleteWaypointBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (deleteWaypointListener != null) deleteWaypointListener.OnDeleteWaypoint(waypoint);
+                showAlert(20, waypoint);
+            }
+        });
+
+        moveupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        movedownBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
@@ -99,5 +115,24 @@ public class WaypointFragment extends Fragment {
     {
         this.waypoint = waypoint;
 
+    }
+
+    private void showAlert(final int position, final Waypoint waypoint) {
+        new AlertDialog.Builder(getActivity().getApplicationContext())
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //  deleteSuggestions(position);
+                        if (waypointListener != null) waypointListener.OnDeleteWaypoint(waypoint);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
