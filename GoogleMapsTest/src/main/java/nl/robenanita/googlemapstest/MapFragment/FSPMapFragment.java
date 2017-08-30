@@ -34,22 +34,19 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import nl.robenanita.googlemapstest.AddWayPointPopup;
 import nl.robenanita.googlemapstest.Airport;
-import nl.robenanita.googlemapstest.AirportsInfoFragment;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.FlightplanGrid;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
 import nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment;
-import nl.robenanita.googlemapstest.InfoWindows.DeleteWaypointListener;
+import nl.robenanita.googlemapstest.InfoWindows.UpdateWaypointListener;
 import nl.robenanita.googlemapstest.InfoWindows.NavaidInfoWindowFragment;
 import nl.robenanita.googlemapstest.InfoWindows.WaypointFragment;
 import nl.robenanita.googlemapstest.LegInfoView;
@@ -75,8 +72,6 @@ import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
 import nl.robenanita.googlemapstest.markers.AviationMarkers;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
-import nl.robenanita.googlemapstest.search.SearchActivity;
-import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 import nl.robenanita.googlemapstest.search.SearchPopup;
 
 /**
@@ -506,12 +501,27 @@ public class FSPMapFragment extends Fragment {
                     Log.i(TAG, "Waypoint: " + waypoint.toString());
                     WaypointFragment waypointFragment = new WaypointFragment();
                     waypointFragment.setupWaypoint(waypoint);
-                    waypointFragment.SetOnDeleteWaypointListener(new DeleteWaypointListener() {
+                    waypointFragment.SetOnDeleteWaypointListener(new UpdateWaypointListener() {
                         @Override
                         public void OnDeleteWaypoint(Waypoint waypoint) {
                             Log.i(TAG, "Delete waypoint clicked");
                             infoWindow.RemoveInfoWindow();
                             infoWindow = null;
+                        }
+
+                        @Override
+                        public void OnMoveUpWaypoint(Waypoint waypoint) {
+
+                        }
+
+                        @Override
+                        public void OnMoveDownWaypoint(Waypoint waypoint) {
+
+                        }
+
+                        @Override
+                        public void OnRenameWaypoint(Waypoint waypoint, String newName) {
+
                         }
                     });
                     infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, waypointFragment);

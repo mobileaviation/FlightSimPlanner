@@ -1,7 +1,6 @@
 package nl.robenanita.googlemapstest.InfoWindows;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
@@ -9,8 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
-import nl.robenanita.googlemapstest.MapFragment.SelectableWaypoint;
+import org.w3c.dom.Text;
+
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 
@@ -21,8 +24,8 @@ public class WaypointFragment extends Fragment {
 
     private View view;
     private Waypoint waypoint;
-    private DeleteWaypointListener deleteWaypointListener;
-    public void SetOnDeleteWaypointListener(DeleteWaypointListener deleteWaypointListener)
+    private UpdateWaypointListener deleteWaypointListener;
+    public void SetOnDeleteWaypointListener(UpdateWaypointListener deleteWaypointListener)
     {
         this.deleteWaypointListener = deleteWaypointListener;
     }
@@ -40,17 +43,39 @@ public class WaypointFragment extends Fragment {
         return view;
     }
 
-    private Button deleteWaypointBtn;
+    private ImageButton deleteWaypointBtn;
+    private ImageButton moveupBtn;
+    private ImageButton modedownBtn;
+    private TextView wapoinyTitleTxt;
+    private TextView headingTxt;
+    private TextView distanceTxt;
+    private TextView timeTxt;
+    private EditText nameEdit;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        deleteWaypointBtn = (Button) view.findViewById(R.id.waypointDelBtn);
-        setDeleteBtnListener();
+        deleteWaypointBtn = (ImageButton) view.findViewById(R.id.waypointDelBtn);
+        moveupBtn = (ImageButton) view.findViewById(R.id.waypointUpBtn);
+        modedownBtn = (ImageButton) view.findViewById(R.id.waypointDownBtn);
+        wapoinyTitleTxt = (TextView) view.findViewById(R.id.wapointTitleTxt);
+        headingTxt = (TextView) view.findViewById(R.id.waypointHeadingTxt);
+        distanceTxt = (TextView) view.findViewById(R.id.waypointDistanceTxt);
+        timeTxt = (TextView) view.findViewById(R.id.waypointTimeTxt);
+        nameEdit = (EditText) view.findViewById(R.id.waypointNameEdit);
+
+        wapoinyTitleTxt.setText("Waypoint Information");
+        headingTxt.setText(Float.toString(waypoint.compass_heading) + "\u00b0");
+        distanceTxt.setText(waypoint.distance_leg.toString() + " NM");
+        timeTxt.setText(waypoint.time_leg.toString() + " min");
+
+        nameEdit.setText(waypoint.name);
+
+        setBtnListeners();
     }
 
-    private void setDeleteBtnListener()
+    private void setBtnListeners()
     {
         deleteWaypointBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,5 +98,6 @@ public class WaypointFragment extends Fragment {
     public void setupWaypoint(Waypoint waypoint)
     {
         this.waypoint = waypoint;
+
     }
 }
