@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest.InfoWindows;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,6 +28,14 @@ public class WaypointFragment extends Fragment {
     private View view;
     private Waypoint waypoint;
     private UpdateWaypointListener waypointListener;
+    private Activity mainActivity;
+
+    public void SetActivity(Activity activity)
+    {
+        this.mainActivity = activity;
+    }
+
+
     public void SetOnWaypointListener(UpdateWaypointListener waypointListener)
     {
         this.waypointListener = waypointListener;
@@ -89,14 +98,14 @@ public class WaypointFragment extends Fragment {
         moveupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (waypointListener != null) waypointListener.OnMoveUpWaypoint(waypoint);
             }
         });
 
         movedownBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (waypointListener != null) waypointListener.OnMoveDownWaypoint(waypoint);
             }
         });
     }
@@ -118,9 +127,9 @@ public class WaypointFragment extends Fragment {
     }
 
     private void showAlert(final int position, final Waypoint waypoint) {
-        new AlertDialog.Builder(getActivity().getApplicationContext())
-                .setTitle("Delete entry")
-                .setMessage("Are you sure you want to delete this entry?")
+        new AlertDialog.Builder(mainActivity)
+                .setTitle("Delete waypoint")
+                .setMessage("Are you sure you want to delete this waypoint?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //  deleteSuggestions(position);
@@ -129,7 +138,7 @@ public class WaypointFragment extends Fragment {
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
+                        if (waypointListener != null) waypointListener.OnCloseWaypointWindow();
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)

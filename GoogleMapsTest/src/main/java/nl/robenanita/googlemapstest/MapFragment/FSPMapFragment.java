@@ -501,27 +501,36 @@ public class FSPMapFragment extends Fragment {
                     Log.i(TAG, "Waypoint: " + waypoint.toString());
                     WaypointFragment waypointFragment = new WaypointFragment();
                     waypointFragment.setupWaypoint(waypoint);
+                    waypointFragment.SetActivity(mainActivity);
                     waypointFragment.SetOnWaypointListener(new UpdateWaypointListener() {
                         @Override
                         public void OnDeleteWaypoint(Waypoint waypoint) {
                             Log.i(TAG, "Delete waypoint clicked");
                             infoWindow.RemoveInfoWindow();
                             infoWindow = null;
+                            flightplanController.DeleteWaypoint(waypoint);
                         }
 
                         @Override
                         public void OnMoveUpWaypoint(Waypoint waypoint) {
-
+                            infoWindow.RemoveInfoWindow();
+                            infoWindow = null;
+                            selectedFlightplan.RemoveFlightplanTrack();
+                            flightplanController.MoveWaypoint(selectedFlightplan, waypoint, false);
                         }
 
                         @Override
                         public void OnMoveDownWaypoint(Waypoint waypoint) {
-
+                            infoWindow.RemoveInfoWindow();
+                            infoWindow = null;
+                            selectedFlightplan.RemoveFlightplanTrack();
+                            flightplanController.MoveWaypoint(selectedFlightplan, waypoint, false);
                         }
 
                         @Override
                         public void OnRenameWaypoint(Waypoint waypoint, String newName) {
-
+                            infoWindow.RemoveInfoWindow();
+                            infoWindow = null;
                         }
 
                         @Override
