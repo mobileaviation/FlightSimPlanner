@@ -66,7 +66,7 @@ public class DBFilesHelper {
                 }
             }
         } catch (IOException e1) {
-            Log.e("Filedir", "Error copying map files");
+            Log.e("Filedir", "Error copying airspaces files");
             e1.printStackTrace();
         }
         return databases;

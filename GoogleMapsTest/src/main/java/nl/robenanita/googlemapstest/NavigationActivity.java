@@ -76,6 +76,7 @@ import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
+import nl.robenanita.googlemapstest.database.AirspacesDB;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.Helpers;
@@ -604,6 +605,10 @@ public class NavigationActivity extends ActionBarActivity implements
             case R.id.action_loadaip:
             {
                 // Testing polygon create code ****************
+
+                AirspacesDB airspacesDB = new AirspacesDB(this);
+                airspacesDB.Open("all_airspaces.db.sqlite");
+                airspacesDB.Close();
 
                 return true;
             }
@@ -1246,57 +1251,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
     }
 
-//    private void setupAirportMarker(Airport airport)
-//    {
-//        if (airport.marker == null)
-//        {
-//            MarkerOptions m = new MarkerOptions();
-//            m.position(airport.getLatLng());
-//            m.title(airport.ident);
-//            m.snippet(airport.ident);
-//
-//            m.icon(airport.GetIcon((float)airport.heading, airport.ident, this));
-//
-//            m.anchor(0.5f, 0.5f);
-//            airport.marker = map.addMarker(m);
-//
-//            airportMarkerMap.put(airport.marker, airport);
-//        }
-//    }
 
-
-//    private void PlaceFlightplanAirportMarkers()
-//    {
-//        if (selectedFlightplan != null)
-//        {
-//            Airport dep = airports.get(selectedFlightplan.departure_airport.id);
-//            if (dep == null) {
-//                dep = selectedFlightplan.departure_airport;
-//                //if (dep.runways.size()==0) LoadRunways(dep);
-//                airports.put(dep.id, dep);
-//            }
-//            setupAirportMarker(dep);
-//            dep.marker.setVisible(true);
-//
-//            Airport des = airports.get(selectedFlightplan.destination_airport.id);
-//            if (des == null) {
-//                des = selectedFlightplan.destination_airport;
-//                //if (des.runways.size()==0) LoadRunways(des);
-//                airports.put(des.id, des);
-//            }
-//            setupAirportMarker(des);
-//            des.marker.setVisible(true);
-//
-//            Airport alt = airports.get(selectedFlightplan.alternate_airport.id);
-//            if (alt == null) {
-//                alt = selectedFlightplan.alternate_airport;
-//                //if (alt.runways.size()==0) LoadRunways(alt);
-//                airports.put(alt.id, alt);
-//            }
-//            setupAirportMarker(alt);
-//            alt.marker.setVisible(true);
-//        }
-//    }
 
     private void setCompassroseMarker(LatLng location)
     {
@@ -1309,33 +1264,6 @@ public class NavigationActivity extends ActionBarActivity implements
 
 
 
-//    public void setupTrack(LatLng from, LatLng To, String ident)
-//    {
-//        if (track != null)
-//        {
-//            track.RemoveTrack();
-//            track = null;
-//        }
-//
-//        track = new Track();
-//        track.setFromToLocation(from, To, ident);
-//
-//
-//        infoPanel.setTrack(track);
-////        track.DrawTrack(map);
-////
-////
-////        Location l = new Location("loc");
-////        l.setLongitude(planePosition.longitude);
-////        l.setLatitude(planePosition.latitude);
-////
-////        if (selectedFlightplan != null) {
-////            Leg alternateLeg = track.getDirecttoLeg(selectedFlightplan, l, this);
-////            selectedFlightplan.setActiveLeg(alternateLeg);
-////        }
-////
-////        SetInfoPanel(l);
-//    }
 
     private final static int
             CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -1443,16 +1371,6 @@ public class NavigationActivity extends ActionBarActivity implements
 
     }
 
-//    @Override
-//    public void onDisconnected() {
-//        Toast.makeText(this, "Disconnected. Please re-connect.",
-//                Toast.LENGTH_SHORT).show();
-//
-//        locationTracking = null;
-//        connected = false;
-//
-//        connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
-//    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

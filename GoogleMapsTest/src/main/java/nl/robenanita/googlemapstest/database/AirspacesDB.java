@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import java.io.File;
+
 /**
  * Created by Rob Verhoef on 24-7-2017.
  */
@@ -25,6 +27,12 @@ public class AirspacesDB {
     {
         String databasename = DBFilesHelper.DatabasePath(context) + database;
 
+        File f = new File(databasename);
+        if (!f.exists())
+        {
+            DBFilesHelper.CopyDatabases(context, true);
+        }
+
         try {
             this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READWRITE);
             return true;
@@ -32,6 +40,11 @@ public class AirspacesDB {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void Close()
+    {
+        this.database.close();
     }
 
     public Cursor GetAirspaces(String country)
