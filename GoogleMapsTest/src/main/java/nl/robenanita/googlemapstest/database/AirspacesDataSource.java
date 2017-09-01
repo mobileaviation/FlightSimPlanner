@@ -13,8 +13,8 @@ import java.io.File;
  * Created by Rob Verhoef on 24-7-2017.
  */
 
-public class AirspacesDB {
-    public AirspacesDB(Context context)
+public class AirspacesDataSource {
+    public AirspacesDataSource(Context context)
     {
         this.context = context;
     }
@@ -64,7 +64,7 @@ public class AirspacesDB {
                 "AND #LON#<lot_bottom_right;";
         sql = sql.replace("#LON#", Double.toString(coordinate.x));
         sql = sql.replace("#LAT#", Double.toString(coordinate.y));
-        Log.i("AirspacesDB", sql);
+        Log.i("AirspacesDataSource", sql);
         return this.database.rawQuery(sql, null);
     }
 

@@ -10,7 +10,7 @@ import com.vividsolutions.jts.geom.Point;
 
 import java.util.ArrayList;
 
-import nl.robenanita.googlemapstest.database.AirspacesDB;
+import nl.robenanita.googlemapstest.database.AirspacesDataSource;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 
 /**
@@ -35,16 +35,10 @@ public class WithinAirspaceCheck extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] params) {
 
-        ArrayList<String> airspacedbFiles = DBFilesHelper.CopyDatabases(context.getApplicationContext(), false);
-
         Airspaces as = new Airspaces(context);
-
-        for (String a : airspacedbFiles) {
-            Log.i(TAG, "read from db: " + a);
-            AirspacesDB airspacesDB = new AirspacesDB(context);
-            airspacesDB.Open(a);
-            as.readFromDatabase(airspacesDB.GetAirspacesByCoordinate(point.getCoordinate()));
-        }
+        AirspacesDataSource airspacesDB = new AirspacesDataSource(context);
+        airspacesDB.Open("all_airspaces.db.sqlite");
+        as.readFromDatabase(airspacesDB.GetAirspacesByCoordinate(point.getCoordinate()));
 
         for (Airspace airspace : as)
         {

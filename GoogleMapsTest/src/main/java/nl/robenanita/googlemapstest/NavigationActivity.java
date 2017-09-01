@@ -76,7 +76,7 @@ import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
-import nl.robenanita.googlemapstest.database.AirspacesDB;
+import nl.robenanita.googlemapstest.database.AirspacesDataSource;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.Helpers;
@@ -606,10 +606,11 @@ public class NavigationActivity extends ActionBarActivity implements
             {
                 // Testing polygon create code ****************
 
-                AirspacesDB airspacesDB = new AirspacesDB(this);
-                airspacesDB.Open("all_airspaces.db.sqlite");
-                airspacesDB.Close();
+//                AirspacesDataSource airspacesDB = new AirspacesDataSource(this);
+//                airspacesDB.Open("all_airspaces.db.sqlite");
+//                airspacesDB.Close();
 
+                fspMapFragment.ShowAirspacesInfoLayout();
                 return true;
             }
 

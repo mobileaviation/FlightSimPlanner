@@ -41,6 +41,7 @@ import java.util.Map;
 
 import nl.robenanita.googlemapstest.AddWayPointPopup;
 import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airspaces.AirspaceInfoFragment;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.FlightplanGrid;
@@ -1140,6 +1141,18 @@ public class FSPMapFragment extends Fragment {
         infoPanel.setTrack(track);
 
         //SetInfoPanel(l);
+    }
+
+    public void ShowAirspacesInfoLayout()
+    {
+        LinearLayout airspacesInfoLayout = (LinearLayout) getView().findViewById(R.id.airspacesInfoLayout);
+        AirspaceInfoFragment airspaceInfoFragment =
+                (AirspaceInfoFragment) getFragmentManager().findFragmentById(R.id.airspacesInfoFragment);
+        if (airspaceInfoFragment == null)
+            airspaceInfoFragment = (AirspaceInfoFragment) this.getChildFragmentManager().findFragmentById(R.id.airspacesInfoFragment);
+
+        airspaceInfoFragment.LoadAirspacesForLocation(googleMap.getCameraPosition().target, mainActivity);
+        airspacesInfoLayout.setVisibility(View.VISIBLE);
     }
 
 }

@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.google.android.gms.maps.GoogleMap;
 
-import nl.robenanita.googlemapstest.database.AirspacesDB;
+import nl.robenanita.googlemapstest.database.AirspacesDataSource;
 
 /**
  * Created by Rob Verhoef on 24-7-2017.
@@ -20,7 +20,7 @@ public class LoadAirspacesAsync extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] params) {
-        AirspacesDB airspacesDB = new AirspacesDB(context);
+        AirspacesDataSource airspacesDB = new AirspacesDataSource(context);
         airspacesDB.Open(databaseName);
         airspaces = new Airspaces(context);
         country = databaseName.split("_")[0];

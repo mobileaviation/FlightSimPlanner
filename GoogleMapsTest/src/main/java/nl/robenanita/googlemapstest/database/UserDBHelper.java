@@ -297,8 +297,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
         if (oldVersion<10){
             db.execSQL(AIRPORTCHARTS_TABLE);
             Log.i(TAG, "Created AirportCharts table");
-
         }
+
 
         updated = true;
     }
