@@ -224,6 +224,9 @@ public class FSPMapFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 FSPMapFragment.this.googleMap = googleMap;
+                googleMap.setMaxZoomPreference(14.5f);
+                googleMap.setMinZoomPreference(7f);
+
                 createVariables();
                 setUiSettings();
                 setMapController();
@@ -338,6 +341,9 @@ public class FSPMapFragment extends Fragment {
             @Override
             public void onCameraIdle() {
                 Log.i(TAG, "Moved Idle");
+                Log.i(TAG, "Camera Moved to: " + googleMap.getCameraPosition().target.latitude + " : " + googleMap.getCameraPosition().target.longitude);
+                Log.i(TAG, "Camera Zoomed to: " + googleMap.getCameraPosition().zoom);
+
                 SetAviationMarkersByZoomAndBoundary();
 
                 if (newWaypointFragment.isVisible())
