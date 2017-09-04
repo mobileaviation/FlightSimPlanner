@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.location.Location;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.vividsolutions.jts.geom.Coordinate;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -164,4 +167,28 @@ public class Helpers {
         return context.getResources().getDisplayMetrics().density * px;
     }
 
+    public static boolean CheckInternetAvailability() {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection)
+                    (new URL("http://clients3.google.com/generate_204")
+                            .openConnection());
+            urlConnection.setRequestProperty("User-Agent", "Android");
+            urlConnection.setRequestProperty("Connection", "close");
+            urlConnection.setConnectTimeout(1500);
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == 204 &&
+                    urlConnection.getContentLength() == 0) {
+                Log.d("Network Checker", "Successfully connected to internet");
+                return true;
+            }
+            else
+            {
+                Log.d("Network Checker", "clients3.google.com not accessible");
+                return false;
+            }
+        } catch (Exception e) {
+            Log.e("Network Checker", "Error checking internet connection", e);
+            return false;
+        }
+    }
 }

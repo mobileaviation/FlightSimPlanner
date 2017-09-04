@@ -490,8 +490,10 @@ public class FSPMapFragment extends Fragment {
 
                 Airport airport = airportMarkerMap.get(marker);
                 Navaid navaid = navaidMarkerMap.get(marker);
-                Waypoint waypoint = selectedFlightplan.waypointMarkerMap.get(marker);
-
+                Waypoint waypoint = null;
+                if (selectedFlightplan!= null) {
+                    waypoint = selectedFlightplan.waypointMarkerMap.get(marker);
+                }
                 if (airport != null) {
                     AirportInfoWndFragment airportInfoFragment = new AirportInfoWndFragment();
                     airportInfoFragment.SetAirport(airport, mainActivity);

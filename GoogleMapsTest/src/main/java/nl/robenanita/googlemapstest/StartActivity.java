@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
@@ -33,15 +34,9 @@ import com.kishan.askpermission.PermissionInterface;
 
 import java.util.logging.Logger;
 
+import nl.robenanita.googlemapstest.Classes.NetworkCheck;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
-import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
-import nl.robenanita.googlemapstest.database.AirportDataSource;
-import nl.robenanita.googlemapstest.database.CheckDatabaseSource;
-import nl.robenanita.googlemapstest.database.FixesDataSource;
-import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
-import nl.robenanita.googlemapstest.database.NavaidsDataSource;
-import nl.robenanita.googlemapstest.database.PropertiesDataSource;
-import nl.robenanita.googlemapstest.database.RunwaysDataSource;
+import nl.robenanita.googlemapstest.database.*;
 import nl.robenanita.googlemapstest.inappbilling.util.IabHelper;
 import nl.robenanita.googlemapstest.inappbilling.util.IabResult;
 import nl.robenanita.googlemapstest.inappbilling.util.Inventory;
@@ -113,6 +108,15 @@ public class StartActivity extends ActionBarActivity {
         {
             Toast.makeText(this, "There is a problem with the installed version of GooglePlay Services!", Toast.LENGTH_LONG).show();
         }
+        
+        NetworkCheck networkCheck = new NetworkCheck();
+        networkCheck.SetOnResult(new NetworkCheck.OnResult() {
+            @Override
+            public void Checked(Boolean result) {
+                Toast.makeText(StartActivity.this, "Internet connection is not present. This app will work without, but for charts loading its necessary!",
+                    Toast.LENGTH_LONG).show();
+            }
+        });
 
         if (adds) {
             startNavigationBtn.setEnabled(true);

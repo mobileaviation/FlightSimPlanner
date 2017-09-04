@@ -181,6 +181,8 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
 
                 airportChart.airport_ident = airportChart.reference_name.substring(airportChart.reference_name.length()-4,
                         airportChart.reference_name.length());
+
+                Log.i(TAG, "Loaded chart: " + airportChart.airport_ident);
                 AirportDataSource airportDataSource = new AirportDataSource(context);
                 airportDataSource.open(0);
                 Airport airport = airportDataSource.GetAirportByIDENT(airportChart.airport_ident);
@@ -191,6 +193,7 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
                 airportChartsDataSource.open();
                 airportChartsDataSource.InsertChart(airportChart);
                 airportChartsDataSource.close();
+                Log.i(TAG, "Inserted chart: " + airportChart.airport_ident + " in datanbase");
             }
 
             airportCharts.add(airportChart);
