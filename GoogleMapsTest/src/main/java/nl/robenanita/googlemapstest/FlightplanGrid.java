@@ -141,6 +141,11 @@ public class FlightplanGrid extends Fragment {
             public void onDeleteClickedClicked(Waypoint waypoint) {
                 if (onFlightplanEvent != null) onFlightplanEvent.onDeleteClickedClicked(waypoint, flightPlan);
             }
+
+            @Override
+            public void onWaypointClicked(Waypoint waypoint){
+                if (onFlightplanEvent != null) onFlightplanEvent.onWaypointClicked(waypoint);
+            }
         });
 
         flightplanItemsList.setAdapter(adapter);

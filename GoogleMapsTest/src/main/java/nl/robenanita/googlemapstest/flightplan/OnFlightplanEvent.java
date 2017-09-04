@@ -13,4 +13,5 @@ public interface OnFlightplanEvent {
     public void onMoveDownClicked(Waypoint waypoint, FlightPlan flightPlan);
     public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan);
     public void onClosePlanClicked(FlightPlan flightPlan);
+    public void onWaypointClicked(Waypoint waypoint);
 }

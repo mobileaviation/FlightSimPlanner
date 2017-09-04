@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -19,6 +20,15 @@ import nl.robenanita.googlemapstest.R;
  */
 public class AirspaceInfoFragment extends Fragment {
 
+    public interface OnAirspaceClicked
+    {
+        public void AirspaceClicked(Airspace airspace);
+    }
+    private OnAirspaceClicked onAirspaceClicked;
+    public void SetOnAirspaceClicked(OnAirspaceClicked onAirspaceClicked)
+    {
+        this.onAirspaceClicked = onAirspaceClicked;
+    }
 
     public AirspaceInfoFragment() {
         // Required empty public constructor
@@ -49,6 +59,15 @@ public class AirspaceInfoFragment extends Fragment {
             @Override
             public void OnFoundAllAirspaces(Airspaces airspaces) {
                 ListView airspacesListView = (ListView) view.findViewById(R.id.airspacesList);
+
+                airspacesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Airspace airspace = (Airspace) adapterView.getAdapter().getItem(i);
+                        if (onAirspaceClicked != null) onAirspaceClicked.AirspaceClicked(airspace);
+                    }
+                });
+
                 AirspaceAdapter airspaceAdapter = new AirspaceAdapter(airspaces);
                 airspacesListView.setAdapter(airspaceAdapter);
             }

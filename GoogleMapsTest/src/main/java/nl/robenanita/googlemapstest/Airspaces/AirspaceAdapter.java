@@ -28,7 +28,7 @@ public class AirspaceAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return airspaces.get(i);
     }
 
     public Airspace getAirspace(int i)

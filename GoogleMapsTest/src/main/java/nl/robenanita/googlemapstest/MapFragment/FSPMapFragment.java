@@ -41,10 +41,12 @@ import java.util.Map;
 
 import nl.robenanita.googlemapstest.AddWayPointPopup;
 import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airspaces.Airspace;
 import nl.robenanita.googlemapstest.Airspaces.AirspaceInfoFragment;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.FlightplanGrid;
+import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
 import nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment;
 import nl.robenanita.googlemapstest.InfoWindows.UpdateWaypointListener;
@@ -956,6 +958,12 @@ public class FSPMapFragment extends Fragment {
             public void onClosePlanClicked(FlightPlan flightPlan) {
                 FSPMapFragment.this.closeFlightplan();
             }
+
+            @Override
+            public void onWaypointClicked(Waypoint waypoint) {
+                LatLng pos = new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude());
+                FSPMapFragment.this.SetMapPosition(pos);
+            }
         });
     }
 
@@ -1061,6 +1069,12 @@ public class FSPMapFragment extends Fragment {
                 closeFlightplanShowAlert();
             }
 
+            @Override
+            public void onWaypointClicked(Waypoint waypoint) {
+                LatLng pos = new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude());
+                FSPMapFragment.this.SetMapPosition(pos);
+            }
+
 
         });
 
@@ -1145,11 +1159,17 @@ public class FSPMapFragment extends Fragment {
 
     public void ShowAirspacesInfoLayout()
     {
-        LinearLayout airspacesInfoLayout = (LinearLayout) getView().findViewById(R.id.airspacesInfoLayout);
+        final LinearLayout airspacesInfoLayout = (LinearLayout) getView().findViewById(R.id.airspacesInfoLayout);
         AirspaceInfoFragment airspaceInfoFragment =
                 (AirspaceInfoFragment) getFragmentManager().findFragmentById(R.id.airspacesInfoFragment);
         if (airspaceInfoFragment == null)
             airspaceInfoFragment = (AirspaceInfoFragment) this.getChildFragmentManager().findFragmentById(R.id.airspacesInfoFragment);
+        airspaceInfoFragment.SetOnAirspaceClicked(new AirspaceInfoFragment.OnAirspaceClicked() {
+            @Override
+            public void AirspaceClicked(Airspace airspace) {
+                airspacesInfoLayout.setVisibility(View.INVISIBLE);
+            }
+        });
 
         airspaceInfoFragment.LoadAirspacesForLocation(googleMap.getCameraPosition().target, mainActivity);
         airspacesInfoLayout.setVisibility(View.VISIBLE);

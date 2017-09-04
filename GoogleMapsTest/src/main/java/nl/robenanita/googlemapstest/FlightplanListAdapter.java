@@ -92,6 +92,18 @@ public class FlightplanListAdapter extends BaseAdapter {
 
             waypoint = flightPlan.Waypoints.get(index);
             flightplanCheckpointTxt.setText(waypoint.name);
+            flightplanCheckpointTxt.setClickable(true);
+            flightplanCheckpointTxt.setTag(waypoint);
+            flightplanCheckpointTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Waypoint p = (Waypoint) ((TextView) view).getTag();
+                    Log.i(TAG, "Waypoint: " + waypoint.name + " Clicked!");
+                    if (onWaypointEvent != null) onWaypointEvent.onWaypointClicked(p);
+                }
+            });
+
+
             if ((flightPlan.getActivetoWaypointIndex() == index) && flightPlan.getFlightplanActive()) {
                 flightplanCheckpointTxt.setTextColor(Color.RED);
                 flightplanCheckpointTxt.setTypeface(flightplanCheckpointTxt.getTypeface(), Typeface.BOLD);
@@ -240,6 +252,7 @@ public class FlightplanListAdapter extends BaseAdapter {
         public void onMoveUpClicked(Waypoint waypoint);
         public void onMoveDownClicked(Waypoint waypoint);
         public void onDeleteClickedClicked(Waypoint waypoint);
+        public void onWaypointClicked(Waypoint waypoint);
     }
 
 }
