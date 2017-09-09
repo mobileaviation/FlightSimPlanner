@@ -93,6 +93,9 @@ public class FSPMapFragment extends Fragment {
     public void SetOnCameraIdleListener(GoogleMap.OnCameraIdleListener onCameraIdleListener)
     { this.onCameraIdleListener = onCameraIdleListener; }
 
+    public Boolean connected;
+
+
     private Activity mainActivity;
 
     private CameraPosition curPosition;
@@ -344,15 +347,24 @@ public class FSPMapFragment extends Fragment {
                 Log.i(TAG, "Camera Moved to: " + googleMap.getCameraPosition().target.latitude + " : " + googleMap.getCameraPosition().target.longitude);
                 Log.i(TAG, "Camera Zoomed to: " + googleMap.getCameraPosition().zoom);
 
-                SetAviationMarkersByZoomAndBoundary();
-
                 if (newWaypointFragment.isVisible())
                 {
                     newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
                 }
 
-                if (onCameraIdleListener != null)
-                    FSPMapFragment.this.onCameraIdleListener.onCameraIdle();
+                Location start = Helpers.getLocation(startedPosition[0].target);
+                Location cur = Helpers.getLocation(googleMap.getCameraPosition().target);
+                Boolean _do = true;
+
+                if (connected) {
+                    _do = (start.distanceTo(cur)>50);
+                }
+
+                if (_do) {
+                    SetAviationMarkersByZoomAndBoundary();
+                    if (onCameraIdleListener != null)
+                        FSPMapFragment.this.onCameraIdleListener.onCameraIdle();
+                }
             }
         });
 

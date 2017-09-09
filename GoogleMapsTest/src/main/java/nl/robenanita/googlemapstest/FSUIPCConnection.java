@@ -116,7 +116,7 @@ public class FSUIPCConnection {
         mTcpClient = null;
         // connect to the server
         conctTask = new connectTask();
-        conctTask.execute();
+        conctTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return true;
     }
@@ -139,7 +139,7 @@ public class FSUIPCConnection {
             fsuipc.setAttribute("Command", "Open");
 
             String cmd = getXMLString(doc);
-            //Log.i(TAG, "Open XML string: " + cmd);
+            Log.i(TAG, "Open XML string: " + cmd);
 
             mTcpClient.sendMessage(cmd);
             //mFSUIPCOpenedListener.FSUIPCAction("FSUIPC Connection Opened", true);

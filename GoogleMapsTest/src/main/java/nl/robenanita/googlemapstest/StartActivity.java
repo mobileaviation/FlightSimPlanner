@@ -108,7 +108,7 @@ public class StartActivity extends ActionBarActivity {
         {
             Toast.makeText(this, "There is a problem with the installed version of GooglePlay Services!", Toast.LENGTH_LONG).show();
         }
-        
+
         NetworkCheck networkCheck = new NetworkCheck();
         networkCheck.SetOnResult(new NetworkCheck.OnResult() {
             @Override

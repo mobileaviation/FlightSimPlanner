@@ -120,7 +120,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private Button enableTrackingBtn;
     private Boolean trackingEnabled;
-    private Boolean connected;
+    //private Boolean connected;
     private Boolean flightplanLoaded;
 
     public enum ConnectionType
@@ -201,7 +201,7 @@ public class NavigationActivity extends ActionBarActivity implements
         (FSPMapFragment) getFragmentManager().findFragmentById(R.id.FspMap);
 
         trackingEnabled = true;
-        connected = false;
+        fspMapFragment.connected = false;
 
         LoadProperties();
 
@@ -503,7 +503,7 @@ public class NavigationActivity extends ActionBarActivity implements
         connection.SetFSUIPCConnectedListener(new FSUIPCConnection.OnFSUIPCAction() {
             @Override
             public void FSUIPCAction(String message, boolean success) {
-                //Log.i(TAG, "FSUIPCConnectedListener fired");
+                Log.i(TAG, "FSUIPCConnectedListener fired");
                 //connectMenuItem.setEnabled(false);
                 //openFsuipcMenuItem.setEnabled(true);
 
@@ -519,7 +519,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
                 connectDisconnectMenuItem.setIcon(R.drawable.connected);
 
-                connected = true;
+                fspMapFragment.connected = true;
                 fspMapFragment.SetupTrackingLine();
 
                 setTestOffsets();
@@ -539,7 +539,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 if (testTimer != null) testTimer.cancel();
 
                 locationTracking = null;
-                connected = false;
+                fspMapFragment.connected = false;
 
                 connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
             }
@@ -547,7 +547,7 @@ public class NavigationActivity extends ActionBarActivity implements
         connection.SetFSUIPCCloseListener(new FSUIPCConnection.OnFSUIPCAction() {
             @Override
             public void FSUIPCAction(String message, boolean success) {
-                connected = false;
+                fspMapFragment.connected = false;
                 locationTracking = null;
 
                 if (mLocationClient != null)
@@ -652,7 +652,7 @@ public class NavigationActivity extends ActionBarActivity implements
             }
             case R.id.action_connect_disconnect:
             {
-                if (connected) {
+                if (fspMapFragment.connected) {
                     switch (connectionType) {
                         case sim :
                         {
@@ -665,7 +665,7 @@ public class NavigationActivity extends ActionBarActivity implements
                         case gps :
                         {
                             // Disconnect gps
-                            connected = false;
+                            fspMapFragment.connected = false;
                             locationTracking = null;
                             connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
                             mLocationClient.disconnect();
@@ -1173,7 +1173,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 });
 
             }
-        }, 0, 250);
+        }, 0, 500);
     }
 
     private InfoPanelFragment infoPanel = null;
@@ -1344,7 +1344,7 @@ public class NavigationActivity extends ActionBarActivity implements
             //mCurrentLocation = mLocationClient.getLastLocation();
 
             fspMapFragment.SetupTrackingLine();
-            connected = true;
+            fspMapFragment.connected = true;
 
             connectDisconnectMenuItem.setIcon(R.drawable.connected);
 
@@ -1400,9 +1400,9 @@ public class NavigationActivity extends ActionBarActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
-        if (connected) {
-            Log.i(TAG, "Location: " + Double.toString(location.getLatitude()) +
-                    " : " + Double.toString(location.getLongitude()));
+        if (fspMapFragment.connected) {
+//            Log.i(TAG, "Location: " + Double.toString(location.getLatitude()) +
+//                    " : " + Double.toString(location.getLongitude()));
 
             fspMapFragment.SetNewTrackingLinePosition(location);
             fspMapFragment.SetPlaneMarker(new PlanePosition(location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getBearing()));

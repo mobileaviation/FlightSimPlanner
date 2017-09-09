@@ -1,5 +1,8 @@
 package nl.robenanita.googlemapstest;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -43,16 +46,38 @@ public class TCPClient {
         mMessageListener = listener;
     }
 
+    private class sendAsync extends AsyncTask<String, String, String>
+    {
+        public String sendString;
+
+        @Override
+        protected String doInBackground(String... strings) {
+            sendMessage(sendString);
+            return null;
+        }
+
+        private void sendMessage(String message){
+            if (out != null && !out.checkError()) {
+                Log.i(TAG, "Sending async: " + message);
+                out.print(message);
+                out.flush();
+            }
+        }
+    }
+
     /**
      * Sends the message entered by client to the server
      * @param message text entered by client
      */
     public void sendMessage(String message){
-        if (out != null && !out.checkError()) {
-            //Log.i(TAG, "Sending: " + message);
-            out.print(message);
-            out.flush();
-        }
+//        if (out != null && !out.checkError()) {
+//            Log.i(TAG, "Sending mainthread: " + message);
+//            out.print(message);
+//            out.flush();
+//        }
+        sendAsync send = new sendAsync();
+        send.sendString = message;
+        send.execute();
     }
 
     public void stopClient(){
