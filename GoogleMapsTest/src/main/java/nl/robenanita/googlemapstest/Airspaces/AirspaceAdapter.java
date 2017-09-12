@@ -55,7 +55,7 @@ public class AirspaceAdapter extends BaseAdapter {
 
         airspaceCategory.setText(airspace.Category.toString());
         airspaceTopLevelTxt.setText(SetString(airspace.getAltLimit_Top(), airspace.AltLimit_Top_Unit, airspace.AltLimit_Top_Ref));
-        airspaceTopLevelTxt.setText(SetString(airspace.getAltLimit_Bottom(), airspace.AltLimit_Bottom_Unit, airspace.AltLimit_Bottom_Ref));
+        airspacebottomLevelTxt.setText(SetString(airspace.getAltLimit_Bottom(), airspace.AltLimit_Bottom_Unit, airspace.AltLimit_Bottom_Ref));
         airspaceNameTxt.setText(airspace.Name);
 
         return view;
