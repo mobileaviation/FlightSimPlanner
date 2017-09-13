@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest.Airspaces;
 
 import android.database.Cursor;
 
+import com.google.android.gms.maps.model.Polygon;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -48,6 +49,8 @@ public class Airspace {
     public AltitudeReference AltLimit_Bottom_Ref;
     private com.vividsolutions.jts.geom.Geometry Geometry;
     public ArrayList<Coordinate> coordinates;
+
+    public Polygon airspacePolygon;
 
     public com.vividsolutions.jts.geom.Geometry getGeometry()
     {

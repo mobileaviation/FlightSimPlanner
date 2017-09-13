@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest.Airspaces;
 
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.vividsolutions.jts.geom.Coordinate;
 
@@ -22,7 +24,7 @@ public class AirspaceInfoFragment extends Fragment {
 
     public interface OnAirspaceClicked
     {
-        public void AirspaceClicked(Airspace airspace);
+        public void AirspaceClicked(Airspace airspace, Airspaces airspaces);
     }
     private OnAirspaceClicked onAirspaceClicked;
     public void SetOnAirspaceClicked(OnAirspaceClicked onAirspaceClicked)
@@ -36,6 +38,7 @@ public class AirspaceInfoFragment extends Fragment {
 
     private View view;
     private Airspaces airspaces;
+    private GoogleMap map;
 
 
     @Override
@@ -46,8 +49,11 @@ public class AirspaceInfoFragment extends Fragment {
         return this.view;
     }
 
-    public void LoadAirspacesForLocation(LatLng location, Context context)
+    public void LoadAirspacesForLocation(GoogleMap map, Context context)
     {
+        LatLng location = map.getCameraPosition().target;
+        this.map = map;
+
         Coordinate c = new Coordinate(location.longitude, location.latitude);
         WithinAirspaceCheck withinAirspaceCheck = new WithinAirspaceCheck(context, c);
         withinAirspaceCheck.SetOnFoundAirspace(new WithinAirspaceCheck.OnFoundAirspace() {
@@ -57,22 +63,28 @@ public class AirspaceInfoFragment extends Fragment {
             }
 
             @Override
-            public void OnFoundAllAirspaces(Airspaces airspaces) {
+            public void OnFoundAllAirspaces(final Airspaces airspaces) {
                 ListView airspacesListView = (ListView) view.findViewById(R.id.airspacesList);
 
                 airspacesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Airspace airspace = (Airspace) adapterView.getAdapter().getItem(i);
-                        if (onAirspaceClicked != null) onAirspaceClicked.AirspaceClicked(airspace);
+                        if (onAirspaceClicked != null) onAirspaceClicked.AirspaceClicked(airspace, airspaces);
                     }
                 });
 
                 AirspaceAdapter airspaceAdapter = new AirspaceAdapter(airspaces);
                 airspacesListView.setAdapter(airspaceAdapter);
+                airspaces.createAirspacesLayer(AirspaceInfoFragment.this.map);
             }
         });
         withinAirspaceCheck.execute();
+    }
+
+    public void removeAirspacesFromMap()
+    {
+        airspaces.removeAirspacesLayer();
     }
 
 }

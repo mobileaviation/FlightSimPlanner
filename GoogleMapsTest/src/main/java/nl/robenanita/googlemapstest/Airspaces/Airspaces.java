@@ -40,10 +40,8 @@ public class Airspaces extends ArrayList<Airspace> {
         }
     }
 
-    public void createAirspacesLayer(GoogleMap mapView, String Name)
+    public void createAirspacesLayer(GoogleMap mapView)
     {
-        //String mapname = "Airspaces"+Name;
-
         for (Airspace airspace: this) {
             PolygonOptions polygonOptions = new PolygonOptions();
 
@@ -55,7 +53,15 @@ public class Airspaces extends ArrayList<Airspace> {
             polygonOptions.strokeColor(airspace.Category.getStrokeColor());
             polygonOptions.strokeWidth(Helpers.convertDpToPixel(airspace.Category.getStrokeWidth(), context));
 
-            mapView.addPolygon(polygonOptions);
+            airspace.airspacePolygon = mapView.addPolygon(polygonOptions);
+        }
+    }
+
+    public void removeAirspacesLayer()
+    {
+        for (Airspace airspace: this) {
+            if (airspace.airspacePolygon != null)
+                airspace.airspacePolygon.remove();
         }
     }
 

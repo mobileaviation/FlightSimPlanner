@@ -43,6 +43,7 @@ import nl.robenanita.googlemapstest.AddWayPointPopup;
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.Airspaces.Airspace;
 import nl.robenanita.googlemapstest.Airspaces.AirspaceInfoFragment;
+import nl.robenanita.googlemapstest.Airspaces.Airspaces;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.FlightplanGrid;
@@ -1177,21 +1178,23 @@ public class FSPMapFragment extends Fragment {
         //SetInfoPanel(l);
     }
 
+    private AirspaceInfoFragment airspaceInfoFragment;
     public void ShowAirspacesInfoLayout()
     {
         final LinearLayout airspacesInfoLayout = (LinearLayout) getView().findViewById(R.id.airspacesInfoLayout);
-        AirspaceInfoFragment airspaceInfoFragment =
+        airspaceInfoFragment =
                 (AirspaceInfoFragment) getFragmentManager().findFragmentById(R.id.airspacesInfoFragment);
         if (airspaceInfoFragment == null)
             airspaceInfoFragment = (AirspaceInfoFragment) this.getChildFragmentManager().findFragmentById(R.id.airspacesInfoFragment);
         airspaceInfoFragment.SetOnAirspaceClicked(new AirspaceInfoFragment.OnAirspaceClicked() {
             @Override
-            public void AirspaceClicked(Airspace airspace) {
+            public void AirspaceClicked(Airspace airspace, Airspaces airspaces) {
                 airspacesInfoLayout.setVisibility(View.INVISIBLE);
+                airspaces.removeAirspacesLayer();
             }
         });
 
-        airspaceInfoFragment.LoadAirspacesForLocation(googleMap.getCameraPosition().target, mainActivity);
+        airspaceInfoFragment.LoadAirspacesForLocation(googleMap, mainActivity);
         airspacesInfoLayout.setVisibility(View.VISIBLE);
     }
 

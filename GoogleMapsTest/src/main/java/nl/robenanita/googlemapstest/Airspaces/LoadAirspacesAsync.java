@@ -30,7 +30,7 @@ public class LoadAirspacesAsync extends AsyncTask {
 
     @Override
     protected void onPostExecute(Object o) {
-        airspaces.createAirspacesLayer(mapView, country);
+        airspaces.createAirspacesLayer(mapView);
         super.onPostExecute(o);
     }
 }
