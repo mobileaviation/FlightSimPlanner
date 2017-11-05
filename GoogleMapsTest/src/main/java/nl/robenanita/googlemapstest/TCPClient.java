@@ -58,7 +58,7 @@ public class TCPClient {
 
         private void sendMessage(String message){
             if (out != null && !out.checkError()) {
-                Log.i(TAG, "Sending async: " + message);
+                //Log.i(TAG, "Sending async: " + message);
                 out.print(message);
                 out.flush();
             }
