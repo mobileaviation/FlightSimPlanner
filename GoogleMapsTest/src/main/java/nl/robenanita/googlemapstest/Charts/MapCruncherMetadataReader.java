@@ -45,12 +45,20 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
         this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public interface OnProgressMessage {
+        public void ProgressMessage(String message, Integer progress);
+    }
+    private OnProgressMessage mOnProgressMessage = null;
+    public void SetOnProgressMessageListener(OnProgressMessage listener) {mOnProgressMessage = listener;}
+
     private String url;
     private String xml_url;
     private String xml;
     private Document document;
     private AirportCharts airportCharts;
     private Context context;
+
+    private String message;
 
     private final String TAG = "MapMetadataReader";
 
@@ -66,6 +74,7 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
 
     @Override
     protected void onProgressUpdate(Integer... values) {
+        mOnProgressMessage.ProgressMessage(message, values[0]);
         super.onProgressUpdate(values);
     }
 
@@ -75,13 +84,23 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
         try {
             _manifestUrl = new URL(xml_url);
             InputStream inputStream = _manifestUrl.openConnection().getInputStream();
+            setProgressMessage("Reading xml from: " + _manifestUrl, 1);
             xml = readFromInputStream(inputStream);
+            setProgressMessage("Read xml from: " + _manifestUrl, 2);
             document = loadXMLFromString(xml);
+            setProgressMessage("Start processing manifest-xml" , 3);
             loadChartsFromXML(document);
+            setProgressMessage("Processed manifest-xml" , 100);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void setProgressMessage(String message, Integer progress)
+    {
+        this.message = message;
+        publishProgress(progress);
     }
 
     private String readFromInputStream(InputStream inputStream)
@@ -151,6 +170,7 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
             AirportChart airportChart = new AirportChart();
+            Integer p = (i * 100) / nodes.getLength();
 
             airportChart.display_name = node.getAttributes().getNamedItem("DisplayName").getTextContent();
             airportChart.reference_name = node.getAttributes().getNamedItem("ReferenceName").getTextContent();
@@ -182,7 +202,9 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
                 airportChart.airport_ident = airportChart.reference_name.substring(airportChart.reference_name.length()-4,
                         airportChart.reference_name.length());
 
-                Log.i(TAG, "Loaded chart: " + airportChart.airport_ident);
+                //Log.i(TAG, "Loaded chart: " + airportChart.airport_ident);
+                setProgressMessage("Loaded chart: " + airportChart.airport_ident , p);
+
                 AirportDataSource airportDataSource = new AirportDataSource(context);
                 airportDataSource.open(0);
                 Airport airport = airportDataSource.GetAirportByIDENT(airportChart.airport_ident);
@@ -193,11 +215,11 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
                 airportChartsDataSource.open();
                 airportChartsDataSource.InsertChart(airportChart);
                 airportChartsDataSource.close();
-                Log.i(TAG, "Inserted chart: " + airportChart.airport_ident + " in datanbase");
+                //Log.i(TAG, "Inserted chart: " + airportChart.airport_ident + " in datanbase");
             }
 
             airportCharts.add(airportChart);
-            Log.i(TAG, "Charts inserted in database: " + airportCharts.size());
+            //Log.i(TAG, "Charts inserted in database: " + airportCharts.size());
         }
     }
 }

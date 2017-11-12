@@ -13,35 +13,53 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
 
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:textColor="#464646"
-            android:text="Wind Direction:"
-            android:id="@+id/textView3"
-            android:layout_gravity="left" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:id="@+id/activateFpWindDirEdit" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:textColor="#464646"
-            android:text="Wind Speed:"
-            android:id="@+id/textView2"
-            android:layout_marginLeft="20dp" />
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:textColor="#464646"
+                    android:text="Wind Direction:"
+                    android:id="@+id/textView3"
+                    android:layout_gravity="left" />
 
-        <EditText
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:id="@+id/activateFpWindSpeedEdit" />
+                <EditText
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/activateFpWindDirEdit" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:textColor="#464646"
+                    android:text="Wind Speed:"
+                    android:id="@+id/textView2"
+                    android:layout_marginLeft="0dp" />
+
+                <EditText
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/activateFpWindSpeedEdit" />
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -54,12 +72,15 @@
         android:id="@+id/linearLayout"
         android:background="#EEEEEE"
         android:visibility="visible"
-        android:layout_margin="10dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:layout_marginLeft="20dp"
             android:orientation="horizontal">
 
             <Button
@@ -91,11 +112,10 @@
             android:layout_marginTop="5dp" />
 
         <ListView
-            android:id="@+id/flightplanList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/flightplanList"
             android:layout_margin="2dp" />
-
     </LinearLayout>
 
 </LinearLayout>

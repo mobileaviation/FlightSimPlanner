@@ -30,7 +30,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.SlidingDrawer;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //import com.appolica.interactiveinfowindow.InfoWindow;
@@ -694,8 +696,41 @@ public class NavigationActivity extends ActionBarActivity implements
             {
 //                PDFCharts pdfCharts = new PDFCharts(this);
 //                pdfCharts.LoadTestPDF();
+                LinearLayout progresslayout = (LinearLayout)NavigationActivity.this.findViewById(R.id.progressLayout);
+                progresslayout.setVisibility(View.VISIBLE);
+                ProgressBar progressBar = (ProgressBar)NavigationActivity.this.findViewById(R.id.navigationProgressBar);
+                TextView progressText = (TextView)NavigationActivity.this.findViewById(R.id.navigationProgressText);
+                progressBar.setProgress(0);
+                progressText.setText("Loading charts: Getting manifest-xml");
+
                 airportCharts = new AirportCharts();
                 MapCruncherMetadataReader mapCruncherMetadataReader = new MapCruncherMetadataReader();
+                mapCruncherMetadataReader.SetOnProgressMessageListener(new MapCruncherMetadataReader.OnProgressMessage() {
+                    @Override
+                    public void ProgressMessage(String message, Integer progress) {
+                        Log.i(TAG, "Loading charts info: " + message + " progress: " + progress.toString());
+                        ProgressBar progressBar = (ProgressBar)NavigationActivity.this.findViewById(R.id.navigationProgressBar);
+                        TextView progressText = (TextView)NavigationActivity.this.findViewById(R.id.navigationProgressText);
+                        progressBar.setProgress(progress);
+                        progressText.setText("Loading charts: " + message);
+
+                        if (progress==100)
+                        {
+                            progressBar.setProgress(100);
+                            progressText.setText("Loading charts: Finished!");
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            finally {
+                                LinearLayout progresslayout = (LinearLayout)NavigationActivity.this.findViewById(R.id.progressLayout);
+                                progresslayout.setVisibility(View.INVISIBLE);
+                            }
+
+                        }
+                    }
+                });
                 mapCruncherMetadataReader.Read(TileProviderFormats.AIRPORTMAPBASE_FORMAT, airportCharts, this);
                 return true;
             }
