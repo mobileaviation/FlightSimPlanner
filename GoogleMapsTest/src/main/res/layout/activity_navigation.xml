@@ -99,7 +99,6 @@
             android:id="@+id/tracksLayout"
             android:layout_width="250dp"
             android:layout_height="fill_parent"
-            android:layout_above="@+id/flightplandrawer"
             android:layout_alignLeft="@+id/instrumentsLayout"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/instrumentsLayout"

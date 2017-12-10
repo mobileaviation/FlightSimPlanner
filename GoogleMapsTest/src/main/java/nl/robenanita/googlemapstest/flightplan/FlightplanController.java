@@ -68,7 +68,6 @@ public class FlightplanController {
                     flightPlan.UpdateVariation((float)v);
                     flightPlanDataSource.UpdateInsertWaypoints(flightPlan.Waypoints);
                     flightPlanDataSource.close();
-                    //LoadFlightplanGrid();
 
                     // Reload flightplan event...
                     if (onFlightplanEvent != null) onFlightplanEvent.onVariationClicked(waypoint, flightPlan);
@@ -100,7 +99,6 @@ public class FlightplanController {
                         flightPlanDataSource.close();
                         if (waypoint.marker != null) waypoint.marker.remove();
                         flightPlan.Waypoints.remove(waypoint);
-                        //reloadFlightplan();
                         dialog.cancel();
                         if (onFlightplanEvent != null) onFlightplanEvent.onDeleteClickedClicked(waypoint, flightPlan);
                     }
@@ -115,25 +113,12 @@ public class FlightplanController {
 
     }
 
-    public void MoveWaypoint(FlightPlan flightPlan, Waypoint waypoint, Boolean down) {
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(activity);
-        flightPlanDataSource.open();
-
-        if (down) {
-            // Move this waypoint one position down, so move the waypoint following this one, one position up
-            flightPlanDataSource.MoveWaypointDown(flightPlan, waypoint);
-            if (onFlightplanEvent != null) onFlightplanEvent.onMoveDownClicked(waypoint, flightPlan);
-        }
-        else
-        {
-            flightPlanDataSource.MoveWaypointUp(flightPlan, waypoint);
-            if (onFlightplanEvent != null) onFlightplanEvent.onMoveUpClicked(waypoint, flightPlan);
-        }
-
-        flightPlanDataSource.GetWaypointsByFlightPlan(flightPlan);
-        flightPlanDataSource.close();
-
-        //reloadFlightplan();
+    public void MoveWaypoint2(FlightPlan flightPlan)
+    {
+        //Update the database
+        // TODO: Entries in the database
+        // Change to order parameter
+        if (onFlightplanEvent != null) onFlightplanEvent.onWaypointMoved(flightPlan);
     }
 
 

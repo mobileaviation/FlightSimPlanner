@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.LegInfoView;
@@ -104,26 +105,7 @@ public class FlightPlan implements Serializable {
         flightPlanDataSource.close();
 
         // Create the legs of this flightplan
-        int c = 0;
-        Waypoint w1 = null;
-        Waypoint w2 = null;
-        for (Waypoint waypoint: this.Waypoints)
-        {
-            if (c==0)
-                // Get the first waypoint
-                w1 = waypoint;
-            if (c>0)
-            {
-                // Get the next waypoint
-                w2 = waypoint;
-                // Create and add the leg
-                Leg l = new Leg(w1, w2, context);
-                this.Legs.add(l);
-                // Set the endwaypoint as the startwaypoint for the next leg
-                w1 = waypoint;
-            }
-            c++;
-        }
+        _createLegs();
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
         propertiesDataSource.open(true);
@@ -137,10 +119,8 @@ public class FlightPlan implements Serializable {
     public Polyline bufferPolyline;
     public Property bufferProperty;
 
-    private void createLegs()
+    private void _createLegs()
     {
-        RemoveFlightplanTrack();
-        Legs.clear();
         int c = 0;
         Waypoint w1 = null;
         Waypoint w2 = null;
@@ -161,6 +141,13 @@ public class FlightPlan implements Serializable {
             }
             c++;
         }
+    }
+
+    private void createLegs()
+    {
+        RemoveFlightplanTrack();
+        Legs.clear();
+        _createLegs();
     }
 
     public void DrawFlightplan(GoogleMap map)
@@ -190,7 +177,7 @@ public class FlightPlan implements Serializable {
     }
 
     public  HashMap<Marker, Waypoint> waypointMarkerMap;
-    public void ShowFlightplanMarkers(GoogleMap map, Context context)
+    public void ShowFlightplanMarkers(GoogleMap map)
     {
         waypointMarkerMap = new HashMap<Marker, Waypoint>();
         for(Waypoint waypoint : this.Waypoints)
@@ -202,11 +189,6 @@ public class FlightPlan implements Serializable {
                 waypointMarkerMap.put(waypoint.marker, waypoint);
             }
         }
-
-//        for (Leg leg: Legs)
-//        {
-//            leg.SetCoarseMarker(map, context);
-//        }
     }
 
     public void CreateBuffer()
@@ -233,8 +215,6 @@ public class FlightPlan implements Serializable {
         BufferOp bufOp = new BufferOp(g);
         bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
         buffer = bufOp.getResultGeometry(Double.parseDouble(bufferProperty.value1));
-
-        //Geometry e = buffer.getEnvelope();
     }
 
     public void LoadRunways(GoogleMap map)
@@ -440,48 +420,6 @@ public class FlightPlan implements Serializable {
         }
     }
 
-    public void InsertWaypoint2(Waypoint waypoint)
-    {
-        ArrayList<Point> points = new ArrayList<Point>();
-
-        int legcount = this.Waypoints.size()-1;
-
-        for (int i=0; i<legcount; i++)
-        {
-            Waypoint from = this.Waypoints.get(i);
-            Waypoint to = this.Waypoints.get(i+1);
-
-            float c1 = from.location.bearingTo(to.location);
-            float d1 = from.location.distanceTo(to.location);
-            float c2 = from.location.bearingTo(waypoint.location);
-            float d2 = from.location.distanceTo(waypoint.location);
-            float a1 = c1 - c2;
-            float a2 = 180f - (Math.abs(a1) + 90f);
-            double cosa2 = Math.cos(Math.toRadians(a2));
-            double d3 = cosa2 * d2;
-            Log.i(TAG, "90degree distance from: " + from.name + " -> " + to.name + " = " + Double.toString(d3));
-
-            Point p = new Point();
-            p.distance = d3;
-            p.legIndex = i;
-            points.add(p);
-        }
-
-        Collections.sort(points);
-        Log.i(TAG, "leg closed to track: " + Integer.toString(points.get(0).legIndex) + " with distance: " + Double.toString(points.get(0).distance));
-
-        Waypoint p1 = this.Waypoints.get(points.get(0).legIndex);
-        Waypoint p2 = this.Waypoints.get(points.get(0).legIndex+1);
-
-        Integer s = Math.abs((p2.order - p1.order) / 2);
-        waypoint.order = p1.order + s;
-
-        Waypoints.add(waypoint);
-
-        Collections.sort(Waypoints);
-        UpdateWaypointsData();
-    }
-
     public void InsertWaypoint(Waypoint waypoint)
     {
         ArrayList<Point> points = new ArrayList<Point>();
@@ -527,6 +465,7 @@ public class FlightPlan implements Serializable {
             waypoint.SetVariation(variation);
         }
     }
+
 
     public void UpdateWaypointsData()
     {

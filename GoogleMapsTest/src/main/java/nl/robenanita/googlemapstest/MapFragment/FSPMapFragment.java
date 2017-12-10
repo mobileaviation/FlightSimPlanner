@@ -539,16 +539,16 @@ public class FSPMapFragment extends Fragment {
                         public void OnMoveUpWaypoint(Waypoint waypoint) {
                             infoWindow.RemoveInfoWindow();
                             infoWindow = null;
-                            selectedFlightplan.RemoveFlightplanTrack();
-                            flightplanController.MoveWaypoint(selectedFlightplan, waypoint, false);
+//                            selectedFlightplan.RemoveFlightplanTrack();
+//                            flightplanController.MoveWaypoint(selectedFlightplan, waypoint, false);
                         }
 
                         @Override
                         public void OnMoveDownWaypoint(Waypoint waypoint) {
                             infoWindow.RemoveInfoWindow();
                             infoWindow = null;
-                            selectedFlightplan.RemoveFlightplanTrack();
-                            flightplanController.MoveWaypoint(selectedFlightplan, waypoint, false);
+//                            selectedFlightplan.RemoveFlightplanTrack();
+//                            flightplanController.MoveWaypoint(selectedFlightplan, waypoint, false);
                         }
 
                         @Override
@@ -829,7 +829,7 @@ public class FSPMapFragment extends Fragment {
         //PlaceFlightplanAirportMarkers();
         //LoadFlightplanRunways();
         selectedFlightplan.DrawFlightplan(googleMap);
-        selectedFlightplan.ShowFlightplanMarkers(googleMap, mainActivity);
+        selectedFlightplan.ShowFlightplanMarkers(googleMap);
         LoadFlightplanGrid();
     }
 
@@ -870,11 +870,9 @@ public class FSPMapFragment extends Fragment {
 
         selectedFlightplan.LoadRunways(googleMap);
 
-        selectedFlightplan.ShowFlightplanMarkers(googleMap, mainActivity);
+        selectedFlightplan.ShowFlightplanMarkers(googleMap);
         selectedFlightplan.DrawFlightplan(googleMap);
-        //SetupFlightplanListeners(selectedFlightplan);
         LoadFlightplanGrid();
-        //PlaceFlightplanAirportMarkers();
 
         selectedFlightplan.DrawBuffer(googleMap);
 
@@ -955,20 +953,6 @@ public class FSPMapFragment extends Fragment {
             }
 
             @Override
-            public void onMoveUpClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                Integer id = flightPlan.id;
-                FSPMapFragment.this.closeFlightplan();
-                FSPMapFragment.this.LoadFlightplan(id);
-            }
-
-            @Override
-            public void onMoveDownClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                Integer id = flightPlan.id;
-                FSPMapFragment.this.closeFlightplan();
-                FSPMapFragment.this.LoadFlightplan(id);
-            }
-
-            @Override
             public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 Integer id = flightPlan.id;
                 FSPMapFragment.this.closeFlightplan();
@@ -984,6 +968,14 @@ public class FSPMapFragment extends Fragment {
             public void onWaypointClicked(Waypoint waypoint) {
                 LatLng pos = new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude());
                 FSPMapFragment.this.SetMapPosition(pos);
+            }
+
+            @Override
+            public void onWaypointMoved(FlightPlan flightPlan) {
+                flightPlan.removeOldFlightplanMarkers();
+                flightPlan.UpdateWaypointsData();
+                flightPlan.DrawFlightplan(googleMap);
+                flightPlan.ShowFlightplanMarkers(googleMap);
             }
         });
     }
@@ -1066,21 +1058,6 @@ public class FSPMapFragment extends Fragment {
             }
 
             @Override
-            public void onMoveUpClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                //moveWaypoint(flightPlan,waypoint, false);
-                Log.i(TAG, "Move Up Clicked");
-                flightPlan.RemoveFlightplanTrack();
-                flightplanController.MoveWaypoint(flightPlan, waypoint, false);
-            }
-
-            @Override
-            public void onMoveDownClicked(Waypoint waypoint, FlightPlan flightPlan) {
-                //moveWaypoint(flightPlan,waypoint, true);
-                flightPlan.RemoveFlightplanTrack();
-                flightplanController.MoveWaypoint(flightPlan, waypoint, true);
-            }
-
-            @Override
             public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 flightplanController.DeleteWaypoint(waypoint);
             }
@@ -1094,6 +1071,11 @@ public class FSPMapFragment extends Fragment {
             public void onWaypointClicked(Waypoint waypoint) {
                 LatLng pos = new LatLng(waypoint.location.getLatitude(), waypoint.location.getLongitude());
                 FSPMapFragment.this.SetMapPosition(pos);
+            }
+
+            @Override
+            public void onWaypointMoved(FlightPlan flightPlan) {
+                flightplanController.MoveWaypoint2(flightPlan);
             }
 
 

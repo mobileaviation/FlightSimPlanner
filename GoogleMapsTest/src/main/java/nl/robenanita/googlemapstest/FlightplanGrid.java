@@ -2,7 +2,9 @@ package nl.robenanita.googlemapstest;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +13,17 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.woxthebox.draglistview.DragItem;
+import com.woxthebox.draglistview.DragListView;
 
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 import nl.robenanita.googlemapstest.flightplan.OnFlightplanEvent;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 
 public class FlightplanGrid extends Fragment {
-
-
-
     public FlightplanGrid() {
         // Required empty public constructor
     }
@@ -34,7 +38,7 @@ public class FlightplanGrid extends Fragment {
         }
     }
 
-    ListView flightplanItemsList;
+    DragListView flightplanItemsList;
     ImageButton closeButton;
     CheckBox onlyActiveCheckBox;
 
@@ -44,7 +48,25 @@ public class FlightplanGrid extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_flightplan_grid, container, false);
 
-        flightplanItemsList = (ListView) v.findViewById(R.id.flightplanItemsList);
+        flightplanItemsList = (DragListView) v.findViewById(R.id.flightplanItemsList);
+        flightplanItemsList.getRecyclerView().setVerticalScrollBarEnabled(true);
+        flightplanItemsList.setCanNotDragAboveTopItem(true);
+        flightplanItemsList.setCanNotDragBelowBottomItem(true);
+        flightplanItemsList.setDragListListener(new DragListView.DragListListenerAdapter() {
+            @Override
+            public void onItemDragStarted(int position) {
+
+            }
+
+            @Override
+            public void onItemDragEnded(int fromPosition, int toPosition) {
+                if (fromPosition != toPosition) {
+                    if (onFlightplanEvent != null) onFlightplanEvent.onWaypointMoved(FlightplanGrid.this.flightPlan);
+                }
+            }
+        });
+
+
         closeButton = (ImageButton) v.findViewById(R.id.closeFlightplanButton);
         onlyActiveCheckBox = (CheckBox) v.findViewById(R.id.onlyActiveCheckBox);
 
@@ -72,7 +94,6 @@ public class FlightplanGrid extends Fragment {
         onlyActiveCheckBox.setChecked(flightPlan.showOnlyActive);
 
         setUpAdapter();
-        //setOnlyActiveinView(flightPlan.showOnlyActive);
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,14 +108,28 @@ public class FlightplanGrid extends Fragment {
                 boolean c = onlyActiveCheckBox.isChecked();
                 FlightplanGrid.this.flightPlan.showOnlyActive = c;
                 setUpAdapter();
-                //setOnlyActiveinView(c);
             }
         });
     }
 
     public void ReloadFlightplan()
     {
-        flightplanItemsList.invalidateViews();
+        //flightplanItemsList.invalidateViews();
+    }
+
+    private static class MyDragItem extends DragItem {
+
+        MyDragItem(Context context, int layoutId) {
+            super(context, layoutId);
+        }
+
+        @Override
+        public void onBindDragView(View clickedView, View dragView) {
+            // TODO : Hier moeten de items in het drag flighplan item nog gevult worden
+//            CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
+//            ((TextView) dragView.findViewById(R.id.text)).setText(text);
+//            dragView.findViewById(R.id.item_layout).setBackgroundColor(dragView.getResources().getColor(R.color.list_item_background));
+        }
     }
 
     private FlightplanListAdapter adapter;
@@ -103,8 +138,8 @@ public class FlightplanGrid extends Fragment {
         int p = flightplanItemsList.getVerticalScrollbarPosition();
         Log.i(TAG, "Flightplan vertical grid position = " + Integer.toString(p));
 
-        adapter = new FlightplanListAdapter(flightPlan);
-        //adapter.navigationActivity = this;
+        adapter = new FlightplanListAdapter(flightPlan, R.layout.flightplan_item, R.id.flightPlanItemDownImgBtn, false);
+        flightplanItemsList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         adapter.setOnFlightplanEvent(new FlightplanListAdapter.OnWaypointEvent() {
             @Override
@@ -128,16 +163,6 @@ public class FlightplanGrid extends Fragment {
             }
 
             @Override
-            public void onMoveUpClicked(Waypoint waypoint) {
-                if (onFlightplanEvent != null) onFlightplanEvent.onMoveUpClicked(waypoint, flightPlan);
-            }
-
-            @Override
-            public void onMoveDownClicked(Waypoint waypoint) {
-                if (onFlightplanEvent != null) onFlightplanEvent.onMoveDownClicked(waypoint, flightPlan);
-            }
-
-            @Override
             public void onDeleteClickedClicked(Waypoint waypoint) {
                 if (onFlightplanEvent != null) onFlightplanEvent.onDeleteClickedClicked(waypoint, flightPlan);
             }
@@ -148,21 +173,11 @@ public class FlightplanGrid extends Fragment {
             }
         });
 
-        flightplanItemsList.setAdapter(adapter);
+        flightplanItemsList.setAdapter(adapter, true);
         flightplanItemsList.setVerticalScrollbarPosition(p);
+        flightplanItemsList.setCanDragHorizontally(false);
+        flightplanItemsList.setCustomDragItem(new MyDragItem(this.getActivity(), R.layout.flightplan_item));
         adapter.notifyDataSetChanged();
-
-        //setGridHeight(adapter);
-    }
-
-    private void setGridHeight(FlightplanListAdapter adapter)
-    {
-        if(adapter.getCount() > 3){
-            View item = adapter.getView(0, null, flightplanItemsList);
-            item.measure(0, 0);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (3.5 * item.getMeasuredHeight()));
-            flightplanItemsList.setLayoutParams(params);
-        }
     }
 
     private void setOnlyActiveinView(boolean Onlyactive)
@@ -175,7 +190,7 @@ public class FlightplanGrid extends Fragment {
         }
         else
         {
-            setGridHeight(adapter);
+            //setGridHeight(adapter);
         }
 
     }

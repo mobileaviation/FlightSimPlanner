@@ -101,43 +101,42 @@
 
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/tracksLayout"
             android:layout_width="327dp"
             android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
             android:layout_alignLeft="@+id/instrumentsLayout"
+            android:layout_alignParentRight="true"
             android:layout_below="@+id/instrumentsLayout"
-            android:layout_above="@+id/flightplandrawer"
-            android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="00dp"
             android:layout_marginRight="2dp"
+            android:layout_marginTop="2dp"
             android:background="#fffff0"
-            android:id="@+id/tracksLayout"
-            android:weightSum="1"
-            android:layout_marginLeft="00dp">
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:background="#bcbcbc"
                 android:gravity="right"
-                android:background="#bcbcbc">
+                android:orientation="horizontal">
 
                 <ImageButton
+                    android:id="@+id/closeTracksBtn"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:id="@+id/closeTracksBtn"
-                    android:src="@drawable/closebutton"
-                    android:focusableInTouchMode="false"
                     android:clickable="true"
-                    android:cropToPadding="false" />
+                    android:cropToPadding="false"
+                    android:focusableInTouchMode="false"
+                    android:src="@drawable/closebutton" />
             </LinearLayout>
 
             <ListView
+                android:id="@+id/tracksListView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/tracksListView"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0"
                 android:headerDividersEnabled="true" />
