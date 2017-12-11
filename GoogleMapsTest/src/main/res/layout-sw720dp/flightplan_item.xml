@@ -21,23 +21,16 @@
             <ImageButton
                 android:id="@+id/flightPlanItemDownImgBtn"
                 android:layout_width="80dp"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                android:background="@android:color/transparent"
                 android:baselineAlignBottom="false"
                 android:clickable="false"
                 android:cropToPadding="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:scaleType="fitXY"
-                android:src="@drawable/arrowdown" />
-
-            <ImageButton
-                android:id="@+id/flightPlanItemUpImgBtn"
-                android:layout_width="40dp"
-                android:layout_height="fill_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/arrowup"
-                android:visibility="gone" />
-
+                android:scaleType="fitCenter"
+                android:src="@drawable/drag_reorder" />
         </LinearLayout>
 
         <TextView

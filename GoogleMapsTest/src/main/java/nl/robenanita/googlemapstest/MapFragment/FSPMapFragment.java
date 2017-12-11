@@ -940,7 +940,6 @@ public class FSPMapFragment extends Fragment {
             @Override
             public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
                 flightplanGrid.ReloadFlightplan();
-                //legInfoView.setVisibility(View.VISIBLE);
                 legInfoView.setActiveLeg(flightPlan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
                 infoPanel.setActiveLeg(flightPlan.getActiveLeg());
             }

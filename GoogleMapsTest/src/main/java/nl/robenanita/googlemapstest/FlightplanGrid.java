@@ -18,8 +18,11 @@ import android.widget.Toast;
 
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
+import com.woxthebox.draglistview.swipe.ListSwipeHelper;
+import com.woxthebox.draglistview.swipe.ListSwipeItem;
 
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
+import nl.robenanita.googlemapstest.flightplan.FlightplanListItem;
 import nl.robenanita.googlemapstest.flightplan.OnFlightplanEvent;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;
 
@@ -65,6 +68,23 @@ public class FlightplanGrid extends Fragment {
                 }
             }
         });
+
+//        flightplanItemsList.setSwipeListener(new ListSwipeHelper.OnSwipeListener() {
+//            @Override
+//            public void onItemSwipeStarted(ListSwipeItem item) {
+//
+//            }
+//
+//            @Override
+//            public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
+//
+//            }
+//
+//            @Override
+//            public void onItemSwiping(ListSwipeItem item, float swipedDistanceX) {
+//
+//            }
+//        });
 
 
         closeButton = (ImageButton) v.findViewById(R.id.closeFlightplanButton);
@@ -114,7 +134,9 @@ public class FlightplanGrid extends Fragment {
 
     public void ReloadFlightplan()
     {
-        //flightplanItemsList.invalidateViews();
+        //flightplanItemsList.notify();
+        //flightplanItemsList.invalidate();
+        if (adapter != null) adapter.notifyDataSetChanged();
     }
 
     private static class MyDragItem extends DragItem {
@@ -125,10 +147,10 @@ public class FlightplanGrid extends Fragment {
 
         @Override
         public void onBindDragView(View clickedView, View dragView) {
-            // TODO : Hier moeten de items in het drag flighplan item nog gevult worden
-//            CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
-//            ((TextView) dragView.findViewById(R.id.text)).setText(text);
-//            dragView.findViewById(R.id.item_layout).setBackgroundColor(dragView.getResources().getColor(R.color.list_item_background));
+            FlightplanListItem clickedItem = new FlightplanListItem(clickedView);
+            Waypoint waypoint = clickedItem.getWaypoint();
+            FlightplanListItem dragItem = new FlightplanListItem(dragView);
+            dragItem.setWaypointInfo(waypoint, false);
         }
     }
 

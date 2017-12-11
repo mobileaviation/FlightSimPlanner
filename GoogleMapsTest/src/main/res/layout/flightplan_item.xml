@@ -1,217 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<com.woxthebox.draglistview.swipe.ListSwipeItem
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:id="@+id/instrumentsLayout"
-    android:visibility="visible">
-
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout">
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/instrumentsLayout"
+        android:visibility="visible">
 
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/flightPlanItemDownImgBtn"
-            android:scaleType="fitXY"
-            android:src="@drawable/arrowdown"
-            android:baselineAlignBottom="false"
-            android:clickable="false"
-            android:cropToPadding="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false" />
-
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="fill_parent"
-            android:id="@+id/flightPlanItemUpImgBtn"
-            android:src="@drawable/arrowup"
-            android:scaleType="fitXY" />
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="120dp"
-        android:layout_height="match_parent"
-        android:text="Checkpoint"
-        android:id="@+id/flightplanCheckpointTxt"
-        android:textColor="#383838"
-        android:gravity="center"
-        android:textSize="14dp" />
-
-    <TextView
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:text="Station"
-        android:id="@+id/flightplanStationTxt"
-        android:textColor="#383838"
-        android:gravity="center"
-        android:visibility="gone" />
-
-    <TextView
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:text="Frequency"
-        android:id="@+id/flightplanFrequencyTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:gravity="center"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="60dp"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="Take Off"
-            android:id="@+id/setTakeoffTimeBtn"
-            android:visibility="visible"
-            android:textSize="10dp" />
-    </LinearLayout>
+            android:id="@+id/linearLayout">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/flightPlanItemDownImgBtn"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                android:background="@android:color/transparent"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:cropToPadding="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:scaleType="fitCenter"
+                android:src="@drawable/drag_reorder" />
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:text="Checkpoint"
+            android:id="@+id/flightplanCheckpointTxt"
+            android:textColor="#383838"
+            android:gravity="center"
+            android:textSize="14dp" />
+
+        <TextView
             android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="Set"
-            android:id="@+id/setAtoBtn"
-            android:visibility="visible" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:text="Station"
+            android:id="@+id/flightplanStationTxt"
+            android:textColor="#383838"
+            android:gravity="center"
+            android:visibility="gone" />
 
-    <TextView
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:text="RETO"
-        android:id="@+id/flightplanRETOTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:gravity="center"
-        android:visibility="gone" />
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="Frequency"
+            android:id="@+id/flightplanFrequencyTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:gravity="center"
+            android:visibility="gone" />
 
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:text="Time LEG"
-        android:id="@+id/flightplanTimeLegTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:singleLine="false"
-        android:gravity="center"
-        android:visibility="gone" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:text="Time TOT"
-        android:id="@+id/flightplanTimeTotTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:singleLine="false"
-        android:gravity="center" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="Take Off"
+                android:id="@+id/setTakeoffTimeBtn"
+                android:visibility="visible"
+                android:textSize="10dp" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:id="@+id/setAtoBtn"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <TextView
             android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="Set"
-            android:id="@+id/setDeviationBtn"
-            android:visibility="visible" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:text="RETO"
+            android:id="@+id/flightplanRETOTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:gravity="center"
+            android:visibility="gone" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="Time LEG"
+            android:id="@+id/flightplanTimeLegTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:singleLine="false"
+            android:gravity="center"
+            android:visibility="gone" />
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="Time TOT"
+            android:id="@+id/flightplanTimeTotTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:singleLine="false"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:id="@+id/setDeviationBtn"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:id="@+id/SetVariationBtn"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="TRUE HDG"
+            android:id="@+id/flightplanTrueHdgTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:singleLine="false"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="TRUE TRACK"
+            android:id="@+id/flightplanTrueTrackTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:singleLine="false"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="Dist. LEG"
+            android:id="@+id/flightplanDistanceLegTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:singleLine="false"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="Dist. TOT"
+            android:id="@+id/flightplanDistanceTotTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:singleLine="false"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="G:S:"
+            android:id="@+id/flightplanGroundSpeedTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:singleLine="false"
+            android:gravity="center" />
+
+        <TextView
             android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="Set"
-            android:id="@+id/SetVariationBtn"
-            android:visibility="visible" />
+            android:layout_height="match_parent"
+            android:text="Winds Dir/Spd"
+            android:id="@+id/flightplanWindSpeedDirTxt"
+            android:textColor="#383838"
+            android:phoneNumber="false"
+            android:singleLine="false"
+            android:gravity="center"
+            android:visibility="gone" />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:text="TRUE HDG"
-        android:id="@+id/flightplanTrueHdgTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:singleLine="false"
-        android:gravity="center"
-        android:visibility="gone" />
-
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:text="TRUE TRACK"
-        android:id="@+id/flightplanTrueTrackTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:singleLine="false"
-        android:gravity="center"
-        android:visibility="gone" />
-
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:text="Dist. LEG"
-        android:id="@+id/flightplanDistanceLegTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:singleLine="false"
-        android:gravity="center"
-        android:visibility="gone" />
-
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:text="Dist. TOT"
-        android:id="@+id/flightplanDistanceTotTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:singleLine="false"
-        android:gravity="center" />
-
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:text="G:S:"
-        android:id="@+id/flightplanGroundSpeedTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:singleLine="false"
-        android:gravity="center" />
-
-    <TextView
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:text="Winds Dir/Spd"
-        android:id="@+id/flightplanWindSpeedDirTxt"
-        android:textColor="#383838"
-        android:phoneNumber="false"
-        android:singleLine="false"
-        android:gravity="center"
-        android:visibility="gone" />
-</LinearLayout>
+</com.woxthebox.draglistview.swipe.ListSwipeItem>

@@ -150,6 +150,12 @@ public class Leg {
         return (b<0) ? 360+b : b ;
     }
 
+    public Integer getCompassHeading()
+    {
+        Integer c = Math.round(toWaypoint.compass_heading);
+        return (c<0) ? 360+c : c ;
+    }
+
     public Integer getTrueTrack()
     {
         Integer t = Math.round(toWaypoint.true_track);

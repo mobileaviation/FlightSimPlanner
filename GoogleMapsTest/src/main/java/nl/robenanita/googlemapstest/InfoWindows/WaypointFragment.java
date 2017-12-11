@@ -55,8 +55,6 @@ public class WaypointFragment extends Fragment {
     }
 
     private ImageButton deleteWaypointBtn;
-    private ImageButton moveupBtn;
-    private ImageButton movedownBtn;
     private TextView wapoinyTitleTxt;
     private TextView headingTxt;
     private TextView distanceTxt;
@@ -68,8 +66,6 @@ public class WaypointFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         deleteWaypointBtn = (ImageButton) view.findViewById(R.id.waypointDelBtn);
-        moveupBtn = (ImageButton) view.findViewById(R.id.waypointUpBtn);
-        movedownBtn = (ImageButton) view.findViewById(R.id.waypointDownBtn);
         wapoinyTitleTxt = (TextView) view.findViewById(R.id.wapointTitleTxt);
         headingTxt = (TextView) view.findViewById(R.id.waypointHeadingTxt);
         distanceTxt = (TextView) view.findViewById(R.id.waypointDistanceTxt);
@@ -92,20 +88,6 @@ public class WaypointFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showAlert(20, waypoint);
-            }
-        });
-
-        moveupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (waypointListener != null) waypointListener.OnMoveUpWaypoint(waypoint);
-            }
-        });
-
-        movedownBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (waypointListener != null) waypointListener.OnMoveDownWaypoint(waypoint);
             }
         });
     }

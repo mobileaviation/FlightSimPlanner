@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="nl.robenanita.googlemapstest.InfoWindows.WaypointFragment">
@@ -102,20 +102,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/waypointDownBtn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/arrowdown" />
-
-        <ImageButton
-            android:id="@+id/waypointUpBtn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/arrowup" />
 
         <ImageButton
             android:id="@+id/waypointDelBtn"

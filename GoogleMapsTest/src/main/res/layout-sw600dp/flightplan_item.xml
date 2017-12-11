@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<com.woxthebox.draglistview.swipe.ListSwipeItem
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -15,34 +18,29 @@
         android:id="@+id/linearLayout">
 
         <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="50dp"
             android:id="@+id/flightPlanItemDownImgBtn"
-            android:scaleType="fitXY"
-            android:src="@drawable/arrowdown"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="@android:color/transparent"
             android:baselineAlignBottom="false"
             android:clickable="false"
             android:cropToPadding="false"
             android:focusable="false"
-            android:focusableInTouchMode="false" />
-
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="fill_parent"
-            android:id="@+id/flightPlanItemUpImgBtn"
-            android:src="@drawable/arrowup"
-            android:scaleType="fitXY" />
+            android:focusableInTouchMode="false"
+            android:scaleType="fitCenter"
+            android:src="@drawable/drag_reorder" />
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="120dp"
-        android:layout_height="match_parent"
-        android:text="Checkpoint"
-        android:id="@+id/flightplanCheckpointTxt"
-        android:textColor="#383838"
-        android:gravity="center"
-        android:textSize="14dp" />
+        <TextView
+            android:id="@+id/flightplanCheckpointTxt"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Checkpoint"
+            android:textColor="#FF383838"
+            android:textSize="14dp" />
 
     <TextView
         android:layout_width="60dp"
@@ -209,3 +207,4 @@
         android:gravity="center"
         android:visibility="gone" />
 </LinearLayout>
+</com.woxthebox.draglistview.swipe.ListSwipeItem>

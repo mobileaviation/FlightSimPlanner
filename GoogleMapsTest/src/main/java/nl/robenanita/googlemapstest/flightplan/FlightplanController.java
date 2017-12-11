@@ -119,6 +119,11 @@ public class FlightplanController {
         // TODO: Entries in the database
         // Change to order parameter
         if (onFlightplanEvent != null) onFlightplanEvent.onWaypointMoved(flightPlan);
+        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(activity);
+        flightPlanDataSource.open();
+        flightPlanDataSource.updateWaypointSortOrder(flightPlan);
+        flightPlanDataSource.updateWaypointSortOrderDB(flightPlan);
+        flightPlanDataSource.close();
     }
 
 

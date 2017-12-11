@@ -84,9 +84,9 @@ public class InfoPanelFragment extends Fragment {
         Waypoint m_to = activeLeg.getToWaypoint();
 
         String _to = m_to.name;
-        String _dst = String.format("%.0f NM", activeLeg.getDistanceNM());
+        String _dst = String.format("%.0f", activeLeg.getDistanceLegNM());
         String _trk = String.format("%03d", activeLeg.getTrueTrack());
-        String _hdg = String.format("%03d", activeLeg.getCourseTo());
+        String _hdg = String.format("%03d", activeLeg.getCompassHeading());
         SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
         String _eta = (m_to.eto == null) ? "NA" : ft.format(m_to.eto);
         Calendar c = new GregorianCalendar(2013,1,1);

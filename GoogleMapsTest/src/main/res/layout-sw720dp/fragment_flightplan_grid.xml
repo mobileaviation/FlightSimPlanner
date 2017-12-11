@@ -196,14 +196,5 @@
         android:id="@+id/flightplanItemsList"
         android:footerDividersEnabled="true"
         android:background="#c8fffff0">
-
     </com.woxthebox.draglistview.DragListView>
-    <!--<ListView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="fill_parent"-->
-            <!--android:id="@+id/flightplanItemsList"-->
-            <!--android:footerDividersEnabled="true"-->
-            <!--android:background="#c8fffff0" />-->
-
-
 </LinearLayout>
