@@ -14,11 +14,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SlidingDrawer;
@@ -44,6 +46,7 @@ import nl.robenanita.googlemapstest.Airport;
 import nl.robenanita.googlemapstest.Airspaces.Airspace;
 import nl.robenanita.googlemapstest.Airspaces.AirspaceInfoFragment;
 import nl.robenanita.googlemapstest.Airspaces.Airspaces;
+import nl.robenanita.googlemapstest.AnimationHelpers;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.FlightplanGrid;
@@ -159,24 +162,47 @@ public class FSPMapFragment extends Fragment {
     }
 
     private void SetupDrawerListeners() {
-
-        flightplangriddrawer = (SlidingDrawer) this.getView().findViewById(R.id.fspflightplandrawer);
-
-        flightplangriddrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+        final ImageButton drawerBtn = (ImageButton) getView().findViewById(R.id.fspflightplanhandle);
+        drawerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDrawerOpened() {
-                FlightplanGrid flightplanggrid = (FlightplanGrid)FSPMapFragment.this.getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
-                Log.i(TAG, "grid height : ");
+            public void onClick(View view) {
+                Log.i(TAG, "Drawer open-close button clicked");
+                if (selectedFlightplan != null)
+                {
+                    setFlightplanLayout(!flightplanLayoutOpen);
+                    //drawerBtn.st
+                }
+            }
+
+        });
+
+        drawerBtn.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View view, DragEvent dragEvent) {
+                float y = dragEvent.getY();
+                Log.i(TAG, "Dragging drawerBtn to: " + y);
+                return true;
             }
         });
 
-//        flightplangriddrawer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FlightplanGrid flightplanggrid = (FlightplanGrid)FSPMapFragment.this.getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
-//                Log.i(TAG, "grid height : " + flightplanggrid.getView().getMeasuredHeight());
-//            }
-//        });
+        //LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
+    }
+
+    private Boolean flightplanLayoutOpen;
+    private void setFlightplanLayout(Boolean open)
+    {
+        if (open)
+        {
+            LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
+            AnimationHelpers.expand(flightplanLayout, 500, Math.round(Helpers.convertDpToPixel(200, getActivity())));
+            flightplanLayoutOpen = true;
+        }
+        else
+        {
+            LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
+            AnimationHelpers.collapse(flightplanLayout, 500, 0);
+            flightplanLayoutOpen = false;
+        }
     }
 
     public GoogleMap GetGooglemap()
@@ -981,10 +1007,7 @@ public class FSPMapFragment extends Fragment {
 
     private void closeFlightplan()
     {
-        LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
-        flightplanLayout.setVisibility(View.GONE);
-        SlidingDrawer flightplanDrawer = (SlidingDrawer) getView().findViewById(R.id.fspflightplandrawer);
-        flightplanDrawer.setVisibility(View.GONE);
+        setFlightplanLayout(false);
 
         if (selectedFlightplan != null)
         {
@@ -993,9 +1016,7 @@ public class FSPMapFragment extends Fragment {
             selectedFlightplan.RemoveAllRunwayMarkers();
             selectedFlightplan.RemoveBuffer();
 
-            //legInfoView.setVisibility(View.GONE);
             selectedFlightplan = null;
-            //if (track != null) track.RemoveTrack();
         }
     }
 
@@ -1026,10 +1047,7 @@ public class FSPMapFragment extends Fragment {
     private FlightplanGrid flightplanGrid;
     private void LoadFlightplanGrid()
     {
-        LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
-        flightplanLayout.setVisibility(View.VISIBLE);
-        SlidingDrawer flightplanDrawer = (SlidingDrawer) getView().findViewById(R.id.fspflightplandrawer);
-        flightplanDrawer.setVisibility(View.VISIBLE);
+        setFlightplanLayout(true);
 
         FlightplanGrid tempGrid = (FlightplanGrid) getChildFragmentManager().findFragmentById(R.id.fspflightplanFragment);
         if (tempGrid==null) tempGrid = (FlightplanGrid) getFragmentManager().findFragmentById(R.id.fspflightplanFragment);

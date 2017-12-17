@@ -69,47 +69,50 @@
             android:layout_weight="6"
             android:orientation="horizontal"></LinearLayout>
 
-        <SlidingDrawer
-            android:id="@+id/fspflightplandrawer"
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_alignParentBottom="true"
+        <!--<SlidingDrawer-->
+            <!--android:id="@+id/fspflightplandrawer"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="0dip"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginLeft="40dp"-->
+            <!--android:layout_marginRight="2dp"-->
+            <!--android:layout_weight="4"-->
+            <!--android:background="#00000000"-->
+            <!--android:content="@+id/fspflightplanLayout"-->
+            <!--android:handle="@+id/fspflightplanhandle"-->
+            <!--android:orientation="vertical"-->
+            <!--android:visibility="invisible">-->
+
+        <ImageButton
+            android:id="@+id/fspflightplanhandle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/openclosebtn" />
+
+
+        <LinearLayout
+            android:id="@+id/fspflightplanLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="2dp"
-            android:layout_weight="4"
             android:background="#00000000"
-            android:content="@+id/fspflightplanLayout"
-            android:handle="@+id/fspflightplanhandle"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:visibility="gone">
 
-            <ImageButton
-                android:id="@+id/fspflightplanhandle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/openclosebtn" />
-
-
-            <LinearLayout
-                android:id="@+id/fspflightplanLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="#00000000"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:map="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/fspflightplanFragment"
-                    android:name="nl.robenanita.googlemapstest.FlightplanGrid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/fspflightplanFragment"
+                android:name="nl.robenanita.googlemapstest.FlightplanGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
-            </LinearLayout>
-        </SlidingDrawer>
+        </LinearLayout>
+        <!--</SlidingDrawer>-->
     </LinearLayout>
 
 </nl.robenanita.googlemapstest.MapFragment.TouchInterceptFrameLayout>
