@@ -86,14 +86,27 @@ public class CoarseMarker {
         textPaint.setTextAlign(Paint.Align.LEFT);
 
         Canvas aircourseCanvas = new Canvas(courseBitmap);
+        aircourseCanvas.save();
         String h = "000" + Integer.toString(Math.round(compass_heading));
         String d = Integer.toString(Math.round(distance));
         h = h.substring(h.length()-3) + "\u00b0";
-        aircourseCanvas.drawText(h, Helpers.convertDpToPixel(40f, context), Helpers.convertDpToPixel(50f, context), textPaint);
+
+        float x = 40f;
+        if (compass_heading<180) {
+            aircourseCanvas.rotate(180, aircourseCanvas.getWidth()/2, aircourseCanvas.getHeight()/2);
+            x=20f;
+        }
+
+        aircourseCanvas.drawText(h, Helpers.convertDpToPixel(x, context), Helpers.convertDpToPixel(50f, context), textPaint);
         textPaint.setTextSize(Helpers.convertDpToPixel(14f, context));
-        aircourseCanvas.drawText(d, Helpers.convertDpToPixel(40f, context), Helpers.convertDpToPixel(62f, context), textPaint);
+        aircourseCanvas.drawText(d, Helpers.convertDpToPixel(x, context), Helpers.convertDpToPixel(62f, context), textPaint);
         textPaint.setTextSize(Helpers.convertDpToPixel(10f, context));
-        aircourseCanvas.drawText("NM", Helpers.convertDpToPixel(60f, context), Helpers.convertDpToPixel(62f, context), textPaint);
+        aircourseCanvas.drawText("NM", Helpers.convertDpToPixel(x+23f, context), Helpers.convertDpToPixel(62f, context), textPaint);
+
+        if (compass_heading<180){
+            aircourseCanvas.restore();
+        }
+        aircourseCanvas.save();
 
         return BitmapDescriptorFactory.fromBitmap(courseBitmap);
     }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,20 @@ public class FlightplanGrid extends Fragment {
     }
 
     private String TAG = "GooglemapsTest";
+    private View gridView;
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        gridView = view;
+    }
+
+    public Integer getHeight()
+    {
+        if (adapter != null) return adapter.getHeight();
+        else
+            return 0;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

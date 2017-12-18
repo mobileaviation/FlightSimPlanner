@@ -89,26 +89,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/openclosebtn" />
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/bigger_openclosebtn"
+            android:paddingTop="0dp" />
 
 
         <LinearLayout
             android:id="@+id/fspflightplanLayout"
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:layout_height="0dp"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="2dp"
             android:background="#00000000"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:map="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/fspflightplanFragment"
                 android:name="nl.robenanita.googlemapstest.FlightplanGrid"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent" />
 
 
         </LinearLayout>

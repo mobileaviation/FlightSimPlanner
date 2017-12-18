@@ -43,6 +43,12 @@ public class FlightplanListAdapter extends DragItemAdapter<Waypoint, FlightplanL
         setItemList(flightPlan.Waypoints);
     }
 
+    private Integer item_height = 0;
+    public Integer getHeight()
+    {
+        return (getItemCount() * 55) + 35;
+    }
+
     @Override
     public long getUniqueItemId(int position) {
         return flightPlan.Waypoints.get(position).order;
@@ -54,10 +60,11 @@ public class FlightplanListAdapter extends DragItemAdapter<Waypoint, FlightplanL
         return new ViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-
         Waypoint waypoint = holder.item.setWaypointInfo(flightPlan, position);
 
         holder.item.flightplanCheckpointTxt.setClickable(true);
@@ -70,6 +77,8 @@ public class FlightplanListAdapter extends DragItemAdapter<Waypoint, FlightplanL
         });
 
         setButtonListeners(holder, waypoint);
+
+        item_height = holder.item.getHeight();
     }
 
     private void setButtonListeners(ViewHolder holder, Waypoint waypoint)

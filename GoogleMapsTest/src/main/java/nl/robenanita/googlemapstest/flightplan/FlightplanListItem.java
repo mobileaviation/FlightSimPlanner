@@ -39,6 +39,12 @@ public class FlightplanListItem {
         getControls(view);
     }
 
+    public Integer getHeight()
+    {
+        if (dragHandleBtn != null) return  dragHandleBtn.getMeasuredHeight();
+        else return 0;
+    }
+
     private void getControls(View view)
     {
         flightplanCheckpointTxt = (TextView) view.findViewById(R.id.flightplanCheckpointTxt);
