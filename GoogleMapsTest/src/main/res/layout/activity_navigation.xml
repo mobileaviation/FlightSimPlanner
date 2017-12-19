@@ -186,7 +186,7 @@
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/airportNatomWeatherLayout"
-                android:name="nl.robenanita.googlemapstest.AirportsInfoFragment"
+                android:name="nl.robenanita.googlemapstest.Airport.AirportsInfoFragment"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent" />
         </LinearLayout>

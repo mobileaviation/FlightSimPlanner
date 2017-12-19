@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,8 +25,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,7 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.robenanita.googlemapstest.AddWayPointPopup;
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.Airspaces.Airspace;
 import nl.robenanita.googlemapstest.Airspaces.AirspaceInfoFragment;
 import nl.robenanita.googlemapstest.Airspaces.Airspaces;
@@ -136,6 +133,8 @@ public class FSPMapFragment extends Fragment {
     private Track track;
 
     private NewWaypointFragment newWaypointFragment;
+
+    private DeviationLine deviationLine;
 
     public FSPMapFragment() {
         // Required empty public constructor
@@ -392,6 +391,13 @@ public class FSPMapFragment extends Fragment {
                 if (infoWindow != null){
                     infoWindow.MapPositionChanged();
                 }
+
+                if (deviationLine == null)
+                {
+                    deviationLine = new DeviationLine(mainActivity, googleMap);
+                }
+
+                deviationLine.DrawDeviationLine(curPlaneLocation);
             }
         });
 
@@ -427,6 +433,8 @@ public class FSPMapFragment extends Fragment {
                     if (onCameraIdleListener != null)
                         FSPMapFragment.this.onCameraIdleListener.onCameraIdle();
                 }
+
+                Log.i(TAG, "connected: " + connected + " _do: " + _do);
             }
         });
 

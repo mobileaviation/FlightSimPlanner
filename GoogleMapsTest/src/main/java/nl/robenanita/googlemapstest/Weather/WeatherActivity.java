@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Xs;
 import nl.robenanita.googlemapstest.database.AirportDataSource;

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.search.SearchPopup;
 
 /**

@@ -17,8 +17,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.Map;
 
-import nl.robenanita.googlemapstest.Airport;
-import nl.robenanita.googlemapstest.AirportAdapter;
+import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.Airport.AirportAdapter;
 import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.FixesAdapter;
 import nl.robenanita.googlemapstest.Navaid;

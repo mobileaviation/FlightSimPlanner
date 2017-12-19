@@ -1,4 +1,4 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.Airport;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -20,6 +20,9 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 
 import java.util.ArrayList;
 
+import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.NavigationActivity;
+import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Weather.Fir;
 import nl.robenanita.googlemapstest.Weather.Metar;
 import nl.robenanita.googlemapstest.Weather.MetarRawAdapter;

@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import nl.robenanita.googlemapstest.Airport;
-import nl.robenanita.googlemapstest.Frequency;
+import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.Airport.Frequency;
 
 /**
  * Created by Rob Verhoef on 22-4-14.

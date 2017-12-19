@@ -1,6 +1,8 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.Airport;
 
 import java.util.ArrayList;
+
+import nl.robenanita.googlemapstest.Airport.Runway;
 
 /**
  * Created by Rob Verhoef on 22-9-2014.

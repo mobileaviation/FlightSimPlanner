@@ -51,6 +51,7 @@ public class AirspaceInfoFragment extends Fragment {
 
     public void LoadAirspacesForLocation(GoogleMap map, Context context)
     {
+        removeAirspacesFromMap();
         LatLng location = map.getCameraPosition().target;
         this.map = map;
 
@@ -64,6 +65,7 @@ public class AirspaceInfoFragment extends Fragment {
 
             @Override
             public void OnFoundAllAirspaces(final Airspaces airspaces) {
+                AirspaceInfoFragment.this.airspaces = airspaces;
                 ListView airspacesListView = (ListView) view.findViewById(R.id.airspacesList);
 
                 airspacesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -84,7 +86,8 @@ public class AirspaceInfoFragment extends Fragment {
 
     public void removeAirspacesFromMap()
     {
-        airspaces.removeAirspacesLayer();
+        if (airspaces != null)
+            airspaces.removeAirspacesLayer();
     }
 
 }

@@ -1,4 +1,4 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.Airport;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.Map;
+
+import nl.robenanita.googlemapstest.R;
 
 /**
  * Created by Rob Verhoef on 25-2-14.

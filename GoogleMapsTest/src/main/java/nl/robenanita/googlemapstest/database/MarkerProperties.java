@@ -11,7 +11,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
-import nl.robenanita.googlemapstest.AirportType;
+import nl.robenanita.googlemapstest.Airport.AirportType;
 
 /**
  * Created by Rob Verhoef on 26-10-2014.

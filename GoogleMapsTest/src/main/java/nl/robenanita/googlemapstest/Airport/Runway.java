@@ -1,4 +1,4 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.Airport;
 
 import com.google.android.gms.maps.model.Marker;
 

@@ -12,8 +12,8 @@ import android.widget.PopupWindow;
 
 import java.util.Map;
 
-import nl.robenanita.googlemapstest.Airport;
-import nl.robenanita.googlemapstest.AirportAdapter;
+import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.Airport.AirportAdapter;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 

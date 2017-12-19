@@ -62,6 +62,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.Airport.Runway;
 import nl.robenanita.googlemapstest.Airspaces.LoadAirspacesAsync;
 import nl.robenanita.googlemapstest.Charts.AirportCharts;
 import nl.robenanita.googlemapstest.Charts.MapCruncherMetadataReader;
@@ -78,7 +80,6 @@ import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
-import nl.robenanita.googlemapstest.database.AirspacesDataSource;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.Helpers;
@@ -238,6 +239,7 @@ public class NavigationActivity extends ActionBarActivity implements
                     @Override
                     public void onCameraIdle() {
                         SetupScaleBar();
+                        fspMapFragment.ShowAirspacesInfoLayout();
                     }
                 });
             }

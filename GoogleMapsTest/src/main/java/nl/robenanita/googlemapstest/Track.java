@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 import nl.robenanita.googlemapstest.flightplan.Leg;
 import nl.robenanita.googlemapstest.flightplan.Waypoint;

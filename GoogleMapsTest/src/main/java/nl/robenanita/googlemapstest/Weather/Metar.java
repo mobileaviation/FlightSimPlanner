@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 
 /**

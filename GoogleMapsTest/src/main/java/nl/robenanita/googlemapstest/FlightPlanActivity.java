@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
 public class FlightPlanActivity extends ActionBarActivity {

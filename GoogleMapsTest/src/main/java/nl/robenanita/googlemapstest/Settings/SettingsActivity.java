@@ -19,12 +19,12 @@ import android.widget.TextView;
 
 import com.andreabaccega.widget.FormEditText;
 
-import nl.robenanita.googlemapstest.Airport;
-import nl.robenanita.googlemapstest.AirportType;
+import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.Airport.AirportType;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.Property;
 import nl.robenanita.googlemapstest.R;
-import nl.robenanita.googlemapstest.Runway;
+import nl.robenanita.googlemapstest.Airport.Runway;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
 import nl.robenanita.googlemapstest.database.RunwaysDataSource;

@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
@@ -86,9 +86,7 @@ public class AviationMarkers extends AsyncTask<String, Integer, Void> {
     protected void onPostExecute(Void aVoid) {
         if (!cancelled) {
             PlaceAirportMarkers(this.cameraPosition.zoom, this.curScreen);
-            //PlaceAirportMarkersByMapLocationIDs(this.cameraPosition.zoom, map.getProjection().getVisibleRegion().latLngBounds, iDs);
-            PlaceNavaidsMarkers(this.cameraPosition.zoom);
-            //setInfoWindow();
+            PlaceNavaidsMarkers(this.cameraPosition.zoom, this.curScreen);
         }
         super.onPostExecute(aVoid);
     }
@@ -117,69 +115,67 @@ public class AviationMarkers extends AsyncTask<String, Integer, Void> {
                         setupAirportMarker(val);
                     }
 
-                    switch (val.type) {
-                        case large_airport: {
-                            val.marker.setVisible((true));
-                            break;
-                        }
-                        case medium_airport: {
-                            val.marker.setVisible(zoom >= 7);
-                            break;
-                        }
-                        case small_airport: {
-                            val.marker.setVisible(zoom >= 9);
-                            break;
-                        }
-                        case heliport: {
-                            val.marker.setVisible(zoom >= 10);
-                            break;
-                        }
-                        case balloonport: {
-                            val.marker.setVisible(zoom >= 10);
-                            break;
-                        }
-                        case seaplane_base: {
-                            val.marker.setVisible(zoom >= 9);
-                            break;
-                        }
-                        case closed: {
-                            val.marker.setVisible(false);
-                            break;
-                        }
-                    }
 
-                    if (!val.marker.isVisible())
-                    {
-                        val.marker.remove();
-                        val.marker = null;
-                    }
-                }
-                else
-                {
-                    if (val.marker != null) {
-                        val.marker.remove();
-                        val.marker = null;
-                    }
                 }
             }
+            showHideAirportByZoom(zoom, latLngBounds);
         }
     }
 
-    private void PlaceNavaidsMarkers(Float zoom)
+    private void showHideAirportByZoom(Float zoom, LatLngBounds latLngBounds)
+    {
+        Log.i(TAG, "Check visibility airport markers: " + Integer.toString(airportMarkerMap.size()));
+
+        Iterator<Marker> it = airportMarkerMap.keySet().iterator();
+
+        while(it.hasNext()) {
+            Marker marker = it.next();
+            Airport val = airportMarkerMap.get(marker);
+
+            if (latLngBounds.contains(val.getLatLng())) {
+
+
+                switch (val.type) {
+                    case large_airport: {
+                        marker.setVisible((true));
+                        break;
+                    }
+                    case medium_airport: {
+                        marker.setVisible(zoom >= 8);
+                        break;
+                    }
+                    case small_airport: {
+                        marker.setVisible(zoom >= 9);
+                        break;
+                    }
+                    case heliport: {
+                        val.marker.setVisible(zoom >= 10);
+                        break;
+                    }
+                    case balloonport: {
+                        marker.setVisible(zoom >= 10);
+                        break;
+                    }
+                    case seaplane_base: {
+                        marker.setVisible(zoom >= 9);
+                        break;
+                    }
+                    case closed: {
+                        marker.setVisible(false);
+                        break;
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void PlaceNavaidsMarkers(Float zoom, LatLngBounds latLngBounds)
     {
         Log.i(TAG, "Trying to place navaids markers: " + Integer.toString(navaids.size()));
 
         if (navaids != null)
         {
-            Boolean visible = true;
-            visible = (zoom>7);
-
-//            if (curVisible!=visible)
-//            {
-//                curVisible = visible;
-//            }
-
-            //Set<Integer> keys = airports.keySet();
             Iterator<Integer> it = navaids.keySet().iterator();
 
             while(it.hasNext())
@@ -197,8 +193,24 @@ public class AviationMarkers extends AsyncTask<String, Integer, Void> {
 
                     navaidMarkerMap.put(val.marker, val);
                 }
+            }
 
-                val.marker.setVisible(visible);
+            showHideNavaidsByZoom(zoom, latLngBounds);
+        }
+    }
+
+    private void showHideNavaidsByZoom(Float zoom, LatLngBounds latLngBounds)
+    {
+        Log.i(TAG, "Check visibility navaids markers: " + Integer.toString(navaidMarkerMap.size()));
+
+        Iterator<Marker> it = navaidMarkerMap.keySet().iterator();
+
+        while(it.hasNext()) {
+            Marker marker = it.next();
+            Navaid val = navaidMarkerMap.get(marker);
+
+            if (latLngBounds.contains(val.getLatLng())) {
+                marker.setVisible(zoom>8);
             }
         }
     }

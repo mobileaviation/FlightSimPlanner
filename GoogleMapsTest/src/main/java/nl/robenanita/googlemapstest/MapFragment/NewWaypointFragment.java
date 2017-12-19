@@ -10,27 +10,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 import java.util.ArrayList;
 
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.NavaidsDataSource;
-import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
 
 public class NewWaypointFragment extends Fragment {

@@ -10,16 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.vividsolutions.jts.geom.LinearRing;
-
 import java.util.ArrayList;
 
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Weather.Metar;
 import nl.robenanita.googlemapstest.Weather.MetarRawAdapter;

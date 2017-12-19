@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import nl.robenanita.googlemapstest.Airport.Airport;
+
 /**
  * Created by Rob Verhoef on 18-1-14.
  */

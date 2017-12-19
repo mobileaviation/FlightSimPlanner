@@ -23,14 +23,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.LegInfoView;
 import nl.robenanita.googlemapstest.Property;
 import nl.robenanita.googlemapstest.R;
-import nl.robenanita.googlemapstest.Runway;
-import nl.robenanita.googlemapstest.RunwaysList;
+import nl.robenanita.googlemapstest.Airport.Runway;
+import nl.robenanita.googlemapstest.Airport.RunwaysList;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;

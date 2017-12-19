@@ -14,7 +14,7 @@ import com.vividsolutions.jts.io.WKTWriter;
 import java.util.Calendar;
 import java.util.Date;
 
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.R;
 

@@ -1,4 +1,4 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.Airport;
 
 /**
  * Created by Rob Verhoef on 22-4-14.

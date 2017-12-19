@@ -13,7 +13,7 @@
         android:padding="2dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:background="@android:color/white"
             android:gravity="center"
@@ -21,11 +21,12 @@
 
             <TextView
                 android:id="@+id/airspaceCategory"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@android:color/black"
+                android:gravity="center"
                 android:padding="4dp"
                 android:text="A"
                 android:textColor="@android:color/white"
@@ -70,7 +71,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"
             android:background="@android:color/white"
@@ -79,10 +80,11 @@
             <TextView
                 android:id="@+id/airspaceNameTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:maxWidth="200dp"
                 android:text="Schiphol CTR"
                 android:textSize="12sp"

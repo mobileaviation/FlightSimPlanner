@@ -6,10 +6,9 @@ import android.graphics.BitmapFactory;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import nl.robenanita.googlemapstest.Airport;
+import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.R;
-import nl.robenanita.googlemapstest.flightplan.Waypoint;
 import nl.robenanita.googlemapstest.flightplan.WaypointType;
 
 /**

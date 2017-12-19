@@ -8,11 +8,11 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import nl.robenanita.googlemapstest.Airport;
-import nl.robenanita.googlemapstest.AirportType;
+import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.Airport.AirportType;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.Property;
-import nl.robenanita.googlemapstest.Runway;
+import nl.robenanita.googlemapstest.Airport.Runway;
 
 /**
  * Created by Rob Verhoef on 23-4-14.

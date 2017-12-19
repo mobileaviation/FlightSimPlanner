@@ -26,7 +26,7 @@
     <LinearLayout
         android:id="@+id/airspacesInfoLayout"
         android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|right"
         android:orientation="horizontal"
         android:visibility="invisible">

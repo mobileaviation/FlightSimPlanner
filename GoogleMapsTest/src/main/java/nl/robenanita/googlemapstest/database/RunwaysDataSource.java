@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.io.IOException;
 
-import nl.robenanita.googlemapstest.Airport;
-import nl.robenanita.googlemapstest.Runway;
-import nl.robenanita.googlemapstest.RunwaysList;
+import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.Airport.Runway;
+import nl.robenanita.googlemapstest.Airport.RunwaysList;
 
 /**
  * Created by Rob Verhoef on 6-4-14.

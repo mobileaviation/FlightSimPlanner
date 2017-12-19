@@ -1,4 +1,4 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.Airport;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,6 +20,9 @@ import com.vividsolutions.jts.io.WKTWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+
+import nl.robenanita.googlemapstest.Helpers;
+import nl.robenanita.googlemapstest.R;
 
 /**
  * Created by Rob Verhoef on 18-1-14.
@@ -164,7 +167,7 @@ public class Airport implements Serializable {
         textPaint.setColor(Color.argb(255,246,249,89));
         airportCanvas.drawText(iata_code, (width.intValue()/2),20,textPaint);
 
-        Bitmap dstBitmap = Bitmap.createBitmap((int)Helpers.convertDpToPixel(100, context),
+        Bitmap dstBitmap = Bitmap.createBitmap((int) Helpers.convertDpToPixel(100, context),
                 (int)Helpers.convertDpToPixel(100, context),
                 Bitmap.Config.ARGB_8888);
         Canvas dstCanvas = new Canvas(dstBitmap);
