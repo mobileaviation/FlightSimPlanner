@@ -53,4 +53,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:11.0.2'
     implementation 'com.kishan.askpermission:askpermission:1.0.3'
     implementation 'com.github.woxthebox:draglistview:1.5.1'
+    implementation 'commons-io:commons-io:2.6'
 }
