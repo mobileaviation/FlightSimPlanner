@@ -53,6 +53,8 @@ public class MapLayersFragment extends Fragment {
                 LayersWeatherSetupFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec("Charts").setIndicator("Charts"),
                 LayersChartsSetupFragment.class, null);
+        tabHost.addTab(tabHost.newTabSpec("Offline").setIndicator("Offline"),
+                LayersOfflineSetupFragment.class, null);
 
 
 
