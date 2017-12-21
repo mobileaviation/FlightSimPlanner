@@ -6,14 +6,14 @@ import android.location.Location;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import nl.robenanita.googlemapstest.Route.Route;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
-import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 
 /**
  * Created by Rob Verhoef on 21-5-2014.
  */
 public class LocationTracking {
-    public LocationTracking(FlightPlan flightPlan, Context context)
+    public LocationTracking(Route flightPlan, Context context)
     {
         this.flightPlan = flightPlan;
         this.context = context;
@@ -42,7 +42,7 @@ public class LocationTracking {
     }
 
     private Context context;
-    private FlightPlan flightPlan;
+    private Route flightPlan;
     public String Name;
     public Long Id;
 }

@@ -5,8 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -14,8 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import nl.robenanita.googlemapstest.flightplan.Leg;
-import nl.robenanita.googlemapstest.flightplan.Waypoint;
+import nl.robenanita.googlemapstest.Route.Leg;
+import nl.robenanita.googlemapstest.Route.Waypoint;
 
 /**
  * Created by Rob Verhoef on 4-8-2014.

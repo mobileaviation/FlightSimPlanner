@@ -20,9 +20,9 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 
 import java.util.ArrayList;
 
-import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
+import nl.robenanita.googlemapstest.Route.Route;
 import nl.robenanita.googlemapstest.Weather.Fir;
 import nl.robenanita.googlemapstest.Weather.Metar;
 import nl.robenanita.googlemapstest.Weather.MetarRawAdapter;
@@ -39,7 +39,6 @@ import nl.robenanita.googlemapstest.Weather.WeatherWebService;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.AirportInfoDataSource;
 import nl.robenanita.googlemapstest.database.FirDataSource;
-import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 
 
 public class AirportsInfoFragment extends Fragment {
@@ -240,7 +239,7 @@ public class AirportsInfoFragment extends Fragment {
         //StationsWebService s = new StationsWebService();
         Geometry g2 = null;
         NavigationActivity activity = (NavigationActivity)getActivity();
-        FlightPlan selectedFlightplan = activity.GetSelectedFlightplan();
+        Route selectedFlightplan = activity.GetSelectedFlightplan();
 
         if (selectedFlightplan != null)
         {

@@ -10,10 +10,10 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import nl.robenanita.googlemapstest.Airport.Airport;
-import nl.robenanita.googlemapstest.flightplan.FlightPlan;
-import nl.robenanita.googlemapstest.flightplan.Leg;
-import nl.robenanita.googlemapstest.flightplan.Waypoint;
-import nl.robenanita.googlemapstest.flightplan.WaypointType;
+import nl.robenanita.googlemapstest.Route.Route;
+import nl.robenanita.googlemapstest.Route.Leg;
+import nl.robenanita.googlemapstest.Route.Waypoint;
+import nl.robenanita.googlemapstest.Route.WaypointType;
 
 /**
  * Created by Rob Verhoef on 12-5-2014.
@@ -122,9 +122,9 @@ public class Track {
         return l;
     }
 
-    private FlightPlan createFlightplan(Waypoint start, Waypoint destination)
+    private Route createFlightplan(Waypoint start, Waypoint destination)
     {
-        FlightPlan tempFlightplan = new FlightPlan(context);
+        Route tempFlightplan = new Route(context);
         tempFlightplan.name = "DirectTo Plan";
         tempFlightplan.altitude = 1000;
         tempFlightplan.wind_direction = 0;
@@ -158,7 +158,7 @@ public class Track {
         Waypoint destination = createWaypoint(toAirport.name, 1000, l);
         destination.waypointType = WaypointType.destinationAirport;
 
-        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        Route tempFlightplan = createFlightplan(start, destination);
         tempFlightplan.destination_airport = toAirport;
         tempFlightplan.startFlightplan(fromLocation);
 
@@ -177,7 +177,7 @@ public class Track {
         Waypoint destination = createWaypoint(toNavaid.name, 1000, l);
         destination.waypointType = WaypointType.navaid;
 
-        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        Route tempFlightplan = createFlightplan(start, destination);
         tempFlightplan.startFlightplan(fromLocation);
 
         directToLeg = tempFlightplan.getActiveLeg();
@@ -195,7 +195,7 @@ public class Track {
         Waypoint destination = createWaypoint(toFix.name, 1000, l);
         destination.waypointType = WaypointType.fix;
 
-        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        Route tempFlightplan = createFlightplan(start, destination);
         tempFlightplan.startFlightplan(fromLocation);
 
         directToLeg = tempFlightplan.getActiveLeg();
@@ -210,14 +210,14 @@ public class Track {
         Waypoint destination = createWaypoint("to Location", 1000, toLocation);
         destination.waypointType = WaypointType.userwaypoint;
 
-        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        Route tempFlightplan = createFlightplan(start, destination);
         tempFlightplan.startFlightplan(fromLocation);
 
         directToLeg = tempFlightplan.getActiveLeg();
         return directToLeg;
     }
 
-    public Leg getDirecttoLeg(FlightPlan flightPlan, Location fromLocation, Context context)
+    public Leg getDirecttoLeg(Route flightPlan, Location fromLocation, Context context)
     {
         Waypoint start = createWaypoint("Current Location", 1, fromLocation);
         start.waypointType = WaypointType.userwaypoint;
@@ -228,7 +228,7 @@ public class Track {
         Waypoint destination = createWaypoint(flightPlan.alternate_airport.name, 1000, l);
         destination.waypointType = WaypointType.destinationAirport;
 
-        FlightPlan tempFlightplan = createFlightplan(start, destination);
+        Route tempFlightplan = createFlightplan(start, destination);
         tempFlightplan.destination_airport = flightPlan.alternate_airport;
         tempFlightplan.altitude = flightPlan.altitude;
         tempFlightplan.wind_direction = flightPlan.wind_direction;

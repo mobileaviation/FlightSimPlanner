@@ -26,7 +26,7 @@ import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.NavaidsDataSource;
-import nl.robenanita.googlemapstest.flightplan.WaypointType;
+import nl.robenanita.googlemapstest.Route.WaypointType;
 
 public class NewWaypointFragment extends Fragment {
     private GoogleMap googleMap;

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
@@ -31,8 +30,6 @@ import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
-
-import java.util.logging.Logger;
 
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
@@ -404,7 +401,7 @@ public class StartActivity extends ActionBarActivity {
     Continent selectedContinent;
 
     private void GetCounts() {
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(this);
+        RouteDataSource flightPlanDataSource = new RouteDataSource(this);
         flightPlanDataSource.open();
         Integer fpCount = flightPlanDataSource.GetFlightplanCount();
         flightPlanDataSource.close();

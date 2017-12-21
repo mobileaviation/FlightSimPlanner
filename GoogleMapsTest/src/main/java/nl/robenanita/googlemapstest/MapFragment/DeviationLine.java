@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.robenanita.googlemapstest.Helpers;
-import nl.robenanita.googlemapstest.flightplan.CoarseMarker;
+import nl.robenanita.googlemapstest.Route.CoarseMarker;
 
 /**
  * Created by Rob Verhoef on 19-12-2017.

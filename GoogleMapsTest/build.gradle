@@ -34,8 +34,8 @@ android {
 }
 
 dependencies {
-    implementation files('libs/ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar')
-    implementation files('libs/jts-1.13.jar')
+    compile files('libs/ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar')
+    compile files('libs/jts-1.13.jar')
     //    compile files('libs/hibernate-spatial-4.3.jar')
     //compile 'com.android.support:appcompat-v7:19.+'
     //compile 'com.google.android.gms:play-services:4.0.30'

@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.R;
-import nl.robenanita.googlemapstest.flightplan.WaypointType;
+import nl.robenanita.googlemapstest.Route.WaypointType;
 
 /**
  * Created by Rob Verhoef on 29-8-2017.

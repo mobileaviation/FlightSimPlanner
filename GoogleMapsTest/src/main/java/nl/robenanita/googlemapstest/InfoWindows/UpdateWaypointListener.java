@@ -1,6 +1,6 @@
 package nl.robenanita.googlemapstest.InfoWindows;
 
-import nl.robenanita.googlemapstest.flightplan.Waypoint;
+import nl.robenanita.googlemapstest.Route.Waypoint;
 
 /**
  * Created by Rob Verhoef on 29-8-2017.

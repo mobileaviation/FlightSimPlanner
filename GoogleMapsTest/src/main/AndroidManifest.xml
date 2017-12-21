@@ -63,7 +63,7 @@
             android:value="AIzaSyAJ9GeSgjpWb5iigW4z9z7Ff4OyHa92GM4"/>
 
         <activity
-            android:name=".flightplan.FlightPlanActivity"
+            android:name=".Route.RouteActivity"
             android:label="@string/title_activity_flight_plan" >
         </activity>
         <activity
@@ -88,7 +88,7 @@
             android:label="@string/title_activity_search_navaids" >
         </activity>
         <activity
-            android:name=".flightplan.FlightPlanActivateActivity"
+            android:name=".Route.RouteActivateActivity"
             android:label="@string/title_activity_flight_plan_activate" >
         </activity>
         <activity

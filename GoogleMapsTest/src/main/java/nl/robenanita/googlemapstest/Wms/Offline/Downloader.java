@@ -84,10 +84,6 @@ public class Downloader extends AsyncTask {
                         tile.DownloadFile(localPath, mapname);
                         downloadTileCount++;
                     }
-//                    else
-//                    {
-//                        System.out.println(z + "/" + x + "/" + y + " is outside of buffer");
-//                    }
                 }
             }
         }

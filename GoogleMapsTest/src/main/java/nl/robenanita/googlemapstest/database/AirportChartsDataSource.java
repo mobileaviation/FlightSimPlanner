@@ -9,7 +9,6 @@ import java.util.Date;
 
 import nl.robenanita.googlemapstest.Charts.AirportChart;
 import nl.robenanita.googlemapstest.Charts.AirportCharts;
-import nl.robenanita.googlemapstest.flightplan.FlightPlan;
 
 /**
  * Created by Rob Verhoef on 3-8-2017.

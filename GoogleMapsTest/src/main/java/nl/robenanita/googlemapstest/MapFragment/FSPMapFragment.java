@@ -50,7 +50,7 @@ import nl.robenanita.googlemapstest.Airspaces.Airspaces;
 import nl.robenanita.googlemapstest.AnimationHelpers;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
-import nl.robenanita.googlemapstest.FlightplanGrid;
+import nl.robenanita.googlemapstest.RouteGrid;
 import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
 import nl.robenanita.googlemapstest.InfoWindows.AirportInfoWndFragment;
@@ -61,23 +61,23 @@ import nl.robenanita.googlemapstest.LegInfoView;
 import nl.robenanita.googlemapstest.MapController;
 import nl.robenanita.googlemapstest.Navaid;
 import nl.robenanita.googlemapstest.R;
+import nl.robenanita.googlemapstest.Route.Route;
+import nl.robenanita.googlemapstest.Route.RouteController;
 import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
 import nl.robenanita.googlemapstest.Track;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Weather.WeatherActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
-import nl.robenanita.googlemapstest.database.FlightPlanDataSource;
+import nl.robenanita.googlemapstest.database.RouteDataSource;
 import nl.robenanita.googlemapstest.database.FrequenciesDataSource;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
 import nl.robenanita.googlemapstest.database.RunwaysDataSource;
-import nl.robenanita.googlemapstest.flightplan.DragLine;
-import nl.robenanita.googlemapstest.flightplan.FlightPlan;
-import nl.robenanita.googlemapstest.flightplan.FlightplanController;
-import nl.robenanita.googlemapstest.flightplan.Leg;
-import nl.robenanita.googlemapstest.flightplan.OnFlightplanEvent;
-import nl.robenanita.googlemapstest.flightplan.Waypoint;
-import nl.robenanita.googlemapstest.flightplan.WaypointType;
+import nl.robenanita.googlemapstest.Route.DragLine;
+import nl.robenanita.googlemapstest.Route.Leg;
+import nl.robenanita.googlemapstest.Route.OnRouteEvent;
+import nl.robenanita.googlemapstest.Route.Waypoint;
+import nl.robenanita.googlemapstest.Route.WaypointType;
 import nl.robenanita.googlemapstest.markers.AviationMarkers;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
 import nl.robenanita.googlemapstest.search.SearchPopup;
@@ -116,14 +116,14 @@ public class FSPMapFragment extends Fragment {
     private MarkerProperties markerProperties;
     private Integer uniqueID;
 
-    private FlightPlan selectedFlightplan;
+    private Route selectedFlightplan;
     private TrackingLine trackingLine;
 
     private Leg clickedLeg;
 
     private LoadTrack loadTrack;
 
-    private FlightplanController flightplanController;
+    private RouteController flightplanController;
 
     private LegInfoView legInfoView;
     private InfoPanelFragment infoPanel;
@@ -184,7 +184,7 @@ public class FSPMapFragment extends Fragment {
                 if (FSPMapFragment.this.selectedFlightplan != null) {
                     ImageButton v = (ImageButton) view;
                     LinearLayout l = (LinearLayout) FSPMapFragment.this.getView().findViewById(R.id.fspflightplanLayout);
-                    FlightplanGrid g = (FlightplanGrid) FSPMapFragment.this.getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+                    RouteGrid g = (RouteGrid) FSPMapFragment.this.getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
 
                     final int y = (int) motionEvent.getRawY();
 
@@ -244,7 +244,7 @@ public class FSPMapFragment extends Fragment {
         return googleMap;
     }
 
-    public FlightPlan GetCurrentFlightplan()
+    public Route GetCurrentFlightplan()
     {
         return selectedFlightplan;
     }
@@ -549,7 +549,7 @@ public class FSPMapFragment extends Fragment {
                     if (w != null) {
                         w.location.setLatitude(marker.getPosition().latitude);
                         w.location.setLongitude(marker.getPosition().longitude);
-                        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(mainActivity);
+                        RouteDataSource flightPlanDataSource = new RouteDataSource(mainActivity);
                         flightPlanDataSource.open();
                         flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
                         flightPlanDataSource.close();
@@ -885,7 +885,7 @@ public class FSPMapFragment extends Fragment {
         selectedFlightplan.removeOldFlightplanMarkers();
         selectedFlightplan.InsertWaypoint(waypoint);
 
-        FlightPlanDataSource flightPlanDataSource = new FlightPlanDataSource(mainActivity);
+        RouteDataSource flightPlanDataSource = new RouteDataSource(mainActivity);
         flightPlanDataSource.open();
         flightPlanDataSource.UpdateInsertWaypoints(selectedFlightplan.Waypoints);
         flightPlanDataSource.updateWaypointSortOrder(selectedFlightplan);
@@ -930,7 +930,7 @@ public class FSPMapFragment extends Fragment {
             flightplanController = null;
         }
 
-        selectedFlightplan = new FlightPlan(mainActivity);
+        selectedFlightplan = new Route(mainActivity);
         selectedFlightplan.LoadFlightplan(mainActivity, flightplan_id, uniqueID);
 
         Log.i(TAG, "Selected flightplan: " + selectedFlightplan.name);
@@ -950,15 +950,15 @@ public class FSPMapFragment extends Fragment {
         airportDataSource.getAirportsInBuffer(selectedFlightplan.buffer);
         airportDataSource.close();
 
-        flightplanController = new FlightplanController(mainActivity, selectedFlightplan);
+        flightplanController = new RouteController(mainActivity, selectedFlightplan);
         setupFlightplanControllerListeners();
 
         setupFlightplanListeners(selectedFlightplan);
     }
 
-    private void setupFlightplanListeners(FlightPlan flightPlan)
+    private void setupFlightplanListeners(Route flightPlan)
     {
-        flightPlan.setOnNewActiveWaypoint(new FlightPlan.OnNewActiveWaypoint() {
+        flightPlan.setOnNewActiveWaypoint(new Route.OnNewActiveWaypoint() {
             @Override
             public void onOldWaypoint(Waypoint waypoint) {
                 if (waypoint.activeCircle != null) {
@@ -991,44 +991,44 @@ public class FSPMapFragment extends Fragment {
 
     private void setupFlightplanControllerListeners()
     {
-        flightplanController.SetOnFlightplanEvent(new OnFlightplanEvent() {
+        flightplanController.SetOnFlightplanEvent(new OnRouteEvent() {
             @Override
-            public void onVariationClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onVariationClicked(Waypoint waypoint, Route flightPlan) {
                 flightplanGrid.ReloadFlightplan();
                 flightPlan.RemoveFlightplanTrack();
                 flightPlan.DrawFlightplan(googleMap);
             }
 
             @Override
-            public void onDeviationClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onDeviationClicked(Waypoint waypoint, Route flightPlan) {
                 flightplanGrid.ReloadFlightplan();
                 flightPlan.RemoveFlightplanTrack();
                 flightPlan.DrawFlightplan(googleMap);
             }
 
             @Override
-            public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onTakeoffClicked(Waypoint waypoint, Route flightPlan) {
                 flightplanGrid.ReloadFlightplan();
                 legInfoView.setActiveLeg(flightPlan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
                 infoPanel.setActiveLeg(flightPlan.getActiveLeg());
             }
 
             @Override
-            public void onAtoClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onAtoClicked(Waypoint waypoint, Route flightPlan) {
                 flightplanGrid.ReloadFlightplan();
                 legInfoView.setActiveLeg(flightPlan.getActiveLeg(), LegInfoView.Distance.larger2000Meters);
                 infoPanel.setActiveLeg(flightPlan.getActiveLeg());
             }
 
             @Override
-            public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onDeleteClickedClicked(Waypoint waypoint, Route flightPlan) {
                 Integer id = flightPlan.id;
                 FSPMapFragment.this.closeFlightplan();
                 FSPMapFragment.this.LoadFlightplan(id);
             }
 
             @Override
-            public void onClosePlanClicked(FlightPlan flightPlan) {
+            public void onClosePlanClicked(Route flightPlan) {
                 FSPMapFragment.this.closeFlightplan();
             }
 
@@ -1039,7 +1039,7 @@ public class FSPMapFragment extends Fragment {
             }
 
             @Override
-            public void onWaypointMoved(FlightPlan flightPlan) {
+            public void onWaypointMoved(Route flightPlan) {
                 flightPlan.removeOldFlightplanMarkers();
                 flightPlan.UpdateWaypointsData();
                 flightPlan.DrawFlightplan(googleMap);
@@ -1080,50 +1080,50 @@ public class FSPMapFragment extends Fragment {
             }
         });
 
-        builder.setMessage("Are you sure you want to close this FlightPlan?");
+        builder.setMessage("Are you sure you want to close this Route?");
         builder.setTitle("Close Flightplan?");
 
         AlertDialog closePlanDialog = builder.create();
         closePlanDialog.show();
     }
 
-    private FlightplanGrid flightplanGrid;
+    private RouteGrid flightplanGrid;
     private void LoadFlightplanGrid()
     {
         //setFlightplanLayout(true);
 
-        FlightplanGrid tempGrid = (FlightplanGrid) getChildFragmentManager().findFragmentById(R.id.fspflightplanFragment);
-        if (tempGrid==null) tempGrid = (FlightplanGrid) getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+        RouteGrid tempGrid = (RouteGrid) getChildFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+        if (tempGrid==null) tempGrid = (RouteGrid) getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
 
         flightplanGrid = tempGrid;
 
-        flightplanGrid.setOnFlightplanEvent(new OnFlightplanEvent() {
+        flightplanGrid.setOnFlightplanEvent(new OnRouteEvent() {
             @Override
-            public void onVariationClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onVariationClicked(Waypoint waypoint, Route flightPlan) {
                 LinearLayout flightplanLayout = (LinearLayout) getView().findViewById(R.id.fspflightplanLayout);
                 flightplanController.SetVariation(waypoint);
             }
             @Override
-            public void onDeviationClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onDeviationClicked(Waypoint waypoint, Route flightPlan) {
                 flightplanController.SetDeviation(waypoint);
             }
             @Override
-            public void onTakeoffClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onTakeoffClicked(Waypoint waypoint, Route flightPlan) {
                 flightplanController.SetETO(waypoint, curPlaneLocation);
             }
 
             @Override
-            public void onAtoClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onAtoClicked(Waypoint waypoint, Route flightPlan) {
                 flightplanController.SetATO(waypoint, curPlaneLocation);
             }
 
             @Override
-            public void onDeleteClickedClicked(Waypoint waypoint, FlightPlan flightPlan) {
+            public void onDeleteClickedClicked(Waypoint waypoint, Route flightPlan) {
                 flightplanController.DeleteWaypoint(waypoint);
             }
 
             @Override
-            public void onClosePlanClicked(FlightPlan flightPlan) {
+            public void onClosePlanClicked(Route flightPlan) {
                 closeFlightplanShowAlert();
             }
 
@@ -1134,7 +1134,7 @@ public class FSPMapFragment extends Fragment {
             }
 
             @Override
-            public void onWaypointMoved(FlightPlan flightPlan) {
+            public void onWaypointMoved(Route flightPlan) {
                 flightplanController.MoveWaypoint2(flightPlan);
             }
 

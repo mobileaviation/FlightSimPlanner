@@ -75,6 +75,7 @@ import nl.robenanita.googlemapstest.Instruments.TurnCoordinatorView;
 import nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView;
 import nl.robenanita.googlemapstest.MapFragment.FSPMapFragment;
 import nl.robenanita.googlemapstest.MapFragment.TrackingLine;
+import nl.robenanita.googlemapstest.Route.Route;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
@@ -87,11 +88,10 @@ import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
 import nl.robenanita.googlemapstest.database.MarkerProperties;
 import nl.robenanita.googlemapstest.database.NavaidsDataSource;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
-import nl.robenanita.googlemapstest.flightplan.FlightPlan;
-import nl.robenanita.googlemapstest.flightplan.FlightPlanActivateActivity;
-import nl.robenanita.googlemapstest.flightplan.FlightPlanActivity;
-import nl.robenanita.googlemapstest.flightplan.Leg;
-import nl.robenanita.googlemapstest.flightplan.Waypoint;
+import nl.robenanita.googlemapstest.Route.RouteActivateActivity;
+import nl.robenanita.googlemapstest.Route.RouteActivity;
+import nl.robenanita.googlemapstest.Route.Leg;
+import nl.robenanita.googlemapstest.Route.Waypoint;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
@@ -248,7 +248,7 @@ public class NavigationActivity extends ActionBarActivity implements
         fspMapFragment.InitializeMap(NavigationActivity.this, legInfoView, infoPanel);
     }
 
-    public FlightPlan GetSelectedFlightplan()
+    public Route GetSelectedFlightplan()
     {
         return fspMapFragment.GetCurrentFlightplan();
     }
@@ -390,7 +390,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void setLoadFlightplan()
     {
-        Intent activateFlightplanIntent = new Intent(NavigationActivity.this, FlightPlanActivateActivity.class);
+        Intent activateFlightplanIntent = new Intent(NavigationActivity.this, RouteActivateActivity.class);
         activateFlightplanIntent.putExtra("key", 1);
         NavigationActivity.this.startActivityForResult(activateFlightplanIntent, 300);
     }
@@ -845,7 +845,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void ShowCreateFlightPlanActivity()
     {
-        Intent startFlightplanIntent = new Intent(NavigationActivity.this, FlightPlanActivity.class);
+        Intent startFlightplanIntent = new Intent(NavigationActivity.this, RouteActivity.class);
         startFlightplanIntent.putExtra("key", 1);
         NavigationActivity.this.startActivityForResult(startFlightplanIntent, 0);
     }
@@ -1218,13 +1218,13 @@ public class NavigationActivity extends ActionBarActivity implements
     private Track track;
     private void SetInfoPanel(Location location)
     {
-        final FlightPlan selectedFlightplan = fspMapFragment.GetCurrentFlightplan();
+        final Route selectedFlightplan = fspMapFragment.GetCurrentFlightplan();
         mCurrentLocation = location;
         infoPanel.setLocation(location);
 
         if (selectedFlightplan != null) {
 
-            selectedFlightplan.setOnDistanceFromWaypoint(new FlightPlan.OnDistanceFromWaypoint() {
+            selectedFlightplan.setOnDistanceFromWaypoint(new Route.OnDistanceFromWaypoint() {
                 @Override
                 public void on2000Meters(boolean firstHit) {
                     if (!selectedFlightplan.endPlan) {

@@ -19,8 +19,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
-import nl.robenanita.googlemapstest.flightplan.Leg;
-import nl.robenanita.googlemapstest.flightplan.Waypoint;
+import nl.robenanita.googlemapstest.Route.Leg;
+import nl.robenanita.googlemapstest.Route.Waypoint;
 
 
 /**

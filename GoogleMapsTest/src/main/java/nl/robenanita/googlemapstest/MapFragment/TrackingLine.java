@@ -9,21 +9,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import nl.robenanita.googlemapstest.LocationTracking;
-import nl.robenanita.googlemapstest.flightplan.FlightPlan;
+import nl.robenanita.googlemapstest.Route.Route;
 
 /**
  * Created by Rob Verhoef on 30-7-2017.
  */
 
 public class TrackingLine {
-    public TrackingLine(GoogleMap googleMap, FlightPlan flightPlan, Context context)
+    public TrackingLine(GoogleMap googleMap, Route flightPlan, Context context)
     {
         this.googleMap = googleMap;
         this.locationTracking = new LocationTracking(flightPlan, context);
     }
 
     private GoogleMap googleMap;
-    private FlightPlan flightPlan;
+    private Route flightPlan;
     private LocationTracking locationTracking;
 
     private LatLng oldPoint;
