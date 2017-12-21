@@ -85,6 +85,12 @@ public class TileProviderFactory {
         return tileProvider;
     }
 
+    public static TileProvider getTileOfflineOpenStreetmapProvider(Context context)
+    {
+        TileProvider tileProvider = new XYZOfflineTileProvider(TileProviderType.offline_openstreet, context);
+        return tileProvider;
+    }
+
     public static TileProvider getTileAirportMapProvider(TileProviderFormats.airportLayer airportmap,
                                                              int opacity, Context context)
     {

@@ -7,5 +7,6 @@ public enum TileProviderType {
     aaf_chartbundle,
     skylines,
     openweathermaps,
-    canadaweather;
+    canadaweather,
+    offline_openstreet;
 }
