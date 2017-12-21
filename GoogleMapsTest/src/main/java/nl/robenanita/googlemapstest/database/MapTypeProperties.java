@@ -96,6 +96,7 @@ public class MapTypeProperties {
         }
         properties.put(chart, visible);
     }
+
     public boolean GetValue(Integer chart)
     {
         if (properties.containsKey(chart)) {

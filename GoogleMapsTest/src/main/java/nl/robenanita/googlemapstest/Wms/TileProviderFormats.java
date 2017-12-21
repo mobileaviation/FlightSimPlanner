@@ -95,46 +95,6 @@ public class TileProviderFormats {
             "&format=image/png" +
             "&styles=#STYLE#";
 
-//    public enum canadamapLayer
-//    {
-//        ETA_UU,
-//        ETA_PN,
-//        RADAR_RDBR;
-//
-//        @Override
-//        public String toString()
-//        {
-//            switch (this) {
-//
-//                case ETA_UU:
-//                    return "GDPS." + super.toString();
-//                case ETA_PN:
-//                    return "GDPS." + super.toString();
-//                case RADAR_RDBR:
-//                    return super.toString();
-//                default:
-//                    return "";
-//
-//            }
-//        }
-//
-//        public String readable() {
-//            switch (this) {
-//
-//                case ETA_UU:
-//                    return "Wind";
-//                case ETA_PN:
-//                    return "Sea level pressure";
-//                case RADAR_RDBR:
-//                    return "North America RADAR";
-//
-//                default:
-//                    return "";
-//
-//            }
-//        }
-//    }
-
     public enum canadamapStyle
     {
         WINDARROW,          // UU
@@ -179,6 +139,8 @@ public class TileProviderFormats {
     public static final String OPENWEATHERTILE_FORMAT = "http://tile.openweathermap.org/map/" +
             "#LAYER#/" +
             "{zoom}/{x}/{y}.png";
+
+    public static final String OPENSTREETTILE_FORMAT = "http://a.tile.openstreetmap.org/{zoom}/{x}/{y}.png ";
 
     public static final String AIRPORTMAP_FORMAT = "http://www.robenanita.nl/tileserver/tileserver.php?%2Findex.json&callback=_callbacks_._0iepyf5mh?/"+
             "#LAYER#/"+  //EHAM-VAC-1
