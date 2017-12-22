@@ -1,6 +1,5 @@
 package nl.robenanita.googlemapstest.Settings.LayersSetup;
 
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,10 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Route.Route;
 import nl.robenanita.googlemapstest.Wms.Offline.Downloader;
+import nl.robenanita.googlemapstest.Wms.TileProviderType;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +23,8 @@ public class LayersOfflineSetupFragment extends Fragment {
 
     private String TAG = "LayersOfflineSetupFragment";
 
-    private Route flightPlan;
+    private Route route;
+    private Button downloadBtn;
 
     public LayersOfflineSetupFragment() {
         // Required empty public constructor
@@ -31,16 +34,30 @@ public class LayersOfflineSetupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_offline_setup, container, false);
+        View view = inflater.inflate(R.layout.fragment_layers_offline_setup, container, false);
+
+        downloadBtn = (Button) view.findViewById(R.id.downloadBtn);
+
+        downloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+                NavigationActivity a = (NavigationActivity)getActivity();
+                Log.i(TAG, "test message");
+            }
+        });
+
+        return view;
     }
 
     public void DownloadRouteTiles()
     {
         Context context = this.getActivity();
-        if (flightPlan.buffer != null)
+        if (route.buffer != null)
         {
             String p = context.getFilesDir().getPath() + "/";
-            Downloader d = new Downloader(context, flightPlan.buffer, p, "", "Openstreet");
+            String map = TileProviderType.offline_openstreet.toString();
+            Downloader d = new Downloader(context, route.buffer, p, "", map);
             d.SetOnDownloadProgress(new Downloader.OnDownloadProgress() {
                 @Override
                 public void OnProgress(Integer progress) {
