@@ -74,6 +74,8 @@ public class MapController
 
     private TileOverlay airportTestOverlay;
 
+    private TileOverlay offlineOverlay;
+
     public void setUpTileProvider()
     {
         TileProvider tp1 = TileProviderFactory.getFAAProvider(TileProviderFormats.chartBundleLayer.sec_4326, context);
@@ -121,6 +123,11 @@ public class MapController
         TileProvider tp12 =
                 TileProviderFactory.getCanadaWeatherProvider(TileProviderFormats.weathermapLayer.RADAR_RDBR, TileProviderFormats.canadamapStyle.RADAR);
         canadaWeatherUSRadarOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp12));
+
+        TileProvider offlineTileProvider =
+                TileProviderFactory.getTileOfflineOpenStreetmapProvider(context);
+        offlineOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(offlineTileProvider));
+        offlineOverlay.setVisible(false);
 
         weatherProperties = new WeatherProperties();
         weatherProperties.ClearProperties();
@@ -262,5 +269,7 @@ public class MapController
     {
         skylinesOverlay.setVisible(enabled);
     }
+
+    public void ShowOfflineMap(Boolean enabled) { offlineOverlay.setVisible(enabled);}
 
 }

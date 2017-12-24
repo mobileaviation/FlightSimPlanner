@@ -59,7 +59,7 @@ public class Tile {
     public void DownloadFile(String localPath, String baseName)
     {
         try {
-            String f = localPath + baseName + "/" + baseName + "-" + z + "-" + x + "-" + y + ".png";
+            String f = localPath + "/" + baseName + "-" + z + "-" + x + "-" + y + ".png";
             Log.i(TAG, "Download from: " + Url() + " to: " + f );
             FileUtils.copyURLToFile(new URL(Url()), new File(f));
         } catch (IOException e) {

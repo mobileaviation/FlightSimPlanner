@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
@@ -25,6 +27,7 @@ public class LayersOfflineSetupFragment extends Fragment {
 
     private Route route;
     private Button downloadBtn;
+    private CheckBox offLineVisibleCheckbox;
 
     public LayersOfflineSetupFragment() {
         // Required empty public constructor
@@ -37,13 +40,23 @@ public class LayersOfflineSetupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_layers_offline_setup, container, false);
 
         downloadBtn = (Button) view.findViewById(R.id.downloadBtn);
+        offLineVisibleCheckbox = (CheckBox) view.findViewById(R.id.openstreetOfflineEnabledBtn);
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 
                 NavigationActivity a = (NavigationActivity)getActivity();
-                Log.i(TAG, "test message");
+                route = a.GetSelectedFlightplan();
+                DownloadRouteTiles();
+            }
+        });
+
+        offLineVisibleCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                NavigationActivity a = (NavigationActivity)getActivity();
+                a.mapController.ShowOfflineMap(b);
             }
         });
 
@@ -55,7 +68,7 @@ public class LayersOfflineSetupFragment extends Fragment {
         Context context = this.getActivity();
         if (route.buffer != null)
         {
-            String p = context.getFilesDir().getPath() + "/";
+            String p = context.getFilesDir().getPath();
             String map = TileProviderType.offline_openstreet.toString();
             Downloader d = new Downloader(context, route.buffer, p, "", map);
             d.SetOnDownloadProgress(new Downloader.OnDownloadProgress() {
