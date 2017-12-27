@@ -57,6 +57,7 @@ public class DeviationLine {
 
                 coarseMarkerObject = new CoarseMarker(planeLocation, mapLocation);
                 coarseMarkerObject.setCoarseMarker(googleMap, context, points.get(1));
+                coarseMarkerObject.setAncherOnFront();
             }
             else
             {

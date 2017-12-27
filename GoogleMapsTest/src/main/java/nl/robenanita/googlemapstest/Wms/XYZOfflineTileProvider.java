@@ -17,20 +17,20 @@ import java.io.IOException;
  */
 
 public class XYZOfflineTileProvider implements TileProvider {
-    public XYZOfflineTileProvider(TileProviderType tileProviderType,
+    public XYZOfflineTileProvider(OfflineMapTypes offlineMapTypes,
                                  Context context)
     {
-        this.tileProviderType = tileProviderType;
+        this.offlineMapTypes = offlineMapTypes;
         this.context = context;
     }
 
-    private TileProviderType tileProviderType;
+    private OfflineMapTypes offlineMapTypes;
     private Context context;
     private String TAG = "XYZOfflineTileProvider";
 
     @Override
     public Tile getTile(int x, int y, int zoom) {
-        String fileName = tileProviderType.toString() + "-" + Integer.toString(zoom)
+        String fileName = offlineMapTypes.toString() + "-" + Integer.toString(zoom)
                 + "-" + Integer.toString(x)
                 + "-" + Integer.toString(y) + ".png";
 
@@ -40,16 +40,16 @@ public class XYZOfflineTileProvider implements TileProvider {
 
         try
         {
-            File f = new File(context.getFilesDir().getPath() + "/" + tileProviderType.toString() + "/" + fileName);
-            Log.i(TAG, "Load offline tile: " + context.getFilesDir().getPath() + "/" + tileProviderType.toString() + "/" + fileName);
-            //if (f.exists()) {
-                image = BitmapFactory.decodeStream(context.openFileInput(fileName));  //tileProviderType.toString() + "/" +
-                Log.i(TAG, "found offline tile: " + context.getFilesDir().getPath() + "/" + tileProviderType.toString() + "/" + fileName);
+            File f = new File(context.getFilesDir().getPath() + "/" + fileName);
+            //Log.i(TAG, "Load offline tile: " + context.getFilesDir().getPath() + "/" + offlineMapTypes.toString() + "/" + fileName);
+            if (f.exists()) {
+                image = BitmapFactory.decodeStream(context.openFileInput(fileName));  //offlineMapTypes.toString() + "/" +
+                //Log.i(TAG, "found offline tile: " + context.getFilesDir().getPath() + "/" + offlineMapTypes.toString() + "/" + fileName);
                 stream = new ByteArrayOutputStream();
                 image.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
                 tile = new Tile(256, 256, byteArray);
-            //}
+            }
         }
         catch (IOException e)
         {

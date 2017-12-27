@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.TileProvider;
 
 import nl.robenanita.googlemapstest.Charts.AirportChart;
 import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
+import nl.robenanita.googlemapstest.Wms.OfflineMapTypes;
 import nl.robenanita.googlemapstest.Wms.TileProviderFactory;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.ChartBundleProperties;
@@ -80,16 +81,22 @@ public class MapController
     {
         TileProvider tp1 = TileProviderFactory.getFAAProvider(TileProviderFormats.chartBundleLayer.sec_4326, context);
         chartBundleSecTileOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp1));
+        chartBundleSecTileOverlay.setZIndex(90);
         TileProvider tp2 = TileProviderFactory.getFAAProvider(TileProviderFormats.chartBundleLayer.wac_4326, context);
         chartBundleWacTileOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp2));
+        chartBundleWacTileOverlay.setZIndex(90);
         TileProvider tp3 = TileProviderFactory.getFAAProvider(TileProviderFormats.chartBundleLayer.tac_4326, context);
         chartBundleTacTileOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp3));
+        chartBundleTacTileOverlay.setZIndex(90);
         TileProvider tp4 = TileProviderFactory.getFAAProvider(TileProviderFormats.chartBundleLayer.enrh_4326, context);
         chartBundleEnrHTileOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp4));
+        chartBundleEnrHTileOverlay.setZIndex(90);
         TileProvider tp5 = TileProviderFactory.getFAAProvider(TileProviderFormats.chartBundleLayer.enrl_4326, context);
         chartBundleEnrLTileOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp5));
+        chartBundleEnrLTileOverlay.setZIndex(90);
         TileProvider tp6 = TileProviderFactory.getFAAProvider(TileProviderFormats.chartBundleLayer.enra_4326, context);
         chartBundleEnrATileOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp6));
+        chartBundleEnrATileOverlay.setZIndex(90);
 
         chartBundleProperties = new ChartBundleProperties();
         chartBundleProperties.ClearProperties();
@@ -97,37 +104,44 @@ public class MapController
 
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
         propertiesDataSource.open(true);
-        Property p = propertiesDataSource.getMapSetup("AIRSPACES");
+        Property airspacesProperty = propertiesDataSource.getMapSetup("AIRSPACES");
+        Property offlineProperty = propertiesDataSource.getMapSetup("OFFLINEMAPS");
         propertiesDataSource.close(true);
-        boolean airspacesVisible = (p!=null) ? Boolean.valueOf(p.value2) : true;
+        boolean airspacesVisible = (airspacesProperty!=null) ? Boolean.valueOf(airspacesProperty.value2) : true;
+        if (offlineProperty==null) offlineProperty = Property.NewProperty("OFFLINEMAPS", "offline_openstreet", "false");
+
+        ShowOfflineMap(Boolean.valueOf(offlineProperty.value2), OfflineMapTypes.valueOf(offlineProperty.value1));
 
         TileProvider SkylinesTileProvider = TileProviderFactory.getSkylinesProvider(TileProviderFormats.skylinesLayer.Airspace, context);
         skylinesOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(SkylinesTileProvider));
+        skylinesOverlay.setZIndex(105);
 
         TileProvider tp7 =
                 TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.precipitation, 50);
         openWeathermapPertOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp7));
+        openWeathermapPertOverlay.setZIndex(110);
         TileProvider tp8 =
                 TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.clouds, 50);
         openWeathermapCloudsOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp8));
+        openWeathermapCloudsOverlay.setZIndex(110);
         TileProvider tp9 =
                 TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.pressure_cntr, 80);
         openWeathermapPressOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp9));
-
+        openWeathermapPressOverlay.setZIndex(110);
         TileProvider tp10 =
                 TileProviderFactory.getCanadaWeatherProvider(TileProviderFormats.weathermapLayer.ETA_UU, TileProviderFormats.canadamapStyle.WINDARROW);
         canadaWeatherWindOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp10));
+        canadaWeatherWindOverlay.setZIndex(110);
         TileProvider tp11 =
                 TileProviderFactory.getCanadaWeatherProvider(TileProviderFormats.weathermapLayer.ETA_PN, TileProviderFormats.canadamapStyle.PRESSURE4_LINE);
         canadaWeatherPressOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp11));
+        canadaWeatherPressOverlay.setZIndex(110);
         TileProvider tp12 =
                 TileProviderFactory.getCanadaWeatherProvider(TileProviderFormats.weathermapLayer.RADAR_RDBR, TileProviderFormats.canadamapStyle.RADAR);
         canadaWeatherUSRadarOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp12));
+        canadaWeatherUSRadarOverlay.setZIndex(110);
 
-        TileProvider offlineTileProvider =
-                TileProviderFactory.getTileOfflineOpenStreetmapProvider(context);
-        offlineOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(offlineTileProvider));
-        offlineOverlay.setVisible(false);
+
 
         weatherProperties = new WeatherProperties();
         weatherProperties.ClearProperties();
@@ -149,6 +163,7 @@ public class MapController
         {
             chartoverlayOptions = new TileOverlayOptions().tileProvider(tp13);
             airportTestOverlay = map.addTileOverlay(chartoverlayOptions);
+            airportTestOverlay.setZIndex(120);
             airportTestOverlay.setVisible(true);
         }
         else
@@ -156,6 +171,7 @@ public class MapController
             airportTestOverlay.remove();
             chartoverlayOptions = new TileOverlayOptions().tileProvider(tp13);
             airportTestOverlay = map.addTileOverlay(chartoverlayOptions);
+            airportTestOverlay.setZIndex(120);
             airportTestOverlay.setVisible(true);
         }
     }
@@ -270,6 +286,18 @@ public class MapController
         skylinesOverlay.setVisible(enabled);
     }
 
-    public void ShowOfflineMap(Boolean enabled) { offlineOverlay.setVisible(enabled);}
+    public void ShowOfflineMap(Boolean enabled, OfflineMapTypes offlineMapTypes) {
+        if (offlineOverlay!=null)
+        {
+            offlineOverlay.remove();
+            offlineOverlay = null;
+        }
+
+        TileProvider offlineTileProvider =
+                TileProviderFactory.getTileOfflineProvider(context, offlineMapTypes);
+        offlineOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(offlineTileProvider));
+        offlineOverlay.setZIndex(100);
+        offlineOverlay.setVisible(enabled);
+    }
 
 }

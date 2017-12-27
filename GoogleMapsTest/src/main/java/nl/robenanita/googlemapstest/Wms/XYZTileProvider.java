@@ -105,19 +105,21 @@ public class XYZTileProvider implements TileProvider {
      */
     private URL getTileUrl(int x, int y, int zoom)
     {
-        String tileUrl = url
-                .replace("{x}", Integer.toString(x))
-                .replace("{y}", Integer.toString(y))
-                .replace("{zoom}", Integer.toString(zoom));
+        return TileProviderFormats.getTileUrl(url, x, y, zoom);
 
-        try
-        {
-            return new URL(tileUrl);
-        }
-        catch(MalformedURLException e)
-        {
-            throw new AssertionError(e);
-        }
+//        String tileUrl = url
+//                .replace("{x}", Integer.toString(x))
+//                .replace("{y}", Integer.toString(y))
+//                .replace("{zoom}", Integer.toString(zoom));
+//
+//        try
+//        {
+//            return new URL(tileUrl);
+//        }
+//        catch(MalformedURLException e)
+//        {
+//            throw new AssertionError(e);
+//        }
     }
 
     /**

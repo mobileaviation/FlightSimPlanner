@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.vividsolutions.jts.geom.Coordinate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,6 +74,7 @@ import nl.robenanita.googlemapstest.Instruments.CompassView;
 import nl.robenanita.googlemapstest.Instruments.HorizonView;
 import nl.robenanita.googlemapstest.Instruments.TurnCoordinatorView;
 import nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView;
+import nl.robenanita.googlemapstest.MapFragment.BufferArea;
 import nl.robenanita.googlemapstest.MapFragment.FSPMapFragment;
 import nl.robenanita.googlemapstest.MapFragment.TrackingLine;
 import nl.robenanita.googlemapstest.Route.Route;
@@ -235,17 +237,24 @@ public class NavigationActivity extends ActionBarActivity implements
                 SetupScaleBar();
                 mapController = fspMapFragment.GetMapcontroller();
 
+                bufferArea.DrawBuffer(googleMap);
+
                 fspMapFragment.SetOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                     @Override
                     public void onCameraIdle() {
                         SetupScaleBar();
                         fspMapFragment.ShowAirspacesInfoLayout();
+                        if (bufferArea != null)
+                        {
+                            createBufferArea(fspMapFragment.GetGooglemap().getCameraPosition().target);
+                            bufferArea.DrawBuffer(fspMapFragment.GetGooglemap());
+                        }
                     }
                 });
             }
         });
 
-        fspMapFragment.InitializeMap(NavigationActivity.this, legInfoView, infoPanel);
+        fspMapFragment.InitializeMap(legInfoView, infoPanel);
     }
 
     public Route GetSelectedFlightplan()
@@ -327,6 +336,16 @@ public class NavigationActivity extends ActionBarActivity implements
     }
 
     Property bufferProperty;
+    public BufferArea bufferArea;
+    public void createBufferArea(LatLng planePos)
+    {
+        if (bufferArea == null) bufferArea = new BufferArea(this);
+        if (fspMapFragment.GetCurrentFlightplan() == null)
+            bufferArea.CreateBuffer(planePos, bufferProperty);
+        else
+            bufferArea.CreateBuffer(fspMapFragment.GetCurrentFlightplan().getRouteCoordinates(), bufferProperty);
+    }
+
     private void LoadProperties() {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
         propertiesDataSource.open(true);
@@ -362,8 +381,9 @@ public class NavigationActivity extends ActionBarActivity implements
 
         curPosition = planePos;
         curZoom = Float.parseFloat(propertiesDataSource.InitZoom.value1);
-//        planePosition = planePos;
         curPlanePosition = new PlanePosition(planePos.latitude, planePos.longitude, 0d, d);
+
+        createBufferArea(planePos);
     }
 
 
@@ -614,7 +634,7 @@ public class NavigationActivity extends ActionBarActivity implements
 //                airspacesDB.Open("all_airspaces.db.sqlite");
 //                airspacesDB.Close();
 
-                fspMapFragment.ShowAirspacesInfoLayout();
+                //fspMapFragment.ShowAirspacesInfoLayout();
                 return true;
             }
 
@@ -905,6 +925,7 @@ public class NavigationActivity extends ActionBarActivity implements
         {
             // Reload properties...
             LoadProperties();
+            bufferArea.DrawBuffer(fspMapFragment.GetGooglemap());
             initInstruments();
         }
 

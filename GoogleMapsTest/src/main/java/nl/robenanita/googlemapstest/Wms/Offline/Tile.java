@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
+
 /**
  * Created by Rob Verhoef on 23-11-2016.
  */
@@ -19,6 +21,7 @@ public class Tile {
     public int y;
     public int z;
     public Coordinate tile;
+    private String url;
 
     private String TAG = "TileDownload";
 
@@ -26,8 +29,9 @@ public class Tile {
     {
 
     }
-    public Tile(int x, int y, int z)
+    public Tile(String url, int x, int y, int z)
     {
+        this.url = url;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -51,9 +55,14 @@ public class Tile {
         this.tile = new Coordinate(this.x, this.y, this.z);
     }
 
-    public String Url()
+//    public String Url()
+//    {
+//        return "http://tile.openstreetmap.org/" + z + "/" + x + "/" + y + ".png";
+//    }
+
+    public URL Url()
     {
-        return "http://tile.openstreetmap.org/" + z + "/" + x + "/" + y + ".png";
+        return TileProviderFormats.getTileUrl(url, x, y, z);
     }
 
     public void DownloadFile(String localPath, String baseName)
@@ -61,7 +70,7 @@ public class Tile {
         try {
             String f = localPath + "/" + baseName + "-" + z + "-" + x + "-" + y + ".png";
             Log.i(TAG, "Download from: " + Url() + " to: " + f );
-            FileUtils.copyURLToFile(new URL(Url()), new File(f));
+            FileUtils.copyURLToFile(Url(), new File(f));
         } catch (IOException e) {
             e.printStackTrace();
         }

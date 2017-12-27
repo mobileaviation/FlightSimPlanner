@@ -20,6 +20,7 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 
 import java.util.ArrayList;
 
+import nl.robenanita.googlemapstest.MapFragment.BufferArea;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Route.Route;
@@ -236,36 +237,15 @@ public class AirportsInfoFragment extends Fragment {
 
     private void setStations()
     {
-        //StationsWebService s = new StationsWebService();
-        Geometry g2 = null;
         NavigationActivity activity = (NavigationActivity)getActivity();
-        Route selectedFlightplan = activity.GetSelectedFlightplan();
-
-        if (selectedFlightplan != null)
-        {
-            g2 = selectedFlightplan.buffer;
-        }
-        else
-        {
-            // Create  buffer around curposition
-            Geometry g1 = new GeometryFactory().createPoint(new Coordinate(activity.curPosition.longitude,
-                    activity.curPosition.latitude));
-            BufferOp bufOp = new BufferOp(g1);
-            bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
-            g2 = bufOp.getResultGeometry(1);
-        }
+        BufferArea bufferArea = activity.bufferArea;
+        Geometry g2 = bufferArea.GetBuffer();
 
         AirportDataSource airportDataSource = new AirportDataSource(activity);
         airportDataSource.open(-1);
         ArrayList<Station> stations = airportDataSource.getAirportsInBuffer(g2);
         setupStationsView(stations);
         airportDataSource.close();
-
-        //setStationsWebServiceDataAvailableListener(s);
-
-        //s.GetStationsByLocationRadius(activity.curPosition, 80);
-
-
     }
 
     private void setInfoListViewVisibility(Type typeVisible)

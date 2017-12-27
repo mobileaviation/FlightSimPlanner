@@ -53,7 +53,7 @@ public class Route implements Serializable {
         endPlan = false;
         showOnlyActive = false;
 
-        bufferPolyline = null;
+        //bufferPolyline = null;
 
         this.context = context;
     }
@@ -106,17 +106,17 @@ public class Route implements Serializable {
         // Create the legs of this flightplan
         _createLegs();
 
-        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
-        propertiesDataSource.open(true);
-        bufferProperty = propertiesDataSource.GetProperty("BUFFER");
-        propertiesDataSource.close(true);
+//        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
+//        propertiesDataSource.open(true);
+//        bufferProperty = propertiesDataSource.GetProperty("BUFFER");
+//        propertiesDataSource.close(true);
 
-        createBuffer();
+        //createBuffer();
     }
 
-    public Geometry buffer;
-    public Polyline bufferPolyline;
-    public Property bufferProperty;
+//    public Geometry buffer;
+//    public Polyline bufferPolyline;
+//    public Property bufferProperty;
 
     private void _createLegs()
     {
@@ -190,30 +190,36 @@ public class Route implements Serializable {
         }
     }
 
-    public void CreateBuffer()
-    {
-        createBuffer();
-    }
+//    public void CreateBuffer()
+//    {
+//        createBuffer();
+//    }
+//
+//    private void createBuffer() {
+//        if (bufferProperty == null)
+//        {
+//            bufferProperty = new Property();
+//            bufferProperty.name = "BUFFER";
+//            bufferProperty.value1 = "0.3";
+//            bufferProperty.value2 = "true";
+//        }
+//        Coordinate[] coordinates = getRouteCoordinates();
+//        Geometry g = new GeometryFactory().createLineString(coordinates);
+//        BufferOp bufOp = new BufferOp(g);
+//        bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
+//        buffer = bufOp.getResultGeometry(Double.parseDouble(bufferProperty.value1));
+//    }
 
-    private void createBuffer() {
-        if (bufferProperty == null)
-        {
-            bufferProperty = new Property();
-            bufferProperty.name = "BUFFER";
-            bufferProperty.value1 = "0.3";
-            bufferProperty.value2 = "true";
-        }
+    public Coordinate[] getRouteCoordinates()
+    {
         Coordinate[] coordinates = new Coordinate[this.Waypoints.size()];
-        Integer i = 0;
+        int i = 0;
         for (Waypoint w : this.Waypoints)
         {
             coordinates[i] = new Coordinate(w.location.getLongitude(), w.location.getLatitude());
             i++;
         }
-        Geometry g = new GeometryFactory().createLineString(coordinates);
-        BufferOp bufOp = new BufferOp(g);
-        bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
-        buffer = bufOp.getResultGeometry(Double.parseDouble(bufferProperty.value1));
+        return coordinates;
     }
 
     public void LoadRunways(GoogleMap map)
@@ -240,33 +246,33 @@ public class Route implements Serializable {
         }
     }
 
-    public void DrawBuffer(GoogleMap map)
-    {
-        Geometry buffer = this.buffer;
-        Coordinate[] coordinates = buffer.getCoordinates();
-        PolylineOptions o = new PolylineOptions();
-        o.color(Color.RED);
-        o.width(2);
-        o.zIndex(1000);
-        for (Coordinate c : coordinates)
-        {
-            LatLng p = new LatLng(c.y, c.x);
-            o.add(p);
-
-        }
-
-        this.bufferPolyline = map.addPolyline(o);
-        this.bufferPolyline.setVisible(Boolean.parseBoolean(this.bufferProperty.value2));
-    }
-
-    public void RemoveBuffer()
-    {
-        if (this.bufferPolyline != null)
-        {
-            this.bufferPolyline.remove();
-            this.bufferPolyline = null;
-        }
-    }
+//    public void DrawBuffer(GoogleMap map)
+//    {
+//        Geometry buffer = this.buffer;
+//        Coordinate[] coordinates = buffer.getCoordinates();
+//        PolylineOptions o = new PolylineOptions();
+//        o.color(Color.RED);
+//        o.width(2);
+//        o.zIndex(1000);
+//        for (Coordinate c : coordinates)
+//        {
+//            LatLng p = new LatLng(c.y, c.x);
+//            o.add(p);
+//
+//        }
+//
+//        this.bufferPolyline = map.addPolyline(o);
+//        this.bufferPolyline.setVisible(Boolean.parseBoolean(this.bufferProperty.value2));
+//    }
+//
+//    public void RemoveBuffer()
+//    {
+//        if (this.bufferPolyline != null)
+//        {
+//            this.bufferPolyline.remove();
+//            this.bufferPolyline = null;
+//        }
+//    }
 
     private void loadRunwaysperAirport(Airport airport, GoogleMap map)
     {
@@ -520,7 +526,7 @@ public class Route implements Serializable {
             }
         }
 
-        createBuffer();
+        //createBuffer();
         createLegs();
     }
 

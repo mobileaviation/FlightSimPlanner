@@ -50,6 +50,7 @@ import nl.robenanita.googlemapstest.Airspaces.Airspaces;
 import nl.robenanita.googlemapstest.AnimationHelpers;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
+import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.RouteGrid;
 import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
@@ -154,9 +155,9 @@ public class FSPMapFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void InitializeMap(Activity mainActivity, LegInfoView legInfoView, InfoPanelFragment infoPanelFragment)
+    public void InitializeMap(LegInfoView legInfoView, InfoPanelFragment infoPanelFragment)
     {
-        this.mainActivity = mainActivity;
+        this.mainActivity = getActivity();
         this.legInfoView = legInfoView;
         this.infoPanel = infoPanelFragment;
         setupMap();
@@ -184,7 +185,8 @@ public class FSPMapFragment extends Fragment {
                 if (FSPMapFragment.this.selectedFlightplan != null) {
                     ImageButton v = (ImageButton) view;
                     LinearLayout l = (LinearLayout) FSPMapFragment.this.getView().findViewById(R.id.fspflightplanLayout);
-                    RouteGrid g = (RouteGrid) FSPMapFragment.this.getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+
+                    RouteGrid g = (RouteGrid) getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
 
                     final int y = (int) motionEvent.getRawY();
 
@@ -199,7 +201,7 @@ public class FSPMapFragment extends Fragment {
                             LinearLayout.LayoutParams ll = (LinearLayout.LayoutParams) l.getLayoutParams();
                             ll.height = yDelta - y;
                             if (ll.height < 0) ll.height = 0;
-                            if (ll.height > g.getHeight()) ll.height = g.getHeight();
+                            //if (ll.height > g.getHeight()) ll.height = g.getHeight();
                             l.setLayoutParams(ll);
                             break;
                     }
@@ -480,21 +482,23 @@ public class FSPMapFragment extends Fragment {
             @Override
             public void onMapLongClick(LatLng latLng) {
                 Log.i(TAG, "Map Long Click clicked");
-                Log.i(TAG, "Clicked Position Lat: " + latLng.latitude + " Lon: " + latLng.longitude);
-                setNewWaypointFragmentVisibility(true);
-                newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
-                newWaypointFragment.SetOnNewWaypointSelectedListener(new NewWapointSelectedListener() {
-                    @Override
-                    public void NewWaypointSelected(SelectableWaypoint waypoint) {
-                        setNewWaypointFragmentVisibility(false);
-                        setNewWaypointInFlightplan(waypoint);
-                    }
-                    @Override
-                    public void NewWaypointCanceled()
-                    {
-                        setNewWaypointFragmentVisibility(false);
-                    }
-                });
+                if (selectedFlightplan != null) {
+                    Log.i(TAG, "Clicked Position Lat: " + latLng.latitude + " Lon: " + latLng.longitude);
+                    setNewWaypointFragmentVisibility(true);
+                    newWaypointFragment.setNewCameraPosition(googleMap, FSPMapFragment.this.mainActivity);
+                    newWaypointFragment.SetOnNewWaypointSelectedListener(new NewWapointSelectedListener() {
+                        @Override
+                        public void NewWaypointSelected(SelectableWaypoint waypoint) {
+                            setNewWaypointFragmentVisibility(false);
+                            setNewWaypointInFlightplan(waypoint);
+                        }
+
+                        @Override
+                        public void NewWaypointCanceled() {
+                            setNewWaypointFragmentVisibility(false);
+                        }
+                    });
+                }
             }
         });
     }
@@ -507,7 +511,7 @@ public class FSPMapFragment extends Fragment {
                 selectedFlightplan.RemoveAllRunwayMarkers();
                 selectedFlightplan.removeOldFlightplanMarkers();
                 selectedFlightplan.RemoveFlightplanTrack();
-                selectedFlightplan.RemoveBuffer();
+                //selectedFlightplan.RemoveBuffer();
 
                 setupNewWaypointInFlightplan(waypoint.GetName(),
                         waypoint.GetLatLng().latitude,
@@ -820,7 +824,7 @@ public class FSPMapFragment extends Fragment {
                     selectedFlightplan.RemoveAllRunwayMarkers();
                     selectedFlightplan.removeOldFlightplanMarkers();
                     selectedFlightplan.RemoveFlightplanTrack();
-                    selectedFlightplan.RemoveBuffer();
+                    //selectedFlightplan.RemoveBuffer();
 
                     setupNewWaypointInFlightplan(addWayPointPopup.WaypointName,
                             addWayPointPopup.Location.latitude,
@@ -894,9 +898,8 @@ public class FSPMapFragment extends Fragment {
 
 
         selectedFlightplan.LoadRunways(googleMap);
-        selectedFlightplan.DrawBuffer(googleMap);
-        //PlaceFlightplanAirportMarkers();
-        //LoadFlightplanRunways();
+        ((NavigationActivity)mainActivity).bufferArea.CreateBuffer(selectedFlightplan.getRouteCoordinates());
+        ((NavigationActivity)mainActivity).bufferArea.DrawBuffer(googleMap);
         selectedFlightplan.DrawFlightplan(googleMap);
         selectedFlightplan.ShowFlightplanMarkers(googleMap);
         LoadFlightplanGrid();
@@ -924,7 +927,7 @@ public class FSPMapFragment extends Fragment {
         {
             selectedFlightplan.RemoveAllRunwayMarkers();
             selectedFlightplan.removeOldFlightplanMarkers();
-            selectedFlightplan.RemoveBuffer();
+            //selectedFlightplan.RemoveBuffer();
             selectedFlightplan.RemoveFlightplanTrack();
             selectedFlightplan = null;
             flightplanController = null;
@@ -943,12 +946,14 @@ public class FSPMapFragment extends Fragment {
         selectedFlightplan.DrawFlightplan(googleMap);
         LoadFlightplanGrid();
 
-        selectedFlightplan.DrawBuffer(googleMap);
+        //selectedFlightplan.DrawBuffer(googleMap);
+        ((NavigationActivity)mainActivity).bufferArea.CreateBuffer(selectedFlightplan.getRouteCoordinates());
+        ((NavigationActivity)mainActivity).bufferArea.DrawBuffer(googleMap);
 
-        AirportDataSource airportDataSource = new AirportDataSource(mainActivity);
-        airportDataSource.open(uniqueID);
-        airportDataSource.getAirportsInBuffer(selectedFlightplan.buffer);
-        airportDataSource.close();
+//        AirportDataSource airportDataSource = new AirportDataSource(mainActivity);
+//        airportDataSource.open(uniqueID);
+//        airportDataSource.getAirportsInBuffer(selectedFlightplan.buffer);
+//        airportDataSource.close();
 
         flightplanController = new RouteController(mainActivity, selectedFlightplan);
         setupFlightplanControllerListeners();
@@ -1057,9 +1062,12 @@ public class FSPMapFragment extends Fragment {
             selectedFlightplan.removeOldFlightplanMarkers();
             selectedFlightplan.RemoveFlightplanTrack();
             selectedFlightplan.RemoveAllRunwayMarkers();
-            selectedFlightplan.RemoveBuffer();
+            //selectedFlightplan.RemoveBuffer();
 
             selectedFlightplan = null;
+
+            ((NavigationActivity)mainActivity).createBufferArea(googleMap.getCameraPosition().target);
+            ((NavigationActivity)mainActivity).bufferArea.DrawBuffer(googleMap);
         }
     }
 

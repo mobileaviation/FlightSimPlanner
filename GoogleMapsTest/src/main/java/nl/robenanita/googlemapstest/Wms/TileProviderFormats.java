@@ -1,5 +1,8 @@
 package nl.robenanita.googlemapstest.Wms;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Created by Rob Verhoef on 7-10-2014.
  */
@@ -140,8 +143,6 @@ public class TileProviderFormats {
             "#LAYER#/" +
             "{zoom}/{x}/{y}.png";
 
-    public static final String OPENSTREETTILE_FORMAT = "http://a.tile.openstreetmap.org/{zoom}/{x}/{y}.png ";
-
     public static final String AIRPORTMAP_FORMAT = "http://www.robenanita.nl/tileserver/tileserver.php?%2Findex.json&callback=_callbacks_._0iepyf5mh?/"+
             "#LAYER#/"+  //EHAM-VAC-1
             "{zoom}/{x}/{y}.png";
@@ -227,6 +228,23 @@ public class TileProviderFormats {
                     return "";
 
             }
+        }
+    }
+
+    public static URL getTileUrl(String url, int x, int y, int zoom)
+    {
+        String tileUrl = url
+                .replace("{x}", Integer.toString(x))
+                .replace("{y}", Integer.toString(y))
+                .replace("{zoom}", Integer.toString(zoom));
+
+        try
+        {
+            return new URL(tileUrl);
+        }
+        catch(MalformedURLException e)
+        {
+            throw new AssertionError(e);
         }
     }
 }

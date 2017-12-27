@@ -85,9 +85,9 @@ public class TileProviderFactory {
         return tileProvider;
     }
 
-    public static TileProvider getTileOfflineOpenStreetmapProvider(Context context)
+    public static TileProvider getTileOfflineProvider(Context context, OfflineMapTypes type)
     {
-        TileProvider tileProvider = new XYZOfflineTileProvider(TileProviderType.offline_openstreet, context);
+        TileProvider tileProvider = new XYZOfflineTileProvider(type, context);
         return tileProvider;
     }
 

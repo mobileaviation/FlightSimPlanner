@@ -45,8 +45,6 @@ public class MapLayersFragment extends Fragment {
                 LayersBaseSetupFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec("AAF-US Maps").setIndicator("AAF-US Maps"),
                 LayersUsSetupFragment.class, null);
-//        tabHost.addTab(tabHost.newTabSpec("Airports").setIndicator("Airports"),
-//                LayersAirportsSetupFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec("Airspaces").setIndicator("Airspaces"),
                 LayersAirspacesSetupFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec("Weather").setIndicator("Weather"),
@@ -55,17 +53,6 @@ public class MapLayersFragment extends Fragment {
                 LayersChartsSetupFragment.class, null);
         tabHost.addTab(tabHost.newTabSpec("Offline").setIndicator("Offline"),
                 LayersOfflineSetupFragment.class, null);
-
-
-
-//        tabHost.setCurrentTab(0);
-//        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-//            @Override
-//            public void onTabChanged(String s) {
-//
-//            }
-//        });
-
 
         return tabHost;
     }

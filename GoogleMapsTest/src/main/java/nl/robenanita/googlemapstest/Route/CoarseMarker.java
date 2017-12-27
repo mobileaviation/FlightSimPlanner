@@ -65,6 +65,11 @@ public class CoarseMarker {
         coarseMarker.setPosition(halfwayPoint);
     }
 
+    public void setAncherOnFront()
+    {
+        coarseMarker.setAnchor(0.15f, 0.5f);
+    }
+
     private Location from;
     private Location to;
     private Float compass_heading;
