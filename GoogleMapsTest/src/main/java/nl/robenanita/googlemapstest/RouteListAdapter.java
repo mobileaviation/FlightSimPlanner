@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,13 @@ public class RouteListAdapter extends DragItemAdapter<Waypoint, RouteListAdapter
     }
 
     private Integer item_height = 0;
-    public Integer getHeight()
+    public Integer getHeight(Context context)
     {
-        return (getItemCount() * 55) + 35;
+        Integer vi = (getItemCount() * 55) + 35;
+        Float v = Float.valueOf(vi.toString());
+        Integer r = Math.round(Helpers.convertDpToPixel (v, context));
+        //return Math.round(Helpers.convertPixelsToDp (v, context));
+        return r;
     }
 
     @Override

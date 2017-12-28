@@ -299,5 +299,4 @@ public class MapController
         offlineOverlay.setZIndex(100);
         offlineOverlay.setVisible(enabled);
     }
-
 }

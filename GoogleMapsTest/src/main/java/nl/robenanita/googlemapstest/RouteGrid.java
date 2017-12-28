@@ -36,9 +36,9 @@ public class RouteGrid extends Fragment {
         gridView = view;
     }
 
-    public Integer getHeight()
+    public Integer getHeight(Context context)
     {
-        if (adapter != null) return adapter.getHeight();
+        if (adapter != null) return adapter.getHeight(context);
         else
             return 0;
     }

@@ -186,7 +186,9 @@ public class FSPMapFragment extends Fragment {
                     ImageButton v = (ImageButton) view;
                     LinearLayout l = (LinearLayout) FSPMapFragment.this.getView().findViewById(R.id.fspflightplanLayout);
 
-                    RouteGrid g = (RouteGrid) getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+                    RouteGrid g;
+                    g = (RouteGrid) getFragmentManager().findFragmentById(R.id.fspflightplanFragment);
+                    if (g==null) g = (RouteGrid) getChildFragmentManager().findFragmentById(R.id.fspflightplanFragment);
 
                     final int y = (int) motionEvent.getRawY();
 
@@ -201,7 +203,7 @@ public class FSPMapFragment extends Fragment {
                             LinearLayout.LayoutParams ll = (LinearLayout.LayoutParams) l.getLayoutParams();
                             ll.height = yDelta - y;
                             if (ll.height < 0) ll.height = 0;
-                            //if (ll.height > g.getHeight()) ll.height = g.getHeight();
+                            if (g != null) if (ll.height > g.getHeight(getActivity())) ll.height = g.getHeight(getActivity());
                             l.setLayoutParams(ll);
                             break;
                     }

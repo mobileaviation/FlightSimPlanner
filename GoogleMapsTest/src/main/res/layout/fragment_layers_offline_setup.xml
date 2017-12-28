@@ -32,6 +32,39 @@
             android:id="@+id/offlineEnabledBtn"
             android:checked="false" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:id="@+id/offlineChartSelection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/offlineOpenstreetBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Openstreetmaps" />
+
+                <RadioButton
+                    android:id="@+id/offlineAafSectionalBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="AAF Sectional" />
+
+                <RadioButton
+                    android:id="@+id/offlineGermanDSFBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="German DSF charts" />
+            </RadioGroup>
+        </LinearLayout>
+
         <Button
             android:id="@+id/offlineDownloadBtn"
             android:layout_width="200dp"

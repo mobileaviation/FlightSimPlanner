@@ -15,6 +15,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -50,13 +52,27 @@ public class LayersOfflineSetupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_layers_offline_setup, container, false);
+        final View view = inflater.inflate(R.layout.fragment_layers_offline_setup, container, false);
 
         setupOfflineFragment();
 
         downloadBtn = (Button) view.findViewById(R.id.offlineDownloadBtn);
         cleanUpBtn = (Button) view.findViewById(R.id.cleanOfflineTilesBtn);
         offLineVisibleCheckbox = (CheckBox) view.findViewById(R.id.offlineEnabledBtn);
+        RadioGroup offlineTypeGroup = (RadioGroup)view.findViewById(R.id.offlineChartSelection);
+
+        offlineTypeGroup.check(offlineMapTypes.toButtonId());
+        offlineTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton b = (RadioButton)view.findViewById(i);
+                offlineMapTypes = (OfflineMapTypes)b.getTag();
+                Log.i(TAG, "Radiobutton selected: " + offlineMapTypes.toString());
+                NavigationActivity a = (NavigationActivity)getActivity();
+                a.mapController.ShowOfflineMap(offlineMapVisible, offlineMapTypes);
+                updateProperty();
+            }
+        });
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +137,8 @@ public class LayersOfflineSetupFragment extends Fragment {
 
         offlineMapTypes = OfflineMapTypes.valueOf(offlineProperty.value1);
         offlineMapVisible = Boolean.valueOf(offlineProperty.value2);
+
+
     }
 
     private void updateProperty()
@@ -145,8 +163,8 @@ public class LayersOfflineSetupFragment extends Fragment {
         if (b != null)
         {
             String p = context.getFilesDir().getPath();
-            String map = OfflineMapTypes.offline_openstreet.toString();
-            String url = OfflineMapTypes.offline_openstreet.toUrl();
+            String map = offlineMapTypes.toString();
+            String url = offlineMapTypes.toUrl();
             Downloader d = new Downloader(context, b, p, url, map);
 
             d.SetOnDownloadProgress(new Downloader.OnDownloadProgress() {
