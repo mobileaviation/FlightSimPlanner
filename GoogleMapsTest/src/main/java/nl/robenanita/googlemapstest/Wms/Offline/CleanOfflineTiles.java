@@ -3,6 +3,7 @@ package nl.robenanita.googlemapstest.Wms.Offline;
 import android.util.Log;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Wms.OfflineMapTypes;
@@ -32,6 +33,24 @@ public class CleanOfflineTiles {
                 file.delete();
         }
 
+    }
+
+    public String GetSize()
+    {
+        Long size = Long.valueOf(0);
+        ArrayList<File> files = getFiles();
+        for (File f: files)
+        {
+            size = size + f.length();
+        }
+        return  readableFileSize(size);
+    }
+
+    private String readableFileSize(long size) {
+        if(size <= 0) return "0";
+        final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
+        int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     private ArrayList<File> getFiles()

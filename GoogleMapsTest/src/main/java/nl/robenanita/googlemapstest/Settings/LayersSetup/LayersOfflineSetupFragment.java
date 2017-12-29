@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import java.io.File;
+
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.Property;
 import nl.robenanita.googlemapstest.R;
@@ -116,10 +118,13 @@ public class LayersOfflineSetupFragment extends Fragment {
                                 String path = getActivity().getFilesDir().getPath();
                                 CleanOfflineTiles cleanOfflineTiles = new CleanOfflineTiles(path, offlineMapTypes);
                                 cleanOfflineTiles.CleanTiles();
+                                updateFilesize();
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
             }
         });
+
+        updateFilesize();
         return view;
     }
 
@@ -151,6 +156,45 @@ public class LayersOfflineSetupFragment extends Fragment {
         propertiesDataSource.updateProperty(offlineProperty);
         propertiesDataSource.close(true);
 
+    }
+
+    private void updateFilesize()
+    {
+        class FileSize extends AsyncTask
+        {
+            String aafSize;
+            String openstreetSize;
+            String germanDsfSize;
+
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                String path = getActivity().getFilesDir().getPath();
+
+                CleanOfflineTiles openstreetFiles = new CleanOfflineTiles(path, OfflineMapTypes.offline_openstreet);
+                openstreetSize = openstreetFiles.GetSize();
+                CleanOfflineTiles aafFiles = new CleanOfflineTiles(path, OfflineMapTypes.offline_aafsectional);
+                aafSize = aafFiles.GetSize();
+                CleanOfflineTiles germanFiles = new CleanOfflineTiles(path, OfflineMapTypes.offline_germandsf);
+                germanDsfSize = germanFiles.GetSize();
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+
+                RadioButton offlineOpenstreet = (RadioButton)getView().findViewById(R.id.offlineOpenstreetBtn);
+                RadioButton offlineAaf = (RadioButton)getView().findViewById(R.id.offlineAafSectionalBtn);
+                RadioButton offlineGerman = (RadioButton)getView().findViewById(R.id.offlineGermanDSFBtn);
+                offlineOpenstreet.setText("Openstreetmaps: " + openstreetSize);
+                offlineAaf.setText("AAF Sectional: " + aafSize);
+                offlineGerman.setText("German DSF charts: " + germanDsfSize);
+                super.onPostExecute(o);
+            }
+        }
+
+        FileSize f = new FileSize();
+        f.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void DownloadRouteTiles()
@@ -193,6 +237,7 @@ public class LayersOfflineSetupFragment extends Fragment {
                         case finished:
                         {
                             progressLayout.setVisibility(View.INVISIBLE);
+                            updateFilesize();
                             break;
                         }
                     }
