@@ -13,10 +13,11 @@
         android:title="@string/action_isnew"
         android:orderInCategory="98"
         app:showAsAction="never" />
-    <item android:id="@+id/action_loadaip"
-        android:title="@string/action_loadaip"
+    <item
+        android:id="@+id/action_loadaip"
         android:orderInCategory="99"
-        android:visible="true"
+        android:title="@string/action_loadaip"
+        android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_loadchart"

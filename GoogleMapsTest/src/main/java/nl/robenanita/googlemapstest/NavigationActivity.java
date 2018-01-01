@@ -156,6 +156,7 @@ public class NavigationActivity extends ActionBarActivity implements
     public Airport initAirport;
     public Runway initRunway;
     public MapController mapController;
+    private Property chartsProperty;
 
     private SlidingDrawer flightplanDrawer;
 
@@ -352,6 +353,7 @@ public class NavigationActivity extends ActionBarActivity implements
         propertiesDataSource.FillProperties();
         markerProperties = propertiesDataSource.getMarkersProperties();
         bufferProperty = propertiesDataSource.GetProperty("BUFFER");
+        chartsProperty = propertiesDataSource.ChartsUrl;
         propertiesDataSource.close(true);
 
         connectionType = propertiesDataSource.getConnectionType();
@@ -753,7 +755,7 @@ public class NavigationActivity extends ActionBarActivity implements
                         }
                     }
                 });
-                mapCruncherMetadataReader.Read(TileProviderFormats.AIRPORTMAPBASE_FORMAT, airportCharts, this);
+                mapCruncherMetadataReader.Read(chartsProperty.value1, airportCharts, this);
                 return true;
             }
             case R.id.action_DirectTo:

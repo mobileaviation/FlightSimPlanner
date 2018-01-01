@@ -175,7 +175,12 @@ public class RouteDataSource {
         database.update(UserDBHelper.USERWAYPOINT_TABLE_NAME,
                 createWayPointContentValues(waypoint),
                 "_id=?", args);
-        Log.i(TAG, "Update waypoint: " + waypoint.compass_heading);
+        //Log.i(TAG, "Update waypoint: " + waypoint.compass_heading);
+    }
+
+    public void RenameWaypoint(Waypoint waypoint)
+    {
+        updateWaypoint(waypoint);
     }
 
     public void deleteWaypoint(Waypoint waypoint)

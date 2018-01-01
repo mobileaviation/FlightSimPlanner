@@ -29,100 +29,91 @@
                     android:layout_margin="10dp">
 
                     <TableRow
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Flight-Sim Planner Settings."
-                            android:textSize="25sp"
                             android:id="@+id/textView"
-                            android:layout_column="0"
-                            android:textColor="#464646"
+                            android:layout_width="570dp"
+                            android:layout_height="wrap_content"
                             android:layout_margin="5dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_span="4" />
+                            android:text="Flight-Sim Planner Settings."
+                            android:textColor="#464646"
+                            android:textSize="25sp" />
 
                     </TableRow>
-
-                    <TableRow
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_gravity="top"
-                        android:background="#656565">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="5dp"
-                            android:text=""/>
-                    </TableRow>
-
 
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
 
-                        <TextView
-                            android:layout_width="200dp"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="22dp"
-                            android:layout_column="0"
-                            android:textColor="#464646"
-                            android:layout_margin="5dp"
-                            android:text="Home Airport:"
-                            android:layout_gravity="center_vertical|left"
-                            android:layout_marginRight="10dp" />
+                            android:orientation="vertical">
 
-                        <EditText
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:layout_column="1"
-                            android:id="@+id/homeAirportEdit"
-                            android:editable="false"
-                            android:autoText="false" />
 
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Search"
-                            android:layout_column="2"
-                            android:id="@+id/searchHomeAirportBtn" />
+                            <TextView
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_marginRight="10dp"
+                                android:text="Home Airport:"
+                                android:textColor="#464646"
+                                android:textSize="22dp" />
 
-                        <!--<EditText-->
-                            <!--android:layout_width="300dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:inputType="number"-->
-                            <!--android:ems="10"-->
-                            <!--android:id="@+id/ipAddressEdit"-->
-                            <!--android:layout_column="4"-->
-                            <!--android:layout_marginLeft="20dp" />-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/homeAirportEdit"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="60"
+                                    android:enabled="false"
+                                    android:inputType="none" />
+
+                                <Button
+                                    android:id="@+id/searchHomeAirportBtn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_column="2"
+                                    android:text="Search" />
+                            </LinearLayout>
+                        </LinearLayout>
                     </TableRow>
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="22dp"
-                            android:id="@+id/textView3"
-                            android:layout_column="0"
-                            android:textColor="#464646"
-                            android:layout_margin="5dp"
-                            android:text="Runway:"
-                            android:layout_gravity="center_vertical|left"
-                            android:layout_marginRight="10dp" />
+                            android:orientation="horizontal">
 
-                        <NumberPicker
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/runwayPicker"
-                            android:layout_column="1"
-                            android:layout_marginTop="5dp"
-                            android:orientation="vertical"
-                            android:textAlignment="center"
-                            android:layout_span="2" />
+
+                            <TextView
+                                android:id="@+id/textView3"
+                                android:layout_width="164dp"
+                                android:layout_height="wrap_content"
+
+                                android:layout_gravity="center_vertical|left"
+                                android:layout_margin="5dp"
+                                android:layout_marginRight="10dp"
+                                android:text="Runway:"
+                                android:textColor="#464646"
+                                android:textSize="22dp" />
+
+                            <NumberPicker
+                                android:id="@+id/runwayPicker"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:orientation="vertical"
+                                android:textAlignment="center" />
+                        </LinearLayout>
 
                     </TableRow>
 
@@ -529,6 +520,47 @@
                             </LinearLayout>
                         </LinearLayout>
                     </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="220dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView27"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_column="3"
+                                    android:layout_gravity="center_vertical|top"
+                                    android:layout_weight="1"
+                                    android:singleLine="true"
+                                    android:text="Airport Charts URL:"
+                                    android:textColor="#464646"
+                                    android:textSize="22dp" />
+
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/airportChartsUrlEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="1"
+                                android:ems="10"
+                                android:inputType="textUri|textPersonName" />
+
+                        </LinearLayout>
+                    </TableRow>
 
                     <TableRow
                         android:layout_width="fill_parent"
@@ -536,30 +568,30 @@
                         android:layout_gravity="right">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:layout_span="5">
+                            android:layout_span="5"
+                            android:orientation="horizontal">
 
 
                             <Button
-                                android:layout_width="150dp"
-                                android:layout_height="wrap_content"
-                                android:text="Save"
                                 android:id="@+id/saveSettingsBtn"
-                                android:layout_marginTop="20dp"
-                                android:layout_margin="10dp"
-                                android:focusable="true" />
-
-                            <Button
                                 android:layout_width="150dp"
                                 android:layout_height="wrap_content"
-                                android:text="Cancel"
-                                android:id="@+id/cancelSettingsBtn"
-                                android:layout_marginTop="20dp"
                                 android:layout_margin="10dp"
-                                android:focusable="true" />
+                                android:layout_marginTop="20dp"
+                                android:focusable="true"
+                                android:text="Save" />
+
+                            <Button
+                                android:id="@+id/cancelSettingsBtn"
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:layout_marginTop="20dp"
+                                android:focusable="true"
+                                android:text="Cancel" />
 
                         </LinearLayout>
                     </TableRow>

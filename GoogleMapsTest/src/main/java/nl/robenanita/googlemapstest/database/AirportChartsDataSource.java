@@ -124,6 +124,12 @@ public class AirportChartsDataSource {
         }
     }
 
+    public void ClearAirportChartsDB()
+    {
+        String query = "DELETE FROM " + UserDBHelper.AIRPORTCHARTS_TABLE_NAME  + ";";
+        database.rawQuery(query, null);
+    }
+
     public AirportCharts GetAllCharts()
     {
         AirportCharts airportCharts = new AirportCharts();

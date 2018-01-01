@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Locale;
 
 import nl.robenanita.googlemapstest.Charts.AirportChart;
+import nl.robenanita.googlemapstest.Property;
 
 /**
  * Created by Rob Verhoef on 2-10-2014.
@@ -91,14 +92,16 @@ public class TileProviderFactory {
         return tileProvider;
     }
 
-    public static TileProvider getTileAirportMapProvider(TileProviderFormats.airportLayer airportmap,
-                                                             int opacity, Context context)
-    {
-        TileProvider tileProvider = new QuadKeyTileProvider(TileProviderFormats.AIRPORTMAPQUADKEY_FORMAT,
-                TileProviderFormats.AIRPORTMAPMANIFEST_FORMAT,
-                airportmap, opacity, context);
-        return tileProvider;
-    }
+//    public static TileProvider getTileAirportMapProvider(TileProviderFormats.airportLayer airportmap,
+//                                                         int opacity, Context context, Property chartsProperty)
+//    {
+//        String AIRPORTMAPQUADKEY_FORMAT = chartsProperty.value1 + "Layer_#LAYER#/#QUADKEY#.png";
+//        String AIRPORTMAPMANIFEST_FORMAT = chartsProperty.value1 + "manifests/0.xml";
+//        TileProvider tileProvider = new QuadKeyTileProvider(AIRPORTMAPQUADKEY_FORMAT,
+//                AIRPORTMAPMANIFEST_FORMAT,
+//                airportmap, opacity, context);
+//        return tileProvider;
+//    }
 
     public static TileProvider getTileAirportChartProvider(AirportChart airportChart,int opacity, Context context)
     {

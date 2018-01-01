@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
@@ -51,6 +52,8 @@ public class SettingsActivity extends ActionBarActivity {
     private Property bufferProperty;
     private TextView bufferSizeTxt;
     private CheckBox bufferVisibleBox;
+    private EditText chartUrlEdit;
+    private Property chartUrlProperty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +115,10 @@ public class SettingsActivity extends ActionBarActivity {
 
         showInstrumentsChkBox = (CheckBox) findViewById(R.id.showInstrumentsChkBox);
         showInstrumentsChkBox.setChecked((propertiesDataSource.getInstrumentsVisible()));
+
+        chartUrlEdit = (EditText) findViewById(R.id.airportChartsUrlEdit);
+        if (propertiesDataSource.ChartsUrl != null) chartUrlEdit.setText(propertiesDataSource.ChartsUrl.value1);
+        else chartUrlEdit.setText("http://*****");
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,6 +207,20 @@ public class SettingsActivity extends ActionBarActivity {
             bufferProperty.value1 = bufferSizeTxt.getText().toString();
             bufferProperty.value2 = (bufferVisibleBox.isChecked() ? "true" : "false");
             propertiesDataSource.updateProperty(bufferProperty);
+
+            if (propertiesDataSource.ChartsUrl == null)
+            {
+                propertiesDataSource.ChartsUrl = new Property();
+                propertiesDataSource.ChartsUrl.name = "CHARTSURL";
+                propertiesDataSource.ChartsUrl.value1 = chartUrlEdit.getText().toString();
+                propertiesDataSource.ChartsUrl.value2 = "";
+                propertiesDataSource.InsertProperty(propertiesDataSource.ChartsUrl);
+            }
+            else
+            {
+                propertiesDataSource.ChartsUrl.value1 = chartUrlEdit.getText().toString();
+                propertiesDataSource.updateProperty(propertiesDataSource.ChartsUrl);
+            }
 
             propertiesDataSource.close(true);
 

@@ -108,6 +108,7 @@ public class PropertiesDataSource {
     public Property InitZoom;
     public Property DBVersion;
     public Property InitFlightplan;
+    public Property ChartsUrl;
 
     public Airport InitAirport;
     private Property initAirport;
@@ -143,6 +144,7 @@ public class PropertiesDataSource {
         InitAirport = getInitAirport();
         connectionType = getProperty("LOCATION");
         instrumentsVisible = getProperty("INSTRUMENTS");
+        ChartsUrl = getProperty("CHARTSURL");
     }
 
     public void UpdateInitAirport()

@@ -168,17 +168,6 @@ public class FSPMapFragment extends Fragment {
     @SuppressLint("ClickableViewAccessibility")
     private void SetupDrawerListeners() {
         final ImageButton drawerBtn = (ImageButton) getView().findViewById(R.id.fspflightplanhandle);
-//        drawerBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.i(TAG, "Drawer open-close button clicked");
-//                if (selectedFlightplan != null)
-//                {
-//                    setFlightplanLayout(!flightplanLayoutOpen);
-//                }
-//            }
-//
-//        });
         drawerBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -630,6 +619,7 @@ public class FSPMapFragment extends Fragment {
                         public void OnRenameWaypoint(Waypoint waypoint, String newName) {
                             infoWindow.RemoveInfoWindow();
                             infoWindow = null;
+                            flightplanController.RenameWaypoint(waypoint, newName);
                         }
 
                         @Override

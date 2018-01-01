@@ -5,22 +5,24 @@
     xmlns:whatever="http://schemas.android.com/apk/res-auto"
     tools:context="nl.robenanita.googlemapstest.Settings.SettingsActivity">
 
-    <LinearLayout android:orientation="vertical"
+    <LinearLayout
+        android:id="@+id/createFlightplanPopup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/createFlightplanPopup"
+        android:layout_margin="1dp"
         android:background="@android:color/black"
-        android:layout_margin="1dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:background="#eeeeee">
+            android:background="#eeeeee"
+            android:orientation="vertical">
+
             <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/scrollView"
                 android:fillViewport="false"
                 android:padding="10dp">
 
@@ -34,33 +36,35 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <TextView
+                            android:id="@+id/textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Flight-Sim Planner Settings."
-                            android:textSize="25sp"
-                            android:id="@+id/textView"
                             android:layout_column="0"
-                            android:textColor="#464646"
                             android:layout_margin="5dp"
                             android:layout_marginRight="10dp"
-                            android:layout_span="4" />
+                            android:layout_span="4"
+                            android:text="Flight-Sim Planner Settings."
+                            android:textColor="#464646"
+                            android:textSize="25sp" />
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="fill_parent"
                             android:layout_height="5dp"
-                            android:background="#656565"></LinearLayout>
+                            android:background="#656565"
+                            android:orientation="vertical"></LinearLayout>
                     </LinearLayout>
 
 
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="5dp"
-                            android:text=""/>
+                            android:text="" />
                     </LinearLayout>
 
 
@@ -73,352 +77,351 @@
                         <TextView
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
-                            android:textSize="22dp"
                             android:layout_column="0"
-                            android:textColor="#464646"
+                            android:layout_weight="0.04"
                             android:text="Home Airport:"
-                            android:layout_weight="0.04" />
+                            android:textColor="#464646"
+                            android:textSize="22dp" />
 
                         <EditText
+                            android:id="@+id/homeAirportEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_column="1"
-                            android:id="@+id/homeAirportEdit"
-                            android:editable="false"
-                            android:autoText="false"
+                            android:layout_marginLeft="20dp"
                             android:layout_weight="1"
-                            android:layout_marginLeft="20dp" />
+                            android:autoText="false"
+                            android:editable="false"
+                            android:enabled="false"
+                            android:inputType="none" />
 
                         <Button
+                            android:id="@+id/searchHomeAirportBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:text="Search"
                             android:layout_column="2"
-                            android:id="@+id/searchHomeAirportBtn" />
+                            android:text="Search" />
 
                         <!--<EditText-->
-                            <!--android:layout_width="300dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:inputType="number"-->
-                            <!--android:ems="10"-->
-                            <!--android:id="@+id/ipAddressEdit"-->
-                            <!--android:layout_column="4"-->
-                            <!--android:layout_marginLeft="20dp" />-->
+                        <!--android:layout_width="300dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:inputType="number"-->
+                        <!--android:ems="10"-->
+                        <!--android:id="@+id/ipAddressEdit"-->
+                        <!--android:layout_column="4"-->
+                        <!--android:layout_marginLeft="20dp" />-->
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="5dp">
 
                         <TextView
+                            android:id="@+id/textView3"
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
-                            android:textSize="22dp"
-                            android:id="@+id/textView3"
                             android:layout_column="0"
-                            android:textColor="#464646"
-                            android:layout_margin="5dp"
-                            android:text="Runway:"
                             android:layout_gravity="center_vertical|left"
-                            android:layout_marginRight="10dp" />
+                            android:layout_margin="5dp"
+                            android:layout_marginRight="10dp"
+                            android:text="Runway:"
+                            android:textColor="#464646"
+                            android:textSize="22dp" />
 
                         <NumberPicker
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/runwayPicker"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_column="1"
+                            android:layout_marginLeft="20dp"
                             android:layout_marginTop="5dp"
+                            android:layout_span="2"
+                            android:layout_weight="1"
                             android:orientation="vertical"
                             android:textAlignment="center"
-                            android:layout_span="2"
-                            android:weightSum="1"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="20dp" />
+                            android:weightSum="1" />
 
                     </LinearLayout>
 
 
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_span="5"
+                        android:orientation="vertical"
+                        android:paddingTop="5dp">
+
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_span="5"
-                            android:layout_gravity="top"
-                            android:paddingTop="5dp">
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="fill_parent"
+                            <TextView
+                                android:layout_width="200dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="10dp">
+                                android:layout_column="3"
+                                android:text="Server PortNr:"
+                                android:textColor="#464646"
+                                android:textSize="22dp" />
 
-                                <TextView
-                                    android:layout_width="200dp"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="22dp"
-                                    android:layout_column="3"
-                                    android:textColor="#464646"
-                                    android:text="Server PortNr:" />
-
-                                <EditText
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:inputType="number"
-                                    android:ems="10"
-                                    android:id="@+id/portEdit"
-                                    android:layout_column="4"
-                                    android:layout_weight="1"
-                                    android:layout_marginLeft="20dp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_column="0"
-                                android:layout_span="5"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="10dp">
-
-                                <TextView
-                                    android:layout_width="200dp"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="22dp"
-                                    android:id="@+id/textView2"
-                                    android:layout_column="3"
-                                    android:textColor="#464646"
-                                    android:text="Server IPAddress:"
-                                    android:layout_marginLeft="0dp"
-                                    android:layout_marginTop="0dp" />
-
-                                <com.andreabaccega.widget.FormEditText
-                                    whatever:testType="ipAddress"
-                                    android:id="@+id/ipAddressEdit"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_column="4"
-                                    whatever:testErrorString="@string/setting_ipnotvalid"
-                                    android:inputType="phone"
-                                    android:digits="0123456789."
-                                    android:layout_marginLeft="20dp"
-                                    />
-                            </LinearLayout>
+                            <EditText
+                                android:id="@+id/portEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="4"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="1"
+                                android:ems="10"
+                                android:inputType="number" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_column="0"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_span="5"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:layout_column="3"
+                                android:layout_marginLeft="0dp"
+                                android:layout_marginTop="0dp"
+                                android:text="Server IPAddress:"
+                                android:textColor="#464646"
+                                android:textSize="22dp" />
+
+                            <com.andreabaccega.widget.FormEditText
+                                android:id="@+id/ipAddressEdit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_column="4"
+                                android:layout_marginLeft="20dp"
+                                android:digits="0123456789."
+                                android:inputType="phone"
+                                whatever:testErrorString="@string/setting_ipnotvalid"
+                                whatever:testType="ipAddress" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_span="3"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:layout_column="3"
+                                android:layout_gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="MarkerType Visible:"
+                                android:textColor="#464646"
+                                android:textSize="22dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout2"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_span="3"
-                            android:layout_marginTop="10dp"
-                            android:layout_weight="1">
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/largeAirportChkBox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:checked="true"
+                                android:singleLine="false"
+                                android:text="Large Airports"
+                                android:textColor="#464646" />
+
+                            <CheckBox
+                                android:id="@+id/mediumAirportChkBox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:checked="true"
+                                android:singleLine="false"
+                                android:text="Medium Airports"
+                                android:textColor="#464646" />
+
+                            <CheckBox
+                                android:id="@+id/smallAirportChkBox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:checked="true"
+                                android:singleLine="false"
+                                android:text="Small Airports"
+                                android:textColor="#464646" />
+
+                            <CheckBox
+                                android:id="@+id/heliportAirportChkBox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:checked="true"
+                                android:singleLine="false"
+                                android:text="Heliports"
+                                android:textColor="#464646" />
+
+                            <CheckBox
+                                android:id="@+id/seaBaseChkBox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:checked="true"
+                                android:singleLine="false"
+                                android:text="Seaplane Base"
+                                android:textColor="#464646" />
+
+                            <CheckBox
+                                android:id="@+id/balloonBaseChkBox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:checked="true"
+                                android:singleLine="false"
+                                android:text="Balloonports"
+                                android:textColor="#464646" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_span="3"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp">
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_marginLeft="10dp"
+                                android:layout_span="2"
+                                android:focusable="true"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="200dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_column="3"
+                                    android:layout_gravity="center_vertical|top"
+                                    android:singleLine="true"
+                                    android:text="Show Instruments:"
+                                    android:textColor="#464646"
+                                    android:textSize="22dp" />
+
+                                <CheckBox
+                                    android:id="@+id/showInstrumentsChkBox"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="20dp"
+                                    android:checked="true"
+                                    android:singleLine="false" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_span="2"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:id="@+id/linearLayout">
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="200dp"
                                     android:layout_height="wrap_content"
-                                    android:textSize="22dp"
                                     android:layout_column="3"
-                                    android:textColor="#464646"
-                                    android:text="MarkerType Visible:"
                                     android:layout_gravity="center_vertical"
-                                    android:singleLine="true" />
+                                    android:layout_marginLeft="0dp"
+                                    android:layout_marginTop="0dp"
+                                    android:singleLine="true"
+                                    android:text="Connection Type:"
+                                    android:textColor="#464646"
+                                    android:textSize="22dp" />
                             </LinearLayout>
 
                             <LinearLayout
-                                android:orientation="vertical"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/linearLayout2">
-
-                                <CheckBox
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Large Airports"
-                                    android:id="@+id/largeAirportChkBox"
-                                    android:checked="true"
-                                    android:singleLine="false"
-                                    android:textColor="#464646"
-                                    android:layout_marginLeft="20dp" />
-
-                                <CheckBox
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Medium Airports"
-                                    android:id="@+id/mediumAirportChkBox"
-                                    android:checked="true"
-                                    android:singleLine="false"
-                                    android:textColor="#464646"
-                                    android:layout_marginLeft="20dp" />
-
-                                <CheckBox
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Small Airports"
-                                    android:id="@+id/smallAirportChkBox"
-                                    android:checked="true"
-                                    android:singleLine="false"
-                                    android:textColor="#464646"
-                                    android:layout_marginLeft="20dp" />
-
-                                <CheckBox
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Heliports"
-                                    android:id="@+id/heliportAirportChkBox"
-                                    android:checked="true"
-                                    android:singleLine="false"
-                                    android:textColor="#464646"
-                                    android:layout_marginLeft="20dp" />
-
-                                <CheckBox
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Seaplane Base"
-                                    android:id="@+id/seaBaseChkBox"
-                                    android:checked="true"
-                                    android:singleLine="false"
-                                    android:textColor="#464646"
-                                    android:layout_marginLeft="20dp" />
-
-                                <CheckBox
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Balloonports"
-                                    android:id="@+id/balloonBaseChkBox"
-                                    android:checked="true"
-                                    android:singleLine="false"
-                                    android:textColor="#464646"
-                                    android:layout_marginLeft="20dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:layout_span="3"
-                            android:layout_marginTop="5dp"
-                            android:paddingBottom="5dp">
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
 
                                 <LinearLayout
-                                    android:orientation="horizontal"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="fill_parent"
-                                    android:layout_marginLeft="10dp"
-                                    android:focusable="true"
-                                    android:layout_span="2">
-
-                                    <TextView
-                                        android:layout_width="200dp"
-                                        android:layout_height="wrap_content"
-                                        android:textSize="22dp"
-                                        android:layout_column="3"
-                                        android:textColor="#464646"
-                                        android:text="Show Instruments:"
-                                        android:layout_gravity="center_vertical|top"
-                                        android:singleLine="true" />
-
-                                    <CheckBox
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:id="@+id/showInstrumentsChkBox"
-                                        android:checked="true"
-                                        android:layout_marginLeft="20dp"
-                                        android:singleLine="false" />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:layout_span="2"
-                            android:layout_weight="1">
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content">
-
-                                <LinearLayout
-                                    android:orientation="horizontal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginLeft="10dp">
-
-                                    <TextView
-                                        android:layout_width="200dp"
-                                        android:layout_height="wrap_content"
-                                        android:textSize="22dp"
-                                        android:layout_column="3"
-                                        android:textColor="#464646"
-                                        android:text="Connection Type:"
-                                        android:layout_gravity="center_vertical"
-                                        android:singleLine="true"
-                                        android:layout_marginTop="0dp"
-                                        android:layout_marginLeft="0dp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:orientation="horizontal"
                                     android:layout_width="fill_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="10dp">
+                                    android:orientation="vertical">
 
-                                    <LinearLayout
-                                        android:orientation="vertical"
+                                    <RadioGroup
                                         android:layout_width="fill_parent"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="0dp">
 
-                                        <RadioGroup
-                                            android:layout_width="fill_parent"
+                                        <RadioButton
+                                            android:id="@+id/simRadioBtn"
+                                            android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginTop="0dp">
+                                            android:layout_marginLeft="0dp"
+                                            android:checked="true"
+                                            android:clickable="true"
+                                            android:enabled="true"
+                                            android:singleLine="false"
+                                            android:text="Simulator"
+                                            android:textColor="#464646" />
 
-                                            <RadioButton
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:text="Simulator"
-                                                android:id="@+id/simRadioBtn"
-                                                android:layout_marginLeft="0dp"
-                                                android:checked="true"
-                                                android:clickable="true"
-                                                android:enabled="true"
-                                                android:textColor="#464646"
-                                                android:singleLine="false" />
-
-                                            <RadioButton
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:text="Gps"
-                                                android:id="@+id/gpsRadioBtn"
-                                                android:layout_marginLeft="0dp"
-                                                android:checked="false"
-                                                android:enabled="true"
-                                                android:clickable="true"
-                                                android:textColor="#464646" />
-                                        </RadioGroup>
-
-                                    </LinearLayout>
+                                        <RadioButton
+                                            android:id="@+id/gpsRadioBtn"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="0dp"
+                                            android:checked="false"
+                                            android:clickable="true"
+                                            android:enabled="true"
+                                            android:text="Gps"
+                                            android:textColor="#464646" />
+                                    </RadioGroup>
 
                                 </LinearLayout>
 
@@ -426,132 +429,172 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:layout_span="3">
+                    </LinearLayout>
 
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:weightSum="1">
-
-                                <LinearLayout
-                                    android:orientation="horizontal"
-                                    android:layout_width="220dp"
-                                    android:layout_height="fill_parent"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginTop="10dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textSize="22dp"
-                                        android:layout_column="3"
-                                        android:textColor="#464646"
-                                        android:text="Buffer:"
-                                        android:layout_gravity="center_vertical|top"
-                                        android:singleLine="true"
-                                        android:id="@+id/textView21" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:orientation="horizontal"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="fill_parent">
-
-                                    <CheckBox
-                                        android:layout_width="150dp"
-                                        android:layout_height="wrap_content"
-                                        android:id="@+id/bufferVisibleBox"
-                                        android:enabled="true"
-                                        android:checked="true"
-                                        android:text="Visible"
-                                        android:layout_marginTop="10dp"
-                                        android:textColor="#464646" />
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="fill_parent"
-                                android:layout_height="match_parent" >
-
-                                <LinearLayout
-                                    android:orientation="horizontal"
-                                    android:layout_width="220dp"
-                                    android:layout_height="fill_parent"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginTop="10dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textSize="22dp"
-                                        android:layout_column="3"
-                                        android:textColor="#464646"
-                                        android:text="Buffer Size (degree):"
-                                        android:layout_gravity="center_vertical|top"
-                                        android:singleLine="true"
-                                        android:id="@+id/textView22" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:orientation="horizontal"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="fill_parent">
-
-                                    <EditText
-                                        android:layout_width="150dp"
-                                        android:layout_height="wrap_content"
-                                        android:inputType="numberDecimal"
-                                        android:ems="10"
-                                        android:id="@+id/bufferSizeEdit"
-                                        android:text="0.3"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginLeft="10dp" />
-
-                                    <TextView
-                                        android:layout_width="120dp"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?android:attr/textAppearanceSmall"
-                                        android:text="a value of 0.1 is approx 10Km radius."
-                                        android:id="@+id/textView25"
-                                        android:layout_marginTop="0dp" />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_span="3"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_span="5">
+                            android:orientation="horizontal"
+                            android:weightSum="1">
 
+                            <LinearLayout
+                                android:layout_width="220dp"
+                                android:layout_height="fill_parent"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
 
-                            <Button
-                                android:layout_width="150dp"
-                                android:layout_height="wrap_content"
-                                android:text="Save"
-                                android:id="@+id/saveSettingsBtn"
-                                android:layout_marginTop="20dp"
-                                android:layout_margin="10dp"
-                                android:focusable="true" />
+                                <TextView
+                                    android:id="@+id/textView21"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_column="3"
+                                    android:layout_gravity="center_vertical|top"
+                                    android:singleLine="true"
+                                    android:text="Buffer:"
+                                    android:textColor="#464646"
+                                    android:textSize="22dp" />
+                            </LinearLayout>
 
-                            <Button
-                                android:layout_width="150dp"
-                                android:layout_height="wrap_content"
-                                android:text="Cancel"
-                                android:id="@+id/cancelSettingsBtn"
-                                android:layout_marginTop="20dp"
-                                android:layout_margin="10dp"
-                                android:focusable="true" />
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="horizontal">
+
+                                <CheckBox
+                                    android:id="@+id/bufferVisibleBox"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:checked="true"
+                                    android:enabled="true"
+                                    android:text="Visible"
+                                    android:textColor="#464646" />
+                            </LinearLayout>
 
                         </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="220dp"
+                                android:layout_height="fill_parent"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView22"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_column="3"
+                                    android:layout_gravity="center_vertical|top"
+                                    android:singleLine="true"
+                                    android:text="Buffer Size (degree):"
+                                    android:textColor="#464646"
+                                    android:textSize="22dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/bufferSizeEdit"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:ems="10"
+                                    android:inputType="numberDecimal"
+                                    android:text="0.3" />
+
+                                <TextView
+                                    android:id="@+id/textView25"
+                                    android:layout_width="120dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="0dp"
+                                    android:text="a value of 0.1 is approx 10Km radius."
+                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="220dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView27"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="3"
+                                android:layout_gravity="center_vertical|top"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="Airport Charts URL:"
+                                android:textColor="#464646"
+                                android:textSize="22dp" />
+
+                        </LinearLayout>
+
+                        <EditText
+                            android:id="@+id/airportChartsUrlEdit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="textUri|textPersonName" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_span="5"
+                        android:orientation="horizontal">
+
+
+                        <Button
+                            android:id="@+id/saveSettingsBtn"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_marginTop="20dp"
+                            android:focusable="true"
+                            android:text="Save" />
+
+                        <Button
+                            android:id="@+id/cancelSettingsBtn"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_marginTop="20dp"
+                            android:focusable="true"
+                            android:text="Cancel" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
             </ScrollView>

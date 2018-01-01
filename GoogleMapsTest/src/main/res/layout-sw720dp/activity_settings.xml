@@ -80,14 +80,16 @@
                             android:layout_weight="0.04" />
 
                         <EditText
+                            android:id="@+id/homeAirportEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_column="1"
-                            android:id="@+id/homeAirportEdit"
-                            android:editable="false"
-                            android:autoText="false"
+                            android:layout_marginLeft="20dp"
                             android:layout_weight="1"
-                            android:layout_marginLeft="20dp" />
+                            android:autoText="false"
+                            android:editable="false"
+                            android:enabled="false"
+                            android:inputType="none" />
 
                         <Button
                             android:layout_width="wrap_content"
@@ -123,17 +125,17 @@
                             android:layout_marginRight="10dp" />
 
                         <NumberPicker
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:id="@+id/runwayPicker"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_column="1"
+                            android:layout_marginLeft="20dp"
                             android:layout_marginTop="5dp"
+                            android:layout_span="2"
+                            android:layout_weight="1"
                             android:orientation="vertical"
                             android:textAlignment="center"
-                            android:layout_span="2"
-                            android:weightSum="1"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="20dp" />
+                            android:weightSum="1" />
 
                     </LinearLayout>
 
@@ -524,7 +526,43 @@
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
+                            <LinearLayout
+                                android:layout_width="220dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView27"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_column="3"
+                                    android:layout_gravity="center_vertical|top"
+                                    android:layout_weight="1"
+                                    android:singleLine="true"
+                                    android:text="Airport Charts URL:"
+                                    android:textColor="#464646"
+                                    android:textSize="22dp" />
+
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/airportChartsUrlEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="1"
+                                android:ems="10"
+                                android:inputType="textUri|textPersonName" />
+
+                        </LinearLayout>
                         <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="fill_parent"

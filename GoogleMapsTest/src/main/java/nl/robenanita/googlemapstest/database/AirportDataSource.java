@@ -75,99 +75,6 @@ public class AirportDataSource {
         dbHelper.close();
     }
 
-//    public boolean insertRunways(ArrayList<Runway> runways)
-//    {
-//        if (runways.size()>0)
-//        {
-//            database.beginTransaction();
-//            try
-//            {
-//                Integer airport_id = runways.get(0).airport_ref;
-//
-//                String[] args = {airport_id.toString()};
-//                database.delete(DBHelper.RUNWAY_TABLE_NAME, DBHelper.C_airport_id + " =?", args);
-//
-//                for (Runway runway : runways)
-//                {
-//                    ContentValues values = getRunwayValues(runway);
-//                    database.insert(DBHelper.RUNWAY_TABLE_NAME, null, values);
-//                }
-//
-//                database.setTransactionSuccessful();
-//            }
-//            catch (Exception ee)
-//            {
-//                database.endTransaction();
-//                Log.i(TAG, "Database error: " + ee.getMessage());
-//                return false;
-//            }
-//
-//            database.endTransaction();
-//        }
-//
-//        return true;
-//    }
-
-    public boolean insertAirports(Map<Integer, Airport> airports)
-    {
-        String deleteQuery = "DELETE FROM " + DBHelper.AIRPORT_TABLE_NAME + " WHERE "
-            + DBHelper.C_id + " in (";
-        for (Map.Entry<Integer, Airport> airp : airports.entrySet())
-        {
-            Airport a = airp.getValue();
-            deleteQuery = deleteQuery + Integer.toString(a.id) + ",";
-        }
-        deleteQuery = deleteQuery.substring(0, deleteQuery.length()-1) + ");";
-        Log.d(TAG, "DELETE Query: " + deleteQuery);
-        try {
-            database.beginTransaction();
-            //database.rawQuery(DBHelper.AIRPORT_TABLE_LOCATION_DROP_INDEX, null);
-            //database.rawQuery(DBHelper.AIRPORT_TABLE_DROP_INDEX, null);
-            database.rawQuery(deleteQuery, null);
-        }
-        catch (Exception ee)
-        {
-            database.endTransaction();
-            return false;
-        }
-        finally {
-            database.setTransactionSuccessful();
-            database.endTransaction();
-        }
-
-
-        database.beginTransaction();
-        try
-        {
-            for (Map.Entry<Integer, Airport> airp : airports.entrySet())
-            {
-                Airport a = airp.getValue();
-                ContentValues values = createContentValues(a);
-                database.insert(DBHelper.AIRPORT_TABLE_NAME, null, values);
-            }
-            database.setTransactionSuccessful();
-        }
-        catch (Exception ee)
-        {
-            database.endTransaction();
-            Log.i(TAG, "Database error: " + ee.getMessage());
-            return false;
-        }
-
-        database.endTransaction();
-
-        try {
-            //database.rawQuery(DBHelper.AIRPORT_TABLE_LOCATION_INDEX, null);
-            //database.rawQuery(DBHelper.AIRPORT_TABLE_INDEX, null);
-        }
-        catch (Exception ee)
-        {
-            Log.i(TAG, "Database error: " + ee.getMessage());
-            return false;
-        }
-
-        return true;
-    }
 
     private ContentValues createContentValues(Airport airport)
     {
@@ -221,7 +128,6 @@ public class AirportDataSource {
     }
 
     public Map<Integer, Airport> SearchAirportNameCode(String searchTerm) {
-        //ArrayList<Airport> airports = new ArrayList<Airport>();
         Map<Integer, Airport> airports = new HashMap<Integer, Airport>();
 
         String query = "SELECT * FROM " + DBHelper.AIRPORT_TABLE_NAME +
@@ -437,6 +343,10 @@ public class AirportDataSource {
                 airports.put(airport.id, airport);
                 // Add the first runway if present else add dummy runway
                 airport.runways.add(cursorToRunway(cursor));
+
+                String w = "WHERE " + DBHelper.C_id + "=" + airport.id;
+                String pidQuery = "UPDATE " + DBHelper.AIRPORT_TABLE_NAME + " SET " + DBHelper.C_pid + " = " + pid + " " + w + ";";
+                database.execSQL(pidQuery);
             }
             else
             {
@@ -450,8 +360,8 @@ public class AirportDataSource {
         // make sure to close the cursor
         cursor.close();
 
-        String pidQuery = "UPDATE " + DBHelper.AIRPORT_TABLE_NAME + " SET " + DBHelper.C_pid + " = " + pid + " " + where;
-        database.execSQL(pidQuery);
+//        String pidQuery = "UPDATE " + DBHelper.AIRPORT_TABLE_NAME + " SET " + DBHelper.C_pid + " = " + pid + " " + where;
+//        database.execSQL(pidQuery);
 
         return airports;
     }

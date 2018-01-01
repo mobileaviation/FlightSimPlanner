@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest.MapFragment;
 
 import android.app.Fragment;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
@@ -18,6 +19,8 @@ import nl.robenanita.googlemapstest.R;
  */
 
 public class InfoWindow {
+
+    private String TAG = "InfoWindow";
 
     public InfoWindow(LatLng position, GoogleMap googleMap, Fragment parentfragent, Fragment fragment)
     {
@@ -45,22 +48,38 @@ public class InfoWindow {
         //setPosition();
     }
 
+    private void afterContentLoaded()
+    {
+        //width = infoWindowContentLayout.getWidth();
+        //height = infoWindowContentLayout.getHeight();
+        //Log.i(TAG, "Window Width: " + width + " Window Height: " + height);
+    }
+
+
+    private Integer width = 0;
+    private Integer height = 0;
     private void setPosition()
     {
         Projection projection = googleMap.getProjection();
         Point screenpoint = projection.toScreenLocation(position);
-        FrameLayout.LayoutParams  layoutParams = (FrameLayout.LayoutParams) infoWindowContentLayout.getLayoutParams();
-        Integer width = infoWindowContentLayout.getMeasuredWidth();
-        Integer height = infoWindowContentLayout.getMeasuredHeight();
+        infoWindowContentLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        width = infoWindowContentLayout.getMeasuredWidth();
+        height = infoWindowContentLayout.getMeasuredHeight();
         Integer x = screenpoint.x - (width / 2);
         Integer y = screenpoint.y - height;
 
-        layoutParams.setMargins(x, y, 0, 0);
-        infoWindowContentLayout.setLayoutParams(layoutParams);
+//        Log.i(TAG, "Window X: " + x + " Window Y: " + y + " ScreenPoint X: " + screenpoint.x + " Screenpoint Y: " + screenpoint.y
+//         + " Window Width: " + width + " Window Height: " + height);
+
+        FrameLayout.LayoutParams p = new FrameLayout.LayoutParams(width, height);
+        p.setMargins(x, y, 0, 0);
+        infoWindowContentLayout.setLayoutParams(p);
     }
 
     public void MapPositionChanged()
     {
+        afterContentLoaded();
         setPosition();
     }
 

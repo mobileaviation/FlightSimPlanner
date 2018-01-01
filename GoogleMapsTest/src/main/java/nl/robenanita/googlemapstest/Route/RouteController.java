@@ -77,6 +77,39 @@ public class RouteController {
         variationDeviationPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
     }
 
+    public void RenameWaypoint(final Waypoint waypoint, final String newName)
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle("Rename waypoint?");
+        alertDialogBuilder
+                .setMessage("Rename waypoint: " + waypoint.name + " To: " + newName + " ?")
+                .setCancelable(false)
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        waypoint.name = newName;
+                        RouteDataSource flightPlanDataSource = new RouteDataSource(activity);
+                        flightPlanDataSource.open();
+                        flightPlanDataSource.RenameWaypoint(waypoint);
+                        flightPlanDataSource.close();
+
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
     public void DeleteWaypoint(final Waypoint waypoint)
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);

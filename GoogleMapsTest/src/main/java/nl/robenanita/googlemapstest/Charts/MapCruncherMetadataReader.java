@@ -78,6 +78,7 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
     protected Void doInBackground(String... strings) {
         URL _manifestUrl;
         try {
+            cleanDatabase();
             _manifestUrl = new URL(xml_url);
             InputStream inputStream = _manifestUrl.openConnection().getInputStream();
             setProgressMessage("Reading xml from: " + _manifestUrl, 1);
@@ -160,6 +161,13 @@ public class MapCruncherMetadataReader extends AsyncTask<String, Integer, Void> 
         return doc;
     }
 
+    private void cleanDatabase()
+    {
+        AirportChartsDataSource airportChartsDataSource = new AirportChartsDataSource(context);
+        airportChartsDataSource.open();
+        airportChartsDataSource.ClearAirportChartsDB();
+        airportChartsDataSource.close();
+    }
 
     private void loadChartsFromXML(Document document) {
         NodeList nodes = document.getElementsByTagName("Layer");
