@@ -100,6 +100,8 @@ public class RouteController {
                         flightPlanDataSource.close();
 
                         dialog.cancel();
+
+                        if (onFlightplanEvent != null) onFlightplanEvent.onWaypointRenamed(waypoint, newName);
                     }
                 });
 

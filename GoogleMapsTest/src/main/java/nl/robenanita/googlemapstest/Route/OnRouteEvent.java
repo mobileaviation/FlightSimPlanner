@@ -13,4 +13,5 @@ public interface OnRouteEvent {
     public void onClosePlanClicked(Route flightPlan);
     public void onWaypointClicked(Waypoint waypoint);
     public void onWaypointMoved(Route flightPlan);
+    public void onWaypointRenamed(Waypoint waypoint, String newName);
 }

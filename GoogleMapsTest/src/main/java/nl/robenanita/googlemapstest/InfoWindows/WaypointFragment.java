@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -85,6 +87,18 @@ public class WaypointFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showAlert(20, waypoint);
+            }
+        });
+        nameEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    /* handle action here */
+                    if (waypointListener != null) waypointListener.OnRenameWaypoint(waypoint, textView.getText().toString());
+                    handled = true;
+                }
+                return handled;
             }
         });
     }

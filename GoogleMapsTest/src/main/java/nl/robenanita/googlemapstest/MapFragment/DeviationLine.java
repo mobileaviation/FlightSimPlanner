@@ -91,7 +91,7 @@ public class DeviationLine {
     private void setLineOption()
     {
         line_options = new PolylineOptions();
-        line_options.color(Color.BLUE);
+        line_options.color(Color.argb(0xA0, 0x66, 0xBB, 0x6A));
         line_options.width(Helpers.convertDpToPixel(7, context));
         line_options.geodesic(true);
         line_options.clickable(true);

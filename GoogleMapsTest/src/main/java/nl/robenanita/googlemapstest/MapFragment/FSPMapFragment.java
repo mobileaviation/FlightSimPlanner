@@ -1042,6 +1042,12 @@ public class FSPMapFragment extends Fragment {
                 flightPlan.DrawFlightplan(googleMap);
                 flightPlan.ShowFlightplanMarkers(googleMap);
             }
+
+            @Override
+            public void onWaypointRenamed(Waypoint waypoint, String newName)
+            {
+                flightplanGrid.ReloadFlightplan();
+            }
         });
     }
 
@@ -1136,6 +1142,12 @@ public class FSPMapFragment extends Fragment {
             @Override
             public void onWaypointMoved(Route flightPlan) {
                 flightplanController.MoveWaypoint2(flightPlan);
+            }
+
+            @Override
+            public void onWaypointRenamed(Waypoint waypoint, String newName)
+            {
+                flightplanController.RenameWaypoint(waypoint, newName);
             }
 
 
