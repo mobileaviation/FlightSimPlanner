@@ -18,12 +18,12 @@ import java.io.OutputStream;
 public class DBHelper extends SQLiteOpenHelper {
     //The Android's default system path of your application database.
 
-    private static String DB_PATH = "/data/data/nl.robenanita.googlemapstest/databases/";
+    public static String DB_PATH = "/data/data/nl.robenanita.googlemapstest/databases/";
 
     private SQLiteDatabase myDataBase;
     private final Context myContext;
 
-    private static final String DATABASE_NAME = "airnav.db";
+    public static final String DATABASE_NAME = "airnav.db";
 
     public static final String AIRPORT_TABLE_NAME = "tbl_Airports";
     public static final String COUNTRY_TABLE_NAME = "tbl_Country";
@@ -100,6 +100,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String C_mapLocation_ID = "MapLocation_ID";
     public static final String C_pid = "pid";
+
+
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

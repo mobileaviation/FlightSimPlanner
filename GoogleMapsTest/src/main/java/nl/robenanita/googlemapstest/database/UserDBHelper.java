@@ -3,13 +3,19 @@ package nl.robenanita.googlemapstest.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 /**
  * Created by Rob Verhoef on 18-1-14.
  */
 public class UserDBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "userairnav.db";
+    public static final String DATABASE_NAME = "userairnav.db";
     private static final int DATABASE_VERSION = 10;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
@@ -84,6 +90,39 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_reference_name = "reference_name";
     public static final String C_file_prefix = "file_prefix";
     public static final String C_file_suffix = "file_suffix";
+
+    public static void BackupUserDatabase(String databaseName)
+    {
+        OutputStream output = null;
+        FileInputStream fis = null;
+        try {
+            final String inFileName = DBHelper.DB_PATH + "/" + databaseName;
+            File dbFile = new File(inFileName);
+            fis = new FileInputStream(dbFile);
+
+            String outFileName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/"+ databaseName + "_copy.db";
+            Log.i(TAG, "Backing up user.db to: " + outFileName);
+
+            // Open the empty db as the output stream
+            output = new FileOutputStream(outFileName);
+
+            // Transfer bytes from the inputfile to the outputfile
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+            output.flush();
+            output.close();
+            if (fis != null) fis.close();
+
+            Log.i(TAG, "Back up user.db succeeded! ");
+        }
+        catch (Exception ee)
+        {
+            Log.i(TAG, "Backing up user.db error: " + ee.getMessage());
+        }
+    }
 
 
     private static final String AIRPORTCHARTS_TABLE = "create table "

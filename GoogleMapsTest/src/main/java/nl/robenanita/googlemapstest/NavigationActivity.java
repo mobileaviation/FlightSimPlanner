@@ -84,6 +84,7 @@ import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
+import nl.robenanita.googlemapstest.database.DBHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.Helpers;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
@@ -94,6 +95,7 @@ import nl.robenanita.googlemapstest.Route.RouteActivateActivity;
 import nl.robenanita.googlemapstest.Route.RouteActivity;
 import nl.robenanita.googlemapstest.Route.Leg;
 import nl.robenanita.googlemapstest.Route.Waypoint;
+import nl.robenanita.googlemapstest.database.UserDBHelper;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
@@ -620,6 +622,12 @@ public class NavigationActivity extends ActionBarActivity implements
             case R.id.load_track_item:
             {
                 ShowLoadTracksActivity();
+                return true;
+            }
+            case R.id.action_backup:
+            {
+                UserDBHelper.BackupUserDatabase(DBHelper.DATABASE_NAME);
+                UserDBHelper.BackupUserDatabase(UserDBHelper.DATABASE_NAME);
                 return true;
             }
             case R.id.action_settings:
