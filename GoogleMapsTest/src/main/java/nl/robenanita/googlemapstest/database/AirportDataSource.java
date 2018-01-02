@@ -122,9 +122,11 @@ public class AirportDataSource {
     public void setProgramID(Integer uniqueId)
     {
         String u = "UPDATE " + DBHelper.AIRPORT_TABLE_NAME + " SET " + DBHelper.C_pid +
-                "=" + Integer.toString(uniqueId);
+                "=" + Integer.toString(uniqueId) + ";";
         Log.i(TAG , "Set program pid: " + u);
-        database.execSQL(u);
+
+
+        database.rawQuery(u, null);
     }
 
     public Map<Integer, Airport> SearchAirportNameCode(String searchTerm) {
@@ -311,7 +313,7 @@ public class AirportDataSource {
             lonBetween = "longitude_deg BETWEEN " + Double.toString(boundary.southwest.longitude)
                     + " AND " + Double.toString(boundary.northeast.longitude);
 
-        where = where + " AND " + latBetween + " AND " + lonBetween;
+        where = where + " AND (" + latBetween + " AND " + lonBetween + ")";
 
         String query = "SELECT A." + dbHelper.C_id + ","
                 + "A." + dbHelper.C_ident + ","
@@ -330,6 +332,7 @@ public class AirportDataSource {
                 + "R." + DBHelper.C_he_longitude
                 + " FROM " + DBHelper.AIRPORT_TABLE_NAME + " A " +
                 "LEFT JOIN " + DBHelper.RUNWAY_TABLE_NAME + " R ON R." + DBHelper.C_airport_ref + " = A." + DBHelper.C_id + " " + where
+                //+ ";";
                 + " AND (" + DBHelper.C_pid + "<>" + pid + " or " +  DBHelper.C_pid + " is null);";
 
         Log.i(TAG, "Airports Query: " + query);

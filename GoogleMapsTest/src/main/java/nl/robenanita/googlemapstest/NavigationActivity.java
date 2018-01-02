@@ -187,6 +187,7 @@ public class NavigationActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        setUniqueIDtoDatabase(0);
         uniqueID = Helpers.generateUniqueId();
         flightplanLoaded = false;
 
@@ -298,7 +299,7 @@ public class NavigationActivity extends ActionBarActivity implements
     }
 
 
-    private void setUniqueIDtoDatabase()
+    private void setUniqueIDtoDatabase(Integer uniqueID)
     {
         AirportDataSource airportDataSource = new AirportDataSource(this);
         airportDataSource.open(uniqueID);
