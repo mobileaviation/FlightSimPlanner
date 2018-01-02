@@ -1,6 +1,7 @@
 package nl.robenanita.googlemapstest.database;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -152,6 +153,10 @@ public class DBHelper extends SQLiteOpenHelper {
             //database does't exist yet.
             Log.e(TAG, "Check DB Error");
         }
+//        catch (SQLiteCantOpenDatabaseException ce)
+//        {
+//            Log.e(TAG, "Cant open database Error");
+//        }
         if(checkDB != null){
             checkDB.close();
         }
