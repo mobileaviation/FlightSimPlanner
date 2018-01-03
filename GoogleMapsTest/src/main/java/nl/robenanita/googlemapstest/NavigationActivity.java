@@ -305,7 +305,7 @@ public class NavigationActivity extends ActionBarActivity implements
     {
         AirportDataSource airportDataSource = new AirportDataSource(this);
         airportDataSource.open(uniqueID);
-        airportDataSource.setProgramID(uniqueID);
+        airportDataSource.resetProgramID();
         airportDataSource.close();
     }
 

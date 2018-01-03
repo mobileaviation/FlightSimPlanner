@@ -33,6 +33,8 @@ public class AirspacesDataSource {
             DBFilesHelper.CopyDatabases(context, true);
         }
 
+
+
         try {
             this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READWRITE);
             return true;

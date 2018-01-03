@@ -119,14 +119,21 @@ public class AirportDataSource {
         return newAirport;
     }
 
+    public void resetProgramID()
+    {
+        String u = "UPDATE " + DBHelper.AIRPORT_TABLE_NAME + " SET " + DBHelper.C_pid + "=null;";
+        database.execSQL(u);
+        Log.i(TAG, "Reset ProgramID");
+    }
+
     public void setProgramID(Integer uniqueId)
     {
         String u = "UPDATE " + DBHelper.AIRPORT_TABLE_NAME + " SET " + DBHelper.C_pid +
                 "=" + Integer.toString(uniqueId) + ";";
-        Log.i(TAG , "Set program pid: " + u);
-
 
         database.rawQuery(u, null);
+
+        Log.i(TAG , "Set program pid: " + u);
     }
 
     public Map<Integer, Airport> SearchAirportNameCode(String searchTerm) {

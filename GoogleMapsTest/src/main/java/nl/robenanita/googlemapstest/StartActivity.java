@@ -532,11 +532,20 @@ public class StartActivity extends ActionBarActivity {
             showSettingsActivity();
             return true;
         }
+        if (id == R.id.action_download_databases)
+        {
+
+        }
         return super.onOptionsItemSelected(item);
     }
 
     private void showSettingsActivity() {
         Intent startSettingsIntent = new Intent(StartActivity.this, SettingsActivity.class);
         StartActivity.this.startActivityForResult(startSettingsIntent, 400);
+    }
+
+    private void DownloadDatabases()
+    {
+
     }
 }
