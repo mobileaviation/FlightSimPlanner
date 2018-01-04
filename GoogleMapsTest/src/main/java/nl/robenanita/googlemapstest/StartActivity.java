@@ -2,8 +2,12 @@ package nl.robenanita.googlemapstest;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -30,6 +34,8 @@ import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
+
+import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
@@ -535,7 +541,23 @@ public class StartActivity extends ActionBarActivity {
         }
         if (id == R.id.action_download_databases)
         {
-            DBDownloader dbDownloader = new DBDownloader(this);
+            final DBDownloader dbDownloader = new DBDownloader(this);
+            BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+
+                    if ((referenceId==dbDownloader.navDbDownloadId)||(referenceId==dbDownloader.airspaceDbDownloadId)) {
+                        ArrayList<String> f = dbDownloader.getFiles();
+                        Log.i(TAG, "NavDB Downloaded");
+                    }
+                }
+            };
+
+            IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            registerReceiver(downloadReceiver, filter);
+
+
             dbDownloader.Download();
             return true;
         }
