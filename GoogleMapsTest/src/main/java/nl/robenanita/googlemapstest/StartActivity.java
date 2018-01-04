@@ -34,6 +34,7 @@ import com.kishan.askpermission.PermissionInterface;
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.database.*;
+import nl.robenanita.googlemapstest.database.Downloader.DBDownloader;
 import nl.robenanita.googlemapstest.inappbilling.util.IabHelper;
 import nl.robenanita.googlemapstest.inappbilling.util.IabResult;
 import nl.robenanita.googlemapstest.inappbilling.util.Inventory;
@@ -534,7 +535,9 @@ public class StartActivity extends ActionBarActivity {
         }
         if (id == R.id.action_download_databases)
         {
-
+            DBDownloader dbDownloader = new DBDownloader(this);
+            dbDownloader.Download();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
