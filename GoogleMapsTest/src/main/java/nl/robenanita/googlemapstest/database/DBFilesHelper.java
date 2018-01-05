@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,6 +93,15 @@ public class DBFilesHelper {
 
     private static void CopyFromAssetsToStorage(Context context, String SourceFile, String DestinationFile) throws IOException {
         InputStream IS = context.getAssets().open(SourceFile);
+        OutputStream OS = new FileOutputStream(DestinationFile);
+        CopyStream(IS, OS);
+        OS.flush();
+        OS.close();
+        IS.close();
+    }
+
+    public static void Copy(Context context, String SourceFile, String DestinationFile) throws IOException {
+        InputStream IS = new FileInputStream(SourceFile);
         OutputStream OS = new FileOutputStream(DestinationFile);
         CopyStream(IS, OS);
         OS.flush();

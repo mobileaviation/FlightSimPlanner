@@ -463,9 +463,21 @@ public class StartActivity extends ActionBarActivity {
     }
 
     private void checkDatabaseVersion() {
-        CheckDatabaseSource checkDatabaseSource = new CheckDatabaseSource(this);
-        checkDatabaseSource.open();
-        checkDatabaseSource.checkVersion();
+        String databasePath = this.getDatabasePath("airnav.db").getPath();
+        Log.i(TAG, "Database Path: " + databasePath);
+
+        DBDownloader dbDownloader = new DBDownloader(this);
+        dbDownloader.SetOnMessage(new DBDownloader.OnMessage() {
+            @Override
+            public void Message(String message) {
+                Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        dbDownloader.CheckAndUpdateDatabases();
+//        CheckDatabaseSource checkDatabaseSource = new CheckDatabaseSource(this);
+//        checkDatabaseSource.open();
+//        checkDatabaseSource.checkVersion();
     }
 
     public boolean loadAds()
@@ -542,6 +554,12 @@ public class StartActivity extends ActionBarActivity {
         if (id == R.id.action_download_databases)
         {
             final DBDownloader dbDownloader = new DBDownloader(this);
+            dbDownloader.SetOnMessage(new DBDownloader.OnMessage() {
+                @Override
+                public void Message(String message) {
+                    Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            });
             BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
