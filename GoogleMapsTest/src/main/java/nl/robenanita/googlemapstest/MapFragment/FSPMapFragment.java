@@ -294,6 +294,7 @@ public class FSPMapFragment extends Fragment {
                 setOnInfoWindowListeners();
                 SetupDrawerListeners();
                 setOnMapClickListeners();
+
                 if (onMapReadyCallback != null)
                     FSPMapFragment.this.onMapReadyCallback.onMapReady(googleMap);
             }
@@ -904,12 +905,14 @@ public class FSPMapFragment extends Fragment {
             aviationMarkers = new AviationMarkers(mainActivity, googleMap, uniqueID ,airports,
                     navaids, airportMarkerMap, navaidMarkerMap, markerProperties);
             aviationMarkers.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            //aviationMarkers.execute();
         }
         else {
             aviationMarkers.cancel(true);
             aviationMarkers = new AviationMarkers(mainActivity, googleMap, uniqueID ,airports,
                     navaids, airportMarkerMap, navaidMarkerMap, markerProperties);
             aviationMarkers.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            //aviationMarkers.execute();
         }
     }
 

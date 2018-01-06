@@ -26,14 +26,14 @@
             android:layout_marginLeft="5dp">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Create a new FlightPlan"
-                android:textSize="25sp"
-                android:id="@+id/textView"
-                android:textColor="#464646"
                 android:layout_margin="5dp"
-                android:layout_marginRight="0dp" />
+                android:layout_marginRight="0dp"
+                android:text="@string/action_create_new_route"
+                android:textColor="#464646"
+                android:textSize="25sp" />
         </LinearLayout>
 
         <com.google.android.gms.ads.AdView

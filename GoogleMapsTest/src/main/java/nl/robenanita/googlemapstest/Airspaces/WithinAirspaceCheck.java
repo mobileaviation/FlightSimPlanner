@@ -37,7 +37,7 @@ public class WithinAirspaceCheck extends AsyncTask {
 
         Airspaces as = new Airspaces(context);
         AirspacesDataSource airspacesDB = new AirspacesDataSource(context);
-        airspacesDB.Open("all_airspaces.db.sqlite");
+        airspacesDB.Open("all-airspaces.db");
         as.readFromDatabase(airspacesDB.GetAirspacesByCoordinate(point.getCoordinate()));
 
         for (Airspace airspace : as)

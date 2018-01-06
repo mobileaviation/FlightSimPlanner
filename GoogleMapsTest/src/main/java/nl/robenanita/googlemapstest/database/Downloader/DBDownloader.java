@@ -174,7 +174,6 @@ public class DBDownloader extends AsyncTask {
     private void updateVersion(Property ver)
     {
         ver.value1 = version;
-        ver.value2 = "false";
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
         propertiesDataSource.open(true);
         propertiesDataSource.updateProperty(ver);

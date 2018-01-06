@@ -18,8 +18,10 @@ import java.util.ArrayList;
 public class DBFilesHelper {
     public static String DatabasePath(Context context)
     {
-        String p = context.getFilesDir().getPath() + "/"
-                + "databases" + "/";
+        //String p = context.getFilesDir().getPath() + "/"
+        //        + "databases" + "/";
+
+        String p = context.getDatabasePath("airnav.db").getParent() + "/";
         File f = new File(p);
         if (!f.exists()) f.mkdir();
         return p;
@@ -60,7 +62,7 @@ public class DBFilesHelper {
         try {
             String [] list = context.getAssets().list("");
             for (String f : list) {
-                if (f.contains("airspaces.db.sqlite")) {
+                if (f.contains("airspaces.db")) {
                     databases.add(f);
                     if (copy) CopyFromAssetsToStorage(context, f, dest + f);
                     Log.e("DatabaseFile", f+ " copied to: " + dest);

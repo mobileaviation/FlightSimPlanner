@@ -9,8 +9,8 @@
     <string name="action_connectFsuipc">Open FSUIPC Connection</string>
     <string name="action_start">Start Receiving Data</string>
     <string name="action_searchairports">Search Airport</string>
-    <string name="action_flightplan">Create or Edit Flightplans</string>
-    <string name="action_flightplan_activate">Activate a flightplan</string>
+    <string name="action_flightplan">Create or Edit Routes</string>
+    <string name="action_flightplan_activate">Activate a route</string>
     <string name="action_maptype">Toggle through map types</string>
     <string name="action_tracking_active">Activate - Deactivate tracking</string>
     <string name="action_connect_disconnect">Connect - Disconnect from Sim</string>
@@ -52,7 +52,7 @@
         <item>Neptune</item>
     </string-array>
 
-    <string name="title_activity_flight_plan">Create FlightPlan</string>
+    <string name="title_activity_flight_plan">Create Route</string>
     <string name="title_activity_navigation">Navigation</string>
     <string name="title_activity_search">Search Airports-Navaids-Fixes</string>
     <string name="title_activity_airport_search">Airport Search</string>
@@ -63,7 +63,7 @@
     <string name="search_airport_title">Search for Airports by name or ICAO code</string>
     <string name="search_navaid_title">Search for VOR-DME_NDB by name or code</string>
     <string name="search_fix_title">Search for Fixes by code</string>
-    <string name="title_activity_flight_plan_activate">Activate FlightPlan</string>
+    <string name="title_activity_flight_plan_activate">Activate Route</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_weather">Weather</string>
     <string name="title_activity_load_track">Load Track</string>
@@ -74,6 +74,8 @@
     <string name="action_directTo" />
     <string name="action_load_test_chart">Load Charts</string>
     <string name="action_backup_userdb">Backup User DB</string>
+    <string name="action_choice_your_route">Choose your route</string>
+    <string name="action_create_new_route">Create a new Route</string>
     <string name="map_style_icao">[{"featureType":"all","elementType":"all","stylers":[{"weight":1.43},{"saturation":100},{"lightness":-5}]},{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"color":"#e8bd4f"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"lightness":-4},{"gamma":4.11}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#a4eba5"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"weight":2.6}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"off"},{"weight":1.38}]},{"featureType":"transit.line","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"transit.line","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"weight":6.58}]},{"featureType":"transit.station","elementType":"all","stylers":[{"weight":0.1},{"saturation":-43},{"lightness":-37}]},{"featureType":"water","elementType":"labels.text","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":44}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ff5252"},{"weight":2.28}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ff9999"},{"weight":1.38}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"hue":"#78c8d6"},{"saturation":-42}]}]</string>
 
 </resources>

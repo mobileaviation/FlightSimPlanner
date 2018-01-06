@@ -339,13 +339,15 @@ public class AirportDataSource {
                 + "R." + DBHelper.C_he_longitude
                 + " FROM " + DBHelper.AIRPORT_TABLE_NAME + " A " +
                 "LEFT JOIN " + DBHelper.RUNWAY_TABLE_NAME + " R ON R." + DBHelper.C_airport_ref + " = A." + DBHelper.C_id + " " + where
-                + ";";
-                //+ " AND (" + DBHelper.C_pid + "<>" + pid + " or " +  DBHelper.C_pid + " is null);";
+                //+ ";";
+                + " AND (" + DBHelper.C_pid + "<>" + pid + " or " +  DBHelper.C_pid + " is null);";
 
         Log.i(TAG, "Airports Query: " + query);
 
+
         Cursor cursor = database.rawQuery(query, null);
 
+        Integer c = cursor.getCount();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Airport airport = cursorToPartAirport(cursor);

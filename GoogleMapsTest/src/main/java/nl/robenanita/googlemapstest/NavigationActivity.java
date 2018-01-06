@@ -235,7 +235,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMapFragment.SetMarkerProperties(markerProperties);
                 fspMapFragment.SetMapPosition(curPosition, curZoom);
                 fspMapFragment.SetPlaneMarker(curPlanePosition);
-                fspMapFragment.SetAviationMarkersByZoomAndBoundary();
+                //fspMapFragment.SetAviationMarkersByZoomAndBoundary();
 
                 initInstruments();
                 SetupScaleBar();
