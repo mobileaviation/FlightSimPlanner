@@ -61,6 +61,11 @@ public class LayersOfflineSetupFragment extends Fragment {
         downloadBtn = (Button) view.findViewById(R.id.offlineDownloadBtn);
         cleanUpBtn = (Button) view.findViewById(R.id.cleanOfflineTilesBtn);
         offLineVisibleCheckbox = (CheckBox) view.findViewById(R.id.offlineEnabledBtn);
+
+        ((RadioButton) view.findViewById(R.id.offlineOpenstreetBtn)).setTag(OfflineMapTypes.offline_openstreet);
+        ((RadioButton) view.findViewById(R.id.offlineAafSectionalBtn)).setTag(OfflineMapTypes.offline_aafsectional);
+        ((RadioButton) view.findViewById(R.id.offlineGermanDSFBtn)).setTag(OfflineMapTypes.offline_germandsf);
+
         RadioGroup offlineTypeGroup = (RadioGroup)view.findViewById(R.id.offlineChartSelection);
 
         offlineTypeGroup.check(offlineMapTypes.toButtonId());
