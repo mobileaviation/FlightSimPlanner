@@ -5,10 +5,12 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 /**
@@ -109,6 +111,25 @@ public class DBFilesHelper {
         OS.flush();
         OS.close();
         IS.close();
+    }
+
+    public static Boolean Copy1(Context context, String SourceFile, String DestinationFile) throws IOException {
+        File sourceFile = new File(SourceFile);
+        File newFile = new File(DestinationFile);
+        FileChannel outputChannel = null;
+        FileChannel inputChannel = null;
+        try
+        {
+            outputChannel = new FileOutputStream(newFile).getChannel();
+            inputChannel = new FileInputStream(sourceFile).getChannel();
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+            inputChannel.close();
+        }
+        finally {
+            if (inputChannel != null) inputChannel.close();
+            if (outputChannel != null) outputChannel.close();
+            return newFile.exists();
+        }
     }
 
     private static void CopyStream(InputStream In, OutputStream Out) throws IOException {

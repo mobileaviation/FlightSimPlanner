@@ -209,9 +209,9 @@ public class DBDownloader extends AsyncTask {
                 if (oldAirspaceDbFile.exists()) context.deleteDatabase("all-airspaces.db");
 
                 try {
-                    DBFilesHelper.Copy(context, navDBbFile.getPath().toString(), oldNavDbFile.getPath().toString());
+                    DBFilesHelper.Copy1(context, navDBbFile.getPath().toString(), oldNavDbFile.getPath().toString());
                     navDBbFile.delete();
-                    DBFilesHelper.Copy(context, airspacesDbFile.getPath().toString(), oldAirspaceDbFile.getPath().toString());
+                    DBFilesHelper.Copy1(context, airspacesDbFile.getPath().toString(), oldAirspaceDbFile.getPath().toString());
                     airspacesDbFile.delete();
 
                     ver.value2 = "true";
