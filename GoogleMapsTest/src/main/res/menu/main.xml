@@ -9,10 +9,14 @@
         android:title="@string/action_settings"
         android:orderInCategory="97"
         app:showAsAction="never" />
-    <item android:id="@+id/action_isnew"
-        android:title="@string/action_isnew"
+    <item
+        android:id="@+id/action_loadchart"
         android:orderInCategory="98"
-        app:showAsAction="never" />
+        android:title="@string/action_load_test_chart" />
+    <item
+        android:id="@+id/action_isnew"
+        android:orderInCategory="99"
+        android:title="@string/action_isnew" />
     <item
         android:id="@+id/action_loadaip"
         android:orderInCategory="99"
@@ -20,14 +24,10 @@
         android:visible="false"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_loadchart"
-        android:orderInCategory="99"
-        android:title="@string/action_load_test_chart"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_backup"
         android:orderInCategory="100"
         android:title="@string/action_backup_userdb"
+        android:visible="false"
         app:showAsAction="never" />
     <item android:id="@+id/action_searchAirport"
         android:title="@string/action_searchairports"
