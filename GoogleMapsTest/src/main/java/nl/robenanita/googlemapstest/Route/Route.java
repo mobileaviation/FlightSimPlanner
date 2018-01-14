@@ -52,6 +52,7 @@ public class Route implements Serializable {
         distance = LegInfoView.Distance.larger2000Meters;
         endPlan = false;
         showOnlyActive = false;
+        redrawBuffer = true;
 
         //bufferPolyline = null;
 
@@ -76,6 +77,7 @@ public class Route implements Serializable {
     public Date date;
     public boolean endPlan;
     public boolean showOnlyActive;
+    public boolean redrawBuffer;
 
     private Leg activeLeg;
     private int legWaypointIndex;
@@ -105,6 +107,8 @@ public class Route implements Serializable {
 
         // Create the legs of this flightplan
         _createLegs();
+
+        redrawBuffer = true;
 
 //        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(context);
 //        propertiesDataSource.open(true);
@@ -461,6 +465,8 @@ public class Route implements Serializable {
 
         Collections.sort(Waypoints);
         UpdateWaypointsData();
+
+        redrawBuffer = true;
     }
 
     public void UpdateVariation(Float variation)

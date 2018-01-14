@@ -46,7 +46,7 @@ public class Leg {
         trackoptions1.add(p1);
         trackoptions1.add(p2);
         trackoptions1.geodesic(true);
-        trackoptions1.clickable(false);
+        trackoptions1.clickable(true);
         trackoptions1.zIndex(990);
 
         halfwayPoint = Helpers.midPoint(new LatLng(from.location.getLatitude(), from.location.getLongitude()),
