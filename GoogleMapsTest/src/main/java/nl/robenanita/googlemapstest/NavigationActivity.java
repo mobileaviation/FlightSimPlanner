@@ -241,18 +241,19 @@ public class NavigationActivity extends ActionBarActivity implements
                 SetupScaleBar();
                 mapController = fspMapFragment.GetMapcontroller();
 
-                bufferArea.DrawBuffer(googleMap);
+                //bufferArea.DrawBuffer(googleMap);
+                createBufferArea(fspMapFragment.GetGooglemap().getCameraPosition().target);
 
                 fspMapFragment.SetOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                     @Override
                     public void onCameraIdle() {
                         SetupScaleBar();
-                        fspMapFragment.ShowAirspacesInfoLayout();
-                        if (bufferArea != null)
-                        {
-                            createBufferArea(fspMapFragment.GetGooglemap().getCameraPosition().target);
-                            bufferArea.DrawBuffer(fspMapFragment.GetGooglemap());
-                        }
+//                        if (bufferArea != null)
+//                        {
+//                            createBufferArea(fspMapFragment.GetGooglemap().getCameraPosition().target);
+//                            bufferArea.DrawBuffer(fspMapFragment.GetGooglemap());
+//                        }
+                        createBufferArea(fspMapFragment.GetGooglemap().getCameraPosition().target);
                     }
                 });
             }
@@ -343,11 +344,21 @@ public class NavigationActivity extends ActionBarActivity implements
     public BufferArea bufferArea;
     public void createBufferArea(LatLng planePos)
     {
+        GoogleMap map = fspMapFragment.GetGooglemap();
         if (bufferArea == null) bufferArea = new BufferArea(this);
-        if (fspMapFragment.GetCurrentFlightplan() == null)
+        if (fspMapFragment.GetCurrentFlightplan() == null) {
             bufferArea.CreateBuffer(planePos, bufferProperty);
+            if (map != null) bufferArea.DrawBuffer(map);
+        }
         else
-            bufferArea.CreateBuffer(fspMapFragment.GetCurrentFlightplan().getRouteCoordinates(), bufferProperty);
+            if (fspMapFragment.GetCurrentFlightplan().redrawBuffer) {
+                Log.i(TAG, "Redraw buffer");
+                bufferArea.CreateBuffer(fspMapFragment.GetCurrentFlightplan().getRouteCoordinates(), bufferProperty);
+                if (map != null) {
+                    bufferArea.DrawBuffer(map);
+                    fspMapFragment.GetCurrentFlightplan().redrawBuffer = false;
+                }
+            }
     }
 
     private void LoadProperties() {
@@ -936,7 +947,8 @@ public class NavigationActivity extends ActionBarActivity implements
         {
             // Reload properties...
             LoadProperties();
-            bufferArea.DrawBuffer(fspMapFragment.GetGooglemap());
+            createBufferArea(fspMapFragment.GetGooglemap().getCameraPosition().target);
+            //bufferArea.DrawBuffer(fspMapFragment.GetGooglemap());
             initInstruments();
         }
 
