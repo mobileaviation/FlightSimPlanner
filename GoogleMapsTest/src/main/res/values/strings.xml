@@ -28,7 +28,7 @@
     <string name="requirements">FSX, Prepar3D or XPlane requirements:</string>
     <string name="fsuipc">For FSX and Prepar3D please install <a href="http://www.schiratti.com/dowson.html">FSUIPC</a></string>
     <string name="xpuipc">For X-Plane please install <a href="http://www.tosi-online.de/XPUIPC/XPUIPC.html">XPUIPC</a></string>
-    <string name="installation">Follow the <a href="http://www.mobileaviationtools.com/index.php/products/flight-sim-planner/installation/">installation instructions</a> on our webpage to install our special piece of server software.</string>
+    <string name="installation">Follow the <a href="http://mobileaviationtools.epizy.com/Installation/">installation instructions</a> on our webpage to install our special piece of server software.</string>
     <string name="jellylink">http://api.5jelly.com/redir/5930468</string>
     <string name="openaiplink">http://www.openaip.net/</string>
     <string name="openaviationdatalink">http://www.openaviationdata.com/</string>
