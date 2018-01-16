@@ -42,32 +42,34 @@ public class FirDataSource {
 
         ArrayList<String> st = new ArrayList<String>();
         String where = "";
+        Boolean firsFound = false;
         for (Station station : stations)
         {
             String s = station.station_id.substring(0, 2);
             if (!st.contains(s)) {
                 st.add(s);
                 where = where + "ident like \"" + s + "%\" OR ";
+                firsFound = true;
             }
         }
 
-        where = where.substring(0, where.length()-4) + ";";
-        String query = "SELECT id, ident FROM tbl_Firs WHERE " + where + ";";
+        if (firsFound) {
+            where = where.substring(0, where.length() - 4) + ";";
+            String query = "SELECT id, ident FROM tbl_Firs WHERE " + where + ";";
 
 
-        Cursor c = database.rawQuery(query, null);
+            Cursor c = database.rawQuery(query, null);
 
-        c.moveToFirst();
-        while (!c.isAfterLast())
-        {
-            Fir fir = new Fir();
-            fir.id = c.getInt(c.getColumnIndex("id"));
-            fir.ident = c.getString(c.getColumnIndex("ident"));
-            firs.add(fir);
+            c.moveToFirst();
+            while (!c.isAfterLast()) {
+                Fir fir = new Fir();
+                fir.id = c.getInt(c.getColumnIndex("id"));
+                fir.ident = c.getString(c.getColumnIndex("ident"));
+                firs.add(fir);
 
-            c.moveToNext();
+                c.moveToNext();
+            }
         }
-
 
         return (firs.size()>0) ? firs : null;
     }
