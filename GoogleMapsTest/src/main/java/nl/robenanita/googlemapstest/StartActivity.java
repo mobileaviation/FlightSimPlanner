@@ -262,6 +262,10 @@ public class StartActivity extends ActionBarActivity {
         try {
             if (mHelper != null) mHelper.dispose();
         }
+        catch (IllegalArgumentException e)
+        {
+            mHelper = null;
+        }
         finally {
             mHelper = null;
         }
@@ -545,6 +549,7 @@ public class StartActivity extends ActionBarActivity {
         return true;
     }
 
+    private DBDownloader dbDownloader;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -557,7 +562,7 @@ public class StartActivity extends ActionBarActivity {
         }
         if (id == R.id.action_download_databases)
         {
-            final DBDownloader dbDownloader = new DBDownloader(this);
+            dbDownloader = new DBDownloader(this);
             dbDownloader.SetOnMessage(new DBDownloader.OnMessage() {
                 @Override
                 public void Message(String message) {
