@@ -179,16 +179,20 @@ public class PropertiesDataSource {
         String r[] = initAirport.value2.split(",");
         if (r.length>0)
         {
-            for (Runway ru: a.runways)
-            {
-                if (ru.id == Integer.parseInt(r[0]))
-                {
-                    InitRunway = ru;
-                    InitRunway.active = r[1];
-                    if (InitRunway.le_latitude_deg==0) InitRunway.le_latitude_deg = a.latitude_deg;
-                    if (InitRunway.he_latitude_deg==0) InitRunway.he_latitude_deg = a.latitude_deg;
-                    if (InitRunway.le_longitude_deg==0) InitRunway.le_longitude_deg = a.longitude_deg;
-                    if (InitRunway.he_longitude_deg==0) InitRunway.he_longitude_deg = a.longitude_deg;
+            if (a.runways != null) {
+                for (Runway ru : a.runways) {
+                    if (ru.id == Integer.parseInt(r[0])) {
+                        InitRunway = ru;
+                        InitRunway.active = r[1];
+                        if (InitRunway.le_latitude_deg == 0)
+                            InitRunway.le_latitude_deg = a.latitude_deg;
+                        if (InitRunway.he_latitude_deg == 0)
+                            InitRunway.he_latitude_deg = a.latitude_deg;
+                        if (InitRunway.le_longitude_deg == 0)
+                            InitRunway.le_longitude_deg = a.longitude_deg;
+                        if (InitRunway.he_longitude_deg == 0)
+                            InitRunway.he_longitude_deg = a.longitude_deg;
+                    }
                 }
             }
         }
@@ -202,6 +206,7 @@ public class PropertiesDataSource {
             InitRunway.le_latitude_deg = a.latitude_deg;
             InitRunway.le_longitude_deg = a.longitude_deg;
             InitRunway.le_heading_degT = 0;
+            InitRunway.active = "le";
 
         }
 

@@ -22,6 +22,7 @@ import com.andreabaccega.widget.FormEditText;
 
 import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.Airport.AirportType;
+import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.Property;
 import nl.robenanita.googlemapstest.R;
@@ -70,7 +71,7 @@ public class SettingsActivity extends ActionBarActivity {
         setupMarkersVisible();
 
         ServerIPAddress = propertiesDataSource.IpAddress.value1;
-        ServerPort = Integer.parseInt(propertiesDataSource.IpAddress.value2);
+        ServerPort = Helpers.parseIntWithDefault(propertiesDataSource.IpAddress.value2, 5000);
 
         airport = propertiesDataSource.InitAirport;
         runway = propertiesDataSource.InitRunway;
@@ -173,7 +174,9 @@ public class SettingsActivity extends ActionBarActivity {
             Integer r1 = 0;
             Integer i = 0;
 
-            if (airport.runways.size() > 0) {
+            Boolean runwaycheck = (airport.runways==null)? false : (airport.runways.size()>0);
+
+            if (runwaycheck) {
                 while (i <= airport.runways.size()) {
                     if (r == r1) {
                         runway = airport.runways.get(i);
@@ -262,44 +265,52 @@ public class SettingsActivity extends ActionBarActivity {
     private void setupRunwaysSpinner()
     {
         rw = (NumberPicker) findViewById(R.id.runwayPicker);
+        if (airport.runways != null) {
+            //if (runway.id > 0) {
+                rw.setEnabled(true);
+                rws = new String[airport.runways.size() * 2];
+                int i = 0;
+                int active = 0;
+                for (Runway r : airport.runways) {
+                    if ((r == runway) && (runway.active.equals("le"))) active = i;
+                    rws[i] = r.le_ident + " : " + r.surface;
+                    i++;
+                    if ((r == runway) && (runway.active.equals("he"))) active = i;
+                    rws[i] = r.he_ident + " : " + r.surface;
+                    i++;
+                }
 
-        if(runway.id>0)
-        {
-            rw.setEnabled(true);
-            rws = new String[airport.runways.size()*2];
-            int i = 0;
-            int active = 0;
-            for (Runway r: airport.runways)
-            {
-                if ((r == runway) && (runway.active.equals("le"))) active = i;
-                rws[i] = r.le_ident + " : " + r.surface;
-                i++;
-                if ((r == runway) && (runway.active.equals("he"))) active = i;
-                rws[i] = r.he_ident + " : " + r.surface;
-                i++;
-            }
+                rw.setWrapSelectorWheel(false);
 
-            rw.setWrapSelectorWheel(false);
+                int max = rws.length - 1;
+                int maxV = rw.getMaxValue();
+                if (max > maxV) {
+                    rw.setMinValue(0);
+                    rw.setValue(0);
+                    rw.setDisplayedValues(rws);
+                    rw.setMaxValue(max);
+                } else {
+                    rw.setMinValue(0);
+                    rw.setValue(0);
+                    rw.setMaxValue(max);
+                    rw.setDisplayedValues(rws);
+                }
 
-            int max = rws.length-1;
-            int maxV = rw.getMaxValue();
-            if (max> maxV){
-                rw.setMinValue(0);
-                rw.setValue(0);
-                rw.setDisplayedValues(rws);
-                rw.setMaxValue(max);
-            }else{
-                rw.setMinValue(0);
-                rw.setValue(0);
-                rw.setMaxValue(max);
-                rw.setDisplayedValues(rws);
-            }
-
-            rw.setValue(active);
+                rw.setValue(active);
+//            } else {
+//                rw.setEnabled(false);
+//            }
         }
         else
         {
             rw.setEnabled(false);
+            rws = new String[1];
+            rws[0] = "Unknown!";
+            rw.setMinValue(0);
+            rw.setValue(0);
+            rw.setMaxValue(0);
+            rw.setDisplayedValues(rws);
+            //rw.setMaxValue(0);
         }
     }
 

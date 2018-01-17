@@ -259,8 +259,12 @@ public class StartActivity extends ActionBarActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mHelper != null) mHelper.dispose();
-        mHelper = null;
+        try {
+            if (mHelper != null) mHelper.dispose();
+        }
+        finally {
+            mHelper = null;
+        }
     }
 
     @Override

@@ -51,7 +51,7 @@ public class FSUIPCConnection {
 
     public boolean isConnected()
     {
-        return mTcpClient.isConnected();
+        return (mTcpClient==null)? false : mTcpClient.isConnected();
     }
 
     private TCPClient mTcpClient = null;
@@ -169,9 +169,11 @@ public class FSUIPCConnection {
             String cmd = getXMLString(doc);
             //Log.i(TAG, "Close XML string: " + cmd);
 
-            mTcpClient.sendMessage(cmd);
-            mTcpClient.stopClient();
-            mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
+            if (mTcpClient != null) {
+                mTcpClient.sendMessage(cmd);
+                mTcpClient.stopClient();
+                mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
+            }
 
             return true;
         } else

@@ -18,6 +18,7 @@ import android.widget.PopupWindow;
 import java.util.Date;
 
 import nl.robenanita.googlemapstest.Airport.Airport;
+import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.RouteDataSource;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
@@ -104,7 +105,7 @@ public class RouteActivity extends ActionBarActivity {
                     errorMessage = "Please supply Altitude!";
                 }
                 else
-                    flightPlan.altitude = Integer.parseInt(flightPlanAltitude.getText().toString());
+                    flightPlan.altitude = Helpers.parseIntWithDefault(flightPlanAltitude.getText().toString(),1000);
 
                 if (flightPlanAirspeed.getText().toString().equals(""))
                 {
@@ -112,7 +113,7 @@ public class RouteActivity extends ActionBarActivity {
                     errorMessage = "Please supply Airspeed!";
                 }
                 else
-                    flightPlan.indicated_airspeed =   Integer.parseInt(flightPlanAirspeed.getText().toString());
+                    flightPlan.indicated_airspeed =   Helpers.parseIntWithDefault(flightPlanAirspeed.getText().toString(),100);
 
                 if (flightPlanName.getText().toString().equals(""))
                 {

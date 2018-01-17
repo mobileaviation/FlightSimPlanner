@@ -102,6 +102,7 @@ import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 
 
+
 public class NavigationActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -377,7 +378,7 @@ public class NavigationActivity extends ActionBarActivity implements
         else ins.setVisibility(View.GONE);
 
         ServerIPAddress = propertiesDataSource.IpAddress.value1;
-        ServerPort = Integer.parseInt(propertiesDataSource.IpAddress.value2);
+        ServerPort = nl.robenanita.googlemapstest.Helpers.parseIntWithDefault(propertiesDataSource.IpAddress.value2, 5000);
 
         initAirport = propertiesDataSource.InitAirport;
 

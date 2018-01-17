@@ -196,4 +196,16 @@ public class Helpers {
             return false;
         }
     }
+
+    public static Integer parseIntWithDefault(String s, Integer def)
+    {
+        try
+        {
+            return Integer.parseInt(s);
+        }
+        catch (NumberFormatException e)
+        {
+            return def;
+        }
+    }
 }
