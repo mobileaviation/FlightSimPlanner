@@ -117,10 +117,11 @@ public class StartActivity extends ActionBarActivity {
         networkCheck.SetOnResult(new NetworkCheck.OnResult() {
             @Override
             public void Checked(Boolean result) {
-                Toast.makeText(StartActivity.this, "Internet connection is not present. This app will work without, but for charts loading its necessary!",
+                if (!result) Toast.makeText(StartActivity.this, "Internet connection is not present. This app will work without, but for charts loading its necessary!",
                     Toast.LENGTH_LONG).show();
             }
         });
+        networkCheck.execute();
 
         if (adds) {
             startNavigationBtn.setEnabled(true);
@@ -562,30 +563,56 @@ public class StartActivity extends ActionBarActivity {
         }
         if (id == R.id.action_download_databases)
         {
-            dbDownloader = new DBDownloader(this);
-            dbDownloader.SetOnMessage(new DBDownloader.OnMessage() {
+            NetworkCheck networkCheck = new NetworkCheck();
+            networkCheck.SetOnResult(new NetworkCheck.OnResult() {
                 @Override
-                public void Message(String message) {
-                    Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
-                }
-            });
-            BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                public void Checked(Boolean result) {
+                    if (result) {
+                        dbDownloader = new DBDownloader(StartActivity.this);
+                        dbDownloader.SetOnMessage(new DBDownloader.OnMessage() {
+                            @Override
+                            public void Message(String message) {
+                                Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+                            @Override
+                            public void onReceive(Context context, Intent intent) {
+                                long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 
-                    if ((referenceId==dbDownloader.navDbDownloadId)||(referenceId==dbDownloader.airspaceDbDownloadId)) {
-                        ArrayList<String> f = dbDownloader.getFiles();
-                        Log.i(TAG, "NavDB Downloaded");
+                                if ((referenceId == dbDownloader.navDbDownloadId) || (referenceId == dbDownloader.airspaceDbDownloadId)) {
+                                    ArrayList<String> f = dbDownloader.getFiles();
+                                    Log.i(TAG, "NavDB Downloaded");
+                                }
+                            }
+                        };
+
+                        IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+                        registerReceiver(downloadReceiver, filter);
+
+
+                        dbDownloader.Download();
+                    }
+                    else
+                    {
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(StartActivity.this);
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User clicked OK button
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.setMessage("Databases can't be dowbnloaded and updated due to lack of internet connectivity");
+                        builder.setTitle("No Internet Connectivity");
+
+                        android.app.AlertDialog xmlNotAvailableDialog = builder.create();
+                        xmlNotAvailableDialog.show();
                     }
                 }
-            };
+            });
 
-            IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-            registerReceiver(downloadReceiver, filter);
-
-
-            dbDownloader.Download();
+            networkCheck.execute();
             return true;
         }
         return super.onOptionsItemSelected(item);

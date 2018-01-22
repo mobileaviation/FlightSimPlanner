@@ -338,9 +338,11 @@ public class FSPMapFragment extends Fragment {
 
     public void SetMapPosition(LatLng position)
     {
-        float zoom = googleMap.getCameraPosition().zoom;
-        curPosition = new CameraPosition(position, zoom,0,0);
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
+        if (googleMap != null) {
+            float zoom = googleMap.getCameraPosition().zoom;
+            curPosition = new CameraPosition(position, zoom, 0, 0);
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
+        }
     }
 
     public void SetPlaneMarker(PlanePosition planePosition)

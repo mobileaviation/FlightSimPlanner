@@ -174,7 +174,6 @@ public class LayersOfflineSetupFragment extends Fragment {
             @Override
             protected Object doInBackground(Object[] objects) {
                 String path = getActivity().getFilesDir().getPath();
-
                 CleanOfflineTiles openstreetFiles = new CleanOfflineTiles(path, OfflineMapTypes.offline_openstreet);
                 openstreetSize = openstreetFiles.GetSize();
                 CleanOfflineTiles aafFiles = new CleanOfflineTiles(path, OfflineMapTypes.offline_aafsectional);
