@@ -68,6 +68,7 @@ import nl.robenanita.googlemapstest.Airport.Runway;
 import nl.robenanita.googlemapstest.Airspaces.LoadAirspacesAsync;
 import nl.robenanita.googlemapstest.Charts.AirportCharts;
 import nl.robenanita.googlemapstest.Charts.MapCruncherMetadataReader;
+import nl.robenanita.googlemapstest.Classes.NetworkCheck;
 import nl.robenanita.googlemapstest.Instruments.AirspeedView;
 import nl.robenanita.googlemapstest.Instruments.AltimeterView;
 import nl.robenanita.googlemapstest.Instruments.CompassView;
@@ -739,44 +740,86 @@ public class NavigationActivity extends ActionBarActivity implements
 
             case R.id.action_loadchart:
             {
-//                PDFCharts pdfCharts = new PDFCharts(this);
-//                pdfCharts.LoadTestPDF();
-                LinearLayout progresslayout = (LinearLayout)NavigationActivity.this.findViewById(R.id.progressLayout);
-                progresslayout.setVisibility(View.VISIBLE);
-                ProgressBar progressBar = (ProgressBar)NavigationActivity.this.findViewById(R.id.navigationProgressBar);
-                TextView progressText = (TextView)NavigationActivity.this.findViewById(R.id.navigationProgressText);
-                progressBar.setProgress(0);
-                progressText.setText("Loading charts: Getting manifest-xml");
+                if (chartsProperty != null) {
+                    NetworkCheck checkTask = new NetworkCheck(chartsProperty.value1 + "MapCruncherMetadata.xml");
+                    checkTask.SetOnResult(new NetworkCheck.OnResult() {
+                        @Override
+                        public void Checked(Boolean result) {
+                            if (result)
+                            {
+                                LinearLayout progresslayout = (LinearLayout) NavigationActivity.this.findViewById(R.id.progressLayout);
+                                progresslayout.setVisibility(View.VISIBLE);
+                                ProgressBar progressBar = (ProgressBar) NavigationActivity.this.findViewById(R.id.navigationProgressBar);
+                                TextView progressText = (TextView) NavigationActivity.this.findViewById(R.id.navigationProgressText);
+                                progressBar.setProgress(0);
+                                progressText.setText("Loading charts: Getting manifest-xml");
 
-                airportCharts = new AirportCharts();
-                MapCruncherMetadataReader mapCruncherMetadataReader = new MapCruncherMetadataReader();
-                mapCruncherMetadataReader.SetOnProgressMessageListener(new MapCruncherMetadataReader.OnProgressMessage() {
-                    @Override
-                    public void ProgressMessage(String message, Integer progress) {
-                        Log.i(TAG, "Loading charts info: " + message + " progress: " + progress.toString());
-                        ProgressBar progressBar = (ProgressBar)NavigationActivity.this.findViewById(R.id.navigationProgressBar);
-                        TextView progressText = (TextView)NavigationActivity.this.findViewById(R.id.navigationProgressText);
-                        progressBar.setProgress(progress);
-                        progressText.setText("Loading charts: " + message);
+                                airportCharts = new AirportCharts();
+                                MapCruncherMetadataReader mapCruncherMetadataReader = new MapCruncherMetadataReader();
+                                mapCruncherMetadataReader.SetOnProgressMessageListener(new MapCruncherMetadataReader.OnProgressMessage() {
+                                    @Override
+                                    public void ProgressMessage(String message, Integer progress) {
+                                        Log.i(TAG, "Loading charts info: " + message + " progress: " + progress.toString());
+                                        ProgressBar progressBar = (ProgressBar) NavigationActivity.this.findViewById(R.id.navigationProgressBar);
+                                        TextView progressText = (TextView) NavigationActivity.this.findViewById(R.id.navigationProgressText);
+                                        progressBar.setProgress(progress);
+                                        progressText.setText("Loading charts: " + message);
 
-                        if (progress==100)
-                        {
-                            progressBar.setProgress(100);
-                            progressText.setText("Loading charts: Finished!");
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                        if (progress == 100) {
+                                            progressBar.setProgress(100);
+                                            progressText.setText("Loading charts: Finished!");
+                                            try {
+                                                Thread.sleep(1000);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            } finally {
+                                                LinearLayout progresslayout = (LinearLayout) NavigationActivity.this.findViewById(R.id.progressLayout);
+                                                progresslayout.setVisibility(View.INVISIBLE);
+                                            }
+
+                                        }
+                                    }
+                                });
+
+                                mapCruncherMetadataReader.Read(chartsProperty.value1, airportCharts, NavigationActivity.this);
                             }
-                            finally {
-                                LinearLayout progresslayout = (LinearLayout)NavigationActivity.this.findViewById(R.id.progressLayout);
-                                progresslayout.setVisibility(View.INVISIBLE);
-                            }
+                            else
+                            {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(NavigationActivity.this);
+                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // User clicked OK button
+                                        dialog.dismiss();
+                                    }
+                                });
 
+                                builder.setMessage("There is no MapCruncherMetadata.xml file found \nat: " + chartsProperty.value1);
+                                builder.setTitle("Missing MapChruncherMetadata.xml!");
+
+                                AlertDialog xmlNotAvailableDialog = builder.create();
+                                xmlNotAvailableDialog.show();
+                            }
                         }
-                    }
-                });
-                mapCruncherMetadataReader.Read(chartsProperty.value1, airportCharts, this);
+                    });
+
+                    checkTask.execute();
+
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NavigationActivity.this);
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked OK button
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builder.setMessage("No Adress to get Charts from is in the settings yet. \nAn Adress needs to be configured for this option to work!");
+                    builder.setTitle("Missing settings!");
+
+                    AlertDialog chartsNotInSettingsDialog = builder.create();
+                    chartsNotInSettingsDialog.show();
+                }
                 return true;
             }
             case R.id.action_DirectTo:

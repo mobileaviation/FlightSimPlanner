@@ -117,10 +117,11 @@ public class StartActivity extends ActionBarActivity {
         networkCheck.SetOnResult(new NetworkCheck.OnResult() {
             @Override
             public void Checked(Boolean result) {
-                Toast.makeText(StartActivity.this, "Internet connection is not present. This app will work without, but for charts loading its necessary!",
+                if (!result) Toast.makeText(StartActivity.this, "Internet connection is not present. This app will work without, but for charts loading its necessary!",
                     Toast.LENGTH_LONG).show();
             }
         });
+        networkCheck.execute();
 
         if (adds) {
             startNavigationBtn.setEnabled(true);

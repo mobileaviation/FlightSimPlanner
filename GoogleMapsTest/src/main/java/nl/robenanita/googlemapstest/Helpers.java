@@ -172,17 +172,23 @@ public class Helpers {
         return context.getResources().getDisplayMetrics().density * px;
     }
 
-    public static boolean CheckInternetAvailability() {
+    public static boolean CheckInternetAvailability()
+    {
+        return checkInternetAvailabilityAdress("http://clients3.google.com/generate_204");
+    }
+
+    public static boolean checkInternetAvailabilityAdress(String address) {
         try {
             HttpURLConnection urlConnection = (HttpURLConnection)
-                    (new URL("http://clients3.google.com/generate_204")
+                    (new URL(address)
                             .openConnection());
             urlConnection.setRequestProperty("User-Agent", "Android");
             urlConnection.setRequestProperty("Connection", "close");
             urlConnection.setConnectTimeout(1500);
             urlConnection.connect();
-            if (urlConnection.getResponseCode() == 204 &&
-                    urlConnection.getContentLength() == 0) {
+            Integer respCode = urlConnection.getResponseCode();
+            Integer contentLength = urlConnection.getContentLength();
+            if ((respCode == 204 && contentLength == 0) || (respCode == 200 && contentLength > 0)) {
                 Log.d("Network Checker", "Successfully connected to internet");
                 return true;
             }

@@ -9,6 +9,17 @@ import nl.robenanita.googlemapstest.Helpers;
  */
 
 public class NetworkCheck extends AsyncTask {
+    public NetworkCheck()
+    {
+        Url = null;
+    }
+
+    public NetworkCheck(String Url)
+    {
+        this.Url = Url;
+    }
+
+    private String Url;
     private boolean result;
     public interface OnResult
     {
@@ -21,7 +32,8 @@ public class NetworkCheck extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        result = Helpers.CheckInternetAvailability();
+        result = (Url==null) ? Helpers.CheckInternetAvailability():
+                Helpers.checkInternetAvailabilityAdress(Url);
         return null;
     }
 
