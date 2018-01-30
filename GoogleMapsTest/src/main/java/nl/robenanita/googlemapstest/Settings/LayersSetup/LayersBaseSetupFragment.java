@@ -39,7 +39,8 @@ public class LayersBaseSetupFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = (LinearLayout) inflater.inflate(R.layout.fragment_layers_base_setup, container, false);
 
-        n = (NavigationActivity)container.getContext();
+        //n = (NavigationActivity)container.getContext();
+        n = (NavigationActivity)getActivity();
 
         MapTypeProperties properties = new MapTypeProperties();
         properties.LoadFromDatabase(n);
