@@ -32,8 +32,7 @@
             android:id="@+id/instrumentsLayout"
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:visibility="gone">
+            android:layout_marginRight="5dp">
 
             <TableLayout
                 android:layout_width="wrap_content"
@@ -50,11 +49,13 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true">
 
+
                     <nl.robenanita.googlemapstest.Instruments.AirspeedView
                         android:layout_width="124dp"
                         android:layout_height="121dp"
                         android:id="@+id/airspeedView"
                         />
+
 
                     <nl.robenanita.googlemapstest.Instruments.HorizonView
                         android:layout_width="124dp"
@@ -80,24 +81,28 @@
                         android:id="@+id/turnCoordinatorView"
                         />
 
+
                     <nl.robenanita.googlemapstest.Instruments.CompassView
                         android:layout_width="124dp"
                         android:layout_height="121dp"
                         android:id="@+id/compassView"
                         />
 
+
                     <nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView
                         android:layout_width="124dp"
                         android:layout_height="121dp"
                         android:id="@+id/vsiView"
                         />
+
                 </TableRow>
             </TableLayout>
         </LinearLayout>
 
+
         <LinearLayout
             android:id="@+id/tracksLayout"
-            android:layout_width="250dp"
+            android:layout_width="327dp"
             android:layout_height="fill_parent"
             android:layout_alignLeft="@+id/instrumentsLayout"
             android:layout_alignParentRight="true"
@@ -148,10 +153,10 @@
             android:visibility="visible" />
 
         <fragment
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/infoPanelFragment"
             android:name="nl.robenanita.googlemapstest.InfoPanelFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/instrumentsLayout" />
 
         <LinearLayout
@@ -171,7 +176,7 @@
                 ads:courseDeviation="0"
                 android:id="@+id/legInfoPanel" />
 
-            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"

@@ -17,12 +17,12 @@
         android:background="#3cffffff">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="fill_parent"
-            android:clickable="false"
+            android:layout_marginLeft="3dp"
             android:background="@drawable/infopanelborder"
-            android:layout_marginLeft="3dp">
+            android:clickable="false"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/InfoPanelLocationText"
@@ -31,14 +31,14 @@
                 android:singleLine="true"
                 android:text="Location:"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/latitudeTxt"
@@ -52,7 +52,7 @@
                     android:singleLine="true"
                     android:text="..."
                     android:textColor="#fff2ec12"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -66,19 +66,19 @@
                     android:singleLine="true"
                     android:text="..."
                     android:textColor="#fff2ec12"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="80dp"
-            android:layout_height="fill_parent"
-            android:background="@drawable/infopanelborder"
             android:id="@+id/linearLayout"
-            android:layout_marginLeft="3dp">
+            android:layout_width="90dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/infopanelborder"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/groundspeedInfoText"
@@ -87,14 +87,14 @@
                 android:singleLine="true"
                 android:text="GS:"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/groundspeedTxt"
@@ -108,19 +108,19 @@
                     android:singleLine="true"
                     android:text="..."
                     android:textColor="#fff2ec12"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="80dp"
-            android:layout_height="fill_parent"
-            android:background="@drawable/infopanelborder"
             android:id="@+id/linearLayout2"
-            android:layout_marginLeft="3dp">
+            android:layout_width="90dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/infopanelborder"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/headingInfoText"
@@ -131,14 +131,14 @@
                 android:text="HDG:"
                 android:textColor="#000000"
                 android:textIsSelectable="false"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/headingTxt"
@@ -152,19 +152,19 @@
                     android:singleLine="true"
                     android:text="..."
                     android:textColor="#fff2ec12"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="80dp"
+            android:id="@+id/linearLayout11"
+            android:layout_width="90dp"
             android:layout_height="fill_parent"
+            android:layout_marginLeft="3dp"
             android:background="@drawable/infopanelborder"
-            android:id="@+id/linearLayout9"
-            android:layout_marginLeft="3dp" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/altitudeInfoText"
@@ -175,14 +175,14 @@
                 android:text="Altitude:"
                 android:textColor="#000000"
                 android:textIsSelectable="false"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:gravity="bottom" >
+                android:gravity="bottom"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/infoAltitudeTxt"
@@ -196,7 +196,7 @@
                     android:singleLine="true"
                     android:text="..."
                     android:textColor="#fff2ec12"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -211,14 +211,14 @@
             android:layout_marginLeft="3dp">
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/trackInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
                 android:singleLine="true"
                 android:text="Track:"
                 android:textColor="#000000"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -235,7 +235,7 @@
                 android:textColor="#fff2ec12"
                 android:textColorHighlight="#ffffffff"
                 android:textIsSelectable="false"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -247,7 +247,7 @@
 
                 <TextView
                     android:id="@+id/distanceToTxt"
-                    android:layout_width="100dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:password="false"
                     android:shadowColor="#ff000000"
@@ -258,12 +258,12 @@
                     android:text="Dis: 500NM"
                     android:textColor="#fff2ec12"
                     android:textIsSelectable="false"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/hdgToTxt"
-                    android:layout_width="80dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:shadowColor="#ff000000"
                     android:shadowDx="1"
@@ -273,29 +273,34 @@
                     android:text="Hdg: 050"
                     android:textColor="#fff2ec12"
                     android:textIsSelectable="false"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/adsNavigationLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignTop="@+id/scaleBarView"
             android:layout_centerHorizontal="true"
-            android:id="@+id/adsNavigationLayout"
-            android:visibility="visible"
-            android:gravity="center">
+            android:gravity="top|right"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adMainNavigation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 ads:adSize="FULL_BANNER"
-                ads:adUnitId="ca-app-pub-5281313269938308/9018552671"
-                android:visibility="gone" />
+                ads:adUnitId="ca-app-pub-5281313269938308/9018552671" />
+
+            <Button
+                android:id="@+id/showMenuBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
 
 
         </LinearLayout>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -103,29 +104,7 @@ public class InfoPanelFragment extends Fragment {
         hdgTxt.setText("Hdg:" + _hdg);
     }
 
-    public void LoadAdd()
-    {
-        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(view.getContext());
-        propertiesDataSource.open(true);
-        boolean ads = propertiesDataSource.checkNoAdvertisements();
-        propertiesDataSource.close(true);
 
-
-        if (!ads) {
-            AdView MainAd = (AdView) view.findViewById(R.id.adMainNavigation);
-            AdRequest leftRequest = new AdRequest.Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice("36A5D52DC49CF3A84F6BD03381312CE1")
-                    .addTestDevice("70F82DF4BD716E85F87B34C81B78C5ED")
-                    .build();
-            MainAd.loadAd(leftRequest);
-        }
-        else
-        {
-            LinearLayout adsNavigationLayout = (LinearLayout) view.findViewById(R.id.adsNavigationLayout);
-            adsNavigationLayout.setVisibility(View.GONE);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -164,9 +143,18 @@ public class InfoPanelFragment extends Fragment {
         Txt = (TextView) view.findViewById(R.id.infoAltitudeTxt);
         Txt.setShadowLayer(2,2,2, Color.BLACK);
 
+        Button showMenuBtn = (Button) view.findViewById(R.id.showMenuBtn);
+        if (showMenuBtn!=null)
+            showMenuBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onDirectToBtnClicked != null) onDirectToBtnClicked.onClick(view);
+                }
+            });
+
         return view;
     }
 
-//    private View.OnClickListener onDirectToBtnClicked = null;
-//    public void setOnDirectToBtnClicked( final View.OnClickListener d) {onDirectToBtnClicked = d; }
+    private View.OnClickListener onDirectToBtnClicked = null;
+    public void setOnDirectToBtnClicked( final View.OnClickListener d) {onDirectToBtnClicked = d; }
 }

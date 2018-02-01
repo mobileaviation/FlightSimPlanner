@@ -40,7 +40,8 @@
             android:name=".NavigationActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_navigation"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@style/NoActionBarTheme">
         </activity>
 
         <meta-data

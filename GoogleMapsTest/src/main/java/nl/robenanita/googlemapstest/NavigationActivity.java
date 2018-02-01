@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,10 +17,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuPopupHelper;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,6 +34,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+//import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.SlidingDrawer;
@@ -205,6 +211,27 @@ public class NavigationActivity extends ActionBarActivity implements
         tracksLayout.setVisibility(View.GONE);
 
         infoPanel = (InfoPanelFragment) getFragmentManager().findFragmentById(R.id.infoPanelFragment);
+        infoPanel.setOnDirectToBtnClicked(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onClick(View view) {
+
+                PopupMenu popup = new PopupMenu(NavigationActivity.this, view);
+                MenuInflater inflater = popup.getMenuInflater();
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        return onOptionsItemSelected(menuItem);
+                    }
+                });
+                inflater.inflate(R.menu.main, popup.getMenu());
+                //@SuppressLint("RestrictedApi")
+                MenuPopupHelper menuPopupHelper = new MenuPopupHelper(NavigationActivity.this, (MenuBuilder) popup.getMenu(), view);
+                menuPopupHelper.setForceShowIcon(true);
+
+                menuPopupHelper.show();
+            }
+        });
 
         routeLineClicked = false;
 
