@@ -60,6 +60,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import java.util.ArrayList;
@@ -196,6 +197,8 @@ public class NavigationActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        new DrawerBuilder().withActivity(this).build();
 
         setUniqueIDtoDatabase(0);
         uniqueID = Helpers.generateUniqueId();
