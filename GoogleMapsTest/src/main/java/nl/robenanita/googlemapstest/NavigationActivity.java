@@ -198,7 +198,8 @@ public class NavigationActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        new DrawerBuilder().withActivity(this).build();
+        FSPMenuDrawer fspMenuDrawer = new FSPMenuDrawer();
+        fspMenuDrawer.getMenuDrawer(this);
 
         setUniqueIDtoDatabase(0);
         uniqueID = Helpers.generateUniqueId();
