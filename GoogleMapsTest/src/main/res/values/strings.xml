@@ -71,7 +71,7 @@
     <string name="action_isnew">What is new?</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="action_directTo" />
+    <string name="action_directTo">Direct To</string>
     <string name="action_load_test_chart">Load Charts</string>
     <string name="action_backup_userdb">Backup User DB</string>
     <string name="action_choice_your_route">Choose your route</string>

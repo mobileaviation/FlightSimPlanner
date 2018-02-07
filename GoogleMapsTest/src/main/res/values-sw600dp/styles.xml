@@ -6,7 +6,10 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!--<style name="NoActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--</style>-->
+    <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
     </style>
 
