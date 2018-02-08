@@ -200,6 +200,12 @@ public class NavigationActivity extends ActionBarActivity implements
 
         FSPMenuDrawer fspMenuDrawer = new FSPMenuDrawer();
         fspMenuDrawer.getMenuDrawer(this);
+        fspMenuDrawer.setOnMenuTtemClicked(new FSPMenuDrawer.OnMenuTtemClicked() {
+            @Override
+            public void MenuItemClicked(FSPMenuDrawer.MenuItemType menuItemType) {
+                Log.i(TAG, "Menu clicked: " + menuItemType.toString());
+            }
+        });
 
         setUniqueIDtoDatabase(0);
         uniqueID = Helpers.generateUniqueId();
