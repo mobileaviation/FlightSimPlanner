@@ -61,6 +61,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import java.util.ArrayList;
@@ -184,6 +185,7 @@ public class NavigationActivity extends ActionBarActivity implements
     private FSPMapFragment fspMapFragment;
 
     private AirportCharts airportCharts;
+    private FSPMenuDrawer fspMenuDrawer;
 
     @Override
     protected void onResume() {
@@ -198,12 +200,13 @@ public class NavigationActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        FSPMenuDrawer fspMenuDrawer = new FSPMenuDrawer();
+        fspMenuDrawer = new FSPMenuDrawer();
         fspMenuDrawer.getMenuDrawer(this);
         fspMenuDrawer.setOnMenuTtemClicked(new FSPMenuDrawer.OnMenuTtemClicked() {
             @Override
-            public void MenuItemClicked(FSPMenuDrawer.MenuItemType menuItemType) {
+            public void MenuItemClicked(FSPMenuDrawer.MenuItemType menuItemType, IDrawerItem item) {
                 Log.i(TAG, "Menu clicked: " + menuItemType.toString());
+                onMenuItemClicked(menuItemType, item);
             }
         });
 
@@ -597,6 +600,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 //startMenuItem.setEnabled(true);
 
                 connectDisconnectMenuItem.setIcon(R.drawable.connected);
+                fspMenuDrawer.SetConnectDisConnectIcon(true);
 
                 fspMapFragment.connected = true;
                 fspMapFragment.SetupTrackingLine();
@@ -621,6 +625,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMapFragment.connected = false;
 
                 connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
+                fspMenuDrawer.SetConnectDisConnectIcon(false);
             }
         });
         connection.SetFSUIPCCloseListener(new FSUIPCConnection.OnFSUIPCAction() {
@@ -635,6 +640,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
                 if (testTimer != null) testTimer.cancel();
                 connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
+                fspMenuDrawer.SetConnectDisConnectIcon(false);
             }
         });
 
@@ -662,6 +668,58 @@ public class NavigationActivity extends ActionBarActivity implements
     //private MenuItem searchAirportItem;
     private MenuItem connectDisconnectMenuItem;
     private MenuItem trackEnabledMenuItem;
+
+    private void onMenuItemClicked(FSPMenuDrawer.MenuItemType menuItemType, IDrawerItem item)
+    {
+        switch (menuItemType)
+        {
+            case isNew: {
+                showIsNewPopup();
+                break;
+            }
+            case search: {
+                ShowSearchActivity();
+                break;
+            }
+            case maptype: {
+                setMapSource();
+                break;
+            }
+            case directTo: {
+                ShowDirectToPopup();
+                break;
+            }
+            case settings: {
+                showSettingsActivity();
+                break;
+            }
+            case tracking: {
+                trackingEnabled = !trackingEnabled;
+                fspMenuDrawer.SetTrackingItemIcon(trackingEnabled);
+                break;
+            }
+            case loadTrack: {
+                ShowLoadTracksActivity();
+                break;
+            }
+            case loadCharts: {
+                LoadCharts();
+                break;
+            }
+            case routeCreate: {
+                ShowCreateFlightPlanActivity();
+                break;
+            }
+            case routeActivate: {
+                setLoadFlightplan();
+                break;
+            }
+            case connectDisconnect: {
+                ConnectDisconnect();
+                break;
+            }
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -737,35 +795,7 @@ public class NavigationActivity extends ActionBarActivity implements
             }
             case R.id.action_connect_disconnect:
             {
-                if (fspMapFragment.connected) {
-                    switch (connectionType) {
-                        case sim :
-                        {
-                            if (connection != null) {
-                                if (testTimer != null) testTimer.cancel();
-                                if (connection != null) connection.Close();
-                            }
-                            break;
-                        }
-                        case gps :
-                        {
-                            // Disconnect gps
-                            fspMapFragment.connected = false;
-                            locationTracking = null;
-                            connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
-                            mLocationClient.disconnect();
-                            break;
-                        }
-                    }
-                }
-                else {
-                    switch (connectionType) {
-                        case sim: { connectToServer(); break; }
-                        case gps: { connectToGps(); break; }
-                    }
-
-
-                }
+                ConnectDisconnect();
                 return true;
             }
 //            case R.id.action_test_item:
@@ -777,86 +807,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
             case R.id.action_loadchart:
             {
-                if (chartsProperty != null) {
-                    NetworkCheck checkTask = new NetworkCheck(chartsProperty.value1 + "MapCruncherMetadata.xml");
-                    checkTask.SetOnResult(new NetworkCheck.OnResult() {
-                        @Override
-                        public void Checked(Boolean result) {
-                            if (result)
-                            {
-                                LinearLayout progresslayout = (LinearLayout) NavigationActivity.this.findViewById(R.id.progressLayout);
-                                progresslayout.setVisibility(View.VISIBLE);
-                                ProgressBar progressBar = (ProgressBar) NavigationActivity.this.findViewById(R.id.navigationProgressBar);
-                                TextView progressText = (TextView) NavigationActivity.this.findViewById(R.id.navigationProgressText);
-                                progressBar.setProgress(0);
-                                progressText.setText("Loading charts: Getting manifest-xml");
-
-                                airportCharts = new AirportCharts();
-                                MapCruncherMetadataReader mapCruncherMetadataReader = new MapCruncherMetadataReader();
-                                mapCruncherMetadataReader.SetOnProgressMessageListener(new MapCruncherMetadataReader.OnProgressMessage() {
-                                    @Override
-                                    public void ProgressMessage(String message, Integer progress) {
-                                        Log.i(TAG, "Loading charts info: " + message + " progress: " + progress.toString());
-                                        ProgressBar progressBar = (ProgressBar) NavigationActivity.this.findViewById(R.id.navigationProgressBar);
-                                        TextView progressText = (TextView) NavigationActivity.this.findViewById(R.id.navigationProgressText);
-                                        progressBar.setProgress(progress);
-                                        progressText.setText("Loading charts: " + message);
-
-                                        if (progress == 100) {
-                                            progressBar.setProgress(100);
-                                            progressText.setText("Loading charts: Finished!");
-                                            try {
-                                                Thread.sleep(1000);
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            } finally {
-                                                LinearLayout progresslayout = (LinearLayout) NavigationActivity.this.findViewById(R.id.progressLayout);
-                                                progresslayout.setVisibility(View.INVISIBLE);
-                                            }
-
-                                        }
-                                    }
-                                });
-
-                                mapCruncherMetadataReader.Read(chartsProperty.value1, airportCharts, NavigationActivity.this);
-                            }
-                            else
-                            {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(NavigationActivity.this);
-                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // User clicked OK button
-                                        dialog.dismiss();
-                                    }
-                                });
-
-                                builder.setMessage("There is no MapCruncherMetadata.xml file found \nat: " + chartsProperty.value1);
-                                builder.setTitle("Missing MapChruncherMetadata.xml!");
-
-                                AlertDialog xmlNotAvailableDialog = builder.create();
-                                xmlNotAvailableDialog.show();
-                            }
-                        }
-                    });
-
-                    checkTask.execute();
-
-                }
-                else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(NavigationActivity.this);
-                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User clicked OK button
-                            dialog.dismiss();
-                        }
-                    });
-
-                    builder.setMessage("No Adress to get Charts from is in the settings yet. \nAn Adress needs to be configured for this option to work!");
-                    builder.setTitle("Missing settings!");
-
-                    AlertDialog chartsNotInSettingsDialog = builder.create();
-                    chartsNotInSettingsDialog.show();
-                }
+                LoadCharts();
                 return true;
             }
             case R.id.action_DirectTo:
@@ -866,6 +817,120 @@ public class NavigationActivity extends ActionBarActivity implements
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void LoadCharts() {
+        if (chartsProperty != null) {
+            NetworkCheck checkTask = new NetworkCheck(chartsProperty.value1 + "MapCruncherMetadata.xml");
+            checkTask.SetOnResult(new NetworkCheck.OnResult() {
+                @Override
+                public void Checked(Boolean result) {
+                    if (result)
+                    {
+                        LinearLayout progresslayout = (LinearLayout) NavigationActivity.this.findViewById(R.id.progressLayout);
+                        progresslayout.setVisibility(View.VISIBLE);
+                        ProgressBar progressBar = (ProgressBar) NavigationActivity.this.findViewById(R.id.navigationProgressBar);
+                        TextView progressText = (TextView) NavigationActivity.this.findViewById(R.id.navigationProgressText);
+                        progressBar.setProgress(0);
+                        progressText.setText("Loading charts: Getting manifest-xml");
+
+                        airportCharts = new AirportCharts();
+                        MapCruncherMetadataReader mapCruncherMetadataReader = new MapCruncherMetadataReader();
+                        mapCruncherMetadataReader.SetOnProgressMessageListener(new MapCruncherMetadataReader.OnProgressMessage() {
+                            @Override
+                            public void ProgressMessage(String message, Integer progress) {
+                                Log.i(TAG, "Loading charts info: " + message + " progress: " + progress.toString());
+                                ProgressBar progressBar = (ProgressBar) NavigationActivity.this.findViewById(R.id.navigationProgressBar);
+                                TextView progressText = (TextView) NavigationActivity.this.findViewById(R.id.navigationProgressText);
+                                progressBar.setProgress(progress);
+                                progressText.setText("Loading charts: " + message);
+
+                                if (progress == 100) {
+                                    progressBar.setProgress(100);
+                                    progressText.setText("Loading charts: Finished!");
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        LinearLayout progresslayout = (LinearLayout) NavigationActivity.this.findViewById(R.id.progressLayout);
+                                        progresslayout.setVisibility(View.INVISIBLE);
+                                    }
+
+                                }
+                            }
+                        });
+
+                        mapCruncherMetadataReader.Read(chartsProperty.value1, airportCharts, NavigationActivity.this);
+                    }
+                    else
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(NavigationActivity.this);
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User clicked OK button
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.setMessage("There is no MapCruncherMetadata.xml file found \nat: " + chartsProperty.value1);
+                        builder.setTitle("Missing MapChruncherMetadata.xml!");
+
+                        AlertDialog xmlNotAvailableDialog = builder.create();
+                        xmlNotAvailableDialog.show();
+                    }
+                }
+            });
+
+            checkTask.execute();
+
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(NavigationActivity.this);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked OK button
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setMessage("No Adress to get Charts from is in the settings yet. \nAn Adress needs to be configured for this option to work!");
+            builder.setTitle("Missing settings!");
+
+            AlertDialog chartsNotInSettingsDialog = builder.create();
+            chartsNotInSettingsDialog.show();
+        }
+    }
+
+    private void ConnectDisconnect() {
+        if (fspMapFragment.connected) {
+            switch (connectionType) {
+                case sim :
+                {
+                    if (connection != null) {
+                        if (testTimer != null) testTimer.cancel();
+                        if (connection != null) connection.Close();
+                    }
+                    break;
+                }
+                case gps :
+                {
+                    // Disconnect gps
+                    fspMapFragment.connected = false;
+                    locationTracking = null;
+                    connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
+                    fspMenuDrawer.SetConnectDisConnectIcon(false);
+                    mLocationClient.disconnect();
+                    break;
+                }
+            }
+        }
+        else {
+            switch (connectionType) {
+                case sim: { connectToServer(); break; }
+                case gps: { connectToGps(); break; }
+            }
+        }
     }
 
     private void ShowLoadTracksActivity() {
@@ -1509,6 +1574,7 @@ public class NavigationActivity extends ActionBarActivity implements
             fspMapFragment.connected = true;
 
             connectDisconnectMenuItem.setIcon(R.drawable.connected);
+            fspMenuDrawer.SetConnectDisConnectIcon(true);
 
             setupLocationRequest();
 

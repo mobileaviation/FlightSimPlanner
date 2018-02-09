@@ -9,6 +9,7 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.ImageHolder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
@@ -46,7 +47,7 @@ public class FSPMenuDrawer {
                         MenuItemType item = (MenuItemType) drawerItem.getTag();
                         if (item != null)
                         {
-                            if (onMenuTtemClicked != null) onMenuTtemClicked.MenuItemClicked(item);
+                            if (onMenuTtemClicked != null) onMenuTtemClicked.MenuItemClicked(item, drawerItem);
                         }
                         drawer.closeDrawer();
                         return false;
@@ -65,6 +66,18 @@ public class FSPMenuDrawer {
                 .withHeaderBackground(R.drawable.header1)
                 .build();
         return headerResult;
+    }
+
+    public void SetTrackingItemIcon(boolean active)
+    {
+        ImageHolder holder = new ImageHolder((active) ? R.drawable.trackactive : R.drawable.trackinactive);
+        drawer.updateIcon(10, holder);
+    }
+
+    public void SetConnectDisConnectIcon(boolean connected)
+    {
+        ImageHolder holder = new ImageHolder((connected) ? R.drawable.connected : R.drawable.disconnected);
+        drawer.updateIcon(9, holder);
     }
 
     private void createMenuItems()
@@ -154,7 +167,7 @@ public class FSPMenuDrawer {
     private OnMenuTtemClicked onMenuTtemClicked;
     public interface OnMenuTtemClicked
     {
-        public void MenuItemClicked(MenuItemType menuItemType);
+        public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem);
     }
 
 }
