@@ -10,6 +10,7 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.holder.ImageHolder;
+import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
@@ -49,8 +50,8 @@ public class FSPMenuDrawer {
                         {
                             if (onMenuTtemClicked != null) onMenuTtemClicked.MenuItemClicked(item, drawerItem);
                         }
-                        drawer.closeDrawer();
-                        return false;
+                        //drawer.closeDrawer();
+                        return true;
                     }
                 })
                 .build();
@@ -70,14 +71,18 @@ public class FSPMenuDrawer {
 
     public void SetTrackingItemIcon(boolean active)
     {
-        ImageHolder holder = new ImageHolder((active) ? R.drawable.trackactive : R.drawable.trackinactive);
-        drawer.updateIcon(10, holder);
+        PrimaryDrawerItem item = (PrimaryDrawerItem)drawer.getDrawerItem(10);
+        item.withIcon((active) ? R.drawable.trackactive : R.drawable.trackinactive);
+        drawer.removeItem(10);
+        drawer.addItemAtPosition(item, 4);
     }
 
     public void SetConnectDisConnectIcon(boolean connected)
     {
-        ImageHolder holder = new ImageHolder((connected) ? R.drawable.connected : R.drawable.disconnected);
-        drawer.updateIcon(9, holder);
+        PrimaryDrawerItem item = (PrimaryDrawerItem)drawer.getDrawerItem(9);
+        item.withIcon((connected) ? R.drawable.connected : R.drawable.disconnected);
+        drawer.removeItem(9);
+        drawer.addItemAtPosition(item, 3);
     }
 
     private void createMenuItems()

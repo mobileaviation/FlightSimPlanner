@@ -599,7 +599,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 //openFsuipcMenuItem.setEnabled(false);
                 //startMenuItem.setEnabled(true);
 
-                connectDisconnectMenuItem.setIcon(R.drawable.connected);
+                //connectDisconnectMenuItem.setIcon(R.drawable.connected);
                 fspMenuDrawer.SetConnectDisConnectIcon(true);
 
                 fspMapFragment.connected = true;
@@ -624,7 +624,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 locationTracking = null;
                 fspMapFragment.connected = false;
 
-                connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
+                //connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
                 fspMenuDrawer.SetConnectDisConnectIcon(false);
             }
         });
@@ -639,7 +639,7 @@ public class NavigationActivity extends ActionBarActivity implements
                         mLocationClient.disconnect();
 
                 if (testTimer != null) testTimer.cancel();
-                connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
+                //connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
                 fspMenuDrawer.SetConnectDisConnectIcon(false);
             }
         });
@@ -650,13 +650,13 @@ public class NavigationActivity extends ActionBarActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         //connectMenuItem = menu.findItem(R.id.action_connect);
         //openFsuipcMenuItem = menu.findItem(R.id.action_connectFsuipc);
         //startMenuItem = menu.findItem(R.id.action_start);
         //searchAirportItem = menu.findItem(R.id.action_searchAirport);
-        connectDisconnectMenuItem = menu.findItem(R.id.action_connect_disconnect);
-        trackEnabledMenuItem = menu.findItem((R.id.action_tracking_active));
+        //connectDisconnectMenuItem = menu.findItem(R.id.action_connect_disconnect);
+        //trackEnabledMenuItem = menu.findItem((R.id.action_tracking_active));
 
         return true;
     }
@@ -666,7 +666,7 @@ public class NavigationActivity extends ActionBarActivity implements
     //private MenuItem openFsuipcMenuItem;
     //private MenuItem startMenuItem;
     //private MenuItem searchAirportItem;
-    private MenuItem connectDisconnectMenuItem;
+    //private MenuItem connectDisconnectMenuItem;
     private MenuItem trackEnabledMenuItem;
 
     private void onMenuItemClicked(FSPMenuDrawer.MenuItemType menuItemType, IDrawerItem item)
@@ -918,7 +918,7 @@ public class NavigationActivity extends ActionBarActivity implements
                     // Disconnect gps
                     fspMapFragment.connected = false;
                     locationTracking = null;
-                    connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
+                    //connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
                     fspMenuDrawer.SetConnectDisConnectIcon(false);
                     mLocationClient.disconnect();
                     break;
@@ -1573,7 +1573,7 @@ public class NavigationActivity extends ActionBarActivity implements
             fspMapFragment.SetupTrackingLine();
             fspMapFragment.connected = true;
 
-            connectDisconnectMenuItem.setIcon(R.drawable.connected);
+            //connectDisconnectMenuItem.setIcon(R.drawable.connected);
             fspMenuDrawer.SetConnectDisConnectIcon(true);
 
             setupLocationRequest();
