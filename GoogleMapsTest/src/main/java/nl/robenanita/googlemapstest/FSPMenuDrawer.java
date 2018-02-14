@@ -73,6 +73,7 @@ public class FSPMenuDrawer {
     {
         PrimaryDrawerItem item = (PrimaryDrawerItem)drawer.getDrawerItem(10);
         item.withIcon((active) ? R.drawable.trackactive : R.drawable.trackinactive);
+        item.withName((active) ? R.string.action_tracking_locked : R.string.action_tracking_free);
         drawer.removeItem(10);
         drawer.addItemAtPosition(item, 4);
     }
@@ -81,6 +82,7 @@ public class FSPMenuDrawer {
     {
         PrimaryDrawerItem item = (PrimaryDrawerItem)drawer.getDrawerItem(9);
         item.withIcon((connected) ? R.drawable.connected : R.drawable.disconnected);
+        item.withName((connected) ? R.string.action_connected : R.string.action_disconnected);
         drawer.removeItem(9);
         drawer.addItemAtPosition(item, 3);
     }
@@ -97,12 +99,12 @@ public class FSPMenuDrawer {
                 .withTag(MenuItemType.routeActivate)
                 .withTextColor(Color.LTGRAY)
                 .withSelectable(false));
-        drawer.addItem(new PrimaryDrawerItem().withIdentifier(9).withName(R.string.action_connect_disconnect)
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(9).withName(R.string.action_disconnected)
                 .withIcon(R.drawable.disconnected)
                 .withTag(MenuItemType.connectDisconnect)
                 .withTextColor(Color.LTGRAY)
                 .withSelectable(false));
-        drawer.addItem(new PrimaryDrawerItem().withIdentifier(10).withName(R.string.action_tracking_active)
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(10).withName(R.string.action_tracking_locked)
                 .withIcon(R.drawable.trackactive)
                 .withTag(MenuItemType.tracking)
                 .withTextColor(Color.LTGRAY)
@@ -162,7 +164,9 @@ public class FSPMenuDrawer {
         loadTrack,
         settings,
         loadCharts,
-        isNew
+        isNew,
+        airspacesTracking,
+        appLocking
     }
 
     public void setOnMenuTtemClicked(OnMenuTtemClicked menuTtemClicked)

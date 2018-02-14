@@ -721,103 +721,103 @@ public class NavigationActivity extends ActionBarActivity implements
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.load_track_item:
-            {
-                ShowLoadTracksActivity();
-                return true;
-            }
-            case R.id.action_backup:
-            {
-                UserDBHelper.BackupUserDatabase(DBHelper.DATABASE_NAME);
-                UserDBHelper.BackupUserDatabase(UserDBHelper.DATABASE_NAME);
-                return true;
-            }
-            case R.id.action_settings:
-                return true;
-            case R.id.action_isnew:
-            {
-                showIsNewPopup();
-                return true;
-            }
-            case R.id.action_loadaip:
-            {
-                // Testing polygon create code ****************
-
-//                AirspacesDataSource airspacesDB = new AirspacesDataSource(this);
-//                airspacesDB.Open("all_airspaces.db.sqlite");
-//                airspacesDB.Close();
-
-                //fspMapFragment.ShowAirspacesInfoLayout();
-                return true;
-            }
-
-            case R.id.action_flightplan:
-            {
-                //ShowCreateFlightPlanPopup(this);
-
-                ShowCreateFlightPlanActivity();
-                return true;
-            }
-            case R.id.action_searchAirport:
-            {
-                ShowSearchActivity();
-                //ShowSearchAirportPopup();
-                return true;
-            }
-            case R.id.action_flightplan_activate:
-            {
-                setLoadFlightplan();
-                return true;
-            }
-
-            case R.id.action_maptype:
-            {
-                setMapSource();
-                return true;
-            }
-            case R.id.action_settings_item:
-            {
-                showSettingsActivity();
-                return true;
-            }
-            case R.id.action_tracking_active:
-            {
-                trackingEnabled = !trackingEnabled;
-                if (trackingEnabled) trackEnabledMenuItem.setIcon(R.drawable.trackactive);
-                else trackEnabledMenuItem.setIcon(R.drawable.trackinactive);
-                return true;
-            }
-            case R.id.action_connect_disconnect:
-            {
-                ConnectDisconnect();
-                return true;
-            }
-//            case R.id.action_test_item:
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        switch (item.getItemId()) {
+//            case R.id.load_track_item:
 //            {
-//                Intent startTestIntent = new Intent(NavigationActivity.this, TestActivity.class);
-//                NavigationActivity.this.startActivityForResult(startTestIntent, 500);
+//                ShowLoadTracksActivity();
 //                return true;
 //            }
-
-            case R.id.action_loadchart:
-            {
-                LoadCharts();
-                return true;
-            }
-            case R.id.action_DirectTo:
-            {
-                ShowDirectToPopup();
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//            case R.id.action_backup:
+//            {
+//                UserDBHelper.BackupUserDatabase(DBHelper.DATABASE_NAME);
+//                UserDBHelper.BackupUserDatabase(UserDBHelper.DATABASE_NAME);
+//                return true;
+//            }
+//            case R.id.action_settings:
+//                return true;
+//            case R.id.action_isnew:
+//            {
+//                showIsNewPopup();
+//                return true;
+//            }
+//            case R.id.action_loadaip:
+//            {
+//                // Testing polygon create code ****************
+//
+////                AirspacesDataSource airspacesDB = new AirspacesDataSource(this);
+////                airspacesDB.Open("all_airspaces.db.sqlite");
+////                airspacesDB.Close();
+//
+//                //fspMapFragment.ShowAirspacesInfoLayout();
+//                return true;
+//            }
+//
+//            case R.id.action_flightplan:
+//            {
+//                //ShowCreateFlightPlanPopup(this);
+//
+//                ShowCreateFlightPlanActivity();
+//                return true;
+//            }
+//            case R.id.action_searchAirport:
+//            {
+//                ShowSearchActivity();
+//                //ShowSearchAirportPopup();
+//                return true;
+//            }
+//            case R.id.action_flightplan_activate:
+//            {
+//                setLoadFlightplan();
+//                return true;
+//            }
+//
+//            case R.id.action_maptype:
+//            {
+//                setMapSource();
+//                return true;
+//            }
+//            case R.id.action_settings_item:
+//            {
+//                showSettingsActivity();
+//                return true;
+//            }
+//            case R.id.action_tracking_active:
+//            {
+//                trackingEnabled = !trackingEnabled;
+//                if (trackingEnabled) trackEnabledMenuItem.setIcon(R.drawable.trackactive);
+//                else trackEnabledMenuItem.setIcon(R.drawable.trackinactive);
+//                return true;
+//            }
+//            case R.id.action_connect_disconnect:
+//            {
+//                ConnectDisconnect();
+//                return true;
+//            }
+////            case R.id.action_test_item:
+////            {
+////                Intent startTestIntent = new Intent(NavigationActivity.this, TestActivity.class);
+////                NavigationActivity.this.startActivityForResult(startTestIntent, 500);
+////                return true;
+////            }
+//
+//            case R.id.action_loadchart:
+//            {
+//                LoadCharts();
+//                return true;
+//            }
+//            case R.id.action_DirectTo:
+//            {
+//                ShowDirectToPopup();
+//                return true;
+//            }
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void LoadCharts() {
         if (chartsProperty != null) {

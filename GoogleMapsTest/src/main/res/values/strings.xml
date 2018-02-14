@@ -12,8 +12,10 @@
     <string name="action_flightplan">Create or Edit Routes</string>
     <string name="action_flightplan_activate">Activate a route</string>
     <string name="action_maptype">Toggle through map types</string>
-    <string name="action_tracking_active">Activate - Deactivate tracking</string>
-    <string name="action_connect_disconnect">Connect - Disconnect from Sim</string>
+    <string name="action_tracking_locked">Map Locked</string>
+    <string name="action_tracking_free">Map Free</string>
+    <string name="action_connected">Connected</string>
+    <string name="action_disconnected">Disconnected</string>
     <string name="action_loadaip">Load Aip Airspace</string>
     <string name="countries_url">http://robenanita.yzi.me/countries.php</string>
     <string name="airports_url">http://robenanita.yzi.me/airports.php</string>
@@ -28,7 +30,7 @@
     <string name="requirements">FSX, Prepar3D or XPlane requirements:</string>
     <string name="fsuipc">For FSX and Prepar3D please install <a href="http://www.schiratti.com/dowson.html">FSUIPC</a></string>
     <string name="xpuipc">For X-Plane please install <a href="http://www.tosi-online.de/XPUIPC/XPUIPC.html">XPUIPC</a></string>
-    <string name="installation">Follow the <a href="http://mobileaviationtools.epizy.com/Installation/">installation instructions</a> on our webpage to install our special piece of server software.</string>
+    <string name="installation">Follow the <a href="http://www.mobileaviationtools.com/Installation/">installation instructions</a> on our webpage to install our special piece of server software.</string>
     <string name="jellylink">http://api.5jelly.com/redir/5930468</string>
     <string name="openaiplink">http://www.openaip.net/</string>
     <string name="openaviationdatalink">http://www.openaviationdata.com/</string>
