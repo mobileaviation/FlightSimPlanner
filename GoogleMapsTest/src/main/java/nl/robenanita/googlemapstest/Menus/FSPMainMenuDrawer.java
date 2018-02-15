@@ -1,4 +1,4 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.Menus;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,18 +17,21 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import nl.robenanita.googlemapstest.R;
+
 /**
  * Created by Rob Verhoef on 6-2-2018.
  */
 
-public class FSPMenuDrawer {
-    public FSPMenuDrawer()
+public class FSPMainMenuDrawer {
+    public FSPMainMenuDrawer()
     {
 
     }
 
     private Activity activity;
     private Drawer drawer;
+    public Drawer getDrawer() {return drawer;}
 
     public Drawer getMenuDrawer(Activity activity)
     {
@@ -40,7 +43,7 @@ public class FSPMenuDrawer {
                 .withActionBarDrawerToggle(false)
                 .withActionBarDrawerToggleAnimated(true)
                 .withSliderBackgroundColor(Color.DKGRAY)
-                .withDisplayBelowStatusBar(true)
+                .withDisplayBelowStatusBar(false)
                 .withAccountHeader(createheader(activity))
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override

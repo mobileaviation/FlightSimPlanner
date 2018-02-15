@@ -60,9 +60,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.vividsolutions.jts.geom.Coordinate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -86,14 +84,14 @@ import nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView;
 import nl.robenanita.googlemapstest.MapFragment.BufferArea;
 import nl.robenanita.googlemapstest.MapFragment.FSPMapFragment;
 import nl.robenanita.googlemapstest.MapFragment.TrackingLine;
+import nl.robenanita.googlemapstest.Menus.FSPMainMenuDrawer;
+import nl.robenanita.googlemapstest.Menus.FSPSecondairyMenuDrawer;
 import nl.robenanita.googlemapstest.Route.Route;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
-import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
-import nl.robenanita.googlemapstest.database.DBHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.Helpers;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
@@ -104,7 +102,6 @@ import nl.robenanita.googlemapstest.Route.RouteActivateActivity;
 import nl.robenanita.googlemapstest.Route.RouteActivity;
 import nl.robenanita.googlemapstest.Route.Leg;
 import nl.robenanita.googlemapstest.Route.Waypoint;
-import nl.robenanita.googlemapstest.database.UserDBHelper;
 import nl.robenanita.googlemapstest.markers.PlaneMarker;
 import nl.robenanita.googlemapstest.search.SearchActivity;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
@@ -185,7 +182,8 @@ public class NavigationActivity extends ActionBarActivity implements
     private FSPMapFragment fspMapFragment;
 
     private AirportCharts airportCharts;
-    private FSPMenuDrawer fspMenuDrawer;
+    private FSPMainMenuDrawer fspMenuDrawer;
+    private FSPSecondairyMenuDrawer fspSecondairyMenuDrawer;
 
     @Override
     protected void onResume() {
@@ -200,15 +198,18 @@ public class NavigationActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        fspMenuDrawer = new FSPMenuDrawer();
+        fspMenuDrawer = new FSPMainMenuDrawer();
         fspMenuDrawer.getMenuDrawer(this);
-        fspMenuDrawer.setOnMenuTtemClicked(new FSPMenuDrawer.OnMenuTtemClicked() {
+        fspMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
             @Override
-            public void MenuItemClicked(FSPMenuDrawer.MenuItemType menuItemType, IDrawerItem item) {
+            public void MenuItemClicked(FSPMainMenuDrawer.MenuItemType menuItemType, IDrawerItem item) {
                 Log.i(TAG, "Menu clicked: " + menuItemType.toString());
                 onMenuItemClicked(menuItemType, item);
             }
         });
+
+        fspSecondairyMenuDrawer = new FSPSecondairyMenuDrawer();
+        fspSecondairyMenuDrawer.addSecondairyMenuDrawer(fspMenuDrawer, this);
 
         setUniqueIDtoDatabase(0);
         uniqueID = Helpers.generateUniqueId();
@@ -669,7 +670,7 @@ public class NavigationActivity extends ActionBarActivity implements
     //private MenuItem connectDisconnectMenuItem;
     private MenuItem trackEnabledMenuItem;
 
-    private void onMenuItemClicked(FSPMenuDrawer.MenuItemType menuItemType, IDrawerItem item)
+    private void onMenuItemClicked(FSPMainMenuDrawer.MenuItemType menuItemType, IDrawerItem item)
     {
         switch (menuItemType)
         {
