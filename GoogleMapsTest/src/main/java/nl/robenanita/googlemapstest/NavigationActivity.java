@@ -86,6 +86,7 @@ import nl.robenanita.googlemapstest.MapFragment.FSPMapFragment;
 import nl.robenanita.googlemapstest.MapFragment.TrackingLine;
 import nl.robenanita.googlemapstest.Menus.FSPMainMenuDrawer;
 import nl.robenanita.googlemapstest.Menus.FSPSecondairyMenuDrawer;
+import nl.robenanita.googlemapstest.Menus.MenuItemType;
 import nl.robenanita.googlemapstest.Route.Route;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
@@ -202,7 +203,7 @@ public class NavigationActivity extends ActionBarActivity implements
         fspMenuDrawer.getMenuDrawer(this);
         fspMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
             @Override
-            public void MenuItemClicked(FSPMainMenuDrawer.MenuItemType menuItemType, IDrawerItem item) {
+            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem item) {
                 Log.i(TAG, "Menu clicked: " + menuItemType.toString());
                 onMenuItemClicked(menuItemType, item);
             }
@@ -210,6 +211,12 @@ public class NavigationActivity extends ActionBarActivity implements
 
         fspSecondairyMenuDrawer = new FSPSecondairyMenuDrawer();
         fspSecondairyMenuDrawer.addSecondairyMenuDrawer(fspMenuDrawer, this);
+        fspSecondairyMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
+            @Override
+            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem) {
+                onMenuItemClicked(menuItemType, drawerItem);
+            }
+        });
 
         setUniqueIDtoDatabase(0);
         uniqueID = Helpers.generateUniqueId();
@@ -670,7 +677,7 @@ public class NavigationActivity extends ActionBarActivity implements
     //private MenuItem connectDisconnectMenuItem;
     private MenuItem trackEnabledMenuItem;
 
-    private void onMenuItemClicked(FSPMainMenuDrawer.MenuItemType menuItemType, IDrawerItem item)
+    private void onMenuItemClicked(MenuItemType menuItemType, IDrawerItem item)
     {
         switch (menuItemType)
         {

@@ -155,23 +155,6 @@ public class FSPMainMenuDrawer {
         drawer.addItem(new DividerDrawerItem());
     }
 
-    public enum MenuItemType
-    {
-        directTo,
-        routeActivate,
-        connectDisconnect,
-        tracking,
-        routeCreate,
-        maptype,
-        search,
-        loadTrack,
-        settings,
-        loadCharts,
-        isNew,
-        airspacesTracking,
-        appLocking
-    }
-
     public void setOnMenuTtemClicked(OnMenuTtemClicked menuTtemClicked)
     {
         this.onMenuTtemClicked = menuTtemClicked;
@@ -183,3 +166,6 @@ public class FSPMainMenuDrawer {
     }
 
 }
+
+
+

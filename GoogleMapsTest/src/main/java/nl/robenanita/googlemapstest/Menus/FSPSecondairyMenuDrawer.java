@@ -33,10 +33,10 @@ public class FSPSecondairyMenuDrawer {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        FSPMainMenuDrawer.MenuItemType item = (FSPMainMenuDrawer.MenuItemType) drawerItem.getTag();
+                        MenuItemType item = (MenuItemType) drawerItem.getTag();
                         if (item != null)
                         {
-
+                            if (onMenuTtemClicked != null) onMenuTtemClicked.MenuItemClicked(item, drawerItem);
                         }
                         //drawer.closeDrawer();
                         return true;
@@ -44,5 +44,15 @@ public class FSPSecondairyMenuDrawer {
                 })
                 .append(drawer.getDrawer());
         return drawer.getDrawer();
+    }
+
+    public void setOnMenuTtemClicked(FSPMainMenuDrawer.OnMenuTtemClicked menuTtemClicked)
+    {
+        this.onMenuTtemClicked = menuTtemClicked;
+    }
+    private FSPMainMenuDrawer.OnMenuTtemClicked onMenuTtemClicked;
+    public interface OnMenuTtemClicked
+    {
+        public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem);
     }
 }
