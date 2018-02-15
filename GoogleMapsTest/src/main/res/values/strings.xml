@@ -17,6 +17,10 @@
     <string name="action_connected">Connected</string>
     <string name="action_disconnected">Disconnected</string>
     <string name="action_loadaip">Load Aip Airspace</string>
+    <string name="action_app_locked">App is Locked</string>
+    <string name="action_app_free">App is Unlocked</string>
+    <string name="action_airspace_check_active">Airspace Check Active</string>
+    <string name="action_airspace_check_disabled">Airspace Check Disabled</string>
     <string name="countries_url">http://robenanita.yzi.me/countries.php</string>
     <string name="airports_url">http://robenanita.yzi.me/airports.php</string>
     <string name="search_hint_airports">"Search for airport on name or code". For example, "Schiphol" or "EHAM"</string>
