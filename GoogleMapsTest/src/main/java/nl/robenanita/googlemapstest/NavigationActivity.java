@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -186,6 +188,9 @@ public class NavigationActivity extends ActionBarActivity implements
     private FSPMainMenuDrawer fspMenuDrawer;
     private FSPSecondairyMenuDrawer fspSecondairyMenuDrawer;
 
+    private Boolean appLocking;
+    //private Boolean airspaceCheck;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -198,6 +203,9 @@ public class NavigationActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        appLocking = false;
+        //airspaceCheck = true;
 
         fspMenuDrawer = new FSPMainMenuDrawer();
         fspMenuDrawer.getMenuDrawer(this);
@@ -261,6 +269,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
         trackingEnabled = true;
         fspMapFragment.connected = false;
+        fspMapFragment.airspace_check = true;
 
         LoadProperties();
 
@@ -312,43 +321,45 @@ public class NavigationActivity extends ActionBarActivity implements
         fspMapFragment.InitializeMap(legInfoView, infoPanel);
     }
 
-    public Route GetSelectedFlightplan()
-    {
-        return fspMapFragment.GetCurrentFlightplan();
-    }
-
-    private void setupAirspaces()
-    {
-        ArrayList<String> airspacesdbFiles = DBFilesHelper.CopyDatabases(this.getApplicationContext(), true);
-
-        for (String a : airspacesdbFiles)
-        {
-            LoadAirspacesAsync loadAirspacesAsync = new LoadAirspacesAsync();
-            loadAirspacesAsync.context = this;
-            loadAirspacesAsync.databaseName = a;
-            loadAirspacesAsync.mapView = map;
-            loadAirspacesAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            Log.i(TAG, "Airpace database: " + a + " loaded!");
-        }
-    }
+//    public Route GetSelectedFlightplan()
+//    {
+//        return fspMapFragment.GetCurrentFlightplan();
+//    }
+//
+//    private void setupAirspaces()
+//    {
+//        ArrayList<String> airspacesdbFiles = DBFilesHelper.CopyDatabases(this.getApplicationContext(), true);
+//
+//        for (String a : airspacesdbFiles)
+//        {
+//            LoadAirspacesAsync loadAirspacesAsync = new LoadAirspacesAsync();
+//            loadAirspacesAsync.context = this;
+//            loadAirspacesAsync.databaseName = a;
+//            loadAirspacesAsync.mapView = map;
+//            loadAirspacesAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            Log.i(TAG, "Airpace database: " + a + " loaded!");
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to stop navigating?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        NavigationActivity.super.onBackPressed();
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+        if (!appLocking) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to stop navigating?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            NavigationActivity.super.onBackPressed();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
 
@@ -724,6 +735,16 @@ public class NavigationActivity extends ActionBarActivity implements
             }
             case connectDisconnect: {
                 ConnectDisconnect();
+                break;
+            }
+            case airspacesTracking:{
+                fspMapFragment.airspace_check = !fspMapFragment.airspace_check;
+                fspSecondairyMenuDrawer.SetAirspaceItemIcon(fspMapFragment.airspace_check);
+                break;
+            }
+            case appLocking:{
+                appLocking = !appLocking;
+                fspSecondairyMenuDrawer.SetApplockedIcon(appLocking);
                 break;
             }
         }

@@ -137,6 +137,8 @@ public class FSPMapFragment extends Fragment {
 
     private DeviationLine deviationLine;
 
+    public Boolean airspace_check;
+
     public FSPMapFragment() {
         // Required empty public constructor
     }
@@ -419,15 +421,18 @@ public class FSPMapFragment extends Fragment {
                 Location start = Helpers.getLocation(startedPosition[0].target);
                 Location cur = Helpers.getLocation(googleMap.getCameraPosition().target);
                 Boolean _do = true;
-                Boolean _airspaces_do = true;
+                Boolean _airspaces_do = airspace_check;
+                Boolean _markers_do = true;
+
 
                 if (connected) {
-                    _do = (start.distanceTo(cur)>50);
-                    _airspaces_do = (start.distanceTo(cur)>500);
+                    _do = _do && (start.distanceTo(cur)>50);
+                    _airspaces_do = _airspaces_do && (start.distanceTo(cur)>500);
+                    _markers_do = _markers_do && (start.distanceTo(cur)>500);
                 }
 
                 if (_do) {
-                    SetAviationMarkersByZoomAndBoundary();
+                    if (_markers_do) SetAviationMarkersByZoomAndBoundary();
                     if (_airspaces_do) ShowAirspacesInfoLayout();
                     if (onCameraIdleListener != null)
                         FSPMapFragment.this.onCameraIdleListener.onCameraIdle();
@@ -452,7 +457,8 @@ public class FSPMapFragment extends Fragment {
         googleMap.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
             @Override
             public void onPolylineClick(Polyline polyline) {
-                Log.i(TAG, "Polyline clicked");
+                Log.i(TAG, "Polyline clicked " + polyline.toString());
+                if (polyline.getTag()=="deviationLine") return;
                 LatLng latLng = googleMap.getCameraPosition().target;
                 Log.i(TAG, "Clicked Position Lat: " + latLng.latitude + " Lon: " + latLng.longitude);
                 setNewWaypointFragmentVisibility(true);
@@ -638,6 +644,9 @@ public class FSPMapFragment extends Fragment {
                     infoWindow = new InfoWindow(marker.getPosition(), googleMap, FSPMapFragment.this, waypointFragment);
                     infoWindow.MapPositionChanged();
                 }
+
+                if (marker.getTag()=="deviationMarker")
+                    ShowAirspacesInfoLayout();
 
                 return true;
             }

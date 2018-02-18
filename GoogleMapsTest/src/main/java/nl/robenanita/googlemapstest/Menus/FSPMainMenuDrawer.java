@@ -43,7 +43,7 @@ public class FSPMainMenuDrawer {
                 .withActionBarDrawerToggle(false)
                 .withActionBarDrawerToggleAnimated(true)
                 .withSliderBackgroundColor(Color.DKGRAY)
-                .withDisplayBelowStatusBar(false)
+                .withDisplayBelowStatusBar(true)
                 .withAccountHeader(createheader(activity))
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -92,6 +92,8 @@ public class FSPMainMenuDrawer {
 
     private void createMenuItems()
     {
+
+
         drawer.addItem(new PrimaryDrawerItem().withIdentifier(6).withName(R.string.action_directTo)
                 .withIcon(R.drawable.dirtecttobtn)
                 .withTag(MenuItemType.directTo)
@@ -129,28 +131,7 @@ public class FSPMainMenuDrawer {
                 .withTextColor(Color.LTGRAY)
                 .withTag(MenuItemType.search)
                 .withSelectable(false));
-        drawer.addItem(new DividerDrawerItem());
 
-        drawer.addItem(new PrimaryDrawerItem().withIdentifier(1)
-                .withName(R.string.action_loadtrack)
-                .withTextColor(Color.LTGRAY)
-                .withTag(MenuItemType.loadTrack)
-                .withSelectable(false));
-        drawer.addItem(new PrimaryDrawerItem().withIdentifier(2)
-                .withName(R.string.action_settings)
-                .withTag(MenuItemType.settings)
-                .withTextColor(Color.LTGRAY)
-                .withSelectable(false));
-        drawer.addItem(new PrimaryDrawerItem().withIdentifier(3)
-                .withName(R.string.action_load_test_chart)
-                .withTag(MenuItemType.loadCharts)
-                .withTextColor(Color.LTGRAY)
-                .withSelectable(false));
-        drawer.addItem(new PrimaryDrawerItem().withIdentifier(4)
-                .withName(R.string.action_isnew)
-                .withTag(MenuItemType.isNew)
-                .withTextColor(Color.LTGRAY)
-                .withSelectable(false));
 
         drawer.addItem(new DividerDrawerItem());
     }

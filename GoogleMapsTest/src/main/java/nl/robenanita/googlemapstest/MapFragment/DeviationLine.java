@@ -53,10 +53,12 @@ public class DeviationLine {
                 points.add(new LatLng(planeLocation.getLatitude(), planeLocation.getLongitude()));
                 points.add(new LatLng(mapLocation.getLatitude(), mapLocation.getLongitude()));
                 line = googleMap.addPolyline(line_options);
+                line.setTag("deviationLine");
                 line.setPoints(points);
 
                 coarseMarkerObject = new CoarseMarker(planeLocation, mapLocation);
-                coarseMarkerObject.setCoarseMarker(googleMap, context, points.get(1));
+                Marker marker = coarseMarkerObject.setCoarseMarker(googleMap, context, points.get(1));
+                marker.setTag("deviationMarker");
                 coarseMarkerObject.setAncherOnFront();
             }
             else

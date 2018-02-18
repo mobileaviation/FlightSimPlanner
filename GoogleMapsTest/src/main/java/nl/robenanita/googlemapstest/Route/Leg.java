@@ -67,6 +67,7 @@ public class Leg {
 
         track = map.addPolyline(trackoptions);
         track1 = map.addPolyline(trackoptions1);
+        track1.setTag(this);
         track.setTag(this);
     }
 

@@ -5,8 +5,11 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -31,7 +34,8 @@ public class FSPSecondairyMenuDrawer {
                 .withActionBarDrawerToggle(false)
                 .withActionBarDrawerToggleAnimated(true)
                 .withSliderBackgroundColor(Color.DKGRAY)
-                .withDisplayBelowStatusBar(false)
+                .withDisplayBelowStatusBar(true)
+                .withAccountHeader(createheader(activity))
                 .withDrawerGravity(Gravity.END)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -50,14 +54,67 @@ public class FSPSecondairyMenuDrawer {
         return drawer.getDrawer();
     }
 
+    private AccountHeader createheader(Activity activity)
+    {
+        // Create the AccountHeader
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(activity)
+                .withHeaderBackground(R.drawable.header1)
+                .build();
+        return headerResult;
+    }
+
+    public void SetAirspaceItemIcon(boolean active)
+    {
+        PrimaryDrawerItem item = (PrimaryDrawerItem)drawer.getDrawerItem(20);
+        item.withIcon((active) ? R.drawable.airspace_locked : R.drawable.airspace_unlocked);
+        item.withName((active) ? R.string.action_airspace_check_active : R.string.action_airspace_check_disabled);
+        drawer.removeItem(20);
+        drawer.addItemAtPosition(item, 1);
+    }
+
+    public void SetApplockedIcon(boolean locked)
+    {
+        PrimaryDrawerItem item = (PrimaryDrawerItem)drawer.getDrawerItem(21);
+        item.withIcon((locked) ? R.drawable.locked : R.drawable.unlocked);
+        item.withName((locked) ? R.string.action_app_locked : R.string.action_app_free);
+        drawer.removeItem(21);
+        drawer.addItemAtPosition(item, 2);
+    }
+
     private void createMenuItems() {
-        drawer.addItem(new PrimaryDrawerItem().withIdentifier(0).withName(R.string.action_airspace_check_active)
+
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(20).withName(R.string.action_airspace_check_active)
                 .withTag(MenuItemType.airspacesTracking)
                 .withTextColor(Color.LTGRAY)
+                .withIcon(R.drawable.airspace_locked)
                 .withSelectable(false));
-        drawer.addItem(new PrimaryDrawerItem().withIdentifier(0).withName(R.string.action_app_free)
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(21).withName(R.string.action_app_free)
                 .withTag(MenuItemType.appLocking)
                 .withIcon(R.drawable.unlocked)
+                .withTextColor(Color.LTGRAY)
+                .withSelectable(false));
+
+        drawer.addItem(new DividerDrawerItem());
+
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(22)
+                .withName(R.string.action_loadtrack)
+                .withTextColor(Color.LTGRAY)
+                .withTag(MenuItemType.loadTrack)
+                .withSelectable(false));
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(23)
+                .withName(R.string.action_settings)
+                .withTag(MenuItemType.settings)
+                .withTextColor(Color.LTGRAY)
+                .withSelectable(false));
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(24)
+                .withName(R.string.action_load_test_chart)
+                .withTag(MenuItemType.loadCharts)
+                .withTextColor(Color.LTGRAY)
+                .withSelectable(false));
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(25)
+                .withName(R.string.action_isnew)
+                .withTag(MenuItemType.isNew)
                 .withTextColor(Color.LTGRAY)
                 .withSelectable(false));
     }
