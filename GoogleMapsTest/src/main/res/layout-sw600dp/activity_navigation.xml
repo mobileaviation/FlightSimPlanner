@@ -241,6 +241,32 @@
         android:visibility="gone"
         android:layout_marginTop="20dp">
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/md_grey_300">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="80"
+                android:gravity="center_vertical"
+                android:shadowColor="@color/md_black_1000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:text="Map layers Setup"
+                android:textColor="@color/md_grey_800" />
+
+            <ImageButton
+                android:id="@+id/closeLayersSetupBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="2dp"
+                android:foreground="@drawable/closebutton" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#EEEEEE"

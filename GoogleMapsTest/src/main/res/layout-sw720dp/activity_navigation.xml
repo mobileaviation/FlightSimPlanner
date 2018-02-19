@@ -226,23 +226,52 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/layersSetupLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="20dp"
         android:background="@android:color/black"
-        android:id="@+id/layersSetupLayout"
-        android:visibility="gone"
-        android:layout_marginTop="20dp">
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/md_grey_300">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="80"
+                android:gravity="center_vertical"
+                android:shadowColor="@color/md_black_1000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:text="Map layers Setup"
+                android:textColor="@color/md_grey_800" />
+
+            <ImageButton
+                android:id="@+id/closeLayersSetupBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="2dp"
+                android:foreground="@drawable/closebutton" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#EEEEEE"
-            android:layout_margin="1dp">
+            android:layout_margin="1dp"
+            android:background="#EEEEEE">
+
             <fragment
-                android:layout_width="500dp"
-                android:layout_height="500dp"
                 android:id="@+id/layersFragment"
-                android:name="nl.robenanita.googlemapstest.Settings.LayersSetup.MapLayersFragment" />
+                android:name="nl.robenanita.googlemapstest.Settings.LayersSetup.MapLayersFragment"
+                android:layout_width="500dp"
+                android:layout_height="500dp" />
         </LinearLayout>
     </LinearLayout>
 

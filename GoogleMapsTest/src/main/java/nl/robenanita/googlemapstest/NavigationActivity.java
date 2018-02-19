@@ -483,6 +483,15 @@ public class NavigationActivity extends ActionBarActivity implements
         LinearLayout layersSetupLayout = (LinearLayout) findViewById(R.id.layersSetupLayout);
         if (layersSetupLayout.getVisibility() == View.GONE) layersSetupLayout.setVisibility(View.VISIBLE);
         else layersSetupLayout.setVisibility(View.GONE);
+
+        ImageButton closeBtn = (ImageButton) findViewById(R.id.closeLayersSetupBtn);
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LinearLayout layersSetupLayout = (LinearLayout) findViewById(R.id.layersSetupLayout);
+                layersSetupLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void setLoadFlightplan()
