@@ -51,7 +51,8 @@ public class FSPMainMenuDrawer {
                         MenuItemType item = (MenuItemType) drawerItem.getTag();
                         if (item != null)
                         {
-                            if (onMenuTtemClicked != null) onMenuTtemClicked.MenuItemClicked(item, drawerItem);
+                            if (onMenuTtemClicked != null) onMenuTtemClicked.MenuItemClicked(item, drawerItem,
+                                    CloseMenuItems.Items().contains(item));
                         }
                         //drawer.closeDrawer();
                         return true;
@@ -60,6 +61,11 @@ public class FSPMainMenuDrawer {
                 .build();
         createMenuItems();
         return drawer;
+    }
+
+    public void CloseMenu()
+    {
+        drawer.closeDrawer();
     }
 
     private AccountHeader createheader(Activity activity)
@@ -143,7 +149,7 @@ public class FSPMainMenuDrawer {
     private OnMenuTtemClicked onMenuTtemClicked;
     public interface OnMenuTtemClicked
     {
-        public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem);
+        public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem, Boolean closeMenu);
     }
 
 }

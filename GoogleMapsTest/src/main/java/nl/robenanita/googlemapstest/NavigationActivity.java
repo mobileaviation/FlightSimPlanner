@@ -211,9 +211,10 @@ public class NavigationActivity extends ActionBarActivity implements
         fspMenuDrawer.getMenuDrawer(this);
         fspMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
             @Override
-            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem item) {
+            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem item, Boolean closeMenu) {
                 Log.i(TAG, "Menu clicked: " + menuItemType.toString());
                 onMenuItemClicked(menuItemType, item);
+                if (closeMenu) fspMenuDrawer.CloseMenu();
             }
         });
 
@@ -221,8 +222,9 @@ public class NavigationActivity extends ActionBarActivity implements
         fspSecondairyMenuDrawer.addSecondairyMenuDrawer(fspMenuDrawer, this);
         fspSecondairyMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
             @Override
-            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem) {
+            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem, Boolean closeMenu) {
                 onMenuItemClicked(menuItemType, drawerItem);
+                if (closeMenu) fspSecondairyMenuDrawer.CloseMenu();
             }
         });
 
@@ -484,7 +486,7 @@ public class NavigationActivity extends ActionBarActivity implements
         if (layersSetupLayout.getVisibility() == View.GONE) layersSetupLayout.setVisibility(View.VISIBLE);
         else layersSetupLayout.setVisibility(View.GONE);
 
-        ImageButton closeBtn = (ImageButton) findViewById(R.id.closeLayersSetupBtn);
+        Button closeBtn = (Button) findViewById(R.id.closeLayersSetupBtn);
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1049,7 +1051,7 @@ public class NavigationActivity extends ActionBarActivity implements
     private boolean isNewPopupVisible;
     private void showIsNewPopup()
     {
-        if (!isNewPopupVisible) {
+        //if (!isNewPopupVisible) {
             int popupWidth = 440;
             int popupHeight = 500;
 
@@ -1065,8 +1067,8 @@ public class NavigationActivity extends ActionBarActivity implements
             isNewPopup.setFocusable(true);
 
             isNewPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
-            isNewPopupVisible = true;
-        }
+          //  isNewPopupVisible = true;
+        //}
     }
 
     private void ShowCreateFlightPlanActivity()

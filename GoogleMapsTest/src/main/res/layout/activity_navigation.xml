@@ -239,7 +239,9 @@
         android:background="@android:color/black"
         android:id="@+id/layersSetupLayout"
         android:visibility="gone"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -249,22 +251,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="80"
+                android:layout_weight="50"
                 android:gravity="center_vertical"
                 android:shadowColor="@color/md_black_1000"
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:text="Map layers Setup"
-                android:textColor="@color/md_grey_800" />
-
-            <ImageButton
+                android:textColor="@color/md_grey_800"
+                android:textSize="18sp" />
+            <Button
                 android:id="@+id/closeLayersSetupBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/closebutton"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
-                android:layout_marginTop="2dp"
-                android:foreground="@drawable/closebutton" />
+                android:layout_marginTop="2dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
