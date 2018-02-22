@@ -186,14 +186,20 @@ public class LayersOfflineSetupFragment extends Fragment {
 
             @Override
             protected void onPostExecute(Object o) {
+                if (this != null) {
+                    View view = getView();
+                    if (view != null) {
+                        RadioButton offlineOpenstreet = (RadioButton) view.findViewById(R.id.offlineOpenstreetBtn);
+                        RadioButton offlineAaf = (RadioButton) view.findViewById(R.id.offlineAafSectionalBtn);
+                        RadioButton offlineGerman = (RadioButton) view.findViewById(R.id.offlineGermanDSFBtn);
 
-                RadioButton offlineOpenstreet = (RadioButton)getView().findViewById(R.id.offlineOpenstreetBtn);
-                RadioButton offlineAaf = (RadioButton)getView().findViewById(R.id.offlineAafSectionalBtn);
-                RadioButton offlineGerman = (RadioButton)getView().findViewById(R.id.offlineGermanDSFBtn);
-
-                if (offlineOpenstreet != null) offlineOpenstreet.setText("Openstreetmaps: " + openstreetSize);
-                if (offlineAaf != null) offlineAaf.setText("AAF Sectional: " + aafSize);
-                if (offlineGerman != null) offlineGerman.setText("German DSF charts: " + germanDsfSize);
+                        if (offlineOpenstreet != null)
+                            offlineOpenstreet.setText("Openstreetmaps: " + openstreetSize);
+                        if (offlineAaf != null) offlineAaf.setText("AAF Sectional: " + aafSize);
+                        if (offlineGerman != null)
+                            offlineGerman.setText("German DSF charts: " + germanDsfSize);
+                    }
+                }
                 super.onPostExecute(o);
             }
         }
