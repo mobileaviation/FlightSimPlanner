@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
@@ -23,7 +21,6 @@ import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,7 +70,6 @@ import java.util.TimerTask;
 
 import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.Airport.Runway;
-import nl.robenanita.googlemapstest.Airspaces.LoadAirspacesAsync;
 import nl.robenanita.googlemapstest.Charts.AirportCharts;
 import nl.robenanita.googlemapstest.Charts.MapCruncherMetadataReader;
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
@@ -91,10 +87,10 @@ import nl.robenanita.googlemapstest.Menus.FSPSecondairyMenuDrawer;
 import nl.robenanita.googlemapstest.Menus.MenuItemType;
 import nl.robenanita.googlemapstest.Route.Route;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
+import nl.robenanita.googlemapstest.SimConnection.FSUIPCConnection;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
-import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.Helpers;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
@@ -610,8 +606,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void connectToServer()
     {
-        connection = new FSUIPCConnection(ServerIPAddress, ServerPort);
-        connection.Connect();
+        connection = new FSUIPCConnection(ServerIPAddress, ServerPort, true);
         connection.SetFSUIPCConnectedListener(new FSUIPCConnection.OnFSUIPCAction() {
             @Override
             public void FSUIPCAction(String message, boolean success) {
@@ -673,7 +668,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMenuDrawer.SetConnectDisConnectIcon(false);
             }
         });
-
+        connection.Connect();
     }
 
     @Override

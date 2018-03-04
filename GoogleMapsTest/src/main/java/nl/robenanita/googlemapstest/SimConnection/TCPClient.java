@@ -1,4 +1,4 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.SimConnection;
 
 import android.os.AsyncTask;
 import android.util.Log;

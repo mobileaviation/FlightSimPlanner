@@ -1,8 +1,11 @@
-package nl.robenanita.googlemapstest;
+package nl.robenanita.googlemapstest.SimConnection;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -28,20 +31,25 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import nl.robenanita.googlemapstest.DataType;
+import nl.robenanita.googlemapstest.Offset;
+
 /**
  * Created by Rob Verhoef on 12-1-14.
  */
 public class FSUIPCConnection {
-    public FSUIPCConnection(String IP, int Port)
+    public FSUIPCConnection(String IP, int Port, boolean webapi)
     {
         ip = IP;
         port = Port;
         offsets = new ArrayList<Offset>();
+        this.webapi = webapi;
     }
 
     private String TAG = "GooglemapsTest";
     private String ip;
     private int port;
+    private boolean webapi;
 
     private boolean m_opened = false;
     private boolean m_processed = false;
@@ -51,10 +59,17 @@ public class FSUIPCConnection {
 
     public boolean isConnected()
     {
-        return (mTcpClient==null)? false : mTcpClient.isConnected();
+        if (webapi)
+        {
+            return (mWebApiClient == null) ? false : mWebApiClient.isConnected();
+        }
+        else {
+            return (mTcpClient == null) ? false : mTcpClient.isConnected();
+        }
     }
 
     private TCPClient mTcpClient = null;
+    private WebAPIClient mWebApiClient = null;
     private connectTask conctTask = null;
 
     private OnFSUIPCAction mFSUIPCConnectedListener = null;
@@ -114,110 +129,150 @@ public class FSUIPCConnection {
     public boolean Connect()
     {
         mTcpClient = null;
+        mWebApiClient = null;
         // connect to the server
-        conctTask = new connectTask();
-        conctTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (webapi)
+        {
+            if (mFSUIPCConnectedListener != null) mFSUIPCConnectedListener.FSUIPCAction("Connected", true);
+        }
+        else {
+            conctTask = new connectTask();
+            conctTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
 
         return true;
     }
 
     public boolean Open()
     {
-        // <root>
-        //  <FSUIPC Command="Open" />
-        // </root>
-
-        Document doc = newXmlDocument();
-        if (doc != null)
+        if (webapi)
         {
-            Element rootElement = doc.createElement("root");
-            doc.appendChild(rootElement);
+            mWebApiClient = new WebAPIClient(ip, port);
+            mWebApiClient.SetFSUIPCOpenListener(new OnFSUIPCAction() {
+                @Override
+                public void FSUIPCAction(String message, boolean success) {
+                    if (mFSUIPCOpenedListener != null) mFSUIPCOpenedListener.FSUIPCAction(message, success);
+                }
+            });
+            return mWebApiClient.OpenFSUIPC();
+        }
+        else {
+            // <root>
+            //  <FSUIPC Command="Open" />
+            // </root>
 
-            Element fsuipc = doc.createElement("FSUIPC");
-            rootElement.appendChild(fsuipc);
+            Document doc = newXmlDocument();
+            if (doc != null) {
+                Element rootElement = doc.createElement("root");
+                doc.appendChild(rootElement);
 
-            fsuipc.setAttribute("Command", "Open");
+                Element fsuipc = doc.createElement("FSUIPC");
+                rootElement.appendChild(fsuipc);
 
-            String cmd = getXMLString(doc);
-            Log.i(TAG, "Open XML string: " + cmd);
+                fsuipc.setAttribute("Command", "Open");
 
-            mTcpClient.sendMessage(cmd);
-            //mFSUIPCOpenedListener.FSUIPCAction("FSUIPC Connection Opened", true);
+                String cmd = getXMLString(doc);
+                Log.i(TAG, "Open XML string: " + cmd);
 
-            return true;
-        } else
-            return false;
+                mTcpClient.sendMessage(cmd);
+                //mFSUIPCOpenedListener.FSUIPCAction("FSUIPC Connection Opened", true);
+
+                return true;
+            } else
+                return false;
+        }
     }
 
     public boolean Close()
     {
-        // <root>
-        //  <FSUIPC Command="Close" />
-        // </root>
-
-        Document doc = newXmlDocument();
-        if (doc != null)
+        if (webapi)
         {
-            Element rootElement = doc.createElement("root");
-            doc.appendChild(rootElement);
-
-            Element fsuipc = doc.createElement("FSUIPC");
-            rootElement.appendChild(fsuipc);
-
-            fsuipc.setAttribute("Command", "Close");
-
-            String cmd = getXMLString(doc);
-            //Log.i(TAG, "Close XML string: " + cmd);
-
-            if (mTcpClient != null) {
-                mTcpClient.sendMessage(cmd);
-                mTcpClient.stopClient();
-                mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
-            }
-
-            return true;
-        } else
             return false;
+        }
+        else {
+            // <root>
+            //  <FSUIPC Command="Close" />
+            // </root>
+
+            Document doc = newXmlDocument();
+            if (doc != null) {
+                Element rootElement = doc.createElement("root");
+                doc.appendChild(rootElement);
+
+                Element fsuipc = doc.createElement("FSUIPC");
+                rootElement.appendChild(fsuipc);
+
+                fsuipc.setAttribute("Command", "Close");
+
+                String cmd = getXMLString(doc);
+                //Log.i(TAG, "Close XML string: " + cmd);
+
+                if (mTcpClient != null) {
+                    mTcpClient.sendMessage(cmd);
+                    mTcpClient.stopClient();
+                    mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
+                }
+
+                return true;
+            } else
+                return false;
+        }
     }
 
     public boolean Process(String DatagroupName)
     {
-        // <root>
-        //      <FSUIPC Command="ReadOffset" Offset="" Datagroup="" />
-        //      <FSUIPC Command="ReadOffset" Offset="" Datagroup="" />
-        // </root>
-
-        Document doc = newXmlDocument();
-        if (doc != null)
+        if (webapi)
         {
-            Element rootElement = doc.createElement("root");
-            doc.appendChild(rootElement);
-
-            Element fsuipc = doc.createElement("FSUIPC");
-            rootElement.appendChild(fsuipc);
-            fsuipc.setAttribute("Command", "ReadOffset");
-            Element offs = doc.createElement("Offsets");
-            fsuipc.appendChild(offs);
-
-            for (Offset o : offsets)
-            {
-                Element off = doc.createElement("Offset");
-                offs.appendChild(off);
-
-                off.setAttribute("Address",  Integer.toString(o.Address));
-                off.setAttribute("Datagroup", o.DatagroupName);
-                off.setAttribute("Datatype", o.Datatype.toString());
-            }
-
-            String cmd = getXMLString(doc);
-            //Log.i(TAG, "ReadOffsets XML string: " + cmd);
-
-            mTcpClient.sendMessage(cmd);
-
-            return true;
-
-        } else
+            mWebApiClient = new WebAPIClient(ip, port);
+            mWebApiClient.SetFSUIPCProcessListener(new OnFSUIPCAction() {
+                @Override
+                public void FSUIPCAction(String message, boolean success) {
+                    if (success)
+                    {
+                        ReadOffsetsFromJson(message);
+                        if (mFSUIPCProcessedListener != null) mFSUIPCProcessedListener.FSUIPCAction("Processed", true);
+                    }
+                }
+            });
+            mWebApiClient.ProcessFSUIPCOffsets(offsets);
             return false;
+        }
+        else {
+            // <root>
+            //      <FSUIPC Command="ReadOffset" Offset="" Datagroup="" />
+            //      <FSUIPC Command="ReadOffset" Offset="" Datagroup="" />
+            // </root>
+
+            Document doc = newXmlDocument();
+            if (doc != null) {
+                Element rootElement = doc.createElement("root");
+                doc.appendChild(rootElement);
+
+                Element fsuipc = doc.createElement("FSUIPC");
+                rootElement.appendChild(fsuipc);
+                fsuipc.setAttribute("Command", "ReadOffset");
+                Element offs = doc.createElement("Offsets");
+                fsuipc.appendChild(offs);
+
+                for (Offset o : offsets) {
+                    Element off = doc.createElement("Offset");
+                    offs.appendChild(off);
+
+                    off.setAttribute("Address", Integer.toString(o.Address));
+                    off.setAttribute("Datagroup", o.DatagroupName);
+                    off.setAttribute("Datatype", o.Datatype.toString());
+                }
+
+                String cmd = getXMLString(doc);
+                //Log.i(TAG, "ReadOffsets XML string: " + cmd);
+
+                mTcpClient.sendMessage(cmd);
+
+                return true;
+
+            } else
+                return false;
+        }
     }
 
     public Object ReadOffset(int Address)
@@ -258,6 +313,28 @@ public class FSUIPCConnection {
         return null;
     }
 
+    private void ReadOffsetsFromJson(String json)
+    {
+        try {
+            JSONArray resp_offsets = new JSONArray(json);
+
+            resp_offsets.length();
+
+            for (int i=0; i< resp_offsets.length(); i++)
+            {
+                JSONObject _offset = resp_offsets.getJSONObject(i);
+                Integer address = _offset.getInt("Address");
+                Offset o = findOffsetByAddress(address);
+//                if (_offset.getString("DataType").equals("Double"))
+//                    o.Value = _offset.getDouble("Value");
+//                else
+                    o.Value = _offset.get("Value").toString().replace(',', '.');
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void readOffsetsFromXML(Node offsets)
     {

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.robenanita.googlemapstest.TCPClient;
+import nl.robenanita.googlemapstest.SimConnection.TCPClient;
 import nl.robenanita.googlemapstest.database.AirportInfoDataSource;
 import nl.robenanita.googlemapstest.database.UserDBHelper;
 
