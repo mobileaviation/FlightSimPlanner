@@ -57,6 +57,22 @@ public class WebAPIClient {
         }
     }
 
+    public boolean CloseFSUIPC()
+    {
+        try {
+            url = new URL(_url + CLOSEENDPOINT);
+            closeTask closeTask = new closeTask();
+            closeTask.url = url;
+            closeTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean ProcessFSUIPCOffsets(List<Offset> offsets)
     {
         JSONArray json_offsets = new JSONArray();
@@ -97,15 +113,22 @@ public class WebAPIClient {
 
         @Override
         protected void onPostExecute(String s) {
-
-            if (mFSUIPCProcessedListener != null) mFSUIPCProcessedListener.FSUIPCAction(s, true);
+            boolean success = !s.startsWith("error");
+            if (mFSUIPCProcessedListener != null) mFSUIPCProcessedListener.FSUIPCAction(s, success);
             super.onPostExecute(s);
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            String resp = WebAPIHelpers.Post(url, processJson.toString());
-            return resp;
+            try {
+                String resp = WebAPIHelpers.Post(url, processJson.toString());
+                return resp;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                return "error; " + e.getMessage();
+            }
         }
     }
 
@@ -116,19 +139,25 @@ public class WebAPIClient {
         @Override
         protected void onPostExecute(String s) {
             // {"Message":"Connection Opened","Simulator":"FSX","Aircraft":"Aircreation582SL Blue"}
-            try {
-                JSONObject json = new JSONObject(s);
-                if (json.getString("Message").equals("Connection Opened")) {
-                    String message = json.getString("Message") + " Sim: " + json.getString("Simulator") + " Aircraft: " + json.getString("Aircraft");
-                    if (mFSUIPCOpenedListener != null) mFSUIPCOpenedListener.FSUIPCAction(message, true);
-                }
-                else
-                {
-                    if (mFSUIPCOpenedListener != null) mFSUIPCOpenedListener.FSUIPCAction("Connection Error", false);
-                }
+            if (!s.startsWith("error")) {
+                try {
+                    JSONObject json = new JSONObject(s);
+                    if (json.getString("Message").equals("Connection Opened")) {
+                        String message = json.getString("Message") + " Sim: " + json.getString("Simulator") + " Aircraft: " + json.getString("Aircraft");
+                        if (mFSUIPCOpenedListener != null)
+                            mFSUIPCOpenedListener.FSUIPCAction(message, true);
+                    } else {
+                        if (mFSUIPCOpenedListener != null)
+                            mFSUIPCOpenedListener.FSUIPCAction("Error: " + s, false);
+                    }
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                mFSUIPCOpenedListener.FSUIPCAction("Error: " + s, false);
             }
             super.onPostExecute(s);
         }
@@ -144,7 +173,51 @@ public class WebAPIClient {
                 return resp;
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                return "error; " + e.getMessage();
+            }
+        }
+    }
+
+    private class closeTask extends AsyncTask<String, Void, String>
+    {
+        public URL url;
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (!s.startsWith("error")) {
+                try {
+                    if (s.equals("Connection Closed")) {
+                        String message = "Connection Closed";
+                        if (mFSUIPCClosedListener != null)
+                            mFSUIPCClosedListener.FSUIPCAction(message, true);
+                    } else {
+                        if (mFSUIPCClosedListener != null)
+                            mFSUIPCClosedListener.FSUIPCAction("Error: " + s, false);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                mFSUIPCClosedListener.FSUIPCAction("Error: " + s, false);
+            }
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                JSONObject json = new JSONObject();
+                json.put("name", "Flightsim Planner");
+
+                String resp = WebAPIHelpers.Post(url, json.toString());
+
+                return resp;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "error; " + e.getMessage();
             }
         }
     }

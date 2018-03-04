@@ -138,7 +138,7 @@ public class NavigationActivity extends ActionBarActivity implements
 
     public enum ConnectionType
     {
-        sim, gps
+        sim, gps, simv2
     }
     private ConnectionType connectionType;
 
@@ -606,7 +606,8 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void connectToServer()
     {
-        connection = new FSUIPCConnection(ServerIPAddress, ServerPort, true);
+        Boolean webapi = (connectionType==ConnectionType.simv2);
+        connection = new FSUIPCConnection(ServerIPAddress, ServerPort, webapi);
         connection.SetFSUIPCConnectedListener(new FSUIPCConnection.OnFSUIPCAction() {
             @Override
             public void FSUIPCAction(String message, boolean success) {
@@ -948,6 +949,14 @@ public class NavigationActivity extends ActionBarActivity implements
                     }
                     break;
                 }
+                case simv2 :
+                {
+                    if (connection != null) {
+                        if (testTimer != null) testTimer.cancel();
+                        if (connection != null) connection.Close();
+                    }
+                    break;
+                }
                 case gps :
                 {
                     // Disconnect gps
@@ -963,6 +972,7 @@ public class NavigationActivity extends ActionBarActivity implements
         else {
             switch (connectionType) {
                 case sim: { connectToServer(); break; }
+                case simv2: { connectToServer(); break; }
                 case gps: { connectToGps(); break; }
             }
         }

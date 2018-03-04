@@ -187,7 +187,14 @@ public class FSUIPCConnection {
     {
         if (webapi)
         {
-            return false;
+            mWebApiClient = new WebAPIClient(ip, port);
+            mWebApiClient.SetFSUIPCCloseListener(new OnFSUIPCAction() {
+                @Override
+                public void FSUIPCAction(String message, boolean success) {
+                    if (mFSUIPCClosedListener != null)  mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
+                }
+            });
+            return mWebApiClient.CloseFSUIPC();
         }
         else {
             // <root>
