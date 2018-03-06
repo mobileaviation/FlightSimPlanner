@@ -1,6 +1,7 @@
 package nl.robenanita.googlemapstest.SimConnection;
 
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompatSideChannelService;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -151,7 +152,16 @@ public class FSUIPCConnection {
             mWebApiClient.SetFSUIPCOpenListener(new OnFSUIPCAction() {
                 @Override
                 public void FSUIPCAction(String message, boolean success) {
-                    if (mFSUIPCOpenedListener != null) mFSUIPCOpenedListener.FSUIPCAction(message, success);
+                    if (success) {
+                        if (mFSUIPCOpenedListener != null)
+                            mFSUIPCOpenedListener.FSUIPCAction(message, success);
+                    }
+                    else {
+                        if (mFSUIPCErrorListener != null) {
+                            mFSUIPCErrorListener.FSUIPCAction(message, false);
+                        }
+                    }
+
                 }
             });
             return mWebApiClient.OpenFSUIPC();
@@ -191,7 +201,12 @@ public class FSUIPCConnection {
             mWebApiClient.SetFSUIPCCloseListener(new OnFSUIPCAction() {
                 @Override
                 public void FSUIPCAction(String message, boolean success) {
-                    if (mFSUIPCClosedListener != null)  mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
+                    if (success)
+                        if (mFSUIPCClosedListener != null)  mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
+                    else
+                        if (mFSUIPCErrorListener != null) {
+                            mFSUIPCErrorListener.FSUIPCAction(message, false);
+                        }
                 }
             });
             return mWebApiClient.CloseFSUIPC();
@@ -236,8 +251,15 @@ public class FSUIPCConnection {
                 public void FSUIPCAction(String message, boolean success) {
                     if (success)
                     {
-                        ReadOffsetsFromJson(message);
-                        if (mFSUIPCProcessedListener != null) mFSUIPCProcessedListener.FSUIPCAction("Processed", true);
+                        if (success) {
+                            ReadOffsetsFromJson(message);
+                            if (mFSUIPCProcessedListener != null)
+                                mFSUIPCProcessedListener.FSUIPCAction("Processed", true);
+                        }
+                        else
+                            if (mFSUIPCErrorListener != null) {
+                                mFSUIPCErrorListener.FSUIPCAction(message, false);
+                            }
                     }
                 }
             });

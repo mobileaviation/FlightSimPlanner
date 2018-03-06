@@ -121,8 +121,11 @@ public class WebAPIClient {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                String resp = WebAPIHelpers.Post(url, processJson.toString());
-                return resp;
+                SimConnectResponse resp = WebAPIHelpers.Post(url, processJson.toString());
+                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
+                    resp.Response = "error: " + resp.Response;
+
+                return resp.Response;
             }
             catch (Exception e)
             {
@@ -168,9 +171,11 @@ public class WebAPIClient {
                 JSONObject json = new JSONObject();
                 json.put("name", "Flightsim Planner");
 
-                String resp = WebAPIHelpers.Post(url, json.toString());
+                SimConnectResponse resp = WebAPIHelpers.Post(url, json.toString());
+                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
+                    resp.Response = "error: " + resp.Response;
 
-                return resp;
+                return resp.Response;
             } catch (Exception e) {
                 e.printStackTrace();
                 return "error; " + e.getMessage();
@@ -212,9 +217,11 @@ public class WebAPIClient {
                 JSONObject json = new JSONObject();
                 json.put("name", "Flightsim Planner");
 
-                String resp = WebAPIHelpers.Post(url, json.toString());
+                SimConnectResponse resp = WebAPIHelpers.Post(url, json.toString());
+                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
+                    resp.Response = "error: " + resp.Response;
 
-                return resp;
+                return resp.Response;
             } catch (Exception e) {
                 e.printStackTrace();
                 return "error; " + e.getMessage();

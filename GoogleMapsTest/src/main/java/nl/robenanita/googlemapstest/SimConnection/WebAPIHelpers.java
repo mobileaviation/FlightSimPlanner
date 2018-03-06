@@ -11,8 +11,9 @@ import java.net.URL;
  */
 
 public class WebAPIHelpers {
-    public static String Post(URL url, String json)
+    public static SimConnectResponse Post(URL url, String json)
     {
+        SimConnectResponse resp = new SimConnectResponse();
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
@@ -20,6 +21,7 @@ public class WebAPIHelpers {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestMethod("POST");
+            connection.setConnectTimeout(1000);
 
             OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
             wr.write(json.toString());
@@ -27,6 +29,7 @@ public class WebAPIHelpers {
 
             StringBuilder sb = new StringBuilder();
             int HttpResult = connection.getResponseCode();
+            resp.HttpResultCode = HttpResult;
             if (HttpResult == HttpURLConnection.HTTP_OK) {
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(connection.getInputStream(), "utf-8"));
@@ -35,14 +38,18 @@ public class WebAPIHelpers {
                     sb.append(line + "\n");
                 }
                 br.close();
-                return sb.toString();
+                resp.Response = sb.toString();
+                return resp;
             } else {
-                return connection.getResponseMessage();
+                resp.Response = connection.getResponseMessage();
+                return resp;
             }
         }
         catch (Exception ex)
         {
-            return ex.getMessage();
+            resp.HttpResultCode = HttpURLConnection.HTTP_BAD_REQUEST;
+            resp.Response = ex.getMessage();
+            return resp;
         }
     }
 
