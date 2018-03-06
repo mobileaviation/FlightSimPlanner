@@ -16,6 +16,7 @@
     <string name="action_tracking_free">Map Free</string>
     <string name="action_connected">Connected</string>
     <string name="action_disconnected">Disconnected</string>
+    <string name="action_connecting">Connecting..</string>
     <string name="action_loadaip">Load Aip Airspace</string>
     <string name="action_app_locked">App is Locked</string>
     <string name="action_app_free">App is Unlocked</string>

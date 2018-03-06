@@ -606,7 +606,6 @@ public class NavigationActivity extends ActionBarActivity implements
 
     private void connectToServer()
     {
-        connectionType = ConnectionType.simv2;
         Boolean webapi = (connectionType==ConnectionType.simv2);
         connection = new FSUIPCConnection(ServerIPAddress, ServerPort, webapi);
         connection.SetFSUIPCConnectedListener(new FSUIPCConnection.OnFSUIPCAction() {
@@ -670,6 +669,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMenuDrawer.SetConnectDisConnectIcon(false);
             }
         });
+        fspMenuDrawer.SetConnectingIcon();
         connection.Connect();
     }
 

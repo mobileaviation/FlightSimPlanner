@@ -92,6 +92,18 @@ public class FSPMainMenuDrawer {
         PrimaryDrawerItem item = (PrimaryDrawerItem)drawer.getDrawerItem(9);
         item.withIcon((connected) ? R.drawable.connected : R.drawable.disconnected);
         item.withName((connected) ? R.string.action_connected : R.string.action_disconnected);
+        item.withEnabled(true);
+        drawer.removeItem(9);
+        drawer.addItemAtPosition(item, 3);
+    }
+
+    public void SetConnectingIcon()
+    {
+        PrimaryDrawerItem item = (PrimaryDrawerItem)drawer.getDrawerItem(9);
+        item.withIcon(R.drawable.connecting);
+        item.withName(R.string.action_connecting);
+        item.withDisabledTextColor(Color.LTGRAY);
+        item.withEnabled(false);
         drawer.removeItem(9);
         drawer.addItemAtPosition(item, 3);
     }

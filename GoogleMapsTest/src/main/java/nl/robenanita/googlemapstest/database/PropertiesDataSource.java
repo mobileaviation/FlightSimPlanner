@@ -115,13 +115,16 @@ public class PropertiesDataSource {
     public Runway InitRunway;
     private Property connectionType;
     public NavigationActivity.ConnectionType getConnectionType()
-    { return (connectionType.value2.equals("sim")) ? NavigationActivity.ConnectionType.sim
-            : NavigationActivity.ConnectionType.gps; }
+    {
+        NavigationActivity.ConnectionType c = NavigationActivity.ConnectionType.gps;
+        if (connectionType.value2.equals("sim")) c = NavigationActivity.ConnectionType.sim;
+        if (connectionType.value2.equals("simv2")) c = NavigationActivity.ConnectionType.simv2;
+        return c; }
     public void updateConnectionType(NavigationActivity.ConnectionType type)
     {
-        if (type == NavigationActivity.ConnectionType.gps)
-            connectionType.value2 = "gps";
-        else connectionType.value2 = "sim";
+        if (type == NavigationActivity.ConnectionType.gps) connectionType.value2 = "gps";
+        if (type == NavigationActivity.ConnectionType.sim) connectionType.value2 = "sim";
+        if (type == NavigationActivity.ConnectionType.simv2) connectionType.value2 = "simv2";
         updateProperty(connectionType);
     }
     private Property instrumentsVisible;

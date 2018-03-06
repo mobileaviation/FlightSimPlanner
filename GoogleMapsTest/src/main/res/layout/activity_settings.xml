@@ -410,7 +410,17 @@
                                             android:singleLine="false"
                                             android:text="Simulator"
                                             android:textColor="#464646" />
-
+                                        <RadioButton
+                                            android:id="@+id/simv2RadioBtn"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="0dp"
+                                            android:checked="true"
+                                            android:clickable="true"
+                                            android:enabled="true"
+                                            android:singleLine="false"
+                                            android:text="Simulator V2"
+                                            android:textColor="#464646" />
                                         <RadioButton
                                             android:id="@+id/gpsRadioBtn"
                                             android:layout_width="wrap_content"

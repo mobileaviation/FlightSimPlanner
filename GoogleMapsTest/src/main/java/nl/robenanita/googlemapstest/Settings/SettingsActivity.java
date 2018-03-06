@@ -44,6 +44,7 @@ public class SettingsActivity extends ActionBarActivity {
     private Button cancelBtn;
     private Button searchAirportBtn;
     private RadioButton simRadioBtn;
+    private RadioButton simV2RadioBtn;
     private RadioButton gpsRadioBtn;
     private CheckBox showInstrumentsChkBox;
     private NumberPicker rw;
@@ -98,18 +99,29 @@ public class SettingsActivity extends ActionBarActivity {
 
         gpsRadioBtn = (RadioButton) findViewById(R.id.gpsRadioBtn);
         simRadioBtn = (RadioButton) findViewById(R.id.simRadioBtn);
+        simV2RadioBtn = (RadioButton) findViewById(R.id.simv2RadioBtn);
+
         NavigationActivity.ConnectionType c = propertiesDataSource.getConnectionType();
         switch (c) {
             case gps:
             {
                 gpsRadioBtn.setChecked(true);
+                simV2RadioBtn.setChecked(false);
                 simRadioBtn.setChecked(false);
                 break;
             }
             case sim:
             {
                 gpsRadioBtn.setChecked(false);
+                simV2RadioBtn.setChecked(false);
                 simRadioBtn.setChecked(true);
+                break;
+            }
+            case simv2:
+            {
+                gpsRadioBtn.setChecked(false);
+                simV2RadioBtn.setChecked(true);
+                simRadioBtn.setChecked(false);
                 break;
             }
         }
@@ -159,9 +171,10 @@ public class SettingsActivity extends ActionBarActivity {
             propertiesDataSource.open(true);
             propertiesDataSource.FillProperties();
 
-            NavigationActivity.ConnectionType c;
+            NavigationActivity.ConnectionType c = NavigationActivity.ConnectionType.gps;;
             if (simRadioBtn.isChecked()) c = NavigationActivity.ConnectionType.sim;
-            else c = NavigationActivity.ConnectionType.gps;
+            if (simV2RadioBtn.isChecked()) c = NavigationActivity.ConnectionType.simv2;
+            if (gpsRadioBtn.isChecked()) c = NavigationActivity.ConnectionType.gps;
             propertiesDataSource.updateConnectionType(c);
             propertiesDataSource.IpAddress.value1 = ipAddressTxt.getText().toString();
             propertiesDataSource.IpAddress.value2 = portTxt.getText().toString();
