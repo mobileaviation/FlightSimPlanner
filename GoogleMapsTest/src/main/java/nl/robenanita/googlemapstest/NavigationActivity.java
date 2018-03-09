@@ -618,9 +618,9 @@ public class NavigationActivity extends ActionBarActivity implements
                 connection.Open();
             }
         });
-        connection.SetFSUIPCOpenListener(new FSUIPCConnection.OnFSUIPCAction() {
+        connection.SetFSUIPCOpenListener(new FSUIPCConnection.OnFSUIPCOpen() {
             @Override
-            public void FSUIPCAction(String message, boolean success) {
+            public void FSUIPCOpen(String message, boolean success, String version) {
                 //Log.i(TAG, "FSUIPCOpenListener fired");
                 //openFsuipcMenuItem.setEnabled(false);
                 //startMenuItem.setEnabled(true);

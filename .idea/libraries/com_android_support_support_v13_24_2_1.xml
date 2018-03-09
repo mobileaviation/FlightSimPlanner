@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="com.android.support:support-v13-24.2.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-v13-24.2.1.aar/a1e86872608f7ad69e08989e1080fe24/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-v13-24.2.1.aar/a1e86872608f7ad69e08989e1080fe24/jars/libs/internal_impl-24.2.1.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-v13-24.2.1.aar/a1e86872608f7ad69e08989e1080fe24/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-v13-24.2.1.aar/264bfd5f2b6c5356ab2bc38533ba61a4/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-v13-24.2.1.aar/264bfd5f2b6c5356ab2bc38533ba61a4/jars/libs/internal_impl-24.2.1.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-v13-24.2.1.aar/264bfd5f2b6c5356ab2bc38533ba61a4/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/support-v13/24.2.1/support-v13-24.2.1-javadoc.jar!/" />

@@ -147,11 +147,12 @@ public class WebAPIClient {
                     JSONObject json = new JSONObject(s);
                     if (json.getString("Message").equals("Connection Opened")) {
                         String message = json.getString("Message") + " Sim: " + json.getString("Simulator") + " Aircraft: " + json.getString("Aircraft");
+                        String version = json.getString("Version");
                         if (mFSUIPCOpenedListener != null)
-                            mFSUIPCOpenedListener.FSUIPCAction(message, true);
+                            mFSUIPCOpenedListener.FSUIPCOpen(message, true, version);
                     } else {
                         if (mFSUIPCOpenedListener != null)
-                            mFSUIPCOpenedListener.FSUIPCAction("Error: " + s, false);
+                            mFSUIPCOpenedListener.FSUIPCOpen("Error: " + s, false, "");
                     }
 
                 } catch (Exception e) {
@@ -160,7 +161,7 @@ public class WebAPIClient {
             }
             else
             {
-                mFSUIPCOpenedListener.FSUIPCAction("Error: " + s, false);
+                mFSUIPCOpenedListener.FSUIPCOpen("Error: " + s, false, "");
             }
             super.onPostExecute(s);
         }
@@ -229,8 +230,8 @@ public class WebAPIClient {
         }
     }
 
-    private FSUIPCConnection.OnFSUIPCAction mFSUIPCOpenedListener = null;
-    public void SetFSUIPCOpenListener(FSUIPCConnection.OnFSUIPCAction listener) {mFSUIPCOpenedListener = listener;}
+    private FSUIPCConnection.OnFSUIPCOpen mFSUIPCOpenedListener = null;
+    public void SetFSUIPCOpenListener(FSUIPCConnection.OnFSUIPCOpen listener) {mFSUIPCOpenedListener = listener;}
     private FSUIPCConnection.OnFSUIPCAction mFSUIPCClosedListener = null;
     public void SetFSUIPCCloseListener(FSUIPCConnection.OnFSUIPCAction listener) {mFSUIPCClosedListener = listener;}
     private FSUIPCConnection.OnFSUIPCAction mFSUIPCProcessedListener = null;

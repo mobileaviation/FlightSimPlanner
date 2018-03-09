@@ -75,8 +75,8 @@ public class FSUIPCConnection {
 
     private OnFSUIPCAction mFSUIPCConnectedListener = null;
     public void SetFSUIPCConnectedListener(OnFSUIPCAction listener) {mFSUIPCConnectedListener = listener;}
-    private OnFSUIPCAction mFSUIPCOpenedListener = null;
-    public void SetFSUIPCOpenListener(OnFSUIPCAction listener) {mFSUIPCOpenedListener = listener;}
+    private OnFSUIPCOpen mFSUIPCOpenedListener = null;
+    public void SetFSUIPCOpenListener(OnFSUIPCOpen listener) {mFSUIPCOpenedListener = listener;}
     private OnFSUIPCAction mFSUIPCClosedListener = null;
     public void SetFSUIPCCloseListener(OnFSUIPCAction listener) {mFSUIPCClosedListener = listener;}
     private OnFSUIPCAction mFSUIPCProcessedListener = null;
@@ -149,21 +149,35 @@ public class FSUIPCConnection {
         if (webapi)
         {
             mWebApiClient = new WebAPIClient(ip, port);
-            mWebApiClient.SetFSUIPCOpenListener(new OnFSUIPCAction() {
+            mWebApiClient.SetFSUIPCOpenListener(new OnFSUIPCOpen() {
                 @Override
-                public void FSUIPCAction(String message, boolean success) {
+                public void FSUIPCOpen(String message, boolean success, String version) {
                     if (success) {
                         if (mFSUIPCOpenedListener != null)
-                            mFSUIPCOpenedListener.FSUIPCAction(message, success);
+                            mFSUIPCOpenedListener.FSUIPCOpen(message, success, version);
                     }
                     else {
                         if (mFSUIPCErrorListener != null) {
                             mFSUIPCErrorListener.FSUIPCAction(message, false);
                         }
                     }
-
                 }
             });
+//            mWebApiClient.SetFSUIPCOpenListener(new OnFSUIPCAction() {
+//                @Override
+//                public void FSUIPCAction(String message, boolean success) {
+//                    if (success) {
+//                        if (mFSUIPCOpenedListener != null)
+//                            mFSUIPCOpenedListener.FSUIPCAction(message, success);
+//                    }
+//                    else {
+//                        if (mFSUIPCErrorListener != null) {
+//                            mFSUIPCErrorListener.FSUIPCAction(message, false);
+//                        }
+//                    }
+//
+//                }
+//            });
             return mWebApiClient.OpenFSUIPC();
         }
         else {
@@ -397,6 +411,10 @@ public class FSUIPCConnection {
         public void FSUIPCRead(String message, int offset, Object value, boolean success);
     }
 
+    public interface OnFSUIPCOpen {
+        public void FSUIPCOpen(String message, boolean success, String version);
+    }
+
     public Document loadXMLFromString(String xml)
     {
         Document doc = null;
@@ -490,7 +508,7 @@ public class FSUIPCConnection {
             if (nodes.getLength() > 0) {
                 //Log.i(TAG, "Fire FSUIPCOpenedListener");
                 if (mFSUIPCOpenedListener != null)
-                    mFSUIPCOpenedListener.FSUIPCAction("Opened", true);
+                    mFSUIPCOpenedListener.FSUIPCOpen("Opened", true, "");
             }
 
             nodes = retDoc.getElementsByTagName("FSUIPC_Closed");
