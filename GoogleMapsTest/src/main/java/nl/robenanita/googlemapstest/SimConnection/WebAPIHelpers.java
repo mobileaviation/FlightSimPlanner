@@ -11,7 +11,19 @@ import java.net.URL;
  */
 
 public class WebAPIHelpers {
-    public static SimConnectResponse Post(URL url, String json)
+    public WebAPIHelpers(int timeout)
+    {
+        connectTimeout = timeout;
+    }
+
+    public WebAPIHelpers()
+    {
+        connectTimeout = 0;
+    }
+
+    private int connectTimeout;
+
+    public SimConnectResponse Post(URL url, String json)
     {
         SimConnectResponse resp = new SimConnectResponse();
         try {
@@ -21,7 +33,7 @@ public class WebAPIHelpers {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestMethod("POST");
-            //connection.setConnectTimeout(1000);
+            if (connectTimeout>0) connection.setConnectTimeout(connectTimeout);
 
             OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
             wr.write(json.toString());

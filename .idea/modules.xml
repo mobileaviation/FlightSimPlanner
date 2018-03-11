@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FlightSimPlanner.iml" filepath="$PROJECT_DIR$/FlightSimPlanner.iml" />
+      <module fileurl="file://C:\Users\Rob Verhoef\Documents\GitHub\FlightSimPlanner\GoogleMapsTest\FlightSimPlanner-GoogleMapsTest.iml" filepath="C:\Users\Rob Verhoef\Documents\GitHub\FlightSimPlanner\GoogleMapsTest\FlightSimPlanner-GoogleMapsTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/GoogleMapsTest/GoogleMapsTest.iml" filepath="$PROJECT_DIR$/GoogleMapsTest/GoogleMapsTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/interactive-info-window/interactive-info-window.iml" filepath="$PROJECT_DIR$/interactive-info-window/interactive-info-window.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
