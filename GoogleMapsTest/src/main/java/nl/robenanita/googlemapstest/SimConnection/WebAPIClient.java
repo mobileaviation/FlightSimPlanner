@@ -192,7 +192,7 @@ public class WebAPIClient {
         protected void onPostExecute(String s) {
             if (!s.startsWith("error")) {
                 try {
-                    if (s.equals("Connection Closed")) {
+                    if (s.contains("Connection Closed")) {
                         String message = "Connection Closed";
                         if (mFSUIPCClosedListener != null)
                             mFSUIPCClosedListener.FSUIPCAction(message, true);

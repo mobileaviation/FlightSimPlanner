@@ -219,6 +219,7 @@ public class FSUIPCConnection {
                         if (mFSUIPCClosedListener != null)  mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
                     else
                         if (mFSUIPCErrorListener != null) {
+                            if (mFSUIPCClosedListener != null)  mFSUIPCClosedListener.FSUIPCAction("FSUIPC Connection Closed", true);
                             mFSUIPCErrorListener.FSUIPCAction(message, false);
                         }
                 }

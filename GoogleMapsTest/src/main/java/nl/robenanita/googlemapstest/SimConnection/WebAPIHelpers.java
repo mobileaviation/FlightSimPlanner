@@ -21,7 +21,7 @@ public class WebAPIHelpers {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestMethod("POST");
-            connection.setConnectTimeout(1000);
+            //connection.setConnectTimeout(1000);
 
             OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
             wr.write(json.toString());
