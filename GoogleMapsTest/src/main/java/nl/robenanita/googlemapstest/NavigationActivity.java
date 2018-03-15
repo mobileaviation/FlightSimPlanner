@@ -608,16 +608,20 @@ public class NavigationActivity extends ActionBarActivity implements
     {
         Boolean webapi = (connectionType==ConnectionType.simv2);
         connection = new FSUIPCConnection(ServerIPAddress, ServerPort, webapi);
-        connection.SetFSUIPCConnectedListener(new FSUIPCConnection.OnFSUIPCAction() {
+
+
+        connection.SetFSUIPCConnectedListener(new FSUIPCConnection.OnFSUIPCConnected() {
             @Override
-            public void FSUIPCAction(String message, boolean success) {
+            public void FSUIPCConnected(String message, boolean success, String version) {
                 Log.i(TAG, "FSUIPCConnectedListener fired");
                 //connectMenuItem.setEnabled(false);
                 //openFsuipcMenuItem.setEnabled(true);
 
+                setTestOffsets();
                 connection.Open();
             }
         });
+
         connection.SetFSUIPCOpenListener(new FSUIPCConnection.OnFSUIPCOpen() {
             @Override
             public void FSUIPCOpen(String message, boolean success, String version) {
@@ -631,12 +635,13 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMapFragment.connected = true;
                 fspMapFragment.SetupTrackingLine();
 
-                setTestOffsets();
+                //setTestOffsets();
 
                 connection.Process("attitude");
                 startTimer();
             }
         });
+
         connection.SetFSUIPCErrorListener(new FSUIPCConnection.OnFSUIPCAction() {
             @Override
             public void FSUIPCAction(String message, boolean success) {
@@ -654,6 +659,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMenuDrawer.SetConnectDisConnectIcon(false);
             }
         });
+
         connection.SetFSUIPCCloseListener(new FSUIPCConnection.OnFSUIPCAction() {
             @Override
             public void FSUIPCAction(String message, boolean success) {
@@ -669,7 +675,9 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMenuDrawer.SetConnectDisConnectIcon(false);
             }
         });
+
         fspMenuDrawer.SetConnectingIcon();
+
         connection.Connect();
     }
 

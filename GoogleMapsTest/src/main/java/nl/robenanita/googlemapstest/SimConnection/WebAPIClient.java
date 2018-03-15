@@ -25,6 +25,7 @@ public class WebAPIClient {
     public static final String  OPENENDPOINT = "v1/fsuipc/open";
     public static final String  CLOSEENDPOINT = "v1/fsuipc/close";
     public static final String  STATUSENDPOINT = "v1/fsuipc/status";
+    public static final String  PROCESSENDPOINT = "v1/fsuipc/offsets";
     public static final String  VALUESENDPOINT = "v1/fsuipc/offsets";
 
     public WebAPIClient(String IP, int Port)
@@ -73,42 +74,89 @@ public class WebAPIClient {
         }
     }
 
-    public boolean ProcessFSUIPCOffsets(List<Offset> offsets)
+    public boolean AddFSUIPCOffsets(List<Offset> offsets)
     {
         JSONArray json_offsets = new JSONArray();
-        //json_offsets.put(offsets);
         try {
             url = new URL(_url + VALUESENDPOINT);
 
-                for (int i = 0; i < offsets.size(); i++)
-                {
-                    JSONObject j = new JSONObject();
-                    j.put("Address", Integer.toString(offsets.get(i).Address));
-                    j.put("DataGroup", offsets.get(i).DatagroupName);
-                    j.put("DataType", offsets.get(i).Datatype.toString());
-                    j.put("Value", "-");
+            for (int i = 0; i < offsets.size(); i++)
+            {
+                JSONObject j = new JSONObject();
+                j.put("Address", Integer.toString(offsets.get(i).Address));
+                j.put("DataGroup", offsets.get(i).DatagroupName);
+                j.put("DataType", offsets.get(i).Datatype.toString());
+                j.put("Value", "-");
 
-                    json_offsets.put(i, j);
-                }
+                json_offsets.put(i, j);
             }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         String json = json_offsets.toString();
 
-        processTask p = new processTask();
-        p.processJson = json;
+        addOffsetsTask p = new addOffsetsTask();
+        p.offsetsJson = json;
         p.url = url;
         p.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return true;
     }
 
+
+    public boolean ProcessFSUIPCOffsets(String dataGroup)
+    {
+        try {
+            url = new URL(_url + PROCESSENDPOINT + "?datagroup=" + dataGroup);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        processTask p = new processTask();
+        p.dataGroup = dataGroup;
+        p.url = url;
+        p.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        return true;
+    }
+
+    private class addOffsetsTask extends AsyncTask<String, Void, String>
+    {
+        public String offsetsJson;
+        public URL url;
+
+        @Override
+        protected void onPostExecute(String s) {
+            boolean success = !s.startsWith("error");
+            if (mFSUIPCAddedOffsetsListener != null) mFSUIPCAddedOffsetsListener.FSUIPCAction(s, success);
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
+                SimConnectResponse resp = webAPIHelpers.Post(url, offsetsJson.toString());
+                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
+                    resp.Response = "error: " + resp.Response;
+
+                return resp.Response;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                return "error; " + e.getMessage();
+            }
+        }
+    }
+
     private class processTask extends AsyncTask<String, Void, String>
     {
-        public String processJson;
+        public String dataGroup;
         public URL url;
 
         @Override
@@ -122,7 +170,7 @@ public class WebAPIClient {
         protected String doInBackground(String... strings) {
             try {
                 WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
-                SimConnectResponse resp = webAPIHelpers.Post(url, processJson.toString());
+                SimConnectResponse resp = webAPIHelpers.Get(url);
                 if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
                     resp.Response = "error: " + resp.Response;
 
@@ -239,4 +287,6 @@ public class WebAPIClient {
     public void SetFSUIPCCloseListener(FSUIPCConnection.OnFSUIPCAction listener) {mFSUIPCClosedListener = listener;}
     private FSUIPCConnection.OnFSUIPCAction mFSUIPCProcessedListener = null;
     public void SetFSUIPCProcessListener(FSUIPCConnection.OnFSUIPCAction listener) {mFSUIPCProcessedListener = listener;}
+    private FSUIPCConnection.OnFSUIPCAction mFSUIPCAddedOffsetsListener = null;
+    public void SetFSUIPCAddedOffsetsListener(FSUIPCConnection.OnFSUIPCAction listener) {mFSUIPCAddedOffsetsListener = listener;}
 }
