@@ -54,20 +54,22 @@ public class WebAPIHelpers {
             StringBuilder sb = new StringBuilder();
             int HttpResult = connection.getResponseCode();
             resp.HttpResultCode = HttpResult;
-            //if (HttpResult == HttpURLConnection.HTTP_OK) {
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream(), "utf-8"));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                br.close();
-                resp.Response = sb.toString();
+            if (HttpResult == HttpURLConnection.HTTP_OK) {
+
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream(), "utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    //br.close();
+                    resp.Response = sb.toString();
+
                 return resp;
-            //} else {
-            //    resp.Response = connection.getResponseMessage();
-            //    return resp;
-            //}
+            } else {
+                resp.Response = connection.getResponseMessage();
+                return resp;
+            }
         }
         catch (Exception ex)
         {

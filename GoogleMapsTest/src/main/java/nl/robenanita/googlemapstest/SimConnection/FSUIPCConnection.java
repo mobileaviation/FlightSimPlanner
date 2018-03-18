@@ -165,12 +165,12 @@ public class FSUIPCConnection {
         if (webapi)
         {
             mWebApiClient = new WebAPIClient(ip, port);
-            mWebApiClient.SetFSUIPCOpenListener(new OnFSUIPCOpen() {
+            mWebApiClient.SetFSUIPCAddedOffsetsListener(new OnFSUIPCAction() {
                 @Override
-                public void FSUIPCOpen(String message, boolean success, String version) {
+                public void FSUIPCAction(String message, boolean success) {
                     if (success) {
                         if (mFSUIPCOpenedListener != null)
-                            mFSUIPCOpenedListener.FSUIPCOpen(message, success, version);
+                            mFSUIPCOpenedListener.FSUIPCOpen(message, success, "");
                     }
                     else {
                         if (mFSUIPCErrorListener != null) {
@@ -179,6 +179,7 @@ public class FSUIPCConnection {
                     }
                 }
             });
+
             return mWebApiClient.AddFSUIPCOffsets(offsets);
         }
         else {
@@ -265,17 +266,15 @@ public class FSUIPCConnection {
             mWebApiClient.SetFSUIPCProcessListener(new OnFSUIPCAction() {
                 @Override
                 public void FSUIPCAction(String message, boolean success) {
-                    if (success)
-                    {
-                        if (success) {
-                            ReadOffsetsFromJson(message);
-                            if (mFSUIPCProcessedListener != null)
-                                mFSUIPCProcessedListener.FSUIPCAction("Processed", true);
-                        }
-                        else
-                            if (mFSUIPCErrorListener != null) {
-                                mFSUIPCErrorListener.FSUIPCAction(message, false);
-                            }
+
+                if (success) {
+                    ReadOffsetsFromJson(message);
+                    if (mFSUIPCProcessedListener != null)
+                        mFSUIPCProcessedListener.FSUIPCAction("Processed", true);
+                }
+                else
+                    if (mFSUIPCErrorListener != null) {
+                        mFSUIPCErrorListener.FSUIPCAction(message, false);
                     }
                 }
             });

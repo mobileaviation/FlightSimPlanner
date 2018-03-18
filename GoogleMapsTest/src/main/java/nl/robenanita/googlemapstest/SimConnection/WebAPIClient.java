@@ -138,18 +138,29 @@ public class WebAPIClient {
 
         @Override
         protected String doInBackground(String... strings) {
+//            try {
+//                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
+//                SimConnectResponse resp = webAPIHelpers.Post(url, offsetsJson.toString());
+//                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
+//                    resp.Response = "error: " + resp.Response;
+//
+//                return resp.Response;
+//            }
+//            catch (Exception e)
+//            {
+//                e.printStackTrace();
+//                return "error; " + e.getMessage();
+//            }
             try {
-                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
-                SimConnectResponse resp = webAPIHelpers.Post(url, offsetsJson.toString());
-                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
-                    resp.Response = "error: " + resp.Response;
+                SimConnectResponse resp = new SimConnectResponse();
+                WebApiApache webApiApache = new WebApiApache();
 
-                return resp.Response;
+                return resp.Response = webApiApache.Post(url.toString(),offsetsJson.toString());
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                e.printStackTrace();
-                return "error; " + e.getMessage();
+                ex.printStackTrace();
+                return "error; " + ex.getMessage();
             }
         }
     }
@@ -168,19 +179,23 @@ public class WebAPIClient {
 
         @Override
         protected String doInBackground(String... strings) {
-            try {
-                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
-                SimConnectResponse resp = webAPIHelpers.Get(url);
-                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
-                    resp.Response = "error: " + resp.Response;
+//            try {
+//                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
+//                SimConnectResponse resp = webAPIHelpers.Get(url);
+//                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
+//                    resp.Response = "error: " + resp.Response;
+//
+//                return resp.Response;
+//            }
+//            catch (Exception e)
+//            {
+//                e.printStackTrace();
+//                return "error; " + e.getMessage();
+//            }
+            SimConnectResponse resp = new SimConnectResponse();
+            WebApiApache webApiApache = new WebApiApache();
 
-                return resp.Response;
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                return "error; " + e.getMessage();
-            }
+            return resp.Response = webApiApache.Get(url.toString());
         }
     }
 
@@ -217,19 +232,32 @@ public class WebAPIClient {
 
         @Override
         protected String doInBackground(String... strings) {
+//            try {
+//                JSONObject json = new JSONObject();
+//                json.put("name", "Flightsim Planner");
+//
+//                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
+//                SimConnectResponse resp = webAPIHelpers.Post(url, json.toString());
+//                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
+//                    resp.Response = "error: " + resp.Response;
+//
+//                return resp.Response;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return "error; " + e.getMessage();
+//            }
             try {
                 JSONObject json = new JSONObject();
                 json.put("name", "Flightsim Planner");
+                SimConnectResponse resp = new SimConnectResponse();
+                WebApiApache webApiApache = new WebApiApache();
 
-                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
-                SimConnectResponse resp = webAPIHelpers.Post(url, json.toString());
-                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
-                    resp.Response = "error: " + resp.Response;
-
-                return resp.Response;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "error; " + e.getMessage();
+                return resp.Response = webApiApache.Post(url.toString(),json.toString());
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                return "error; " + ex.getMessage();
             }
         }
     }
@@ -264,19 +292,32 @@ public class WebAPIClient {
 
         @Override
         protected String doInBackground(String... strings) {
+//            try {
+//                JSONObject json = new JSONObject();
+//                json.put("name", "Flightsim Planner");
+//
+//                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
+//                SimConnectResponse resp = webAPIHelpers.Post(url, json.toString());
+//                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
+//                    resp.Response = "error: " + resp.Response;
+//
+//                return resp.Response;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return "error; " + e.getMessage();
+//            }
             try {
                 JSONObject json = new JSONObject();
                 json.put("name", "Flightsim Planner");
+                SimConnectResponse resp = new SimConnectResponse();
+                WebApiApache webApiApache = new WebApiApache();
 
-                WebAPIHelpers webAPIHelpers = new WebAPIHelpers();
-                SimConnectResponse resp = webAPIHelpers.Post(url, json.toString());
-                if (resp.HttpResultCode != HttpURLConnection.HTTP_OK)
-                    resp.Response = "error: " + resp.Response;
-
-                return resp.Response;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "error; " + e.getMessage();
+                return resp.Response = webApiApache.Post(url.toString(),json.toString());
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                return "error; " + ex.getMessage();
             }
         }
     }
