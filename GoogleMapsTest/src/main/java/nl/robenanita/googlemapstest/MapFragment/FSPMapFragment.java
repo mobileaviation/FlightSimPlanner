@@ -321,6 +321,12 @@ public class FSPMapFragment extends Fragment {
         settings.setZoomGesturesEnabled(true);
     }
 
+    @Override
+    public void onDestroy() {
+        mapController.closeTestMBTilesMap();
+        super.onDestroy();
+    }
+
     private void setMapController()
     {
         mapController = new MapController(googleMap, mainActivity);

@@ -91,6 +91,7 @@ import nl.robenanita.googlemapstest.SimConnection.FSUIPCConnection;
 import nl.robenanita.googlemapstest.Tracks.LoadTrack;
 import nl.robenanita.googlemapstest.Tracks.LoadTrackActivity;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
+import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.FixesDataSource;
 import nl.robenanita.googlemapstest.database.Helpers;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
@@ -316,7 +317,14 @@ public class NavigationActivity extends ActionBarActivity implements
             }
         });
 
+        TestMBTiles();
         fspMapFragment.InitializeMap(legInfoView, infoPanel);
+    }
+
+    private void TestMBTiles()
+    {
+        String path = DBFilesHelper.DatabasePath(this);
+        DBFilesHelper.CopyFromAssetDatabaseTo(this, "ehaa_256@2x.mbtiles", path);
     }
 
 //    public Route GetSelectedFlightplan()
