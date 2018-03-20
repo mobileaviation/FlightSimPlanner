@@ -51,6 +51,7 @@ import nl.robenanita.googlemapstest.AnimationHelpers;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
 import nl.robenanita.googlemapstest.NavigationActivity;
+import nl.robenanita.googlemapstest.Route.Json.RouteObject;
 import nl.robenanita.googlemapstest.RouteGrid;
 import nl.robenanita.googlemapstest.Helpers;
 import nl.robenanita.googlemapstest.InfoPanelFragment;
@@ -950,6 +951,10 @@ public class FSPMapFragment extends Fragment {
         selectedFlightplan.UpdateWaypointsData();
 
         selectedFlightplan.LoadRunways(googleMap);
+
+        // Test Json Output
+        RouteObject jsonRouteObject = new RouteObject(selectedFlightplan);
+        String json = jsonRouteObject.SerializeJson().toString();
 
         selectedFlightplan.ShowFlightplanMarkers(googleMap);
         selectedFlightplan.DrawFlightplan(googleMap);

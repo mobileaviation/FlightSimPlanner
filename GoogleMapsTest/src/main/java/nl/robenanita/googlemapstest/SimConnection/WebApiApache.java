@@ -4,7 +4,6 @@ package nl.robenanita.googlemapstest.SimConnection;
  * Created by Rob Verhoef on 17-3-2018.
  */
 
-import android.renderscript.RenderScript;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -14,17 +13,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 public class WebApiApache {
 
@@ -85,18 +79,10 @@ public class WebApiApache {
             HttpResponse serverResponse = client.execute(request);
             if (serverResponse.getStatusLine().getStatusCode()!=200) response = "error:";
 
-            HttpEntity entity = serverResponse.getEntity();
-            if (entity.getContentLength()>0)
+            HttpEntity responseEntity = serverResponse.getEntity();
+            if (responseEntity.getContentLength()>0)
             {
-                StringBuilder sb = new StringBuilder();
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(entity.getContent()));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                br.close();
-                response = response + sb.toString();
+                response = response + EntityUtils.toString(responseEntity);
             }
 
             Log.d(TAG, "Get: " + response);

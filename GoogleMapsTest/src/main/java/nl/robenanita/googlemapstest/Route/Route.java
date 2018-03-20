@@ -118,10 +118,6 @@ public class Route implements Serializable {
         //createBuffer();
     }
 
-//    public Geometry buffer;
-//    public Polyline bufferPolyline;
-//    public Property bufferProperty;
-
     private void _createLegs()
     {
         int c = 0;
@@ -194,26 +190,6 @@ public class Route implements Serializable {
         }
     }
 
-//    public void CreateBuffer()
-//    {
-//        createBuffer();
-//    }
-//
-//    private void createBuffer() {
-//        if (bufferProperty == null)
-//        {
-//            bufferProperty = new Property();
-//            bufferProperty.name = "BUFFER";
-//            bufferProperty.value1 = "0.3";
-//            bufferProperty.value2 = "true";
-//        }
-//        Coordinate[] coordinates = getRouteCoordinates();
-//        Geometry g = new GeometryFactory().createLineString(coordinates);
-//        BufferOp bufOp = new BufferOp(g);
-//        bufOp.setEndCapStyle(BufferOp.CAP_ROUND);
-//        buffer = bufOp.getResultGeometry(Double.parseDouble(bufferProperty.value1));
-//    }
-
     public Coordinate[] getRouteCoordinates()
     {
         Coordinate[] coordinates = new Coordinate[this.Waypoints.size()];
@@ -249,34 +225,6 @@ public class Route implements Serializable {
             }
         }
     }
-
-//    public void DrawBuffer(GoogleMap map)
-//    {
-//        Geometry buffer = this.buffer;
-//        Coordinate[] coordinates = buffer.getCoordinates();
-//        PolylineOptions o = new PolylineOptions();
-//        o.color(Color.RED);
-//        o.width(2);
-//        o.zIndex(1000);
-//        for (Coordinate c : coordinates)
-//        {
-//            LatLng p = new LatLng(c.y, c.x);
-//            o.add(p);
-//
-//        }
-//
-//        this.bufferPolyline = map.addPolyline(o);
-//        this.bufferPolyline.setVisible(Boolean.parseBoolean(this.bufferProperty.value2));
-//    }
-//
-//    public void RemoveBuffer()
-//    {
-//        if (this.bufferPolyline != null)
-//        {
-//            this.bufferPolyline.remove();
-//            this.bufferPolyline = null;
-//        }
-//    }
 
     private void loadRunwaysperAirport(Airport airport, GoogleMap map)
     {
