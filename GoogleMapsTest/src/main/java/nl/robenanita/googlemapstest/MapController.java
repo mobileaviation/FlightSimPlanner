@@ -8,12 +8,16 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 
+import java.io.File;
+
 import nl.robenanita.googlemapstest.Charts.AirportChart;
 import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
+import nl.robenanita.googlemapstest.Wms.MapBoxOfflineTileProvider;
 import nl.robenanita.googlemapstest.Wms.OfflineMapTypes;
 import nl.robenanita.googlemapstest.Wms.TileProviderFactory;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.ChartBundleProperties;
+import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.MapTypeProperties;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
 import nl.robenanita.googlemapstest.database.WeatherProperties;
@@ -152,6 +156,21 @@ public class MapController
         SetChartBundle();
 
         skylinesOverlay.setVisible(airspacesVisible);
+        setupTestMBTilesMap();
+    }
+
+    public void closeTestMBTilesMap()
+    {
+        mbTilesProvider.close();
+    }
+    private MapBoxOfflineTileProvider mbTilesProvider;
+    public void setupTestMBTilesMap()
+    {
+        TileOverlayOptions opts = new TileOverlayOptions();
+        File myMBTiles = new File(DBFilesHelper.DatabasePath(context) + "ehaa_256@2x.mbtiles");
+        mbTilesProvider = new MapBoxOfflineTileProvider(myMBTiles);
+        opts.tileProvider(mbTilesProvider);
+        map.addTileOverlay(opts).setZIndex(90);
     }
 
     private TileOverlayOptions chartoverlayOptions;
