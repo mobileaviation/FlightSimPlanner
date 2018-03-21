@@ -10,12 +10,21 @@ public class WaypointObject {
     public WaypointObject(Waypoint waypoint)
     {
         _waypoint = waypoint;
+        assign();
     }
 
-    private Waypoint _waypoint;
+    private transient Waypoint _waypoint;
 
-    public String getName() { return _waypoint.name; }
-    public Double getLatitude() {return _waypoint.location.getLatitude();}
-    public Double getLongitude() {return _waypoint.location.getLongitude();}
-    public String getType() {return _waypoint.waypointType.toString();}
+    private void assign()
+    {
+        name = _waypoint.name;
+        latitude = _waypoint.location.getLatitude();
+        longitude = _waypoint.location.getLongitude();
+        type = _waypoint.waypointType.toString();
+    }
+
+    private String name;
+    private Double latitude;
+    private Double longitude;
+    private String type;
 }
