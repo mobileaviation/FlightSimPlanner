@@ -317,7 +317,7 @@ public class NavigationActivity extends ActionBarActivity implements
             }
         });
 
-        TestMBTiles();
+        //TestMBTiles();
         fspMapFragment.InitializeMap(legInfoView, infoPanel);
     }
 

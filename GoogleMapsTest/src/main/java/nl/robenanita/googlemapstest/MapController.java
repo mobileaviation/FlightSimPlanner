@@ -156,7 +156,7 @@ public class MapController
         SetChartBundle();
 
         skylinesOverlay.setVisible(airspacesVisible);
-        setupTestMBTilesMap();
+        //setupTestMBTilesMap();
     }
 
     public void closeTestMBTilesMap()
