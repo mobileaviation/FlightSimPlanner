@@ -228,17 +228,6 @@ public class NavigationActivity extends ActionBarActivity implements
 //            }
 //        });
 
-        // Test code for the sliding pane layout
-        final SlidingPaneLayout l  = (SlidingPaneLayout)findViewById(R.id.drawer_layout);
-        l.openPane();
-        ImageButton t = (ImageButton)findViewById(R.id.test_button);
-        t.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                l.closePane();
-            }
-        });
-
         setUniqueIDtoDatabase(0);
         uniqueID = Helpers.generateUniqueId();
         flightplanLoaded = false;
