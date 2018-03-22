@@ -1,295 +1,331 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<!--<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:id="@+id/drawer_layout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:fitsSystemWindows="true">-->
+<android.support.v4.widget.SlidingPaneLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" >
-
-    <RelativeLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-
-        <fragment
-            android:id="@+id/FspMap"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="nl.robenanita.googlemapstest.MapFragment.FSPMapFragment"/>
-
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.MapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="372dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:id="@+id/instrumentsLayout"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp">
-
-            <TableLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#fffff0"
-                android:id="@+id/smallInstrumentsView"
-                android:layout_alignParentRight="true"
-                android:visibility="visible"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="right|top">
-
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true">
-
-                    <nl.robenanita.googlemapstest.Instruments.AirspeedView
-                        android:layout_width="124dp"
-                        android:layout_height="121dp"
-                        android:id="@+id/airspeedView"
-                        />
-
-                    <nl.robenanita.googlemapstest.Instruments.HorizonView
-                        android:layout_width="124dp"
-                        android:layout_height="121dp"
-                        android:id="@+id/horizonView"
-                        />
-
-                    <nl.robenanita.googlemapstest.Instruments.AltimeterView
-                        android:layout_width="124dp"
-                        android:layout_height="121dp"
-                        android:id="@+id/altimeterView"
-                        />
-                </TableRow>
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true">
-
-                    <nl.robenanita.googlemapstest.Instruments.TurnCoordinatorView
-                        android:layout_width="124dp"
-                        android:layout_height="121dp"
-                        android:id="@+id/turnCoordinatorView"
-                        />
-
-                    <nl.robenanita.googlemapstest.Instruments.CompassView
-                        android:layout_width="124dp"
-                        android:layout_height="121dp"
-                        android:id="@+id/compassView"
-                        />
-
-                    <nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView
-                        android:layout_width="124dp"
-                        android:layout_height="121dp"
-                        android:id="@+id/vsiView"
-                        />
-                </TableRow>
-            </TableLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/tracksLayout"
-            android:layout_width="327dp"
-            android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignStart="@id/instrumentsLayout"
-            android:layout_below="@+id/instrumentsLayout"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:background="#fffff0"
-            android:orientation="vertical"
-            android:weightSum="1">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="#bcbcbc"
-                android:gravity="right"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/closeTracksBtn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:clickable="true"
-                    android:cropToPadding="false"
-                    android:focusableInTouchMode="false"
-                    android:src="@drawable/closebutton" />
-            </LinearLayout>
-
-            <ListView
-                android:id="@+id/tracksListView"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0"
-                android:headerDividersEnabled="true" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:id="@+id/scaleBarView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="false"
-            android:visibility="visible"
-            android:layout_margin="5dp"
-            android:layout_below="@+id/infoPanelFragment" />
-
-        <fragment
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/infoPanelFragment"
-            android:name="nl.robenanita.googlemapstest.InfoPanelFragment"
-            android:layout_toLeftOf="@+id/instrumentsLayout" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="401dp"
-            android:layout_height="101dp"
-            android:id="@+id/legInfoLayout"
-            android:focusableInTouchMode="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/infoPanelFragment">
-
-            <nl.robenanita.googlemapstest.LegInfoView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                ads:courseDeviation="0"
-                android:id="@+id/legInfoPanel" />
-
-            </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_toStartOf="@+id/legInfoLayout"
-            android:visibility="visible"
-            android:id="@+id/airportInfoLayout"
-            android:layout_below="@+id/scaleBarView"
-            android:layout_alignLeft="@+id/map"
-            android:layout_marginBottom="10dp">
-
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/airportNatomWeatherLayout"
-                android:name="nl.robenanita.googlemapstest.Airport.AirportsInfoFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/progressLayout"
-            android:layout_width="400dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:background="#AAff8800"
-            android:orientation="vertical"
-            android:visibility="invisible">
-
-            <ProgressBar
-                android:id="@+id/navigationProgressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:max="100"
-                android:progress="1" />
-
-            <TextView
-                android:id="@+id/navigationProgressText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="TextView"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    android:orientation="horizontal"
+    >
 
     <LinearLayout
-        android:id="@+id/layersSetupLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/black"
-        android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:layout_height="match_parent"
+        android:background="@color/black_overlay">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/md_grey_300">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="50"
-                android:gravity="center_vertical"
-                android:shadowColor="@color/md_black_1000"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:text="Map layers Setup"
-                android:textColor="@color/md_grey_800"
-                android:textSize="18sp" />
-            <Button
-                android:id="@+id/closeLayersSetupBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/closebutton"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginTop="2dp"/>
-
-            <!--<ImageButton-->
-                <!--android:id="@+id/closeLayersSetupBtn"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="2dp"-->
-                <!--android:layout_marginRight="2dp"-->
-                <!--android:layout_marginTop="2dp"-->
-                <!--android:foreground="@drawable/closebutton" />-->
-        </LinearLayout>
-        <LinearLayout
+        <ImageButton
+            android:id="@+id/test_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="1dp"
-            android:background="#EEEEEE">
-
-            <fragment
-                android:id="@+id/layersFragment"
-                android:name="nl.robenanita.googlemapstest.Settings.LayersSetup.MapLayersFragment"
-                android:layout_width="500dp"
-                android:layout_height="500dp" />
-        </LinearLayout>
+            android:layout_gravity="start"
+            android:layout_margin="10dp"
+            android:foreground="@drawable/aerodromesearch" />
     </LinearLayout>
 
-    <com.joanzapata.pdfview.PDFView
-        android:id="@+id/pdfView"
-        android:layout_width="700dp"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/container"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true"
-        android:visibility="gone"/>
+        tools:context=".MainActivity"
+        tools:ignore="MergeRootFrame">
 
-</FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <fragment
+                android:id="@+id/FspMap"
+                android:name="nl.robenanita.googlemapstest.MapFragment.FSPMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
+            <LinearLayout
+                android:id="@+id/instrumentsLayout"
+                android:layout_width="372dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TableLayout
+                    android:id="@+id/smallInstrumentsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="right|top"
+                    android:background="#fffff0"
+                    android:visibility="visible">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true">
+
+                        <nl.robenanita.googlemapstest.Instruments.AirspeedView
+                            android:id="@+id/airspeedView"
+                            android:layout_width="124dp"
+                            android:layout_height="121dp" />
+
+                        <nl.robenanita.googlemapstest.Instruments.HorizonView
+                            android:id="@+id/horizonView"
+                            android:layout_width="124dp"
+                            android:layout_height="121dp" />
+
+                        <nl.robenanita.googlemapstest.Instruments.AltimeterView
+                            android:id="@+id/altimeterView"
+                            android:layout_width="124dp"
+                            android:layout_height="121dp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true">
+
+                        <nl.robenanita.googlemapstest.Instruments.TurnCoordinatorView
+                            android:id="@+id/turnCoordinatorView"
+                            android:layout_width="124dp"
+                            android:layout_height="121dp" />
+
+                        <nl.robenanita.googlemapstest.Instruments.CompassView
+                            android:id="@+id/compassView"
+                            android:layout_width="124dp"
+                            android:layout_height="121dp" />
+
+                        <nl.robenanita.googlemapstest.Instruments.VerticalSpeedIndicatorView
+                            android:id="@+id/vsiView"
+                            android:layout_width="124dp"
+                            android:layout_height="121dp" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/tracksLayout"
+                android:layout_width="327dp"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:layout_alignStart="@id/instrumentsLayout"
+                android:layout_below="@+id/instrumentsLayout"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#fffff0"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="#bcbcbc"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/closeTracksBtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:clickable="true"
+                        android:cropToPadding="false"
+                        android:focusableInTouchMode="false"
+                        android:src="@drawable/closebutton" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/tracksListView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:headerDividersEnabled="true" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/scaleBarView"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="false"
+                android:layout_below="@+id/infoPanelFragment"
+                android:layout_margin="5dp"
+                android:visibility="visible" />
+
+            <fragment
+                android:id="@+id/infoPanelFragment"
+                android:name="nl.robenanita.googlemapstest.InfoPanelFragment"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/instrumentsLayout" />
+
+            <LinearLayout
+                android:id="@+id/legInfoLayout"
+                android:layout_width="401dp"
+                android:layout_height="101dp"
+                android:layout_below="@+id/infoPanelFragment"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <nl.robenanita.googlemapstest.LegInfoView
+                    android:id="@+id/legInfoPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    ads:courseDeviation="0" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/airportInfoLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignLeft="@+id/map"
+                android:layout_below="@+id/scaleBarView"
+                android:layout_marginBottom="10dp"
+                android:layout_toStartOf="@+id/legInfoLayout"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/airportNatomWeatherLayout"
+                    android:name="nl.robenanita.googlemapstest.Airport.AirportsInfoFragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/progressLayout"
+                android:layout_width="400dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="#AAff8800"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <ProgressBar
+                    android:id="@+id/navigationProgressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="1" />
+
+                <TextView
+                    android:id="@+id/navigationProgressText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layersSetupLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/black"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/md_grey_300">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="50"
+                    android:gravity="center_vertical"
+                    android:shadowColor="@color/md_black_1000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:text="Map layers Setup"
+                    android:textColor="@color/md_grey_800"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/closeLayersSetupBtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/closebutton" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:background="#EEEEEE">
+
+                <fragment
+                    android:id="@+id/layersFragment"
+                    android:name="nl.robenanita.googlemapstest.Settings.LayersSetup.MapLayersFragment"
+                    android:layout_width="500dp"
+                    android:layout_height="500dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <!--<android.support.design.widget.NavigationView-->
+        <!--android:id="@+id/nav_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:minWidth="45dp"-->
+        <!--ads:menu="@menu/nav_view_menu">-->
+
+    <!--</android.support.design.widget.NavigationView>-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="start">-->
+
+    <!--<ImageButton-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="start"-->
+    <!--android:foreground="@drawable/aerodromesearch" />-->
+    <!--</LinearLayout>-->
+
+<!--</android.support.v4.widget.DrawerLayout>-->
+</android.support.v4.widget.SlidingPaneLayout>

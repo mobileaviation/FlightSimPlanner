@@ -15,6 +15,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
@@ -203,25 +204,38 @@ public class NavigationActivity extends ActionBarActivity implements
 
         appLocking = false;
         //airspaceCheck = true;
+// *************************
+// TODO a rebuild of the menus using the NavigationDrawer
+//
+//        fspMenuDrawer = new FSPMainMenuDrawer();
+//        fspMenuDrawer.getMenuDrawer(this);
+//        fspMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
+//            @Override
+//            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem item, Boolean closeMenu) {
+//                Log.i(TAG, "Menu clicked: " + menuItemType.toString());
+//                onMenuItemClicked(menuItemType, item);
+//                if (closeMenu) fspMenuDrawer.CloseMenu();
+//            }
+//        });
+//
+//        fspSecondairyMenuDrawer = new FSPSecondairyMenuDrawer();
+//        fspSecondairyMenuDrawer.addSecondairyMenuDrawer(fspMenuDrawer, this);
+//        fspSecondairyMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
+//            @Override
+//            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem, Boolean closeMenu) {
+//                onMenuItemClicked(menuItemType, drawerItem);
+//                if (closeMenu) fspSecondairyMenuDrawer.CloseMenu();
+//            }
+//        });
 
-        fspMenuDrawer = new FSPMainMenuDrawer();
-        fspMenuDrawer.getMenuDrawer(this);
-        fspMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
+        // Test code for the sliding pane layout
+        final SlidingPaneLayout l  = (SlidingPaneLayout)findViewById(R.id.drawer_layout);
+        l.openPane();
+        ImageButton t = (ImageButton)findViewById(R.id.test_button);
+        t.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem item, Boolean closeMenu) {
-                Log.i(TAG, "Menu clicked: " + menuItemType.toString());
-                onMenuItemClicked(menuItemType, item);
-                if (closeMenu) fspMenuDrawer.CloseMenu();
-            }
-        });
-
-        fspSecondairyMenuDrawer = new FSPSecondairyMenuDrawer();
-        fspSecondairyMenuDrawer.addSecondairyMenuDrawer(fspMenuDrawer, this);
-        fspSecondairyMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
-            @Override
-            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem, Boolean closeMenu) {
-                onMenuItemClicked(menuItemType, drawerItem);
-                if (closeMenu) fspSecondairyMenuDrawer.CloseMenu();
+            public void onClick(View view) {
+                l.closePane();
             }
         });
 

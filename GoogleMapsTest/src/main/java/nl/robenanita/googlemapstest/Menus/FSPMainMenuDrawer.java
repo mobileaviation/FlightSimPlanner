@@ -5,17 +5,21 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 
+import com.mikepenz.crossfader.Crossfader;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.MiniDrawer;
 import com.mikepenz.materialdrawer.holder.ImageHolder;
 import com.mikepenz.materialdrawer.holder.StringHolder;
+import com.mikepenz.materialdrawer.interfaces.ICrossfader;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialize.util.UIUtils;
 
 import nl.robenanita.googlemapstest.R;
 
@@ -31,6 +35,9 @@ public class FSPMainMenuDrawer {
 
     private Activity activity;
     private Drawer drawer;
+    private MiniDrawer miniDrawer;
+    private Crossfader crossfader;
+
     public Drawer getDrawer() {return drawer;}
 
     public Drawer getMenuDrawer(Activity activity)
@@ -59,7 +66,10 @@ public class FSPMainMenuDrawer {
                     }
                 })
                 .build();
+
+
         createMenuItems();
+
         return drawer;
     }
 

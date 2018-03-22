@@ -25,7 +25,7 @@ public class PDFCharts {
     {
         this.navigationActivity = navigationActivity;
 
-        pdfView = (PDFView) navigationActivity.findViewById(R.id.pdfView);
+        //pdfView = (PDFView) navigationActivity.findViewById(R.id.pdfView);
     }
 
     private NavigationActivity navigationActivity;
