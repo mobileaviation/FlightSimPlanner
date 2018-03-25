@@ -323,7 +323,7 @@ public class FSPMapFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        mapController.closeTestMBTilesMap();
+        //mapController.closeTestMBTilesMap();
         super.onDestroy();
     }
 

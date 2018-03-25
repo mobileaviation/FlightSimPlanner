@@ -272,17 +272,19 @@
             </LinearLayout>
         </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/black_overlay">
+        android:orientation="vertical">
 
-        <ImageButton
+        <fragment
+            android:id="@+id/navigationbuttonsfragment"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:foreground="@drawable/connected" />
-    </FrameLayout>
+            android:layout_height="match_parent"
+            android:name="nl.robenanita.googlemapstest.Menus.NavigationButtonFragment"
+            />
+
+    </LinearLayout>
 
     </FrameLayout>
 

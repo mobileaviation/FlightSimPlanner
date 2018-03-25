@@ -157,7 +157,7 @@ public class QuadKeyTileProvider implements TileProvider {
 
         String cachedFileName = "Airport_"+layer.toString() + "_" + quad + ".png";
 
-        //Log.i(TAG, "Airport URL: " + tileUrl.toString());
+        Log.i(TAG, "Airport cachedFile: " + cachedFileName);
         // http://tile.openweathermap.org/map/clouds/6/33/20.png
 
         Tile tile = null;

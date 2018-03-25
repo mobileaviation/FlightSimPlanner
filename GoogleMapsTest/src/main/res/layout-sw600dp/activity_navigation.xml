@@ -282,4 +282,18 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/navigationbuttonsfragment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:name="nl.robenanita.googlemapstest.Menus.NavigationButtonFragment"
+            />
+
+    </LinearLayout>
+
 </FrameLayout>
