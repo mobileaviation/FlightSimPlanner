@@ -8,10 +8,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 
 import com.mikepenz.crossfader.util.UIUtils;
 
@@ -117,7 +120,11 @@ public class NavigationButtonFragment extends Fragment {
     private ImageButton aerodrome_searchBtn;
     private ImageButton airspace_lockingBtn;
     private ImageButton appLockingBtn;
-    private ImageButton settingsBtn;
+    private ImageButton moreBtn;
+    private MenuItem settingsItem;
+    private MenuItem prevtrackItem;
+    private MenuItem loadChartsItem;
+    private MenuItem isnewItem;
 
    private void setupButtons()
    {
@@ -126,7 +133,11 @@ public class NavigationButtonFragment extends Fragment {
            public void onClick(View view) {
                ImageButton button = (ImageButton)view;
                MenuItemType itemType = (MenuItemType)button.getTag();
-               if (onNavigationMemuItemClicked != null) onNavigationMemuItemClicked.OnMenuItemClicked(view,itemType);
+               if (itemType==MenuItemType.more){
+                   showMoreMenu();
+               }
+               else
+                    if (onNavigationMemuItemClicked != null) onNavigationMemuItemClicked.OnMenuItemClicked(view,itemType);
            }
        };
 
@@ -157,9 +168,33 @@ public class NavigationButtonFragment extends Fragment {
        appLockingBtn = (ImageButton) view.findViewById(R.id.appLocking);
        appLockingBtn.setTag(MenuItemType.appLocking);
        appLockingBtn.setOnClickListener(onButtonClick);
-       settingsBtn = (ImageButton) view.findViewById(R.id.settings);
-       settingsBtn.setTag(MenuItemType.settings);
-       settingsBtn.setOnClickListener(onButtonClick);
+       moreBtn = (ImageButton) view.findViewById(R.id.settings);
+       moreBtn.setTag(MenuItemType.more);
+       moreBtn.setOnClickListener(onButtonClick);
+   }
+
+   private void showMoreMenu()
+   {
+       PopupMenu popup = new PopupMenu(getActivity(), moreBtn);
+       popup.getMenuInflater().inflate(R.menu.nav_menu, popup.getMenu());
+
+       popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+           @Override
+           public boolean onMenuItemClick(MenuItem menuItem) {
+
+               MenuItemType itemType = null;
+               if(menuItem.getItemId()==R.id.action_loadtrack_menuitem) itemType = MenuItemType.loadTrack;
+               if(menuItem.getItemId()==R.id.action_load_chart_menuitem) itemType = MenuItemType.loadCharts;
+               if(menuItem.getItemId()==R.id.action_settings_menuitem) itemType = MenuItemType.settings;
+               if(menuItem.getItemId()==R.id.action_isnew_menuitem) itemType = MenuItemType.isNew;
+               if (itemType != null)
+                    if (onNavigationMemuItemClicked != null) onNavigationMemuItemClicked.OnMenuItemClicked(null,itemType);
+
+               return false;
+           }
+       });
+
+       popup.show();
    }
 
    public void SetTrackingItemIcon(Boolean enabled)

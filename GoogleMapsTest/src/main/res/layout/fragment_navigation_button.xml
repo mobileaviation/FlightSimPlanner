@@ -15,10 +15,11 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="10dp"
-            android:background="@drawable/close_menu"/>
+            android:background="@drawable/close_menu"
+            android:contentDescription="@string/close_menu" />
 
         <ScrollView
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="match_parent">
 
             <LinearLayout
@@ -33,70 +34,80 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/dirtecttobtn" />
+                    android:background="@drawable/dirtecttobtn"
+                    android:contentDescription="@string/dirtecttobtn" />
 
                 <ImageButton
                     android:id="@+id/flightplan_activate"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/flightplanactivate" />
+                    android:background="@drawable/flightplanactivate"
+                    android:contentDescription="@string/flightplanactivate" />
 
                 <ImageButton
                     android:id="@+id/connect_disconnect"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/disconnected" />
+                    android:background="@drawable/disconnected"
+                    android:contentDescription="@string/connected_disconnected" />
 
                 <ImageButton
                     android:id="@+id/trackactive"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/trackactive" />
+                    android:background="@drawable/trackactive"
+                    android:contentDescription="@string/trackactive" />
 
                 <ImageButton
                     android:id="@+id/new_flightplan"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/flightplanbutton" />
+                    android:background="@drawable/flightplanbutton"
+                    android:contentDescription="@string/flightplanbutton" />
 
                 <ImageButton
                     android:id="@+id/map_type"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/maptype" />
+                    android:background="@drawable/maptype"
+                    android:contentDescription="@string/maptype" />
 
                 <ImageButton
                     android:id="@+id/aerodrome_search"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/aerodromesearch" />
+                    android:background="@drawable/aerodromesearch"
+                    android:contentDescription="@string/aerodromesearch" />
 
                 <ImageButton
                     android:id="@+id/airspace_locking"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/airspace_locked" />
+                    android:background="@drawable/airspace_locked"
+                    android:contentDescription="@string/airspace_locked" />
 
                 <ImageButton
                     android:id="@+id/appLocking"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/unlocked" />
+                    android:background="@drawable/unlocked"
+                    android:contentDescription="@string/locked_unlocked" />
 
                 <ImageButton
                     android:id="@+id/settings"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/settings" />
+                    android:background="@drawable/more"
+                    android:contentDescription="@string/settings" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
