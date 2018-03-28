@@ -13,6 +13,16 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.gradle\caches\transforms-1\files-1.1\crossfader-1.5.2.aar\107b02235a6aeea49782947bcf45527c\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="26.0.2"
+        sha1="f54bcbd729c9a2f42542d0701c04b5d3e86e8847">
+        <dex dex="C:\Development projects\FlightsimPlanner\GoogleMapsTest\build\intermediates\transforms\preDex\release\24.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\Rob Verhoef\.gradle\caches\transforms-1\files-1.1\play-services-ads-11.0.2.aar\523f4616d4e5b8e5c558600f5d8d8b55\jars\classes.jar"
         jumboMode="false"
         min-sdk-version="19"
@@ -70,6 +80,16 @@
         revision="26.0.2"
         sha1="86baa7d1051901fc1b8e7f596732f71f32175bde">
         <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\FlightSimPlanner\GoogleMapsTest\build\intermediates\transforms\preDex\release\11.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Development projects\FlightsimPlanner\GoogleMapsTest\libs\ksoap2-android-assembly-3.1.1-jar-with-dependencies.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="26.0.2"
+        sha1="ddcd1698b4bc242e26bfd99e3779688ab311b918">
+        <dex dex="C:\Development projects\FlightsimPlanner\GoogleMapsTest\build\intermediates\transforms\preDex\release\1.jar" />
     </item>
     <item
         is-multidex="false"
@@ -223,6 +243,16 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.gradle\caches\transforms-1\files-1.1\transition-25.3.1.aar\b2b348c91db5e143f5554f1158aab5cd\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="26.0.2"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="C:\Development projects\FlightsimPlanner\GoogleMapsTest\build\intermediates\transforms\preDex\release\16.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\Rob Verhoef\.gradle\caches\transforms-1\files-1.1\fastadapter-extensions-expandable-3.2.3.aar\581b6d0be409cf0785c1cf1e7ef74fd3\jars\classes.jar"
         jumboMode="false"
         min-sdk-version="19"
@@ -293,6 +323,26 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.gradle\caches\transforms-1\files-1.1\design-25.3.1.aar\063c103a8985d2b39612d00ef76216e7\jars\classes.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="26.0.2"
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="C:\Development projects\FlightsimPlanner\GoogleMapsTest\build\intermediates\transforms\preDex\release\5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Rob Verhoef\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.2\3edcfe49d2c6053a70a2a47e4e1c2f94998a49cf\gson-2.8.2.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="26.0.2"
+        sha1="3edcfe49d2c6053a70a2a47e4e1c2f94998a49cf">
+        <dex dex="C:\Development projects\FlightsimPlanner\GoogleMapsTest\build\intermediates\transforms\preDex\release\25.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\Rob Verhoef\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.1.aar\8fa2b6e35213795d10292973d06dccf5\jars\classes.jar"
         jumboMode="false"
         min-sdk-version="19"
@@ -340,6 +390,16 @@
         revision="26.0.2"
         sha1="815893df5f31da2ece4040fe0a12fd44b577afaf">
         <dex dex="C:\Users\Rob Verhoef\AndroidStudioProjects\FlightSimPlanner\GoogleMapsTest\build\intermediates\transforms\preDex\release\21.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Development projects\FlightsimPlanner\GoogleMapsTest\libs\jts-1.13.jar"
+        jumboMode="false"
+        min-sdk-version="19"
+        optimize="true"
+        revision="26.0.2"
+        sha1="1d7457bff1a63d8f2b2e0e0961300aa1831d0fb7">
+        <dex dex="C:\Development projects\FlightsimPlanner\GoogleMapsTest\build\intermediates\transforms\preDex\release\2.jar" />
     </item>
     <item
         is-multidex="false"
