@@ -18,5 +18,6 @@ public enum MenuItemType
     loadCharts,
     isNew,
     airspacesTracking,
-    appLocking
+    appLocking,
+    more
 }

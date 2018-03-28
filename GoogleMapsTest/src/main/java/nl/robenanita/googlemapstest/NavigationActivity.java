@@ -1,5 +1,7 @@
 package nl.robenanita.googlemapstest;
 
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +17,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
@@ -27,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -85,6 +89,8 @@ import nl.robenanita.googlemapstest.MapFragment.TrackingLine;
 import nl.robenanita.googlemapstest.Menus.FSPMainMenuDrawer;
 import nl.robenanita.googlemapstest.Menus.FSPSecondairyMenuDrawer;
 import nl.robenanita.googlemapstest.Menus.MenuItemType;
+import nl.robenanita.googlemapstest.Menus.NavigationButtonFragment;
+import nl.robenanita.googlemapstest.Menus.OnNavigationMemuItemClicked;
 import nl.robenanita.googlemapstest.Route.Route;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.SimConnection.FSUIPCConnection;
@@ -186,7 +192,7 @@ public class NavigationActivity extends ActionBarActivity implements
     private FSPSecondairyMenuDrawer fspSecondairyMenuDrawer;
 
     private Boolean appLocking;
-    //private Boolean airspaceCheck;
+    private NavigationButtonFragment navigationButtonFragment;
 
     @Override
     protected void onResume() {
@@ -203,25 +209,36 @@ public class NavigationActivity extends ActionBarActivity implements
 
         appLocking = false;
         //airspaceCheck = true;
+// *************************
+// TODO a rebuild of the menus using the NavigationDrawer
+//
+//        fspMenuDrawer = new FSPMainMenuDrawer();
+//        fspMenuDrawer.getMenuDrawer(this);
+//        fspMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
+//            @Override
+//            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem item, Boolean closeMenu) {
+//                Log.i(TAG, "Menu clicked: " + menuItemType.toString());
+//                onMenuItemClicked(menuItemType, item);
+//                if (closeMenu) fspMenuDrawer.CloseMenu();
+//            }
+//        });
+//
+//        fspSecondairyMenuDrawer = new FSPSecondairyMenuDrawer();
+//        fspSecondairyMenuDrawer.addSecondairyMenuDrawer(fspMenuDrawer, this);
+//        fspSecondairyMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
+//            @Override
+//            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem, Boolean closeMenu) {
+//                onMenuItemClicked(menuItemType, drawerItem);
+//                if (closeMenu) fspSecondairyMenuDrawer.CloseMenu();
+//            }
+//        });
 
-        fspMenuDrawer = new FSPMainMenuDrawer();
-        fspMenuDrawer.getMenuDrawer(this);
-        fspMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
+        navigationButtonFragment = (NavigationButtonFragment) getFragmentManager().findFragmentById(R.id.navigationbuttonsfragment);
+        navigationButtonFragment.SetOnButtonClicked(new OnNavigationMemuItemClicked() {
             @Override
-            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem item, Boolean closeMenu) {
-                Log.i(TAG, "Menu clicked: " + menuItemType.toString());
-                onMenuItemClicked(menuItemType, item);
-                if (closeMenu) fspMenuDrawer.CloseMenu();
-            }
-        });
-
-        fspSecondairyMenuDrawer = new FSPSecondairyMenuDrawer();
-        fspSecondairyMenuDrawer.addSecondairyMenuDrawer(fspMenuDrawer, this);
-        fspSecondairyMenuDrawer.setOnMenuTtemClicked(new FSPMainMenuDrawer.OnMenuTtemClicked() {
-            @Override
-            public void MenuItemClicked(MenuItemType menuItemType, IDrawerItem drawerItem, Boolean closeMenu) {
-                onMenuItemClicked(menuItemType, drawerItem);
-                if (closeMenu) fspSecondairyMenuDrawer.CloseMenu();
+            public Boolean OnMenuItemClicked(View button, MenuItemType itemType) {
+                onMenuItemClicked(itemType, (ImageButton)button);
+                return true;
             }
         });
 
@@ -638,7 +655,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 //startMenuItem.setEnabled(true);
 
                 //connectDisconnectMenuItem.setIcon(R.drawable.connected);
-                fspMenuDrawer.SetConnectDisConnectIcon(true);
+                navigationButtonFragment.SetConnectDisConnectIcon(true);
 
                 fspMapFragment.connected = true;
                 fspMapFragment.SetupTrackingLine();
@@ -664,7 +681,7 @@ public class NavigationActivity extends ActionBarActivity implements
                 fspMapFragment.connected = false;
 
                 //connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
-                fspMenuDrawer.SetConnectDisConnectIcon(false);
+                navigationButtonFragment.SetConnectDisConnectIcon(false);
             }
         });
 
@@ -680,11 +697,11 @@ public class NavigationActivity extends ActionBarActivity implements
 
                 if (testTimer != null) testTimer.cancel();
                 //connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
-                fspMenuDrawer.SetConnectDisConnectIcon(false);
+                navigationButtonFragment.SetConnectDisConnectIcon(false);
             }
         });
 
-        fspMenuDrawer.SetConnectingIcon();
+        navigationButtonFragment.SetConnectingIcon();
 
         connection.Connect();
     }
@@ -712,7 +729,7 @@ public class NavigationActivity extends ActionBarActivity implements
     //private MenuItem connectDisconnectMenuItem;
     private MenuItem trackEnabledMenuItem;
 
-    private void onMenuItemClicked(MenuItemType menuItemType, IDrawerItem item)
+    private void onMenuItemClicked(MenuItemType menuItemType, ImageButton item)
     {
         switch (menuItemType)
         {
@@ -738,7 +755,7 @@ public class NavigationActivity extends ActionBarActivity implements
             }
             case tracking: {
                 trackingEnabled = !trackingEnabled;
-                fspMenuDrawer.SetTrackingItemIcon(trackingEnabled);
+                navigationButtonFragment.SetTrackingItemIcon(trackingEnabled);
                 break;
             }
             case loadTrack: {
@@ -763,12 +780,12 @@ public class NavigationActivity extends ActionBarActivity implements
             }
             case airspacesTracking:{
                 fspMapFragment.airspace_check = !fspMapFragment.airspace_check;
-                fspSecondairyMenuDrawer.SetAirspaceItemIcon(fspMapFragment.airspace_check);
+                navigationButtonFragment.SetAirspaceItemIcon(fspMapFragment.airspace_check);
                 break;
             }
             case appLocking:{
                 appLocking = !appLocking;
-                fspSecondairyMenuDrawer.SetApplockedIcon(appLocking);
+                navigationButtonFragment.SetApplockedIcon(appLocking);
                 break;
             }
         }
@@ -980,7 +997,7 @@ public class NavigationActivity extends ActionBarActivity implements
                     fspMapFragment.connected = false;
                     locationTracking = null;
                     //connectDisconnectMenuItem.setIcon(R.drawable.disconnected);
-                    fspMenuDrawer.SetConnectDisConnectIcon(false);
+                    navigationButtonFragment.SetConnectDisConnectIcon(false);
                     mLocationClient.disconnect();
                     break;
                 }
@@ -1636,7 +1653,7 @@ public class NavigationActivity extends ActionBarActivity implements
             fspMapFragment.connected = true;
 
             //connectDisconnectMenuItem.setIcon(R.drawable.connected);
-            fspMenuDrawer.SetConnectDisConnectIcon(true);
+            navigationButtonFragment.SetConnectDisConnectIcon(true);
 
             setupLocationRequest();
 

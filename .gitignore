@@ -1,6 +1,7 @@
 # Built application files
 /*/build/
-/build/
+build/
+GoogleMapsTest/build/
 
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
@@ -10,12 +11,13 @@ local.properties
 
 # Gradle generated files
 .gradle/
+GoogleMapsTest/.gradle/
 
 # Signing files
 .signing/
 
 # User-specific configurations
-.idea/libraries/
+.idea/libraries
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/.name
@@ -27,6 +29,18 @@ local.properties
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
 *.iml
+GoogleMapsTest/.idea/libraries
+GoogleMapsTest/.idea/workspace.xml
+GoogleMapsTest/.idea/tasks.xml
+GoogleMapsTest/.idea/.name
+GoogleMapsTest/.idea/compiler.xml
+GoogleMapsTest/.idea/copyright/profiles_settings.xml
+GoogleMapsTest/.idea/encodings.xml
+GoogleMapsTest/.idea/misc.xml
+GoogleMapsTest/.idea/modules.xml
+GoogleMapsTest/.idea/scopes/scope_settings.xml
+GoogleMapsTest/.idea/vcs.xml
+GoogleMapsTest/*.iml
 
 # OS-specific files
 .DS_Store

@@ -1,5 +1,7 @@
 package nl.robenanita.googlemapstest.Route.Json;
 
+import java.sql.Struct;
+
 import nl.robenanita.googlemapstest.Airport.Airport;
 
 /**
@@ -10,12 +12,21 @@ public class AirportObject {
     public AirportObject(Airport airport)
     {
         _airport = airport;
+        assign();
     }
-    private Airport _airport;
+    private transient Airport _airport;
+    private String name;
+    private String ident;
+    private Double latitude;
+    private Double longitude;
+    private String country;
 
-    public String getName() {return _airport.name;}
-    public String getIdent() {return _airport.ident;}
-    public Double getLatitude() {return _airport.latitude_deg;}
-    public Double getLongitude() {return _airport.longitude_deg;}
-    public String getCountry() {return _airport.iso_country;}
+    private void assign()
+    {
+        name = _airport.name;
+        ident = _airport.ident;
+        latitude = _airport.latitude_deg;
+        longitude = _airport.longitude_deg;
+        country = _airport.iso_country;
+    }
 }

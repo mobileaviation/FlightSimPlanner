@@ -323,7 +323,7 @@ public class FSPMapFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        mapController.closeTestMBTilesMap();
+        //mapController.closeTestMBTilesMap();
         super.onDestroy();
     }
 
@@ -960,7 +960,7 @@ public class FSPMapFragment extends Fragment {
 
         // Test Json Output
         RouteObject jsonRouteObject = new RouteObject(selectedFlightplan);
-        String json = jsonRouteObject.SerializeJson().toString();
+        String json = jsonRouteObject.toJson();
 
         selectedFlightplan.ShowFlightplanMarkers(googleMap);
         selectedFlightplan.DrawFlightplan(googleMap);
