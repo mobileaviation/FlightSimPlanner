@@ -1,7 +1,6 @@
 package nl.robenanita.googlemapstest.SimConnection;
 
 import android.os.AsyncTask;
-import android.support.v4.app.NotificationCompatSideChannelService;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -35,22 +34,25 @@ import javax.xml.transform.stream.StreamResult;
 import nl.robenanita.googlemapstest.DataType;
 import nl.robenanita.googlemapstest.Offset;
 
+
 /**
  * Created by Rob Verhoef on 12-1-14.
  */
 public class FSUIPCConnection {
-    public FSUIPCConnection(String IP, int Port, boolean webapi)
+    public FSUIPCConnection(String IP, int Port, boolean webapi, String version)
     {
         ip = IP;
         port = Port;
         offsets = new ArrayList<Offset>();
         this.webapi = webapi;
+        this.version = version;
     }
 
     private String TAG = "GooglemapsTest";
     private String ip;
     private int port;
     private boolean webapi;
+    private String version;
 
     private boolean m_opened = false;
     private boolean m_processed = false;
@@ -134,22 +136,7 @@ public class FSUIPCConnection {
         // connect to the server
         if (webapi)
         {
-            mWebApiClient = new WebAPIClient(ip, port);
-            mWebApiClient.SetFSUIPCOpenListener(new OnFSUIPCOpen() {
-                @Override
-                public void FSUIPCOpen(String message, boolean success, String version) {
-                    if (success) {
-                        if (mFSUIPCConnectedListener != null)
-                            mFSUIPCConnectedListener.FSUIPCConnected(message, success, version);
-                    }
-                    else {
-                        if (mFSUIPCErrorListener != null) {
-                            mFSUIPCErrorListener.FSUIPCAction(message, false);
-                        }
-                    }
-                }
-            });
-            return mWebApiClient.OpenFSUIPC();
+            return connectV2();
 
         }
         else {
@@ -157,6 +144,42 @@ public class FSUIPCConnection {
             conctTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
+        return true;
+    }
+
+    private boolean connectV2()
+    {
+        VersionCheck versionCheck = new VersionCheck(version, ip, port);
+        versionCheck.onVersionCheck = new VersionCheck.OnVersionCheck() {
+            @Override
+            public void Checked(String ServerVersion, Boolean success) {
+                if (success) {
+                    mWebApiClient = new WebAPIClient(ip, port);
+                    mWebApiClient.SetFSUIPCOpenListener(new OnFSUIPCOpen() {
+                        @Override
+                        public void FSUIPCOpen(String message, boolean success, String version) {
+                            if (success) {
+                                if (mFSUIPCConnectedListener != null)
+                                    mFSUIPCConnectedListener.FSUIPCConnected(message, success, version);
+                            } else {
+                                if (mFSUIPCErrorListener != null) {
+                                    mFSUIPCErrorListener.FSUIPCAction(message, false);
+                                }
+                            }
+                        }
+                    });
+                    mWebApiClient.OpenFSUIPC();
+                }
+                else
+                {
+                    if (mFSUIPCErrorListener != null) {
+                        mFSUIPCErrorListener.FSUIPCAction(ServerVersion, false);
+                    }
+                }
+            }
+        };
+
+        versionCheck.StartVersionCheck();
         return true;
     }
 

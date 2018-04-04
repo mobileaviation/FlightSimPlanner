@@ -632,7 +632,7 @@ public class NavigationActivity extends ActionBarActivity implements
     private void connectToServer()
     {
         Boolean webapi = (connectionType==ConnectionType.simv2);
-        connection = new FSUIPCConnection(ServerIPAddress, ServerPort, webapi);
+        connection = new FSUIPCConnection(ServerIPAddress, ServerPort, webapi, getString(R.string.version));
 
 
         connection.SetFSUIPCConnectedListener(new FSUIPCConnection.OnFSUIPCConnected() {
