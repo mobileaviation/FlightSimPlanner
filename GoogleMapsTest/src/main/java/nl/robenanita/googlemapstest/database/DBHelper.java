@@ -33,8 +33,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String NAVAIDS_TABLE_NAME = "tbl_Navaids";
     public static final String PROPERTIES_TABLE_NAME = "tbl_Properties";
     public static final String FREQUENCIES_TABLE_NAME = "tbl_AirportFrequencies";
+    public static final String MBTILES_TABLE_NAME = "tbl_MbTiles";
 
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 23;
     private static final String TAG = "GooglemapsTest";
 
     public Boolean updated = false;
@@ -101,11 +102,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String C_mapLocation_ID = "MapLocation_ID";
     public static final String C_pid = "pid";
 
-
+    public static String DbPath;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.myContext = context;
+        DbPath = this.myContext.getApplicationInfo().dataDir + "/databases/";
     }
 
     @Override
@@ -134,68 +136,41 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try
         {
+
             Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
+            copyDataBase();
             //createDataBase();
         }
         catch(Exception ee)
         {
             Log.e(TAG, "Error Updating DB " + ee.getMessage());
         }
-        updated = true;
     }
 
     private SQLiteDatabase checkDB;
     private boolean checkDataBase(){
         checkDB = null;
         try{
-            String myPath = DB_PATH + DATABASE_NAME;
+            String myPath = DbPath + DATABASE_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         }
         catch(SQLiteException e){
             //database does't exist yet.
             Log.e(TAG, "Check DB Error");
         }
-//        catch (SQLiteCantOpenDatabaseException ce)
-//        {
-//            Log.e(TAG, "Cant open database Error");
-//        }
+
         if(checkDB != null){
             checkDB.close();
+            return true;
         }
-        return checkDB != null ? true : false;
-    }
-
-    public void DoCopyDatabase()
-    {
-        this.getReadableDatabase();
-
-        try {
-            copyDataBase();
-        } catch (IOException e) {
-            throw new Error("Error copying database");
-        }
+        else return  false;
     }
 
     public void createDataBase() throws IOException{
-        boolean dbExist = checkDataBase();
-        if(dbExist){
-            //do nothing - database already exist
-            this.getWritableDatabase();
-
-        }
-        else
-        {
-            this.getReadableDatabase();
-
-            try {
-                copyDataBase();
-            } catch (IOException e) {
-                throw new Error("Error copying database");
-            }
-        }
+        // Empty for compatibility
     }
 
-    private void copyDataBase() throws IOException{
+    private void copyDataBase() throws Exception{
         //Open your local db as the input stream
         InputStream myInput = null;
         OutputStream myOutput = null;
@@ -205,7 +180,7 @@ public class DBHelper extends SQLiteOpenHelper {
         {
             myInput = myContext.getAssets().open(DATABASE_NAME);
             // Path to the just created empty db
-            String outFileName = DB_PATH + DATABASE_NAME;
+            String outFileName = DbPath + DATABASE_NAME;
             //Open the empty db as the output stream
             myOutput = new FileOutputStream(outFileName);
             //transfer bytes from the inputfile to the outputfile
@@ -220,44 +195,44 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.e(TAG, ee.getMessage());
         }
         finally {
-            if (myOutput != null) myOutput.flush();
-            if (myOutput != null) myOutput.close();
+            if (myOutput != null) {
+                myOutput.flush();
+                myOutput.close();
+            }
             if (myInput != null) myInput.close();
         }
     }
 
     public SQLiteDatabase openDataBase(){
         //Open the database
-        String myPath = DB_PATH + DATABASE_NAME;
-        try
-        {
-            //myContext.deleteDatabase("airnav.db");
-//            myContext.deleteDatabase("airnav2.db");
-//            myContext.deleteDatabase("airnav3.db");
-//            myContext.deleteDatabase("airnav4.db");
-//            myContext.deleteDatabase("airnav5.db");
-
-            //if (checkDB != null)
-            //    if (checkDB.isOpen())
-            //checkDB.close();
-        }
-        catch (Exception ee)
-        {
-
+        if (!checkDataBase()) {
+            this.getWritableDatabase();
+            try {
+                copyDataBase();
+            }
+            catch (Exception ee)
+            {
+                Log.e(TAG, "Error copy database: " + ee.getMessage());
+                return null;
+            }
         }
 
+        String myPath = DbPath + DATABASE_NAME;
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
         return myDataBase;
     }
 
     public void deleteDatabase(Integer version)
     {
+        Log.i(TAG, "Try to remove the old database: " + version.toString() + " : " + this.DATABASE_VERSION);
         if (version != this.DATABASE_VERSION)
             {
-            this.close();
+            //this.close();
+            Log.i(TAG, "Try to remove the old database");
             try
             {
                 myContext.deleteDatabase("airnav.db");
+                Log.i(TAG, "tried to delete database: airnav.db" );
             }
             catch (Exception ee)
             {

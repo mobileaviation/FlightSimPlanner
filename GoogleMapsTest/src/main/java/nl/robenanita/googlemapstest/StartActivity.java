@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -482,11 +483,15 @@ public class StartActivity extends ActionBarActivity {
                 Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
             }
         });
-
         dbDownloader.CheckAndUpdateDatabases();
-//        CheckDatabaseSource checkDatabaseSource = new CheckDatabaseSource(this);
-//        checkDatabaseSource.open();
-//        checkDatabaseSource.checkVersion();
+
+        // Check the airnav database and copy it from Assets if necessary
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.openDataBase();
+        if (db.isOpen()) Log.i(TAG, "opened for test!");
+        dbHelper.close();
+        if (!db.isOpen()) Log.i(TAG, "Db is closed");
+        Log.i(TAG, "Database checked and copied if necessary!");
     }
 
     public boolean loadAds()
