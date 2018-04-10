@@ -102,6 +102,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String C_mapLocation_ID = "MapLocation_ID";
     public static final String C_pid = "pid";
 
+    public static final String C_mbtileslink = "mbtileslink";
+    public static final String C_xmllink = "xmllink";
+    public static final String C_version = "version";
+    public static final String C_startValidity = "startValidity";
+    public static final String C_endValidity = "endValidity";
+
+
     public static String DbPath;
 
     public DBHelper(Context context) {

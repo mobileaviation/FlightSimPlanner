@@ -16,12 +16,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Charts.AirportChart;
 import nl.robenanita.googlemapstest.Charts.AirportCharts;
+import nl.robenanita.googlemapstest.MBTiles.MBTile;
+import nl.robenanita.googlemapstest.MBTiles.MBTileType;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
+import nl.robenanita.googlemapstest.database.MBTilesDataSource;
 
 public class LayersChartsSetupFragment extends Fragment {
 
@@ -38,38 +42,42 @@ public class LayersChartsSetupFragment extends Fragment {
         // Inflate the layout for this fragment
 
         view = inflater.inflate(R.layout.fragment_layers_charts_setup, container, false);
-
         n = (NavigationActivity)container.getContext();
-
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//
+//        ListView chartsListView = (ListView) view.findViewById(R.id.airportChartsSetupList);
+//        AirportChartsDataSource airportChartsDataSource = new AirportChartsDataSource(getContext());
+//        airportChartsDataSource.open();
+//        AirportCharts charts = airportChartsDataSource.GetAllCharts();
+//        airportChartsDataSource.close();
+//
+//        ChartsSetupAdapter chartsSetupAdapter = new ChartsSetupAdapter(charts);
+//        chartsListView.setAdapter(chartsSetupAdapter);
+//
+//        chartsListView.setClickable(true);
+//        chartsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                ChartsSetupAdapter adapter = (ChartsSetupAdapter) adapterView.getAdapter();
+//                AirportChart chart = adapter.GetAirportChart(i);
+//
+//                downloadTask = new DownloadImageTask();
+//                downloadTask.execute(chart.thumbnail_url);
+//
+//                n.mapController.SetAirportChart(chart);
+//            }
+//        });
 
-        ListView chartsListView = (ListView) view.findViewById(R.id.airportChartsSetupList);
-        AirportChartsDataSource airportChartsDataSource = new AirportChartsDataSource(getContext());
-        airportChartsDataSource.open();
-        AirportCharts charts = airportChartsDataSource.GetAllCharts();
-        airportChartsDataSource.close();
+        MBTilesDataSource tilesDataSource = new MBTilesDataSource(n);
+        tilesDataSource.open();
+        ArrayList<MBTile> ofm_tiles = tilesDataSource.GetMBTilesByType(MBTileType.ofm);
 
-        ChartsSetupAdapter chartsSetupAdapter = new ChartsSetupAdapter(charts);
-        chartsListView.setAdapter(chartsSetupAdapter);
-
-        chartsListView.setClickable(true);
-        chartsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ChartsSetupAdapter adapter = (ChartsSetupAdapter) adapterView.getAdapter();
-                AirportChart chart = adapter.GetAirportChart(i);
-
-                downloadTask = new DownloadImageTask();
-                downloadTask.execute(chart.thumbnail_url);
-
-                n.mapController.SetAirportChart(chart);
-            }
-        });
+        tilesDataSource.close();
     }
 
     private DownloadImageTask downloadTask;
