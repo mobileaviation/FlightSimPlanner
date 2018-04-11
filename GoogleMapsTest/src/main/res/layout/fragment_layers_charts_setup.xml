@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:text="Airport Charts"
+        android:text="Charts"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold"
         android:typeface="normal"
@@ -25,11 +25,4 @@
         android:layout_marginTop="20dp"
         android:layout_weight="3"></ListView>
 
-    <ImageView
-        android:id="@+id/chartImageView"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:adjustViewBounds="false"
-        app:srcCompat="@android:color/transparent" />
 </LinearLayout>

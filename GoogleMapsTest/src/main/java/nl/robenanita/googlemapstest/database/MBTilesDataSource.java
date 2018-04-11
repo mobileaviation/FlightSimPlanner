@@ -15,9 +15,11 @@ public class MBTilesDataSource {
     private SQLiteDatabase database;
     private DBHelper dbHelper;
     private String TAG = "GooglemapsTest";
+    private Context context;
 
     public MBTilesDataSource(Context context) {
         dbHelper = new DBHelper(context);
+        this.context = context;
     }
 
     public void open() {
@@ -34,10 +36,8 @@ public class MBTilesDataSource {
         dbHelper.close();
     }
 
-    public ArrayList<MBTile> GetMBTilesByType(MBTileType type)
+    public ArrayList<MBTile> GetMBTilesByType(MBTileType type, ArrayList<MBTile> tiles)
     {
-        ArrayList<MBTile> tiles = new ArrayList<>();
-
         String query = "SELECT * FROM " + DBHelper.MBTILES_TABLE_NAME + " WHERE " +
                 DBHelper.C_type + "=?;";
         String[] args = {type.toString()};
@@ -54,7 +54,7 @@ public class MBTilesDataSource {
 
     private MBTile CursorToTile(Cursor cursor)
     {
-        MBTile tile = new MBTile();
+        MBTile tile = new MBTile(this.context);
 
         tile._id = cursor.getInt(cursor.getColumnIndex("_id"));
         tile.name = cursor.getString(cursor.getColumnIndex(DBHelper.C_name));

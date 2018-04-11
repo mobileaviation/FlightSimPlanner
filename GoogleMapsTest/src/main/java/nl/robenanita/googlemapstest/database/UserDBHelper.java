@@ -91,38 +91,39 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_file_prefix = "file_prefix";
     public static final String C_file_suffix = "file_suffix";
 
-    public static void BackupUserDatabase(String databaseName)
-    {
-        OutputStream output = null;
-        FileInputStream fis = null;
-        try {
-            final String inFileName = DBHelper.DB_PATH + "/" + databaseName;
-            File dbFile = new File(inFileName);
-            fis = new FileInputStream(dbFile);
-
-            String outFileName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/"+ databaseName + "_copy.db";
-            Log.i(TAG, "Backing up user.db to: " + outFileName);
-
-            // Open the empty db as the output stream
-            output = new FileOutputStream(outFileName);
-
-            // Transfer bytes from the inputfile to the outputfile
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = fis.read(buffer)) > 0) {
-                output.write(buffer, 0, length);
-            }
-            output.flush();
-            output.close();
-            if (fis != null) fis.close();
-
-            Log.i(TAG, "Back up user.db succeeded! ");
-        }
-        catch (Exception ee)
-        {
-            Log.i(TAG, "Backing up user.db error: " + ee.getMessage());
-        }
-    }
+//    public static void BackupUserDatabase(String databaseName)
+//    {
+//        OutputStream output = null;
+//        FileInputStream fis = null;
+//        try {
+//            String
+//            final String inFileName = DBHelper.DB_PATH + "/" + databaseName;
+//            File dbFile = new File(inFileName);
+//            fis = new FileInputStream(dbFile);
+//
+//            String outFileName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/"+ databaseName + "_copy.db";
+//            Log.i(TAG, "Backing up user.db to: " + outFileName);
+//
+//            // Open the empty db as the output stream
+//            output = new FileOutputStream(outFileName);
+//
+//            // Transfer bytes from the inputfile to the outputfile
+//            byte[] buffer = new byte[1024];
+//            int length;
+//            while ((length = fis.read(buffer)) > 0) {
+//                output.write(buffer, 0, length);
+//            }
+//            output.flush();
+//            output.close();
+//            if (fis != null) fis.close();
+//
+//            Log.i(TAG, "Back up user.db succeeded! ");
+//        }
+//        catch (Exception ee)
+//        {
+//            Log.i(TAG, "Backing up user.db error: " + ee.getMessage());
+//        }
+//    }
 
 
     private static final String AIRPORTCHARTS_TABLE = "create table "
@@ -248,7 +249,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
     public UserDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        myContext = context;
+        DbPath = this.myContext.getApplicationInfo().dataDir + "/databases/";
     }
+
+    private Context myContext;
+    private String DbPath;
 
     @Override
     public void onCreate(SQLiteDatabase db) {

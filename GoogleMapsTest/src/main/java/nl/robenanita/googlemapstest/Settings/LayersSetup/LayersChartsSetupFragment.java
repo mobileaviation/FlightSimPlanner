@@ -1,10 +1,14 @@
 package nl.robenanita.googlemapstest.Settings.LayersSetup;
 
 
+import android.app.DownloadManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -35,6 +39,9 @@ public class LayersChartsSetupFragment extends Fragment {
 
     private View view;
     private NavigationActivity n;
+    private String TAG = "GooglemapsTest";
+    private String downloadedToDir;
+    private DownloadManager dm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +50,8 @@ public class LayersChartsSetupFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_layers_charts_setup, container, false);
         n = (NavigationActivity)container.getContext();
+        downloadedToDir = n.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString() + "/";
+        Log.i(TAG, "Download Folder: " + downloadedToDir);
         return view;
     }
 
@@ -73,34 +82,46 @@ public class LayersChartsSetupFragment extends Fragment {
 //            }
 //        });
 
+        ListView chartsListView = (ListView) view.findViewById(R.id.airportChartsSetupList);
+
         MBTilesDataSource tilesDataSource = new MBTilesDataSource(n);
         tilesDataSource.open();
-        ArrayList<MBTile> ofm_tiles = tilesDataSource.GetMBTilesByType(MBTileType.ofm);
-
+        ArrayList<MBTile> maps = new ArrayList<>();
+        tilesDataSource.GetMBTilesByType(MBTileType.ofm, maps);
         tilesDataSource.close();
-    }
 
-    private DownloadImageTask downloadTask;
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
+        ChartsSetupAdapter chartsSetupAdapter = new ChartsSetupAdapter(maps);
+        chartsSetupAdapter.SetOnStartDownload(new StartDownloadEvent() {
+            @Override
+            public void OnStartDownload(MBTile tile) {
+                tile.StartDownload();
             }
-            return mIcon11;
-        }
+        });
+        chartsListView.setAdapter(chartsSetupAdapter);
 
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-
-            ImageView imageView = (ImageView)view.findViewById(R.id.chartImageView);
-            imageView.setImageBitmap(bitmap);
-        }
     }
+
+//    private DownloadImageTask downloadTask;
+//    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+//
+//        protected Bitmap doInBackground(String... urls) {
+//            String urldisplay = urls[0];
+//            Bitmap mIcon11 = null;
+//            try {
+//                InputStream in = new java.net.URL(urldisplay).openStream();
+//                mIcon11 = BitmapFactory.decodeStream(in);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return mIcon11;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//            super.onPostExecute(bitmap);
+//
+//            ImageView imageView = (ImageView)view.findViewById(R.id.chartImageView);
+//            imageView.setImageBitmap(bitmap);
+//        }
+//    }
 }
