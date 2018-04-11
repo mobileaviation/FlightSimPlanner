@@ -61,11 +61,12 @@ public class MBTile {
         DownloadManager.Request nvRequest = new DownloadManager.Request(Uri.parse(mbtileslink));
         nvRequest.setTitle("Downloading " + name + " from " + type.toString());
         nvRequest.setDescription("Downloading " + name + " from " + type.toString());
-        nvRequest.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, "");
+        nvRequest.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS,
+                new File(mbtileslink).getName());
         dbDownloadId = dm.enqueue(nvRequest);
     }
 
-    public Boolean CheckDownloadedTile()
+    public String CheckDownloadedTile()
     {
         dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query q = new DownloadManager.Query();
@@ -76,12 +77,12 @@ public class MBTile {
                 String file = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
                 String filename = new File(Uri.parse(file).getPath()).getName();
 
-                if (filename.equals(new File(mbtileslink).getName())) return true;
+                if (filename.equals(new File(mbtileslink).getName())) return file;
                 c.moveToNext();
             }
         }
 
-        return false;
+        return null;
     }
 
     private Date getDate(Integer timestamp) { return new Date((long)timestamp*1000); }

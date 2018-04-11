@@ -84,8 +84,8 @@ public class ChartsSetupAdapter extends BaseAdapter {
         if (chart.type == MBTileType.ofm) imageView.setImageResource(R.drawable.ofm_charts_header);
         if (chart.type == MBTileType.fsp) imageView.setImageResource(R.drawable.fsp_charts_header);
 
-        Boolean downloaded = chart.CheckDownloadedTile();
-        Log.i(TAG, "Downloaded: " + chart.name + ((downloaded) ? " found" : " not found"));
+        String file = chart.CheckDownloadedTile();
+        Log.i(TAG, "Downloaded: " + chart.name + ((file!=null) ? " found: " + file : " not found"));
 
         LinearLayout chartLayout = (LinearLayout) view.findViewById(R.id.chartSetupLayout);
 
