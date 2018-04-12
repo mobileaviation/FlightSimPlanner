@@ -1,5 +1,8 @@
 <resources>
 
     <color name="black_overlay">#96000000</color>
+    <color name="light_orange">@android:color/holo_orange_light</color>
+    <color name="light_red">@android:color/holo_red_light</color>
+    <color name="light_green">@android:color/holo_green_light</color>
 
 </resources>

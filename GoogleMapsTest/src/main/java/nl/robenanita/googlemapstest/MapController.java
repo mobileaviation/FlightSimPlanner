@@ -9,8 +9,11 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import nl.robenanita.googlemapstest.Charts.AirportChart;
+import nl.robenanita.googlemapstest.MBTiles.MBTile;
 import nl.robenanita.googlemapstest.Settings.LayersSetup.MapStyle;
 import nl.robenanita.googlemapstest.Wms.MapBoxOfflineTileProvider;
 import nl.robenanita.googlemapstest.Wms.OfflineMapTypes;
@@ -31,6 +34,7 @@ public class MapController
     {
         this.map = map;
         this.context = context;
+        mbTileProviderOverlays = new HashMap<>();
     }
 
     private GoogleMap map;
@@ -159,19 +163,55 @@ public class MapController
         //setupTestMBTilesMap();
     }
 
-    public void closeTestMBTilesMap()
+    private class MBTilesOverlay
     {
-        mbTilesProvider.close();
+        public MBTilesOverlay(String mbTilesFile)
+        {
+            Provider = new MapBoxOfflineTileProvider(new File(mbTilesFile));
+        }
+
+        public TileOverlay Overlay;
+        public MapBoxOfflineTileProvider Provider;
+
+        public void Remove()
+        {
+            Overlay.remove();
+            Provider.close();
+        }
     }
-    private MapBoxOfflineTileProvider mbTilesProvider;
-    public void setupTestMBTilesMap()
+
+    private MBTilesOverlay setupMBTilesMap(String mbTilesFile)
     {
         TileOverlayOptions opts = new TileOverlayOptions();
-        File myMBTiles = new File(DBFilesHelper.DatabasePath(context) + "ehaa_256@2x.mbtiles");
-        mbTilesProvider = new MapBoxOfflineTileProvider(myMBTiles);
-        opts.tileProvider(mbTilesProvider);
-        map.addTileOverlay(opts).setZIndex(90);
+        MBTilesOverlay mbTilesOverlay = new MBTilesOverlay(mbTilesFile);
+        opts.tileProvider(mbTilesOverlay.Provider);
+        mbTilesOverlay.Overlay = map.addTileOverlay(opts);
+        mbTilesOverlay.Overlay.setZIndex(90);
+        return mbTilesOverlay;
     }
+
+    private Map<String, MBTilesOverlay> mbTileProviderOverlays;
+    public void SetupMBTileMap(MBTile map, Boolean checked)
+    {
+        String localFilename = map.getLocalFilename();
+        if (mbTileProviderOverlays.containsKey(localFilename))
+        {
+            MBTilesOverlay tileOverlay = mbTileProviderOverlays.get(localFilename);
+            if (!checked)
+            {
+                tileOverlay.Remove();
+                mbTileProviderOverlays.remove(localFilename);
+            }
+        }
+        else
+        {
+            if (checked) {
+                MBTilesOverlay tileOverlay = setupMBTilesMap(localFilename);
+                mbTileProviderOverlays.put(localFilename, tileOverlay);
+            }
+        }
+    }
+
 
     private TileOverlayOptions chartoverlayOptions;
     public void SetAirportChart(AirportChart airportChart)

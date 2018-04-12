@@ -1,14 +1,19 @@
 package nl.robenanita.googlemapstest.Settings.LayersSetup;
 
 import android.app.DownloadManager;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,14 +35,17 @@ import nl.robenanita.googlemapstest.R;
 public class ChartsSetupAdapter extends BaseAdapter {
     private ArrayList<MBTile> charts;
     private String TAG = "GooglemapsTest";
-    private StartDownloadEvent onStartDownload;
-    public void SetOnStartDownload(StartDownloadEvent startDownloadEvent)
+    private ChartEvent onEvent;
+    private Context context;
+
+    public void SetOnEvent(ChartEvent event)
     {
-        onStartDownload = startDownloadEvent;
+        onEvent = event;
     }
 
-    public ChartsSetupAdapter(ArrayList<MBTile> charts) {
+    public ChartsSetupAdapter(ArrayList<MBTile> charts, Context context) {
         this.charts = charts;
+        this.context = context;
     }
 
     @Override
@@ -72,7 +80,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Log.i( TAG,"Start download the: " + chart.mbtileslink + " file");
-                if (onStartDownload != null) onStartDownload.OnStartDownload(chart);
+                if (onEvent != null) onEvent.OnStartDownload(chart);
             }
         });
 
@@ -84,8 +92,19 @@ public class ChartsSetupAdapter extends BaseAdapter {
         if (chart.type == MBTileType.ofm) imageView.setImageResource(R.drawable.ofm_charts_header);
         if (chart.type == MBTileType.fsp) imageView.setImageResource(R.drawable.fsp_charts_header);
 
-        String file = chart.CheckDownloadedTile();
-        Log.i(TAG, "Downloaded: " + chart.name + ((file!=null) ? " found: " + file : " not found"));
+
+        CheckBox activateChartCheckBox = (CheckBox) view.findViewById(R.id.activateChartCheckBox);
+        activateChartCheckBox.setTag(chart);
+        activateChartCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                MBTile chechedChart = (MBTile) compoundButton.getTag();
+                if (onEvent != null) onEvent.OnChecked(b, chechedChart);
+            }
+        });
+
+        checkFiles checkFiles = new checkFiles(activateChartCheckBox, context);
+        checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
 
         LinearLayout chartLayout = (LinearLayout) view.findViewById(R.id.chartSetupLayout);
 
@@ -94,6 +113,43 @@ public class ChartsSetupAdapter extends BaseAdapter {
         }
 
         return view;
+    }
+
+    public class checkFiles extends AsyncTask<MBTile, String, Boolean>
+    {
+        public checkFiles(CheckBox activateChartCheckBox, Context context)
+        {
+            this.activateChartCheckBox = activateChartCheckBox;
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            activateChartCheckBox.setEnabled(false);
+            activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context, R.color.light_orange));
+        }
+
+        @Override
+        protected Boolean doInBackground(MBTile... mbTiles) {
+            tile = mbTiles[0];
+            return tile.CheckFile();
+        }
+
+        private CheckBox activateChartCheckBox;
+        private MBTile tile;
+        private Context context;
+
+        @Override
+        protected void onPostExecute(Boolean localFilePresent) {
+            super.onPostExecute(localFilePresent);
+
+            activateChartCheckBox.setEnabled(localFilePresent);
+            activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context,
+                    ((localFilePresent) ? R.color.light_green : R.color.light_red)));
+
+            Log.i(TAG, "MBTiles file for: " + tile.name + " is " + ((localFilePresent) ? "present" : "not present"));
+        }
     }
 
 }

@@ -90,11 +90,16 @@ public class LayersChartsSetupFragment extends Fragment {
         tilesDataSource.GetMBTilesByType(MBTileType.ofm, maps);
         tilesDataSource.close();
 
-        ChartsSetupAdapter chartsSetupAdapter = new ChartsSetupAdapter(maps);
-        chartsSetupAdapter.SetOnStartDownload(new StartDownloadEvent() {
+        ChartsSetupAdapter chartsSetupAdapter = new ChartsSetupAdapter(maps, n);
+        chartsSetupAdapter.SetOnEvent(new ChartEvent() {
             @Override
             public void OnStartDownload(MBTile tile) {
                 tile.StartDownload();
+            }
+
+            @Override
+            public void OnChecked(Boolean checked, MBTile tile) {
+                n.mapController.SetupMBTileMap(tile, checked);
             }
         });
         chartsListView.setAdapter(chartsSetupAdapter);

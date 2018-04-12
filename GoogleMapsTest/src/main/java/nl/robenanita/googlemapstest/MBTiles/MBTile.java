@@ -5,9 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
+
+import nl.robenanita.googlemapstest.database.DBFilesHelper;
+import nl.robenanita.googlemapstest.database.DBHelper;
 
 public class MBTile {
     public MBTile(Context context)
@@ -15,6 +20,8 @@ public class MBTile {
         this.context = context;
         localChartsDir = this.context.getApplicationInfo().dataDir + "/charts/";
     }
+
+    private String TAG = "MBTile";
 
     private Context context;
     private String localChartsDir;
@@ -37,19 +44,19 @@ public class MBTile {
     public void setStartValidity(Integer timestamp) { startValidity = getDate(timestamp);}
     public Date endValidity;
     public void setEndValidity(Integer timestamp) { endValidity = getDate(timestamp);}
-    public Boolean LocalFileExists()
+    private Boolean LocalFileExists()
     {
         return new File(getLocalFilename()).exists();
     }
 
-    public Boolean CheckValidity()
+    private Boolean CheckValidity()
     {
         File file = new File(getLocalFilename());
         Date lastModified = new Date(file.lastModified());
         return endValidity.before(new Date());
     }
 
-    private String getLocalFilename()
+    public String getLocalFilename()
     {
         File remoteFile = new File(mbtileslink);
         return localChartsDir + remoteFile.getName();
@@ -83,6 +90,39 @@ public class MBTile {
         }
 
         return null;
+    }
+
+    public Boolean CheckFile()
+    {
+        if (!LocalFileExists())
+        {
+            String downloadedFile = CheckDownloadedTile();
+            if (downloadedFile != null)
+            {
+                try {
+                    Log.i(TAG, "Found downloaded file: " + downloadedFile);
+                    File downl_file = new File(Uri.parse(downloadedFile).getPath());
+                    File local_file = new File(getLocalFilename());
+
+                    if (local_file.exists()) local_file.delete();
+                    if (!(new File(localChartsDir)).exists()) (new File(localChartsDir)).mkdir();
+                    DBFilesHelper.Copy1(context, downl_file.toString(), local_file.toString());
+                    if (local_file.exists()) downl_file.delete();
+
+                    Log.i(TAG, "Copied downloaded file to: " + local_file.toString());
+
+                    return local_file.exists();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            else
+                return false;
+        }
+        else
+            return true;
     }
 
     private Date getDate(Integer timestamp) { return new Date((long)timestamp*1000); }
