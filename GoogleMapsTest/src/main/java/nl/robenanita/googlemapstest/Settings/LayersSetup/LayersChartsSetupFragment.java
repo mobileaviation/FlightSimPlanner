@@ -21,6 +21,8 @@ import android.widget.ListView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import nl.robenanita.googlemapstest.Charts.AirportChart;
 import nl.robenanita.googlemapstest.Charts.AirportCharts;
@@ -30,6 +32,7 @@ import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
 import nl.robenanita.googlemapstest.database.MBTilesDataSource;
+import nl.robenanita.googlemapstest.database.PropertiesDataSource;
 
 public class LayersChartsSetupFragment extends Fragment {
 
@@ -103,6 +106,32 @@ public class LayersChartsSetupFragment extends Fragment {
             }
         });
         chartsListView.setAdapter(chartsSetupAdapter);
+
+//        MBTile test = new MBTile(n);
+//        test._id = 10;
+//        test.name = "VACLFOR.mbtiles";
+//        test.type = MBTileType.fsp;
+//        test.mbtileslink = "http://192.168.2.8:81/VACEHLE.mbtiles";
+//        test.version = 1804;
+//        test.endValidity = new Date();
+//
+//        maps.add(test);
+//        chartsListView.invalidate();
+        PropertiesDataSource propertiesDataSource = new PropertiesDataSource(n);
+        propertiesDataSource.open(true);
+        propertiesDataSource.FillProperties();
+        String ip = propertiesDataSource.IpAddress.value1;
+        Integer port = Integer.parseInt(propertiesDataSource.IpAddress.value2);
+        LocalMBCharts localMBCharts = new LocalMBCharts(ip,port);
+
+        localMBCharts.SetOnMBFilesList(new LocalMBCharts.OnMBFileList() {
+            @Override
+            public void filesList(List<MBTile> files, Boolean success) {
+
+            }
+        });
+
+        localMBCharts.GetFilelist();
 
     }
 
