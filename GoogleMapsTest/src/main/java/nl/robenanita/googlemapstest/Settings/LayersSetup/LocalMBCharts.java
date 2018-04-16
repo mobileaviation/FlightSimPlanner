@@ -1,14 +1,22 @@
 package nl.robenanita.googlemapstest.Settings.LayersSetup;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import nl.robenanita.googlemapstest.MBTiles.MBTile;
+import nl.robenanita.googlemapstest.MBTiles.MBTileType;
 import nl.robenanita.googlemapstest.SimConnection.WebApiApache;
 
 public class LocalMBCharts {
@@ -19,12 +27,14 @@ public class LocalMBCharts {
         public void filesList(List<MBTile> files, Boolean success);
     }
 
-    public LocalMBCharts(String Ip, int Port)
+    public LocalMBCharts(String Ip, int Port, Context context)
     {
-        baseUrl = "http://" + Ip + ":" + Integer.toString(Port) + "/v1/fsuipc/files?filter=*.mbtiles";
+        this.context = context;
+        baseUrl = "http://" + Ip + ":" + Integer.toString(Port);
     }
 
     private String baseUrl;
+    private Context context;
 
     private OnMBFileList onMBFilesList;
     public void SetOnMBFilesList(OnMBFileList onMBFileList) {this.onMBFilesList = onMBFileList;}
@@ -41,7 +51,26 @@ public class LocalMBCharts {
             try
             {
                 JSONArray array = new JSONArray(json);
-                Log.i(TAG, "Test");
+                ArrayList<MBTile> tileList = new ArrayList<>();
+
+                for (int i = 0; i<array.length(); i++)
+                {
+                    JSONObject object = array.getJSONObject(i);
+                    MBTile tile = new MBTile(context);
+                    tile.name = object.getString("Filename");
+                    tile.mbtileslink = baseUrl + "/" + tile.name;
+                    tile.type = MBTileType.fsp;
+                    tile.version = 1804;
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    tile.startValidity = format.parse(object.getString("CreationTime"));
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(tile.startValidity);
+                    cal.add(Calendar.DATE, 30);
+                    tile.endValidity = cal.getTime();
+                    tileList.add(tile);
+                }
+
+                if (onMBFilesList != null) onMBFilesList.filesList(tileList, true);
             }
             catch (Exception ee) {
                 if (onMBFilesList != null) onMBFilesList.filesList(null, false);
@@ -72,7 +101,7 @@ public class LocalMBCharts {
         protected String doInBackground(String... strings) {
             try {
                 WebApiApache webApiApache = new WebApiApache();
-                String resp = webApiApache.Get(url);
+                String resp = webApiApache.Get(url + "/v1/fsuipc/files?filter=*.mbtiles");
                 return resp;
             }
             catch (Exception ex)

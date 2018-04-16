@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -45,6 +46,7 @@ public class LayersChartsSetupFragment extends Fragment {
     private String TAG = "GooglemapsTest";
     private String downloadedToDir;
     private DownloadManager dm;
+    private Button refreshLocalChartsBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,6 +88,14 @@ public class LayersChartsSetupFragment extends Fragment {
 //        });
 
         ListView chartsListView = (ListView) view.findViewById(R.id.airportChartsSetupList);
+        refreshLocalChartsBtn = (Button)view.findViewById(R.id.refreshLocalChartsBtn);
+
+        refreshLocalChartsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refreshLocalCharts();
+            }
+        });
 
         MBTilesDataSource tilesDataSource = new MBTilesDataSource(n);
         tilesDataSource.open();
@@ -105,6 +115,7 @@ public class LayersChartsSetupFragment extends Fragment {
                 n.mapController.SetupMBTileMap(tile, checked);
             }
         });
+
         chartsListView.setAdapter(chartsSetupAdapter);
 
 //        MBTile test = new MBTile(n);
@@ -117,12 +128,18 @@ public class LayersChartsSetupFragment extends Fragment {
 //
 //        maps.add(test);
 //        chartsListView.invalidate();
+
+
+    }
+
+    private void refreshLocalCharts()
+    {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(n);
         propertiesDataSource.open(true);
         propertiesDataSource.FillProperties();
         String ip = propertiesDataSource.IpAddress.value1;
         Integer port = Integer.parseInt(propertiesDataSource.IpAddress.value2);
-        LocalMBCharts localMBCharts = new LocalMBCharts(ip,port);
+        LocalMBCharts localMBCharts = new LocalMBCharts(ip,port, n);
 
         localMBCharts.SetOnMBFilesList(new LocalMBCharts.OnMBFileList() {
             @Override
@@ -132,7 +149,6 @@ public class LayersChartsSetupFragment extends Fragment {
         });
 
         localMBCharts.GetFilelist();
-
     }
 
 //    private DownloadImageTask downloadTask;
