@@ -16,7 +16,7 @@ import java.io.OutputStream;
  */
 public class UserDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "userairnav.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
     public static final String TRACKPOINTS_TABLE_NAME = "tbl_Trackpoints";
@@ -25,6 +25,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String USERWAYPOINT_TABLE_NAME = "tbl_Userwaypoints";
     public static final String AIRPORTINFO_TABLE_NAME = "tbl_AirportInfo";
     public static final String AIRPORTCHARTS_TABLE_NAME = "tbl_AirportCharts";
+    public static final String MBTILES_LOCAL_TABLE_NAME = "tbl_MBTilesLocal";
 
     private static final String TAG = "GooglemapsTest";
 
@@ -91,6 +92,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_file_prefix = "file_prefix";
     public static final String C_file_suffix = "file_suffix";
 
+    public static final String C_start_validity = "start_validity";
+    public static final String C_end_validity = "end_validity";
+    public static final String C_available = "available";
+
 //    public static void BackupUserDatabase(String databaseName)
 //    {
 //        OutputStream output = null;
@@ -124,6 +129,16 @@ public class UserDBHelper extends SQLiteOpenHelper {
 //            Log.i(TAG, "Backing up user.db error: " + ee.getMessage());
 //        }
 //    }
+
+    private static final String MBTILES_LOCAL_TABLE = "create table"
+            + MBTILES_LOCAL_TABLE_NAME + " (_id integer primary key autoincrement, "
+            + C_name + " text,"
+            + C_url + " text,"
+            + C_version + " integer,"
+            + C_start_validity + " integer,"
+            + C_end_validity + " integer,"
+            + C_available + " integer"
+            + " );";
 
 
     private static final String AIRPORTCHARTS_TABLE = "create table "
@@ -288,6 +303,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL(AIRPORTINFO_NOTAMNUMBER_INDEX);
         Log.i(TAG, "Created AirportCharts table");
         db.execSQL(AIRPORTCHARTS_TABLE);
+        Log.i(TAG, "Creating MBTilesLocal table");
+        db.execSQL(MBTILES_LOCAL_TABLE);
     }
 
     private void insertBasicPropertiesData(SQLiteDatabase db)
@@ -342,6 +359,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
         if (oldVersion<10){
             db.execSQL(AIRPORTCHARTS_TABLE);
             Log.i(TAG, "Created AirportCharts table");
+        }
+
+        if (oldVersion<11)
+        {
+            db.execSQL(MBTILES_LOCAL_TABLE);
+            Log.i(TAG, "Create MBTilesLocal Table");
         }
 
 
