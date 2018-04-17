@@ -95,6 +95,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_start_validity = "start_validity";
     public static final String C_end_validity = "end_validity";
     public static final String C_available = "available";
+    public static final String C_type = "type";
 
 //    public static void BackupUserDatabase(String databaseName)
 //    {
@@ -130,11 +131,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 //        }
 //    }
 
-    private static final String MBTILES_LOCAL_TABLE = "create table"
+    private static final String MBTILES_LOCAL_TABLE = "create table "
             + MBTILES_LOCAL_TABLE_NAME + " (_id integer primary key autoincrement, "
             + C_name + " text,"
             + C_url + " text,"
             + C_version + " integer,"
+            + C_type + " text,"
             + C_start_validity + " integer,"
             + C_end_validity + " integer,"
             + C_available + " integer"
