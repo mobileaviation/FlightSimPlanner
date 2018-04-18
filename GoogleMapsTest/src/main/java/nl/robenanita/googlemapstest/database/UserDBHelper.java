@@ -368,18 +368,17 @@ public class UserDBHelper extends SQLiteOpenHelper {
             Log.i(TAG, "Created AirportCharts table");
         }
 
-        if (oldVersion<11)
-        {
-            db.execSQL(MBTILES_LOCAL_TABLE);
-            Log.i(TAG, "Create MBTilesLocal Table");
-        }
-
         if (oldVersion<13)
         {
-            db.execSQL(MBTILES_LOCAL_TABLE_ADD_VISIBLE);
-            String q = "UPDATE " + MBTILES_LOCAL_TABLE_NAME +
-                    " SET " + C_visible_order + "=-1";
-            db.execSQL(q);
+            try {
+                db.execSQL(MBTILES_LOCAL_TABLE);
+                Log.i(TAG, "Create MBTilesLocal Table");
+            }
+            catch(Exception ee)
+            {
+                Log.e(TAG, ee.getMessage());
+            }
+
         }
 
 
