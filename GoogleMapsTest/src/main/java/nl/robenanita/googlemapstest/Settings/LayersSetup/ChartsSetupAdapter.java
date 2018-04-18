@@ -74,6 +74,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
         view = inflater.inflate(R.layout.adapter_chartssetup, viewGroup, false);
 
         final MBTile chart = GetChart(i);
+        chart.CheckVisibleStatus();
 
         ImageButton downloadChartButton = (ImageButton) view.findViewById(R.id.downloadChartButton);
         downloadChartButton.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +84,18 @@ public class ChartsSetupAdapter extends BaseAdapter {
                 if (onEvent != null) onEvent.OnStartDownload(chart);
             }
         });
+
+        //TODO
+//        ImageButton deleteChartBtn;
+//        deleteChartBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // delete the file
+//                //check the file
+//                checkFiles checkFiles = new checkFiles(activateChartCheckBox, context);
+//                checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
+//            }
+//        });
 
         TextView textView = (TextView) view.findViewById(R.id.chartSetupTxt);
 
@@ -95,6 +108,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
 
         CheckBox activateChartCheckBox = (CheckBox) view.findViewById(R.id.activateChartCheckBox);
         activateChartCheckBox.setTag(chart);
+        if (chart.visible_order>-1) activateChartCheckBox.setChecked(true);
         activateChartCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

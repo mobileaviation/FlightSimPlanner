@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import nl.robenanita.googlemapstest.Wms.TileProviderFactory;
 import nl.robenanita.googlemapstest.Wms.TileProviderFormats;
 import nl.robenanita.googlemapstest.database.ChartBundleProperties;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
+import nl.robenanita.googlemapstest.database.MBTilesLocalDataSource;
 import nl.robenanita.googlemapstest.database.MapTypeProperties;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
 import nl.robenanita.googlemapstest.database.WeatherProperties;
@@ -34,12 +36,14 @@ public class MapController
     {
         this.map = map;
         this.context = context;
+        mbTilesIndex = 100;
         mbTileProviderOverlays = new HashMap<>();
     }
 
     private GoogleMap map;
     private Context context;
     private String TAG = "GooglemapsTest";
+    private Integer mbTilesIndex;
 
     private TileOverlay chartBundleSecTileOverlay;
     private TileOverlay chartBundleWacTileOverlay;
@@ -160,7 +164,8 @@ public class MapController
         SetChartBundle();
 
         skylinesOverlay.setVisible(airspacesVisible);
-        //setupTestMBTilesMap();
+
+        setupMBTiles();
     }
 
     private class MBTilesOverlay
@@ -171,12 +176,30 @@ public class MapController
         }
 
         public TileOverlay Overlay;
+        public Integer Index;
         public MapBoxOfflineTileProvider Provider;
 
         public void Remove()
         {
             Overlay.remove();
             Provider.close();
+        }
+    }
+
+    private void setupMBTiles()
+    {
+        MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(context);
+        mbTilesLocalDataSource.open();
+        ArrayList<MBTile> tiles = mbTilesLocalDataSource.getVisibleTiles();
+        mbTilesLocalDataSource.close();
+
+        for (MBTile tile : tiles)
+        {
+            String localFilename = tile.getLocalFilename();
+            MBTilesOverlay tileOverlay = setupMBTilesMap(localFilename);
+            tileOverlay.Index = tile.visible_order;
+            mbTilesIndex = tile.visible_order + 1;
+            mbTileProviderOverlays.put(localFilename, tileOverlay);
         }
     }
 
@@ -200,6 +223,8 @@ public class MapController
             if (!checked)
             {
                 tileOverlay.Remove();
+                map.visible_order = -1;
+                map.InsertUpdateDB();
                 mbTileProviderOverlays.remove(localFilename);
             }
         }
@@ -207,6 +232,10 @@ public class MapController
         {
             if (checked) {
                 MBTilesOverlay tileOverlay = setupMBTilesMap(localFilename);
+                tileOverlay.Index = mbTilesIndex;
+                map.visible_order = mbTilesIndex;
+                map.InsertUpdateDB();
+                mbTilesIndex++;
                 mbTileProviderOverlays.put(localFilename, tileOverlay);
             }
         }

@@ -33,6 +33,7 @@ import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.AirportChartsDataSource;
 import nl.robenanita.googlemapstest.database.MBTilesDataSource;
+import nl.robenanita.googlemapstest.database.MBTilesLocalDataSource;
 import nl.robenanita.googlemapstest.database.PropertiesDataSource;
 
 public class LayersChartsSetupFragment extends Fragment {
@@ -102,6 +103,10 @@ public class LayersChartsSetupFragment extends Fragment {
         ArrayList<MBTile> maps = new ArrayList<>();
         tilesDataSource.GetMBTilesByType(MBTileType.ofm, maps);
         tilesDataSource.close();
+        MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(n);
+        mbTilesLocalDataSource.open();
+        mbTilesLocalDataSource.getAllLocalTiles(maps, MBTileType.fsp);
+        mbTilesLocalDataSource.close();
 
         ChartsSetupAdapter chartsSetupAdapter = new ChartsSetupAdapter(maps, n);
         chartsSetupAdapter.SetOnEvent(new ChartEvent() {
@@ -145,6 +150,13 @@ public class LayersChartsSetupFragment extends Fragment {
             @Override
             public void filesList(List<MBTile> files, Boolean success) {
 
+//                MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(n);
+//                mbTilesLocalDataSource.open();
+                for (MBTile tile: files) {
+//                    mbTilesLocalDataSource.insertUpdateTile(tile);
+                    tile.InsertUpdateDB();
+                }
+//                mbTilesLocalDataSource.close();
             }
         });
 

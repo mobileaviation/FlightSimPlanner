@@ -16,7 +16,7 @@ import java.io.OutputStream;
  */
 public class UserDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "userairnav.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 13;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
     public static final String TRACKPOINTS_TABLE_NAME = "tbl_Trackpoints";
@@ -96,6 +96,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_end_validity = "end_validity";
     public static final String C_available = "available";
     public static final String C_type = "type";
+    public static final String C_visible_order = "visible_order";
 
 //    public static void BackupUserDatabase(String databaseName)
 //    {
@@ -139,8 +140,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
             + C_type + " text,"
             + C_start_validity + " integer,"
             + C_end_validity + " integer,"
-            + C_available + " integer"
+            + C_available + " integer,"
+            + C_visible_order + " integer"
             + " );";
+
+    private static final String MBTILES_LOCAL_TABLE_ADD_VISIBLE = "alter table "
+            + MBTILES_LOCAL_TABLE_NAME + " add column " + C_visible_order + " integer;";
 
 
     private static final String AIRPORTCHARTS_TABLE = "create table "
@@ -367,6 +372,14 @@ public class UserDBHelper extends SQLiteOpenHelper {
         {
             db.execSQL(MBTILES_LOCAL_TABLE);
             Log.i(TAG, "Create MBTilesLocal Table");
+        }
+
+        if (oldVersion<13)
+        {
+            db.execSQL(MBTILES_LOCAL_TABLE_ADD_VISIBLE);
+            String q = "UPDATE " + MBTILES_LOCAL_TABLE_NAME +
+                    " SET " + C_visible_order + "=-1";
+            db.execSQL(q);
         }
 
 

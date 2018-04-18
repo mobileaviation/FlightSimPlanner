@@ -13,12 +13,14 @@ import java.util.Date;
 
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.DBHelper;
+import nl.robenanita.googlemapstest.database.MBTilesLocalDataSource;
 
 public class MBTile {
     public MBTile(Context context)
     {
         this.context = context;
         localChartsDir = this.context.getApplicationInfo().dataDir + "/charts/";
+        visible_order = -1;
     }
 
     private String TAG = "MBTile";
@@ -40,6 +42,8 @@ public class MBTile {
     public String mbtileslink;
     public String xmllink;
     public Integer version;
+    public Integer visible_order;
+
     public Date startValidity;
     public void setStartValidity(Integer timestamp) { startValidity = getDate(timestamp);}
     public Date endValidity;
@@ -126,4 +130,31 @@ public class MBTile {
     }
 
     private Date getDate(Integer timestamp) { return new Date((long)timestamp*1000); }
+
+    public void InsertUpdateDB()
+    {
+        MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(context);
+        mbTilesLocalDataSource.open();
+        mbTilesLocalDataSource.insertUpdateTile(this);
+        mbTilesLocalDataSource.close();
+    }
+
+    public void CheckVisibleStatus()
+    {
+        MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(context);
+        mbTilesLocalDataSource.open();
+        visible_order = mbTilesLocalDataSource.checkVisibleStatusTile(this);
+        mbTilesLocalDataSource.close();
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (object instanceof MBTile)
+        {
+            MBTile testTile = (MBTile) object;
+            return this.getLocalFilename().equals(testTile.getLocalFilename());
+        }
+        else return false;
+    }
 }
