@@ -157,7 +157,8 @@ public class StartActivity extends ActionBarActivity {
                 Manifest.permission.ACCESS_NETWORK_STATE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.INTERNET,
-                Manifest.permission.WAKE_LOCK).setCallback(new PermissionCallback() {
+                Manifest.permission.WAKE_LOCK
+                ).setCallback(new PermissionCallback() {
             @Override
             public void onPermissionsGranted(int requestCode) {
                 Toast.makeText(StartActivity.this, "Permission Received!", Toast.LENGTH_LONG).show();
@@ -468,8 +469,6 @@ public class StartActivity extends ActionBarActivity {
 
         databaseVersionTxt = (TextView) findViewById(R.id.databaseVersionTxt);
         databaseVersionTxt.setText(v.value1);
-
-
     }
 
     private void checkDatabaseVersion() {

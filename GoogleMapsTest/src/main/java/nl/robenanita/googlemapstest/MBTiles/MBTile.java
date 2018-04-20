@@ -21,6 +21,7 @@ public class MBTile {
         this.context = context;
         localChartsDir = this.context.getApplicationInfo().dataDir + "/charts/";
         visible_order = -1;
+        CheckfileRunning = false;
     }
 
     private String TAG = "MBTile";
@@ -48,9 +49,19 @@ public class MBTile {
     public void setStartValidity(Integer timestamp) { startValidity = getDate(timestamp);}
     public Date endValidity;
     public void setEndValidity(Integer timestamp) { endValidity = getDate(timestamp);}
-    private Boolean LocalFileExists()
+    public Boolean LocalFileExists()
     {
         return new File(getLocalFilename()).exists();
+    }
+
+    public Boolean DeleteLocalFile()
+    {
+        File file = new File(getLocalFilename());
+        file.delete();
+        String downloadedFile = CheckDownloadedTile();
+        File dlFile = new File(downloadedFile);
+        if (dlFile.exists()) dlFile.delete();
+        return !LocalFileExists() && !dlFile.exists();
     }
 
     private Boolean CheckValidity()
@@ -96,6 +107,7 @@ public class MBTile {
         return null;
     }
 
+    public Boolean CheckfileRunning;
     public Boolean CheckFile()
     {
         if (!LocalFileExists())
@@ -104,20 +116,33 @@ public class MBTile {
             if (downloadedFile != null)
             {
                 try {
+                    CheckfileRunning = true;
                     Log.i(TAG, "Found downloaded file: " + downloadedFile);
                     File downl_file = new File(Uri.parse(downloadedFile).getPath());
                     File local_file = new File(getLocalFilename());
 
-                    if (local_file.exists()) local_file.delete();
-                    if (!(new File(localChartsDir)).exists()) (new File(localChartsDir)).mkdir();
-                    DBFilesHelper.Copy1(context, downl_file.toString(), local_file.toString());
-                    if (local_file.exists()) downl_file.delete();
+                    if (downl_file.exists()) {
 
-                    Log.i(TAG, "Copied downloaded file to: " + local_file.toString());
+                        if (local_file.exists()) local_file.delete();
+                        if (!(new File(localChartsDir)).exists())
+                            (new File(localChartsDir)).mkdir();
+                        DBFilesHelper.Copy1(context, downl_file.toString(), local_file.toString());
+                        if (local_file.exists()) downl_file.delete();
 
-                    return local_file.exists();
+                        Log.i(TAG, "Copied downloaded file to: " + local_file.toString());
+
+                        CheckfileRunning = false;
+                        return local_file.exists();
+                    }
+                    else
+                    {
+                        CheckfileRunning = false;
+                        return false;
+
+                    }
 
                 } catch (Exception e) {
+                    CheckfileRunning = false;
                     e.printStackTrace();
                     return false;
                 }

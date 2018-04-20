@@ -1,9 +1,12 @@
 package nl.robenanita.googlemapstest.Settings.LayersSetup;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
@@ -76,12 +79,64 @@ public class ChartsSetupAdapter extends BaseAdapter {
         final MBTile chart = GetChart(i);
         chart.CheckVisibleStatus();
 
-        ImageButton downloadChartButton = (ImageButton) view.findViewById(R.id.downloadChartButton);
-        downloadChartButton.setOnClickListener(new View.OnClickListener() {
+        final CheckBox activateChartCheckBox = (CheckBox) view.findViewById(R.id.activateChartCheckBox);
+        final ImageButton deleteDownloadChartButton = (ImageButton) view.findViewById(R.id.downloadChartButton);
+        deleteDownloadChartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i( TAG,"Start download the: " + chart.mbtileslink + " file");
-                if (onEvent != null) onEvent.OnStartDownload(chart);
+                if (!chart.LocalFileExists()) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                    dialog.setTitle("Download " + chart.name + " ?")
+                            .setMessage("Are you sure you want to download: " + chart.name + " ?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Log.i(TAG, "Start download the: " + chart.mbtileslink + " file");
+                                    if (onEvent != null) onEvent.OnStartDownload(chart);
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+
+                }
+                else
+                {
+                    // delete file only if not visible
+                    if (!(chart.visible_order>-1))
+                    {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                        dialog.setTitle("Delete " + chart.name + " ?")
+                                .setMessage("Are you sure you want to delete: " + chart.name + " ?")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (chart.DeleteLocalFile())
+                                        {
+                                            Log.i(TAG, "File deleted: " + chart.getLocalFilename());
+                                            checkFiles checkFiles = new checkFiles(activateChartCheckBox, deleteDownloadChartButton, context);
+                                            checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
+                                        }
+                                        else
+                                        {
+                                            Log.e(TAG, "Trouble deleting file: " + chart.getLocalFilename());
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("No", null)
+                                .show();
+                    }
+                    else {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                        dialog.setTitle("Disable chart before delete")
+                                .setMessage("You first must disable the chart before i can be deleted!")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton("Yes", null)
+                                .show();
+                    }
+                }
+
             }
         });
 
@@ -106,9 +161,9 @@ public class ChartsSetupAdapter extends BaseAdapter {
         if (chart.type == MBTileType.fsp) imageView.setImageResource(R.drawable.fsp_charts_header);
 
 
-        CheckBox activateChartCheckBox = (CheckBox) view.findViewById(R.id.activateChartCheckBox);
+
         activateChartCheckBox.setTag(chart);
-        if (chart.visible_order>-1) activateChartCheckBox.setChecked(true);
+        activateChartCheckBox.setChecked(((chart.visible_order>-1)));
         activateChartCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -117,8 +172,10 @@ public class ChartsSetupAdapter extends BaseAdapter {
             }
         });
 
-        checkFiles checkFiles = new checkFiles(activateChartCheckBox, context);
-        checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
+        if (!chart.CheckfileRunning) {
+            checkFiles checkFiles = new checkFiles(activateChartCheckBox, deleteDownloadChartButton, context);
+            checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
+        }
 
         LinearLayout chartLayout = (LinearLayout) view.findViewById(R.id.chartSetupLayout);
 
@@ -131,9 +188,10 @@ public class ChartsSetupAdapter extends BaseAdapter {
 
     public class checkFiles extends AsyncTask<MBTile, String, Boolean>
     {
-        public checkFiles(CheckBox activateChartCheckBox, Context context)
+        public checkFiles(CheckBox activateChartCheckBox, ImageButton deleteDownloadBtn, Context context)
         {
             this.activateChartCheckBox = activateChartCheckBox;
+            this.deleteDownloadBtn = deleteDownloadBtn;
             this.context = context;
         }
 
@@ -142,6 +200,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
             super.onPreExecute();
             activateChartCheckBox.setEnabled(false);
             activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context, R.color.light_orange));
+            deleteDownloadBtn.setEnabled(false);
         }
 
         @Override
@@ -151,6 +210,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
         }
 
         private CheckBox activateChartCheckBox;
+        private ImageButton deleteDownloadBtn;
         private MBTile tile;
         private Context context;
 
@@ -162,7 +222,12 @@ public class ChartsSetupAdapter extends BaseAdapter {
             activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context,
                     ((localFilePresent) ? R.color.light_green : R.color.light_red)));
 
+            deleteDownloadBtn.setEnabled(true);
+            deleteDownloadBtn.setBackground((Drawable)context.getResources().
+                    getDrawable(localFilePresent ? R.drawable.delete_download_btn : R.drawable.download_btn));
+
             Log.i(TAG, "MBTiles file for: " + tile.name + " is " + ((localFilePresent) ? "present" : "not present"));
+
         }
     }
 

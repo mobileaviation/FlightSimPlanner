@@ -196,6 +196,8 @@ public class DBHelper extends SQLiteOpenHelper {
             while ((length = myInput.read(buffer))>0){
                 myOutput.write(buffer, 0, length);
             }
+
+
         }
         catch(Exception ee)
         {

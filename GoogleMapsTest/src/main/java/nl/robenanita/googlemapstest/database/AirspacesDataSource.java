@@ -9,6 +9,8 @@ import com.vividsolutions.jts.geom.Coordinate;
 
 import java.io.File;
 
+import nl.robenanita.googlemapstest.Settings.LayersSetup.LayersOfflineSetupFragment;
+
 /**
  * Created by Rob Verhoef on 24-7-2017.
  */
@@ -21,7 +23,9 @@ public class AirspacesDataSource {
 
     private Context context;
 
+    private String TAG = "GoogleMapsTest";
     private SQLiteDatabase database;
+    private Integer retryCopyCount;
 
     public Boolean Open(String database)
     {
@@ -33,13 +37,22 @@ public class AirspacesDataSource {
             DBFilesHelper.CopyDatabases(context, true);
         }
 
-
-
         try {
-            this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READWRITE);
+            this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READONLY);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error opening Airspaces database: " + e.getMessage() + ". try copy from assets");
+            try {
+                Log.e(TAG, "Try to delete and recopy from assets: " + databasename);
+                context.deleteDatabase(database);
+                DBFilesHelper.CopyDatabases(context, true);
+                this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READWRITE);
+                return true;
+            }
+            catch (Exception ee)
+            {
+                Log.e(TAG, "Tryed to delete and recopy from assets but exception: " + ee.getMessage());
+            }
             return false;
         }
     }

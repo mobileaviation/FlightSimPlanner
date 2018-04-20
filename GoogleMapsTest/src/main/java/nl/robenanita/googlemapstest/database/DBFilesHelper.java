@@ -20,10 +20,14 @@ import java.util.ArrayList;
 public class DBFilesHelper {
     public static String DatabasePath(Context context)
     {
-        //String p = context.getFilesDir().getPath() + "/"
-        //        + "databases" + "/";
+//        String p = context.getFilesDir().getPath() + "/"
+//                + "databases" + "/";
 
         String p = context.getDatabasePath("airnav.db").getParent() + "/";
+
+        //String p = context.getApplicationInfo().dataDir + "/";
+        //String p = "/data/data/nl.robenanita.googlemapstest/databases/";
+
         File f = new File(p);
         if (!f.exists()) f.mkdir();
         return p;
@@ -133,7 +137,7 @@ public class DBFilesHelper {
     }
 
     private static void CopyStream(InputStream In, OutputStream Out) throws IOException {
-        byte[] buffer = new byte[5120];
+        byte[] buffer = new byte[1024];
         int lenght = In.read(buffer);
         while (lenght >0){
             Out.write(buffer, 0, lenght);
