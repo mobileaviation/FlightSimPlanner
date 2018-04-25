@@ -105,17 +105,20 @@ public class MBTilesLocalDataSource {
 
     public void insertUpdateTile(MBTile tile)
     {
+        ArrayList<String> ignore = new ArrayList<>();
         if (checkTile(tile))
         {
+            ignore.add(UserDBHelper.C_available);
+            ignore.add(UserDBHelper.C_visible_order);
             database.update(UserDBHelper.MBTILES_LOCAL_TABLE_NAME,
-                    TileToContentValue(tile),
+                    TileToContentValue(tile, ignore),
                     UserDBHelper.C_name + " =?",
                     new String[]{tile.name});
         }
         else
         {
             database.insert(UserDBHelper.MBTILES_LOCAL_TABLE_NAME, null,
-                    TileToContentValue(tile));
+                    TileToContentValue(tile, ignore));
         }
 
     }
@@ -146,9 +149,10 @@ public class MBTilesLocalDataSource {
         return tile;
     }
 
-    private ContentValues TileToContentValue(MBTile tile)
+    private ContentValues TileToContentValue(MBTile tile, ArrayList<String> ignoreColums )
     {
         ContentValues values = new ContentValues();
+
 
         values.put(UserDBHelper.C_name, tile.name);
         values.put(UserDBHelper.C_url, tile.mbtileslink);
@@ -156,8 +160,8 @@ public class MBTilesLocalDataSource {
         values.put(UserDBHelper.C_type, tile.type.toString());
         values.put(UserDBHelper.C_start_validity, (long)tile.startValidity.getTime()/1000);
         values.put(UserDBHelper.C_end_validity, (long)tile.endValidity.getTime()/1000);
-        values.put(UserDBHelper.C_available, tile.CheckFile());
-        values.put(UserDBHelper.C_visible_order, tile.visible_order);
+        if (!ignoreColums.contains(UserDBHelper.C_available)) values.put(UserDBHelper.C_available, tile.CheckFile());
+        if (!ignoreColums.contains(UserDBHelper.C_visible_order)) values.put(UserDBHelper.C_visible_order, tile.visible_order);
 
         return values;
     }

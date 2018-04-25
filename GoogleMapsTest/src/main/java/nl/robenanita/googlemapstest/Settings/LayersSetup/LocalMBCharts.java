@@ -24,7 +24,7 @@ public class LocalMBCharts {
 
     public interface OnMBFileList
     {
-        public void filesList(List<MBTile> files, Boolean success);
+        public void filesList(List<MBTile> files, Boolean success, String message);
     }
 
     public LocalMBCharts(String Ip, int Port, Context context)
@@ -70,15 +70,17 @@ public class LocalMBCharts {
                     tileList.add(tile);
                 }
 
-                if (onMBFilesList != null) onMBFilesList.filesList(tileList, true);
+                String message = "Retrieved " + tileList.size() + " charts from " + baseUrl;
+                if (onMBFilesList != null) onMBFilesList.filesList(tileList, true, message);
             }
             catch (Exception ee) {
-                if (onMBFilesList != null) onMBFilesList.filesList(null, false);
+                String message = "Error parsing charts " + ee.getMessage();
+                if (onMBFilesList != null) onMBFilesList.filesList(null, false, message);
             }
         }
         else
         {
-            if (onMBFilesList != null) onMBFilesList.filesList(null, false);
+            if (onMBFilesList != null) onMBFilesList.filesList(null, false, json);
         }
     }
 

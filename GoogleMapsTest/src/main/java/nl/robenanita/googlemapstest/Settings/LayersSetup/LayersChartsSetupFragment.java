@@ -1,8 +1,10 @@
 package nl.robenanita.googlemapstest.Settings.LayersSetup;
 
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -19,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -64,29 +67,6 @@ public class LayersChartsSetupFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//
-//        ListView chartsListView = (ListView) view.findViewById(R.id.airportChartsSetupList);
-//        AirportChartsDataSource airportChartsDataSource = new AirportChartsDataSource(getContext());
-//        airportChartsDataSource.open();
-//        AirportCharts charts = airportChartsDataSource.GetAllCharts();
-//        airportChartsDataSource.close();
-//
-//        ChartsSetupAdapter chartsSetupAdapter = new ChartsSetupAdapter(charts);
-//        chartsListView.setAdapter(chartsSetupAdapter);
-//
-//        chartsListView.setClickable(true);
-//        chartsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                ChartsSetupAdapter adapter = (ChartsSetupAdapter) adapterView.getAdapter();
-//                AirportChart chart = adapter.GetAirportChart(i);
-//
-//                downloadTask = new DownloadImageTask();
-//                downloadTask.execute(chart.thumbnail_url);
-//
-//                n.mapController.SetAirportChart(chart);
-//            }
-//        });
 
         ListView chartsListView = (ListView) view.findViewById(R.id.airportChartsSetupList);
         refreshLocalChartsBtn = (Button)view.findViewById(R.id.refreshLocalChartsBtn);
@@ -94,7 +74,18 @@ public class LayersChartsSetupFragment extends Fragment {
         refreshLocalChartsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                refreshLocalCharts();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setTitle("Get chartslist from server ?")
+                        .setMessage("Do you want to retrieve the chartslist from the server?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                refreshLocalCharts();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
         });
 
@@ -148,42 +139,20 @@ public class LayersChartsSetupFragment extends Fragment {
 
         localMBCharts.SetOnMBFilesList(new LocalMBCharts.OnMBFileList() {
             @Override
-            public void filesList(List<MBTile> files, Boolean success) {
-
-//                MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(n);
-//                mbTilesLocalDataSource.open();
-                for (MBTile tile: files) {
-//                    mbTilesLocalDataSource.insertUpdateTile(tile);
-                    tile.InsertUpdateDB();
+            public void filesList(List<MBTile> files, Boolean success, String message) {
+                if (success) {
+                    for (MBTile tile : files) {
+                        tile.InsertUpdateDB();
+                    }
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                 }
-//                mbTilesLocalDataSource.close();
+                else
+                {
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         localMBCharts.GetFilelist();
     }
-
-//    private DownloadImageTask downloadTask;
-//    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-//
-//        protected Bitmap doInBackground(String... urls) {
-//            String urldisplay = urls[0];
-//            Bitmap mIcon11 = null;
-//            try {
-//                InputStream in = new java.net.URL(urldisplay).openStream();
-//                mIcon11 = BitmapFactory.decodeStream(in);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return mIcon11;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Bitmap bitmap) {
-//            super.onPostExecute(bitmap);
-//
-//            ImageView imageView = (ImageView)view.findViewById(R.id.chartImageView);
-//            imageView.setImageBitmap(bitmap);
-//        }
-//    }
 }
