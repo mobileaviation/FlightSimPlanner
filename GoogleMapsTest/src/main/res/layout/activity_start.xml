@@ -248,7 +248,7 @@
 
         <ImageButton
             android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/openaipBtn"
             android:src="@drawable/dsopenaip"
             android:clickable="true"
@@ -258,7 +258,7 @@
 
         <ImageButton
             android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/xplaneBtn"
             android:src="@drawable/dsxplane"
             android:focusableInTouchMode="false"
@@ -275,7 +275,7 @@
 
         <ImageButton
             android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/OpenWeatherMapBtn"
             android:src="@drawable/dsopenweathermap"
             android:clickable="true"
@@ -283,7 +283,7 @@
 
         <ImageButton
             android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/weatherBtn"
             android:src="@drawable/dsweather"
             android:clickable="true"
@@ -291,7 +291,7 @@
 
         <ImageButton
             android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/SkyLinesBtn"
             android:src="@drawable/dsskylines"
             android:clickable="true"
@@ -299,7 +299,7 @@
 
         <ImageButton
             android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/canadaBtn"
             android:src="@drawable/dscanadaweather"
             android:clickable="true"
@@ -307,11 +307,19 @@
 
         <ImageButton
             android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/chartbundleBtn"
             android:src="@drawable/dschartbundle"
             android:clickable="true"
             android:scaleType="fitXY" />
+
+        <ImageButton
+            android:id="@+id/openFlightmapsBtn"
+            android:layout_width="150dp"
+            android:layout_height="32dp"
+            android:clickable="true"
+            android:src="@drawable/dsopenflightmaps"
+            android:scaleType="fitXY"/>
     </LinearLayout>
 
     <LinearLayout

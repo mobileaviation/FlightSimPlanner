@@ -252,102 +252,109 @@
         </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/dataSourcesLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:layout_marginTop="300dp"
         android:layout_marginLeft="10dp"
-        android:id="@+id/dataSourcesLayout">
+        android:layout_marginTop="290dp"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sources"
-            android:id="@+id/textView5"
-            android:textSize="20dp"
             android:layout_marginBottom="10dp"
-            android:textStyle="bold|italic"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:text="Sources"
+            android:textSize="20dp"
+            android:textStyle="bold|italic" />
 
         <ImageButton
+            android:id="@+id/openaipBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/openaipBtn"
-            android:src="@drawable/dsopenaip"
+            android:baselineAlignBottom="true"
             android:clickable="true"
             android:focusable="true"
-            android:baselineAlignBottom="true" />
+            android:src="@drawable/dsopenaip" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/xplaneBtn"
-            android:src="@drawable/dsxplane"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
             android:focusableInTouchMode="false"
-            android:clickable="true" />
+            android:src="@drawable/dsxplane" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/ourairportsBtn"
-            android:src="@drawable/dsourairports"
-            android:clickable="true" />
-
-        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/dsourairports" />
+
+        <ImageButton
             android:id="@+id/OpenWeatherMapBtn"
-            android:src="@drawable/dsopenweathermap"
-            android:clickable="true" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/dsopenweathermap" />
+
+        <ImageButton
+            android:id="@+id/openFlightmapsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/dsopenflightmaps" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:layout_marginTop="300dp"
         android:layout_marginLeft="10dp"
-        android:id="@+id/linearLayout" >
+        android:layout_marginTop="290dp"
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sources"
             android:id="@+id/textView6"
-            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textStyle="bold|italic"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:text="Sources"
+            android:textSize="20dp"
+            android:textStyle="bold|italic" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/weatherBtn"
-            android:src="@drawable/dsweather"
-            android:clickable="true" />
-
-        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/dsweather" />
+
+        <ImageButton
             android:id="@+id/SkyLinesBtn"
-            android:src="@drawable/dsskylines"
-            android:clickable="true" />
-
-        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/dsskylines" />
+
+        <ImageButton
             android:id="@+id/canadaBtn"
-            android:src="@drawable/dscanadaweather"
-            android:clickable="true" />
-
-        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/dscanadaweather" />
+
+        <ImageButton
             android:id="@+id/chartbundleBtn"
-            android:src="@drawable/dschartbundle"
-            android:clickable="true" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/dschartbundle" />
     </LinearLayout>
 
     <LinearLayout

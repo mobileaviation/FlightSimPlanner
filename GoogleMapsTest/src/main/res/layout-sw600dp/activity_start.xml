@@ -98,6 +98,12 @@
             android:id="@+id/OpenWeatherMapBtn"
             android:src="@drawable/dsopenweathermap"
             android:clickable="true" />
+        <ImageButton
+            android:id="@+id/openFlightmapsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/dsopenflightmaps" />
 
     </LinearLayout>
 

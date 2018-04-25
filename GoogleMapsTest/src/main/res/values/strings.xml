@@ -47,6 +47,7 @@
     <string name="canadalink">https://weather.gc.ca/mainmenu/weather_menu_e.html</string>
     <string name="skylineslink">https://www.skylines.aero/</string>
     <string name="chartbundlelink">http://www.chartbundle.com/</string>
+    <string name="openflightmapslink">https://openflightmaps.org/live/</string>
 
     <string-array name="planets_array">
         <item>Mercury</item>

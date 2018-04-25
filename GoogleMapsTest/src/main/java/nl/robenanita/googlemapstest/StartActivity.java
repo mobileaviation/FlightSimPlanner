@@ -208,6 +208,7 @@ public class StartActivity extends ActionBarActivity {
         ImageButton canadaBtn = (ImageButton) findViewById(R.id.canadaBtn);
         ImageButton skylinesBtn = (ImageButton) findViewById(R.id.SkyLinesBtn);
         ImageButton chartBundleBtn = (ImageButton) findViewById(R.id.chartbundleBtn);
+        ImageButton openFlightmapsBtn = (ImageButton) findViewById(R.id.openFlightmapsBtn);
 
         openaipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,6 +256,12 @@ public class StartActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 goToUrl(getResources().getString(R.string.chartbundlelink));
+            }
+        });
+        openFlightmapsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUrl(getResources().getString(R.string.openflightmapslink));
             }
         });
     }
