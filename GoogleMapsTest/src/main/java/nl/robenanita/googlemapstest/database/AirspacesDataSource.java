@@ -19,6 +19,7 @@ public class AirspacesDataSource {
     public AirspacesDataSource(Context context)
     {
         this.context = context;
+        dbHelper = new AirspacesDBHelper(this.context);
     }
 
     private Context context;
@@ -26,40 +27,50 @@ public class AirspacesDataSource {
     private String TAG = "GoogleMapsTest";
     private SQLiteDatabase database;
     private Integer retryCopyCount;
+    private AirspacesDBHelper dbHelper;
 
     public Boolean Open(String database)
     {
-        String databasename = DBFilesHelper.DatabasePath(context) + database;
-
-        File f = new File(databasename);
-        if (!f.exists())
-        {
-            DBFilesHelper.CopyDatabases(context, true);
-        }
-
+//        String databasename = DBFilesHelper.DatabasePath(context) + database;
+//
+//        File f = new File(databasename);
+//        if (!f.exists())
+//        {
+//            DBFilesHelper.CopyDatabases(context, true);
+//        }
+//
+//        try {
+//            this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READWRITE);
+//            return true;
+//        } catch (Exception e) {
+//            Log.e(TAG, "Error opening Airspaces database: " + e.getMessage() + ". try copy from assets");
+//            try {
+//                Log.e(TAG, "Try to delete and recopy from assets: " + databasename);
+//                context.deleteDatabase(database);
+//                DBFilesHelper.CopyDatabases(context, true);
+//                this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READWRITE);
+//                return true;
+//            }
+//            catch (Exception ee)
+//            {
+//                Log.e(TAG, "Tryed to delete and recopy from assets but exception: " + ee.getMessage());
+//            }
+//            return false;
+//        }
         try {
-            this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READONLY);
+            this.database = dbHelper.openDataBase();
             return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error opening Airspaces database: " + e.getMessage() + ". try copy from assets");
-            try {
-                Log.e(TAG, "Try to delete and recopy from assets: " + databasename);
-                context.deleteDatabase(database);
-                DBFilesHelper.CopyDatabases(context, true);
-                this.database = SQLiteDatabase.openDatabase(databasename, null, SQLiteDatabase.OPEN_READWRITE);
-                return true;
-            }
-            catch (Exception ee)
-            {
-                Log.e(TAG, "Tryed to delete and recopy from assets but exception: " + ee.getMessage());
-            }
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "Exception opening database: " + e.getMessage());
             return false;
         }
     }
 
     public void Close()
     {
-        this.database.close();
+        dbHelper.close();
     }
 
     public Cursor GetAirspaces(String country)

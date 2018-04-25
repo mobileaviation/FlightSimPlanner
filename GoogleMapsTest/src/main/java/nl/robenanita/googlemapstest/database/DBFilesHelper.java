@@ -23,9 +23,9 @@ public class DBFilesHelper {
 //        String p = context.getFilesDir().getPath() + "/"
 //                + "databases" + "/";
 
-        String p = context.getDatabasePath("airnav.db").getParent() + "/";
+        //String p = context.getDatabasePath("airnav.db").getParent() + "/";
 
-        //String p = context.getApplicationInfo().dataDir + "/";
+        String p = context.getApplicationInfo().dataDir + "/databases/";
         //String p = "/data/data/nl.robenanita.googlemapstest/databases/";
 
         File f = new File(p);

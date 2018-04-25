@@ -25,6 +25,7 @@ public class LoadAirspacesAsync extends AsyncTask {
         airspaces = new Airspaces(context);
         country = databaseName.split("_")[0];
         airspaces.readFromDatabase(airspacesDB.GetAirspaces(country));
+        airspacesDB.Close();
         return null;
     }
 

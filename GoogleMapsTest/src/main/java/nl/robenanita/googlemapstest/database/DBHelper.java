@@ -17,9 +17,6 @@ import java.io.OutputStream;
  */
 public class DBHelper extends SQLiteOpenHelper {
     //The Android's default system path of your application database.
-
-    //public static String DB_PATH = "/data/data/nl.robenanita.googlemapstest/databases/";
-
     private SQLiteDatabase myDataBase;
     private final Context myContext;
 
@@ -115,6 +112,7 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.myContext = context;
         DbPath = this.myContext.getApplicationInfo().dataDir + "/databases/";
+
     }
 
     @Override
@@ -145,8 +143,7 @@ public class DBHelper extends SQLiteOpenHelper {
         {
 
             Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
-            copyDataBase();
-            //createDataBase();
+            DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
         }
         catch(Exception ee)
         {
@@ -177,47 +174,12 @@ public class DBHelper extends SQLiteOpenHelper {
         // Empty for compatibility
     }
 
-    private void copyDataBase() throws Exception{
-        //Open your local db as the input stream
-        InputStream myInput = null;
-        OutputStream myOutput = null;
-
-
-        try
-        {
-            myInput = myContext.getAssets().open(DATABASE_NAME);
-            // Path to the just created empty db
-            String outFileName = DbPath + DATABASE_NAME;
-            //Open the empty db as the output stream
-            myOutput = new FileOutputStream(outFileName);
-            //transfer bytes from the inputfile to the outputfile
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = myInput.read(buffer))>0){
-                myOutput.write(buffer, 0, length);
-            }
-
-
-        }
-        catch(Exception ee)
-        {
-            Log.e(TAG, ee.getMessage());
-        }
-        finally {
-            if (myOutput != null) {
-                myOutput.flush();
-                myOutput.close();
-            }
-            if (myInput != null) myInput.close();
-        }
-    }
-
     public SQLiteDatabase openDataBase(){
         //Open the database
         if (!checkDataBase()) {
             this.getWritableDatabase();
             try {
-                copyDataBase();
+                DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
             }
             catch (Exception ee)
             {
