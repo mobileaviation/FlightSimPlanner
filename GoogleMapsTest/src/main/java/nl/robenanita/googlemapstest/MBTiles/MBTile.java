@@ -39,6 +39,7 @@ public class MBTile {
     {
         if (type_str.equals("ofm")) type = MBTileType.ofm;
         if (type_str.equals("fsp")) type = MBTileType.fsp;
+        if (type_str.equals("local")) type = MBTileType.local;
     }
     public String mbtileslink;
     public String xmllink;
@@ -155,6 +156,15 @@ public class MBTile {
     }
 
     private Date getDate(Integer timestamp) { return new Date((long)timestamp*1000); }
+
+    public void UpdateVisibility()
+    {
+        MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(context);
+        mbTilesLocalDataSource.open();
+        mbTilesLocalDataSource.updateVisibility(this);
+        mbTilesLocalDataSource.close();
+    }
+
 
     public void InsertUpdateDB()
     {

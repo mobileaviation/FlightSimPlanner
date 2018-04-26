@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_weight="80"
+            android:layout_weight="60"
             android:text="Charts"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
@@ -28,10 +28,18 @@
             android:id="@+id/refreshLocalChartsBtn"
             android:layout_width="10dp"
             android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="Refresh local"
+            android:textSize="9sp" />
+
+        <Button
+            android:id="@+id/refreshServerChartsBtn"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_weight="20"
-            android:text="Refresh Local"
-            android:textSize="10sp" />
+            android:text="Refresh Server"
+            android:textSize="8sp" />
     </LinearLayout>
 
     <ListView

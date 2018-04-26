@@ -159,6 +159,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.chartSetupImage);
         if (chart.type == MBTileType.ofm) imageView.setImageResource(R.drawable.ofm_charts_header);
         if (chart.type == MBTileType.fsp) imageView.setImageResource(R.drawable.fsp_charts_header);
+        if (chart.type == MBTileType.local) imageView.setImageResource(R.drawable.local_charts_header);
 
 
 

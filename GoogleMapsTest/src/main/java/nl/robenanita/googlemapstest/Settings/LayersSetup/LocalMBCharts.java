@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest.Settings.LayersSetup;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -9,6 +10,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,16 +35,64 @@ public class LocalMBCharts {
         baseUrl = "http://" + Ip + ":" + Integer.toString(Port);
     }
 
+    public LocalMBCharts(Context context)
+    {
+        this.context = context;
+        File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        baseUrl = f.getAbsolutePath();
+        Log.i(TAG, "Local BaseUrl: " + baseUrl);
+    }
+
     private String baseUrl;
     private Context context;
 
     private OnMBFileList onMBFilesList;
     public void SetOnMBFilesList(OnMBFileList onMBFileList) {this.onMBFilesList = onMBFileList;}
 
-    public void GetFilelist()
+    public void GetRemoteFilelist()
     {
         getFiles files = new getFiles(baseUrl);
         files.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void GetLocalFileList()
+    {
+        try {
+            File directory = new File(baseUrl);
+            File[] files = directory.listFiles();
+            ArrayList<MBTile> tileList = new ArrayList();
+            for (File f : files) {
+                if (f.getName().contains(".mbtiles") || f.getName().contains(".MBTILES")) {
+                    MBTile tile = new MBTile(context);
+                    tile.name = f.getName();
+                    tile.mbtileslink = f.getAbsolutePath();
+                    tile.type = MBTileType.local;
+                    tile.version = 1804;
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    tile.startValidity = new Date(f.lastModified());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(tile.startValidity);
+                    cal.add(Calendar.DATE, 30);
+                    tile.endValidity = cal.getTime();
+                    tileList.add(tile);
+                }
+            }
+
+            if (tileList.size() > 0) {
+                String message = "Retrieved " + tileList.size() + " charts from " + baseUrl;
+                if (onMBFilesList != null) onMBFilesList.filesList(tileList, true, message);
+            } else {
+                String message = "No file found on: " + baseUrl;
+                if (onMBFilesList != null) onMBFilesList.filesList(tileList, false, message);
+            }
+
+        }
+        catch(Exception ee)
+        {
+            String message = "Error getting files from: " + baseUrl + " :" + ee.getMessage();
+            if (onMBFilesList != null) onMBFilesList.filesList(null, false, message);
+        }
+
     }
 
     private void parseFilesListJson(String json)

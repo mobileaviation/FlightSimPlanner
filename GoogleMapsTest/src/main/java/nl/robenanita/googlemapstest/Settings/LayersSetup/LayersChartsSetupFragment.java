@@ -50,7 +50,10 @@ public class LayersChartsSetupFragment extends Fragment {
     private String TAG = "GooglemapsTest";
     private String downloadedToDir;
     private DownloadManager dm;
+    private Button refreshServerChartsBtn;
     private Button refreshLocalChartsBtn;
+    private ArrayList<MBTile> maps;
+    private ListView chartsListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,15 +71,35 @@ public class LayersChartsSetupFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListView chartsListView = (ListView) view.findViewById(R.id.airportChartsSetupList);
+        chartsListView = (ListView) view.findViewById(R.id.airportChartsSetupList);
+        refreshServerChartsBtn = (Button)view.findViewById(R.id.refreshServerChartsBtn);
         refreshLocalChartsBtn = (Button)view.findViewById(R.id.refreshLocalChartsBtn);
 
-        refreshLocalChartsBtn.setOnClickListener(new View.OnClickListener() {
+        refreshServerChartsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
                 dialog.setTitle("Get chartslist from server ?")
                         .setMessage("Do you want to retrieve the chartslist from the server?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                refreshRemoteCharts();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        });
+
+        refreshLocalChartsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setTitle("Get MBTILES from Downloads?")
+                        .setMessage("Retrieve all local downloaded MBTILES files, " + System.lineSeparator() +
+                        "Push the download button next to the map to make it available for use.")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
@@ -89,16 +112,34 @@ public class LayersChartsSetupFragment extends Fragment {
             }
         });
 
-        MBTilesDataSource tilesDataSource = new MBTilesDataSource(n);
-        tilesDataSource.open();
-        ArrayList<MBTile> maps = new ArrayList<>();
-        tilesDataSource.GetMBTilesByType(MBTileType.ofm, maps);
-        tilesDataSource.close();
-        MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(n);
-        mbTilesLocalDataSource.open();
-        mbTilesLocalDataSource.getAllLocalTiles(maps, MBTileType.fsp);
-        mbTilesLocalDataSource.close();
+        maps = new ArrayList<>();
 
+        getChartData();
+
+        setupListView();
+
+//        MBTile test = new MBTile(n);
+//        test._id = 10;
+//        test.name = "VACLFOR.mbtiles";
+//        test.type = MBTileType.fsp;
+//        test.mbtileslink = "http://192.168.2.8:81/VACEHLE.mbtiles";
+//        test.version = 1804;
+//        test.endValidity = new Date();
+//
+//        maps.add(test);
+//        chartsListView.invalidate();
+
+    }
+
+    private void refreshLocalCharts() {
+        LocalMBCharts localMBCharts = new LocalMBCharts(n);
+
+        setLocalMBCharts(localMBCharts, MBTileType.local);
+        localMBCharts.GetLocalFileList();
+    }
+
+    private void setupListView()
+    {
         ChartsSetupAdapter chartsSetupAdapter = new ChartsSetupAdapter(maps, n);
         chartsSetupAdapter.SetOnEvent(new ChartEvent() {
             @Override
@@ -113,22 +154,24 @@ public class LayersChartsSetupFragment extends Fragment {
         });
 
         chartsListView.setAdapter(chartsSetupAdapter);
-
-//        MBTile test = new MBTile(n);
-//        test._id = 10;
-//        test.name = "VACLFOR.mbtiles";
-//        test.type = MBTileType.fsp;
-//        test.mbtileslink = "http://192.168.2.8:81/VACEHLE.mbtiles";
-//        test.version = 1804;
-//        test.endValidity = new Date();
-//
-//        maps.add(test);
-//        chartsListView.invalidate();
-
-
     }
 
-    private void refreshLocalCharts()
+
+    private void getChartData()
+    {
+        MBTilesDataSource tilesDataSource = new MBTilesDataSource(n);
+        tilesDataSource.open();
+        tilesDataSource.GetMBTilesByType(MBTileType.ofm, maps);
+        tilesDataSource.close();
+        MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(n);
+        mbTilesLocalDataSource.open();
+        mbTilesLocalDataSource.getAllLocalTiles(maps, MBTileType.fsp);
+        mbTilesLocalDataSource.getAllLocalTiles(maps, MBTileType.local);
+        mbTilesLocalDataSource.close();
+    }
+
+
+    private void refreshRemoteCharts()
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(n);
         propertiesDataSource.open(true);
@@ -137,13 +180,34 @@ public class LayersChartsSetupFragment extends Fragment {
         Integer port = Integer.parseInt(propertiesDataSource.IpAddress.value2);
         LocalMBCharts localMBCharts = new LocalMBCharts(ip,port, n);
 
+        setLocalMBCharts(localMBCharts, MBTileType.fsp);
+
+        localMBCharts.GetRemoteFilelist();
+    }
+
+    private void setLocalMBCharts(LocalMBCharts localMBCharts, final MBTileType chartType)
+    {
         localMBCharts.SetOnMBFilesList(new LocalMBCharts.OnMBFileList() {
             @Override
             public void filesList(List<MBTile> files, Boolean success, String message) {
                 if (success) {
+                    MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(getContext());
+                    mbTilesLocalDataSource.open();
                     for (MBTile tile : files) {
+
+                        MBTile checkTile = mbTilesLocalDataSource.getTileByName(tile);
+                        if (checkTile != null) tile.visible_order = checkTile.visible_order;
                         tile.InsertUpdateDB();
+
                     }
+
+                    mbTilesLocalDataSource.removeUnknown(files, true, chartType);
+                    mbTilesLocalDataSource.close();
+
+                    maps = new ArrayList<>();
+                    getChartData();
+                    setupListView();
+
                     Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                 }
                 else
@@ -152,7 +216,5 @@ public class LayersChartsSetupFragment extends Fragment {
                 }
             }
         });
-
-        localMBCharts.GetFilelist();
     }
 }

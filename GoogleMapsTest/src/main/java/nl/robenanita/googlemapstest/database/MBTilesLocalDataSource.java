@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,14 +79,28 @@ public class MBTilesLocalDataSource {
         return tiles;
     }
 
+    public MBTile getTileByName(MBTile tile)
+    {
+        Cursor cursor = m_GetCursorByName(tile);
+
+        MBTile m_tile = null;
+        if (cursor.moveToFirst()) m_tile = CursorToTile(cursor);
+
+        return m_tile;
+    }
+
     public Boolean checkTile(MBTile tile)
+    {
+        return (m_GetCursorByName(tile).getCount()>0);
+    }
+
+    private Cursor m_GetCursorByName(MBTile tile)
     {
         String query = "SELECT * FROM " + UserDBHelper.MBTILES_LOCAL_TABLE_NAME + " WHERE "
                 + UserDBHelper.C_name + "=?";
         String[] args = {tile.name};
         Cursor cursor = database.rawQuery(query, args);
-
-        return (cursor.getCount()>0);
+        return cursor;
     }
 
     public Integer checkVisibleStatusTile(MBTile tile)
@@ -105,22 +120,28 @@ public class MBTilesLocalDataSource {
 
     public void insertUpdateTile(MBTile tile)
     {
-        ArrayList<String> ignore = new ArrayList<>();
         if (checkTile(tile))
         {
-            ignore.add(UserDBHelper.C_available);
-            ignore.add(UserDBHelper.C_visible_order);
             database.update(UserDBHelper.MBTILES_LOCAL_TABLE_NAME,
-                    TileToContentValue(tile, ignore),
+                    TileToContentValue(tile),
                     UserDBHelper.C_name + " =?",
                     new String[]{tile.name});
         }
         else
         {
             database.insert(UserDBHelper.MBTILES_LOCAL_TABLE_NAME, null,
-                    TileToContentValue(tile, ignore));
+                    TileToContentValue(tile));
         }
 
+    }
+
+    public void updateVisibility(MBTile tile)
+    {
+        ContentValues values = new ContentValues();
+        values.put(UserDBHelper.C_visible_order, tile.visible_order);
+        database.update(UserDBHelper.MBTILES_LOCAL_TABLE_NAME,
+                values, "_id = ?",
+                new String[]{Integer.toString(tile._id)});
     }
 
     public void updateAvailable(MBTile tile)
@@ -132,6 +153,23 @@ public class MBTilesLocalDataSource {
                 values, "_id = ?",
                 new String[]{Integer.toString(tile._id)});
     }
+
+    public void removeUnknown(List<MBTile> tiles, Boolean remainLocalAvailable, MBTileType type)
+    {
+        String inTiles = "";
+        for (MBTile tile : tiles)
+        {
+            inTiles = inTiles + "'" + tile.name + "'" + ",";
+        }
+        if (inTiles.length()>0) {
+            inTiles = inTiles.substring(0, inTiles.length()-1);
+            String query = "DELETE FROM " + UserDBHelper.MBTILES_LOCAL_TABLE_NAME +
+                    " WHERE name not in (" + inTiles + ") AND type = '" + type.toString() + "'";
+            if (remainLocalAvailable) query = query + " AND available=0";
+            database.execSQL(query);
+        }
+    }
+
 
     private MBTile CursorToTile(Cursor cursor)
     {
@@ -149,7 +187,7 @@ public class MBTilesLocalDataSource {
         return tile;
     }
 
-    private ContentValues TileToContentValue(MBTile tile, ArrayList<String> ignoreColums )
+    private ContentValues TileToContentValue(MBTile tile)
     {
         ContentValues values = new ContentValues();
 
@@ -160,8 +198,8 @@ public class MBTilesLocalDataSource {
         values.put(UserDBHelper.C_type, tile.type.toString());
         values.put(UserDBHelper.C_start_validity, (long)tile.startValidity.getTime()/1000);
         values.put(UserDBHelper.C_end_validity, (long)tile.endValidity.getTime()/1000);
-        if (!ignoreColums.contains(UserDBHelper.C_available)) values.put(UserDBHelper.C_available, tile.CheckFile());
-        if (!ignoreColums.contains(UserDBHelper.C_visible_order)) values.put(UserDBHelper.C_visible_order, tile.visible_order);
+        values.put(UserDBHelper.C_available, tile.CheckFile());
+        values.put(UserDBHelper.C_visible_order, tile.visible_order);
 
         return values;
     }
