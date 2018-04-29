@@ -18,7 +18,7 @@ public class AirportInfoDataSource {
     private String TAG = "GooglemapsTest";
 
     public AirportInfoDataSource(Context context) {
-        dbHelper = new UserDBHelper(context);
+        dbHelper = UserDBHelper.getInstance(context);
     }
 
     public void open(){

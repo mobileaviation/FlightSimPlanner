@@ -492,7 +492,7 @@ public class StartActivity extends ActionBarActivity {
         dbDownloader.CheckAndUpdateDatabases();
 
         // Check the airnav database and copy it from Assets if necessary
-        DBHelper dbHelper = new DBHelper(this);
+        DBHelper dbHelper = DBHelper.getInstance(this);
         SQLiteDatabase db = dbHelper.openDataBase();
         if (db.isOpen()) Log.i(TAG, "opened for test!");
         dbHelper.close();

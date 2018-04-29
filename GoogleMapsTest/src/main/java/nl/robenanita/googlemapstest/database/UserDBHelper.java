@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -269,7 +270,19 @@ public class UserDBHelper extends SQLiteOpenHelper {
             " latitude_deg, longitude_deg" +
             ");";
 
-    public UserDBHelper(Context context) {
+    private static UserDBHelper sInstance;
+    public static synchronized UserDBHelper getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new UserDBHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private UserDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         myContext = context;
         DbPath = this.myContext.getApplicationInfo().dataDir + "/databases/";
@@ -333,6 +346,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
+        Toast.makeText(myContext, "Updating userdata database.", Toast.LENGTH_LONG).show();
 
         // add columns to flightplan table
         if (oldVersion<3) db.execSQL(FLIGHTPLAN_TABLE_ADD_DATE);

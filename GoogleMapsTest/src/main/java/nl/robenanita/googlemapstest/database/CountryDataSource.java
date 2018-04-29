@@ -31,7 +31,7 @@ public class CountryDataSource {
     };
 
     public CountryDataSource(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public void open() {

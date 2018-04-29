@@ -24,7 +24,7 @@ public class NavaidsDataSource {
     private Integer pid;
 
     public NavaidsDataSource(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public void open(Integer pid){

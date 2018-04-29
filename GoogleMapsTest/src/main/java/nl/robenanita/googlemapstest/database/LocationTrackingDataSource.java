@@ -20,7 +20,7 @@ public class LocationTrackingDataSource {
     private String TAG = "GooglemapsTest";
 
     public LocationTrackingDataSource(Context context) {
-        dbHelper = new UserDBHelper(context);
+        dbHelper =  UserDBHelper.getInstance(context);
     }
 
     public void open() {

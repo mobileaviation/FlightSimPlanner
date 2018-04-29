@@ -28,8 +28,8 @@ public class PropertiesDataSource {
 
     public PropertiesDataSource(Context context) {
         c = context;
-        userDbHelper = new UserDBHelper(context);
-        dbHelper = new DBHelper(context);
+        userDbHelper = UserDBHelper.getInstance(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public void open(boolean user){

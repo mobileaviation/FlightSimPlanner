@@ -57,7 +57,7 @@ public class AirportDataSource {
     };
 
     public AirportDataSource(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper =  DBHelper.getInstance(context);
     }
 
     public void open(Integer pid) {

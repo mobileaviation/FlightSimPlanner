@@ -20,7 +20,7 @@ public class RunwaysDataSource {
     private String TAG = "GooglemapsTest";
 
     public RunwaysDataSource(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     private String[] runwayColumns = {

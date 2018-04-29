@@ -18,7 +18,7 @@ public class MBTilesDataSource {
     private Context context;
 
     public MBTilesDataSource(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
         this.context = context;
     }
 

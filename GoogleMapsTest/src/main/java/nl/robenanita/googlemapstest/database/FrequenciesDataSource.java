@@ -19,7 +19,7 @@ public class FrequenciesDataSource {
     private String TAG = "GooglemapsTest";
 
     public FrequenciesDataSource(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public void open(){

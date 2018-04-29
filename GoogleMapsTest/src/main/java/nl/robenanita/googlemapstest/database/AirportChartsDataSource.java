@@ -20,7 +20,7 @@ public class AirportChartsDataSource {
     private String TAG = "GooglemapsTest";
 
     public AirportChartsDataSource(Context context) {
-        dbHelper = new UserDBHelper(context);
+        dbHelper = UserDBHelper.getInstance(context);
     }
 
     public void open(){

@@ -19,7 +19,7 @@ public class FirDataSource {
     private String TAG = "GooglemapsTest";
 
     public FirDataSource(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public void open() {

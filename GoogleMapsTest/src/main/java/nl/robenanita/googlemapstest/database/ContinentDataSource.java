@@ -29,7 +29,7 @@ public class ContinentDataSource {
 
     public ContinentDataSource(Context context)
     {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public void open() {

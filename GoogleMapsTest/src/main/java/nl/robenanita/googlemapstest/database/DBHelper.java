@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String FREQUENCIES_TABLE_NAME = "tbl_AirportFrequencies";
     public static final String MBTILES_TABLE_NAME = "tbl_MbTiles";
 
-    private static final int DATABASE_VERSION = 23;
+    private static final int DATABASE_VERSION = 31;
     private static final String TAG = "GooglemapsTest";
 
     public Boolean updated = false;
@@ -108,7 +109,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static String DbPath;
 
-    public DBHelper(Context context) {
+    private static DBHelper sInstance;
+    public static synchronized DBHelper getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new DBHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.myContext = context;
         DbPath = this.myContext.getApplicationInfo().dataDir + "/databases/";
@@ -143,6 +156,7 @@ public class DBHelper extends SQLiteOpenHelper {
         {
 
             Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
+            Toast.makeText(myContext, "Updating database from installer!", Toast.LENGTH_LONG).show();
             DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
         }
         catch(Exception ee)
@@ -157,10 +171,13 @@ public class DBHelper extends SQLiteOpenHelper {
         try{
             String myPath = DbPath + DATABASE_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            //checkDB.execSQL("SELECT COUNT(*) FROM tbl_Properties");
         }
         catch(SQLiteException e){
             //database does't exist yet.
             Log.e(TAG, "Check DB Error");
+            if (checkDB.isOpen()) checkDB.close();
+            return false;
         }
 
         if(checkDB != null){
@@ -189,7 +206,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         String myPath = DbPath + DATABASE_NAME;
-        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+        myDataBase = this.getWritableDatabase();
+        //myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
         return myDataBase;
     }
 

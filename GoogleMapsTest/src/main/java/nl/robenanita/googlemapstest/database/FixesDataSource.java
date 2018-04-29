@@ -23,7 +23,7 @@ public class FixesDataSource {
     private Integer pid;
 
     public FixesDataSource(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public void open(Integer pid){

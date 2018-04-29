@@ -23,7 +23,7 @@ public class RouteDataSource {
     private String TAG = "GooglemapsTest";
 
     public RouteDataSource(Context context) {
-        dbHelper = new UserDBHelper(context);
+        dbHelper = UserDBHelper.getInstance(context);
     }
 
     public void open(){

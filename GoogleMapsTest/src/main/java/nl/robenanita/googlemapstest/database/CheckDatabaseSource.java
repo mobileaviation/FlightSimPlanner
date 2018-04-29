@@ -22,7 +22,7 @@ public class CheckDatabaseSource {
 
     public CheckDatabaseSource(Context context) {
         c = context;
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public void open(){

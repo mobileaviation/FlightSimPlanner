@@ -20,7 +20,7 @@ public class MBTilesLocalDataSource {
 
     public MBTilesLocalDataSource(Context context) {
         this.context = context;
-        dbHelper = new UserDBHelper(context);
+        dbHelper = UserDBHelper.getInstance(context);
     }
 
     public void open(){
