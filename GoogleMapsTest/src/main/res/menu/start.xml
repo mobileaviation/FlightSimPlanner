@@ -11,4 +11,8 @@
         android:title="@string/actions_download_databases"
         android:orderInCategory="101"
         app:showAsAction="never" />
+    <item android:id="@+id/action_firebase_test"
+        android:title="@string/firebasetest"
+        android:orderInCategory="102"
+        app:showAsAction="never" />
 </menu>

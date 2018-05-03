@@ -1,27 +1,15 @@
-package nl.robenanita.googlemapstest.database;
+package nl.robenanita.googlemapstest.Firebase;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import nl.robenanita.googlemapstest.R;
 
-/**
- * Created by Rob Verhoef on 18-1-14.
- */
-public class DBHelper extends SQLiteOpenHelper {
-    //The Android's default system path of your application database.
-    private SQLiteDatabase myDataBase;
-    private final Context myContext;
-
-    public static final String DATABASE_NAME = "airnav.db";
+public class FBDBHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "fbairnav.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String TAG = "GooglemapsTest";
 
     public static final String AIRPORT_TABLE_NAME = "tbl_Airports";
     public static final String COUNTRY_TABLE_NAME = "tbl_Country";
@@ -32,12 +20,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PROPERTIES_TABLE_NAME = "tbl_Properties";
     public static final String FREQUENCIES_TABLE_NAME = "tbl_AirportFrequencies";
     public static final String MBTILES_TABLE_NAME = "tbl_MbTiles";
-
-    // PRAGMA user_version (= integer)
-    private static final int DATABASE_VERSION = 31;
-    private static final String TAG = "GooglemapsTest";
-
-    public Boolean updated = false;
 
     public static final String C_id = "id";
     public static final String C_ident = "ident";
@@ -107,127 +89,52 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String C_startValidity = "startValidity";
     public static final String C_endValidity = "endValidity";
 
+    private Context context;
 
-    public static String DbPath;
+    public static SQLiteDatabase database;
 
-    private static DBHelper sInstance;
-    public static synchronized DBHelper getInstance(Context context) {
+    private static FBDBHelper sInstance;
+    public static synchronized FBDBHelper getInstance(Context context) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
-            sInstance = new DBHelper(context.getApplicationContext());
+            sInstance = new FBDBHelper(context.getApplicationContext());
         }
         return sInstance;
     }
 
-    private DBHelper(Context context) {
+    private FBDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.myContext = context;
-        DbPath = this.myContext.getApplicationInfo().dataDir + "/databases/";
+        this.context = context;
+    }
 
+    public SQLiteDatabase Open()
+    {
+        database = getWritableDatabase();
+        return database;
     }
 
     @Override
-    public synchronized void close() {
-        if(myDataBase != null)
-            myDataBase.close();
+    public void close()
+    {
+        database.close();
         super.close();
     }
 
-
-
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        try
-        {
-            Log.i(TAG, "Creating Database");
-            //createDataBase();
-        }
-        catch (Exception ee)
-        {
-            Log.e(TAG, "Error Creating DB " + ee.getMessage());
-        }
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        String q = context.getString(R.string.createAirportsTable);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createFrequenciesTable);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createRunwaysTable);
+        sqLiteDatabase.execSQL(q);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try
-        {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
 
-            Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
-            Toast.makeText(myContext, "Updating database from installer!", Toast.LENGTH_LONG).show();
-            DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
-        }
-        catch(Exception ee)
-        {
-            Log.e(TAG, "Error Updating DB " + ee.getMessage());
-        }
-    }
-
-    private SQLiteDatabase checkDB;
-    private boolean checkDataBase(){
-        checkDB = null;
-        try{
-            String myPath = DbPath + DATABASE_NAME;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-            //checkDB.execSQL("SELECT COUNT(*) FROM tbl_Properties");
-        }
-        catch(SQLiteException e){
-            //database does't exist yet.
-            Log.e(TAG, "Check DB Error");
-            if (checkDB != null) if (checkDB.isOpen()) checkDB.close();
-            return false;
-        }
-
-        if(checkDB != null){
-            checkDB.close();
-            return true;
-        }
-        else return  false;
-    }
-
-    public void createDataBase() throws IOException{
-        // Empty for compatibility
-    }
-
-    public SQLiteDatabase openDataBase(){
-        //Open the database
-        if (!checkDataBase()) {
-            this.getWritableDatabase();
-            try {
-                DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
-            }
-            catch (Exception ee)
-            {
-                Log.e(TAG, "Error copy database: " + ee.getMessage());
-                return null;
-            }
-        }
-
-        String myPath = DbPath + DATABASE_NAME;
-        myDataBase = this.getWritableDatabase();
-        //myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-        return myDataBase;
-    }
-
-    public void deleteDatabase(Integer version)
-    {
-        Log.i(TAG, "Try to remove the old database: " + version.toString() + " : " + this.DATABASE_VERSION);
-        if (version != this.DATABASE_VERSION)
-            {
-            //this.close();
-            Log.i(TAG, "Try to remove the old database");
-            try
-            {
-                myContext.deleteDatabase("airnav.db");
-                Log.i(TAG, "tried to delete database: airnav.db" );
-            }
-            catch (Exception ee)
-            {
-                Log.i(TAG, "Problem deleting database: " + ee.getMessage());
-            }
-        }
     }
 }

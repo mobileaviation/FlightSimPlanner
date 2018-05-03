@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "702285397223",
+    "firebase_url": "https://flightsimplanner-202711.firebaseio.com",
+    "project_id": "flightsimplanner-202711",
+    "storage_bucket": "flightsimplanner-202711.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702285397223:android:9c9afb207af7615d",
+        "android_client_info": {
+          "package_name": "nl.robenanita.flightsimplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702285397223-0q4jcv480nbknhfp2rb3esbfmnpg3hhu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZoA41QRDAsIV7zQ8ZqM0JLDpX8aQ88-E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702285397223:android:c061dc2fec89fec5",
+        "android_client_info": {
+          "package_name": "nl.robenanita.googlemapstest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702285397223-kjtu7o1qpbauqn0oc0unuim6vu5ofdv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nl.robenanita.googlemapstest",
+            "certificate_hash": "0e89460b8c8ed2bc7eb268a25290f6e6e8f985b8"
+          }
+        },
+        {
+          "client_id": "702285397223-0q4jcv480nbknhfp2rb3esbfmnpg3hhu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZoA41QRDAsIV7zQ8ZqM0JLDpX8aQ88-E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702285397223-0q4jcv480nbknhfp2rb3esbfmnpg3hhu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

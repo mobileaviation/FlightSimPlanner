@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:+'
+        classpath 'com.google.gms:google-services:3.1.1'
     }
 }
 
@@ -41,11 +42,11 @@ dependencies {
     implementation 'com.andreabaccega:android-form-edittext:1.0.5@aar'
     implementation 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
     implementation 'com.android.support:support-v4:25.3.1'
-    implementation 'com.google.android.gms:play-services-maps:11.0.2'
+    implementation 'com.google.android.gms:play-services-maps:11.8.0'
     //implementation 'com.android.support:appcompat-v7:25.3.1'
     implementation 'com.android.support:design:25.3.1'
-    implementation 'com.google.android.gms:play-services-location:11.0.2'
-    implementation 'com.google.android.gms:play-services-ads:11.0.2'
+    implementation 'com.google.android.gms:play-services-location:11.8.0'
+    implementation 'com.google.android.gms:play-services-ads:11.8.0'
     implementation 'com.kishan.askpermission:askpermission:1.0.3'
     implementation 'com.github.woxthebox:draglistview:1.5.1'
     implementation 'commons-io:commons-io:2.6'
@@ -56,4 +57,7 @@ dependencies {
                 transitive = true
             }
 
+    implementation 'com.google.firebase:firebase-database:11.8.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -39,6 +39,8 @@ import com.kishan.askpermission.PermissionInterface;
 import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
+import nl.robenanita.googlemapstest.Firebase.FBAirportsDataSource;
+import nl.robenanita.googlemapstest.Firebase.FBDBHelper;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.database.*;
 import nl.robenanita.googlemapstest.database.Downloader.DBDownloader;
@@ -568,6 +570,13 @@ public class StartActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (id == R.id.action_firebase_test)
+        {
+            TestFirebaseDatabase();
+            return true;
+        }
+
         if (id == R.id.action_settings) {
             showSettingsActivity();
             return true;
@@ -627,6 +636,17 @@ public class StartActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void TestFirebaseDatabase() {
+        FBAirportsDataSource fbAirportsDataSource = new FBAirportsDataSource(this);
+        fbAirportsDataSource.Open();
+
+        // load data
+        fbAirportsDataSource.ReadFBDataTest();
+
+        fbAirportsDataSource.Close();
+
     }
 
     private void showSettingsActivity() {

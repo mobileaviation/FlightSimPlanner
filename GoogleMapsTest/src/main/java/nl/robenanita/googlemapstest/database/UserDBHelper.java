@@ -17,7 +17,8 @@ import java.io.OutputStream;
  */
 public class UserDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "userairnav.db";
-    private static final int DATABASE_VERSION = 13;
+    // PRAGMA user_version (= integer)
+    private static final int DATABASE_VERSION = 14;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
     public static final String TRACKPOINTS_TABLE_NAME = "tbl_Trackpoints";
