@@ -8,8 +8,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class FBAirportsDataSource {
     public FBAirportsDataSource(Context context)
@@ -38,13 +43,20 @@ public class FBAirportsDataSource {
 
     public void ReadFBDataTest()
     {
-        Query query = mDatabase.child("airports").orderByChild("continent").startAt("NA").endAt("NA");
+        Query query = mDatabase.child("airports").orderByChild("index").startAt(0).endAt(1000);
 
         ValueEventListener dataListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Object a = dataSnapshot.getValue();
-                Log.i(TAG, "retrieved Object");
+                try {
+                    //GenericTypeIndicator<List<Object>> airportsType = new GenericTypeIndicator<List<Object>>(){};
+                    Object airports = dataSnapshot.getValue();
+                    Log.i(TAG, "retrieved Object");
+                }
+                catch (Exception ee)
+                {
+                    Log.i("Test", ee.getMessage());
+                }
             }
 
             @Override
