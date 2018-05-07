@@ -21,6 +21,7 @@ public class FBAirportsDataSource {
     {
         this.context = context;
         fbdbHelper = FBDBHelper.getInstance(context);
+        airports = new ArrayList<>();
     }
 
     private static final String TAG = "GooglemapsTest";
@@ -30,10 +31,11 @@ public class FBAirportsDataSource {
     private SQLiteDatabase database;
     private DatabaseReference mDatabase;
 
+    private ArrayList<FBAirport> airports;
+
     public void Open()
     {
         database = fbdbHelper.Open();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public void Close()
@@ -41,17 +43,37 @@ public class FBAirportsDataSource {
         fbdbHelper.close();
     }
 
-    public void ReadFBDataTest()
+    Integer start;
+    Integer count;
+    Query query;
+    ValueEventListener dataListener;
+    public void ReadFBDataTest(final Integer airportCount)
     {
-        Query query = mDatabase.child("airports").orderByChild("index").startAt(0).endAt(1000);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        ValueEventListener dataListener = new ValueEventListener() {
+        start = 0;
+        count = 1000;
+
+        query = mDatabase.child("airports").orderByChild("index").startAt(start).endAt(start + (count-1));
+
+        dataListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
                     //GenericTypeIndicator<List<Object>> airportsType = new GenericTypeIndicator<List<Object>>(){};
-                    Object airports = dataSnapshot.getValue();
-                    Log.i(TAG, "retrieved Object");
+                    for (DataSnapshot airportSnapshow: dataSnapshot.getChildren()){
+                        FBAirport airport = airportSnapshow.getValue(FBAirport.class);
+                        airports.add(airport);
+                        //Log.i(TAG, "retrieved Object: " + airport.name);
+                    }
+
+                    start = start + count;
+                    Log.i(TAG, "Read 1000 airports, get the next from: " + start.toString());
+
+                    query = mDatabase.child("airports").orderByChild("index").startAt(start).endAt(start + (count-1));
+                    if (start<airportCount) query.addListenerForSingleValueEvent(dataListener);
+                        else
+                            Log.i(TAG, "Finished reading airports");
                 }
                 catch (Exception ee)
                 {
@@ -65,7 +87,7 @@ public class FBAirportsDataSource {
             }
         };
 
-        query.addValueEventListener(dataListener);
+        query.addListenerForSingleValueEvent(dataListener);
     }
 
 

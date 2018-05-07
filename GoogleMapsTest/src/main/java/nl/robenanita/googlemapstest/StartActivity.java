@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
 import nl.robenanita.googlemapstest.Firebase.FBAirportsDataSource;
 import nl.robenanita.googlemapstest.Firebase.FBDBHelper;
+import nl.robenanita.googlemapstest.Firebase.FBStatistics;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.database.*;
 import nl.robenanita.googlemapstest.database.Downloader.DBDownloader;
@@ -638,15 +639,26 @@ public class StartActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    FBAirportsDataSource fbAirportsDataSource;
     private void TestFirebaseDatabase() {
-        FBAirportsDataSource fbAirportsDataSource = new FBAirportsDataSource(this);
+        fbAirportsDataSource = new FBAirportsDataSource(this);
         fbAirportsDataSource.Open();
 
         // load data
-        fbAirportsDataSource.ReadFBDataTest();
+        // First get Statistics
+        FBStatistics statistics = new FBStatistics();
+        statistics.OnStatisticsEvent = new FBStatistics.StatisticsEventListerner() {
+            @Override
+            public void OnStatistics(FBStatistics statistics) {
+                Log.i(TAG, "Recieved statistics from Firebase");
 
-        fbAirportsDataSource.Close();
+                fbAirportsDataSource.ReadFBDataTest(statistics.AirportsCount);
 
+                //fbAirportsDataSource.Close();
+            }
+        };
+
+        statistics.FillStatistics();
     }
 
     private void showSettingsActivity() {
