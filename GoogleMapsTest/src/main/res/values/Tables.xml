@@ -48,4 +48,97 @@
       type text,
       description text,
       frequency_mhz real);</string>
+
+        <string name="createFrequenciesAirportIdentIndex">create index airport_frequencies_airport_ref on tbl_AirportFrequencies (airport_ref, airport_ident);</string>
+    <string name="createLocationAirportTableIndex">create index location_index
+            on tbl_Airports (
+            latitude_deg,
+            longitude_deg);</string>
+    <string name="createNameIdentAirportTableIndex">create index name_ident_index
+            on tbl_Airports (
+            id,
+            name,
+            ident);</string>
+    <string name="createRunwaysAirportHELocationIndex">create index runway_helocation_index
+            on tbl_Runways (
+            he_latitude_deg,
+            he_longitude_deg
+            );</string>
+    <string name="createRunwaysAirportIdentIndex">create index runway_airportident_index
+            on tbl_Runways  (
+            airport_ident,
+            airport_ref
+            );</string>
+    <string name="createRunwaysAirportLELocationIndex">create index runway_lelocation_index
+            on tbl_Runways (
+            le_latitude_deg,
+            le_longitude_deg
+            );</string>
+
+    <string name="createNavaidsTable">create table tbl_Navaids (_id integer primary key autoincrement,
+            id integer,
+            filename text,
+            ident text,
+            name text,
+            type text,
+            frequency_khz real,
+            latitude_deg real,
+            longitude_deg real,
+            elevation_ft integer,
+            iso_country text,
+            dme_frequency_khz real,
+            dme_channel real,
+            dme_latitude_deg real,
+            dme_longitude_deg real,
+            dme_elevation_ft integer,
+            slaved_variation_deg real,
+            magnetic_variation_deg real,
+            usageType text,
+            power text,
+            associated_airport text,
+            associated_airport_id integer,
+            MapLocation_ID integer,
+            pid integer);</string>
+    <string name="createNavaidsIdentNameIndex">create index navaids_ident_name_index on tbl_Navaids (ident, name);</string>
+    <string name="createNavaidsLocationIndex">create index navaids_location_index on tbl_Navaids(latitude_deg, longitude_deg);</string>
+    <string name="createContinentTable">create table tbl_Continent (_id integer primary key autoincrement,
+            id integer,
+            name text,
+            code text);</string>
+    <string name="createCountryTable">create table tbl_Country (_id integer primary key autoincrement,
+            id integer,
+            code text,
+            name text,
+            continent text,
+            wikipedia_link text,
+            keywords text);</string>
+    <string name="createFirsTable">create table tbl_Firs (_id integer primary key autoincrement,
+            id integer,
+            ident text,
+            name text,
+            position text,
+            polygon text);</string>
+    <string name="createFixesTable">create table tbl_Fixes(_id integer primary key autoincrement, name text,
+            ident text, latitude_deg real,
+            longitude_deg real,
+            MapLocation_ID integer,
+            pid integer);</string>
+    <string name="createMbTilesTable">create table tbl_MbTiles(_id integer primary key autoincrement,
+              name text,
+              region text,
+              type text,
+              mbtileslink text,
+              xmllink text,
+              version integer,
+              startValidity integer,
+              endValidity integer);</string>
+
+    <string name="createFixesLocationIndex">create index fixes_location_index
+            on tbl_Fixes(
+            latitude_deg,
+            longitude_deg);</string>
+    <string name="createFixesNameIndex">create index navaids_name_index
+            on tbl_Fixes(
+            name);</string>
+
 </resources>

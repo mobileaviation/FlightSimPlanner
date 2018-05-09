@@ -40,8 +40,12 @@ import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
 import nl.robenanita.googlemapstest.Firebase.FBAirportsDataSource;
+import nl.robenanita.googlemapstest.Firebase.FBCountriesDataSource;
 import nl.robenanita.googlemapstest.Firebase.FBDBHelper;
+import nl.robenanita.googlemapstest.Firebase.FBFixesDataSource;
+import nl.robenanita.googlemapstest.Firebase.FBNavaidsDataSource;
 import nl.robenanita.googlemapstest.Firebase.FBStatistics;
+import nl.robenanita.googlemapstest.Firebase.FBTilesDataSource;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.database.*;
 import nl.robenanita.googlemapstest.database.Downloader.DBDownloader;
@@ -640,9 +644,22 @@ public class StartActivity extends ActionBarActivity {
     }
 
     FBAirportsDataSource fbAirportsDataSource;
+    FBNavaidsDataSource fbNavaidsDataSource;
+    FBFixesDataSource fbFixesDataSource;
+    FBTilesDataSource fbTilesDataSource;
+    FBCountriesDataSource fbCountriesDataSource;
     private void TestFirebaseDatabase() {
         fbAirportsDataSource = new FBAirportsDataSource(this);
         fbAirportsDataSource.Open();
+        fbNavaidsDataSource = new FBNavaidsDataSource(this);
+        fbNavaidsDataSource.Open();
+        fbFixesDataSource = new FBFixesDataSource(this);
+        fbFixesDataSource.Open();
+        fbTilesDataSource = new FBTilesDataSource(this);
+        fbTilesDataSource.Open();
+        fbCountriesDataSource = new FBCountriesDataSource(this);
+        fbCountriesDataSource.Open();
+
 
         // load data
         // First get Statistics
@@ -652,7 +669,11 @@ public class StartActivity extends ActionBarActivity {
             public void OnStatistics(FBStatistics statistics) {
                 Log.i(TAG, "Recieved statistics from Firebase");
 
-                fbAirportsDataSource.ReadFBDataTest(statistics.AirportsCount);
+                fbAirportsDataSource.ReadFBAirportData(statistics.AirportsCount);
+                fbNavaidsDataSource.ReadFBNavaidData(statistics.NavaidsCount);
+                fbCountriesDataSource.ReadFBCountryData(statistics.CountriesCount);
+                fbTilesDataSource.ReadFBTilesData(statistics.MBTilesCount);
+                fbFixesDataSource.ReadFBFixesData(statistics.FixesCount);
 
                 //fbAirportsDataSource.Close();
             }

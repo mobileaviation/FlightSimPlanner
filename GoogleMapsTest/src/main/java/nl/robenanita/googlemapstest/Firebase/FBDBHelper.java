@@ -64,6 +64,8 @@ public class FBDBHelper extends SQLiteOpenHelper {
     public static final String C_he_elevation = "he_elevation_ft";
     public static final String C_he_heading = "he_heading_degT";
     public static final String C_he_displaced_threshold = "he_displaced_threshold_ft";
+    public static final String C_lighted = "lighted";
+    public static final String C_closed = "closed";
 
     public static final String C_filename = "filename";
     public static final String C_dme_frequency_khz = "dme_frequency_khz";
@@ -76,6 +78,7 @@ public class FBDBHelper extends SQLiteOpenHelper {
     public static final String C_usageType = "usageType";
     public static final String C_power = "power";
     public static final String C_associated_airport = "associated_airport";
+    public static final String C_associated_airport_id = "associated_airport_id";
 
     public static final String C_description = "description";
     public static final String C_frequency_mhz = "frequency_mhz";
@@ -88,6 +91,7 @@ public class FBDBHelper extends SQLiteOpenHelper {
     public static final String C_version = "version";
     public static final String C_startValidity = "startValidity";
     public static final String C_endValidity = "endValidity";
+    public static final String C_region = "region";
 
     private Context context;
 
@@ -125,11 +129,47 @@ public class FBDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        // Create Tables
         String q = context.getString(R.string.createAirportsTable);
         sqLiteDatabase.execSQL(q);
         q = context.getString(R.string.createFrequenciesTable);
         sqLiteDatabase.execSQL(q);
         q = context.getString(R.string.createRunwaysTable);
+        sqLiteDatabase.execSQL(q);
+
+        // Add Indexes
+        q = context.getString(R.string.createNameIdentAirportTableIndex);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createLocationAirportTableIndex);
+        sqLiteDatabase.execSQL(q);
+
+        q = context.getString(R.string.createRunwaysAirportIdentIndex);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createRunwaysAirportHELocationIndex);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createRunwaysAirportLELocationIndex);
+        sqLiteDatabase.execSQL(q);
+
+        q = context.getString(R.string.createNavaidsTable);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createNavaidsIdentNameIndex);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createNavaidsLocationIndex);
+        sqLiteDatabase.execSQL(q);
+
+        q = context.getString(R.string.createContinentTable);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createCountryTable);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createMbTilesTable);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createFirsTable);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createFixesTable);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createFixesLocationIndex);
+        sqLiteDatabase.execSQL(q);
+        q = context.getString(R.string.createFixesNameIndex);
         sqLiteDatabase.execSQL(q);
     }
 

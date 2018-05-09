@@ -1,5 +1,4 @@
 package nl.robenanita.googlemapstest.Firebase;
 
-public class FBAirports {
-
+public class FBFir {
 }

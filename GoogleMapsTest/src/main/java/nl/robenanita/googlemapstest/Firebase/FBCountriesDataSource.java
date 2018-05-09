@@ -12,10 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
-public class FBAirportsDataSource {
-    public FBAirportsDataSource(Context context)
+public class FBCountriesDataSource {
+    public FBCountriesDataSource(Context context)
     {
         this.context = context;
         fbdbHelper = FBDBHelper.getInstance(context);
@@ -42,47 +40,34 @@ public class FBAirportsDataSource {
     Integer count;
     Query query;
     ValueEventListener dataListener;
-    public void ReadFBAirportData(final Integer airportCount)
+
+    public void ReadFBCountryData(final Integer countryCount)
     {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         start = 0;
-        count = 1000;
+        count = 100;
 
-        query = mDatabase.child("airports").orderByChild("index").startAt(start).endAt(start + (count-1));
+        query = mDatabase.child("countries").orderByChild("index").startAt(start).endAt(start + (count-1));
 
         dataListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
                     //GenericTypeIndicator<List<Object>> airportsType = new GenericTypeIndicator<List<Object>>(){};
-                    for (DataSnapshot airportSnapshow: dataSnapshot.getChildren()){
-                        FBAirport airport = airportSnapshow.getValue(FBAirport.class);
-                        ContentValues v = airport.getAirportContentValues();
-                        database.insert(FBDBHelper.AIRPORT_TABLE_NAME, null, v);
-
-                        if (airport.runways != null) {
-                            for (FBRunway runway : airport.runways) {
-                                ContentValues r = runway.getRunwayValues();
-                                database.insert(FBDBHelper.RUNWAY_TABLE_NAME, null, r);
-                            }
-                        }
-
-                        if (airport.frequencies != null) {
-                            for (FBFrequency frequency : airport.frequencies) {
-                                ContentValues f = frequency.getFrequencyValues();
-                                database.insert(FBDBHelper.FREQUENCIES_TABLE_NAME, null, f);
-                            }
-                        }
+                    for (DataSnapshot countrySnapshow: dataSnapshot.getChildren()){
+                        FBCountry country = countrySnapshow.getValue(FBCountry.class);
+                        ContentValues v = country.getCountryContentValues();
+                        database.insert(FBDBHelper.COUNTRY_TABLE_NAME, null, v);
                     }
 
                     start = start + count;
-                    Log.i(TAG, "Read 1000 airports, get the next from: " + start.toString());
+                    Log.i(TAG, "Read 100 countries, get the next from: " + start.toString());
 
-                    query = mDatabase.child("airports").orderByChild("index").startAt(start).endAt(start + (count-1));
-                    if (start<airportCount) query.addListenerForSingleValueEvent(dataListener);
-                        else {
-                        Log.i(TAG, "Finished reading airports");
+                    query = mDatabase.child("counrties").orderByChild("index").startAt(start).endAt(start + (count-1));
+                    if (start<countryCount) query.addListenerForSingleValueEvent(dataListener);
+                    else {
+                        Log.i(TAG, "Finished reading countries");
                         database.setTransactionSuccessful();
                         database.endTransaction();
                     }
@@ -102,9 +87,4 @@ public class FBAirportsDataSource {
         database.beginTransaction();
         query.addListenerForSingleValueEvent(dataListener);
     }
-
-
-
-
 }
-
