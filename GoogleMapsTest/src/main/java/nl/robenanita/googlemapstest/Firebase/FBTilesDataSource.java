@@ -41,8 +41,10 @@ public class FBTilesDataSource {
     Query query;
     ValueEventListener dataListener;
 
-    public void ReadFBTilesData(final Integer tilesCount)
+    public void ReadFBTilesData(final Integer tilesCount, Boolean clearTable)
     {
+        if (clearTable) deleteAllRowsFromTables();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         start = 0;
@@ -86,5 +88,10 @@ public class FBTilesDataSource {
 
         database.beginTransaction();
         query.addListenerForSingleValueEvent(dataListener);
+    }
+
+    private void deleteAllRowsFromTables()
+    {
+        database.execSQL("DELETE FROM " + FBDBHelper.MBTILES_TABLE_NAME);
     }
 }

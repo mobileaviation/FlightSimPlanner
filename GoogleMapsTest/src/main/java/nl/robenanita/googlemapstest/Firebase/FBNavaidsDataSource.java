@@ -41,8 +41,10 @@ public class FBNavaidsDataSource {
     Query query;
     ValueEventListener dataListener;
 
-    public void ReadFBNavaidData(final Integer navaidsCount)
+    public void ReadFBNavaidData(final Integer navaidsCount, Boolean clearTable)
     {
+        if (clearTable) deleteAllRowsFromTables();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         start = 0;
@@ -86,5 +88,10 @@ public class FBNavaidsDataSource {
 
         database.beginTransaction();
         query.addListenerForSingleValueEvent(dataListener);
+    }
+
+    private void deleteAllRowsFromTables()
+    {
+        database.execSQL("DELETE FROM " + FBDBHelper.NAVAIDS_TABLE_NAME);
     }
 }

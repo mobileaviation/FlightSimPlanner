@@ -41,8 +41,10 @@ public class FBFixesDataSource {
     Query query;
     ValueEventListener dataListener;
 
-    public void ReadFBFixesData(final Integer fixesCount)
+    public void ReadFBFixesData(final Integer fixesCount, Boolean clearTable)
     {
+        if (clearTable) deleteAllRowsFromTables();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         start = 0;
@@ -86,5 +88,10 @@ public class FBFixesDataSource {
 
         database.beginTransaction();
         query.addListenerForSingleValueEvent(dataListener);
+    }
+
+    private void deleteAllRowsFromTables()
+    {
+        database.execSQL("DELETE FROM " + FBDBHelper.FIXES_TABLE_NAME);
     }
 }

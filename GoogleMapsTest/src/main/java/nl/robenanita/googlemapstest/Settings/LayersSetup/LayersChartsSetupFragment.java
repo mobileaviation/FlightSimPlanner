@@ -197,7 +197,7 @@ public class LayersChartsSetupFragment extends Fragment {
 
                         MBTile checkTile = mbTilesLocalDataSource.getTileByName(tile);
                         if (checkTile != null) tile.visible_order = checkTile.visible_order;
-                        tile.InsertUpdateDB();
+                        tile.InsertUpdateDB(mbTilesLocalDataSource);
 
                     }
 

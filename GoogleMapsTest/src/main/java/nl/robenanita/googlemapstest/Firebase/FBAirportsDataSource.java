@@ -28,6 +28,8 @@ public class FBAirportsDataSource {
     private SQLiteDatabase database;
     private DatabaseReference mDatabase;
 
+    public FBTableDownloadProgress progress;
+
     public void Open()
     {
         database = fbdbHelper.Open();
@@ -42,8 +44,11 @@ public class FBAirportsDataSource {
     Integer count;
     Query query;
     ValueEventListener dataListener;
-    public void ReadFBAirportData(final Integer airportCount)
+    public void ReadFBAirportData(final Integer airportCount, Boolean clearTable)
     {
+        if (clearTable) deleteAllRowsFromTables();
+
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         start = 0;
@@ -78,13 +83,15 @@ public class FBAirportsDataSource {
 
                     start = start + count;
                     Log.i(TAG, "Read 1000 airports, get the next from: " + start.toString());
+                    if (progress != null) progress.onProgress(airportCount, start, FBTableType.airports);
 
                     query = mDatabase.child("airports").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<airportCount) query.addListenerForSingleValueEvent(dataListener);
                         else {
-                        Log.i(TAG, "Finished reading airports");
+                        if (progress != null) progress.onProgress(airportCount, airportCount, FBTableType.airports);
                         database.setTransactionSuccessful();
                         database.endTransaction();
+                        Log.i(TAG, "Finished reading airports");
                     }
                 }
                 catch (Exception ee)
@@ -104,6 +111,12 @@ public class FBAirportsDataSource {
     }
 
 
+    private void deleteAllRowsFromTables()
+    {
+        database.execSQL("DELETE FROM " + FBDBHelper.AIRPORT_TABLE_NAME);
+        database.execSQL("DELETE FROM " + FBDBHelper.RUNWAY_TABLE_NAME);
+        database.execSQL("DELETE FROM " + FBDBHelper.FREQUENCIES_TABLE_NAME);
+    }
 
 
 }

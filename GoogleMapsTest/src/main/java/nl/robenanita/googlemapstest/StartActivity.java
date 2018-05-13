@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.text.method.LinkMovementMethod;
@@ -39,6 +40,7 @@ import com.kishan.askpermission.PermissionInterface;
 import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
+import nl.robenanita.googlemapstest.Firebase.DownloadDatabaseDialog;
 import nl.robenanita.googlemapstest.Firebase.FBAirportsDataSource;
 import nl.robenanita.googlemapstest.Firebase.FBCountriesDataSource;
 import nl.robenanita.googlemapstest.Firebase.FBDBHelper;
@@ -74,6 +76,7 @@ public class StartActivity extends ActionBarActivity {
     CountDownTimer adLoadTimer;
 
     IabHelper mHelper;
+    FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -578,7 +581,9 @@ public class StartActivity extends ActionBarActivity {
 
         if (id == R.id.action_firebase_test)
         {
-            TestFirebaseDatabase();
+            //TestFirebaseDatabase();
+            DownloadDatabaseDialog downloadDatabaseDialog = new DownloadDatabaseDialog();
+            downloadDatabaseDialog.show(fm, "DownloadDatabase");
             return true;
         }
 
@@ -669,11 +674,12 @@ public class StartActivity extends ActionBarActivity {
             public void OnStatistics(FBStatistics statistics) {
                 Log.i(TAG, "Recieved statistics from Firebase");
 
-                fbAirportsDataSource.ReadFBAirportData(statistics.AirportsCount);
-                fbNavaidsDataSource.ReadFBNavaidData(statistics.NavaidsCount);
-                fbCountriesDataSource.ReadFBCountryData(statistics.CountriesCount);
-                fbTilesDataSource.ReadFBTilesData(statistics.MBTilesCount);
-                fbFixesDataSource.ReadFBFixesData(statistics.FixesCount);
+                Boolean clearTable = true;
+                fbAirportsDataSource.ReadFBAirportData(statistics.AirportsCount, clearTable);
+                fbNavaidsDataSource.ReadFBNavaidData(statistics.NavaidsCount, clearTable);
+                fbCountriesDataSource.ReadFBCountryData(statistics.CountriesCount, clearTable);
+                fbTilesDataSource.ReadFBTilesData(statistics.MBTilesCount, clearTable);
+                fbFixesDataSource.ReadFBFixesData(statistics.FixesCount, clearTable);
 
                 //fbAirportsDataSource.Close();
             }

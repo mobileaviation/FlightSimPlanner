@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String MBTILES_TABLE_NAME = "tbl_MbTiles";
 
     // PRAGMA user_version (= integer)
-    private static final int DATABASE_VERSION = 31;
+    private static final int DATABASE_VERSION = 33;
     private static final String TAG = "GooglemapsTest";
 
     public Boolean updated = false;
@@ -155,7 +155,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try
         {
-
+            deleteDatabase(oldVersion);
             Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
             Toast.makeText(myContext, "Updating database from installer!", Toast.LENGTH_LONG).show();
             DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);

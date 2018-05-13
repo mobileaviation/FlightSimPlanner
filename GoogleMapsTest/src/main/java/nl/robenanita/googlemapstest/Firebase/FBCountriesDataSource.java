@@ -41,8 +41,10 @@ public class FBCountriesDataSource {
     Query query;
     ValueEventListener dataListener;
 
-    public void ReadFBCountryData(final Integer countryCount)
+    public void ReadFBCountryData(final Integer countryCount, Boolean clearTable)
     {
+        if (clearTable) deleteAllRowsFromTables();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         start = 0;
@@ -86,5 +88,10 @@ public class FBCountriesDataSource {
 
         database.beginTransaction();
         query.addListenerForSingleValueEvent(dataListener);
+    }
+
+    private void deleteAllRowsFromTables()
+    {
+        database.execSQL("DELETE FROM " + FBDBHelper.COUNTRY_TABLE_NAME);
     }
 }

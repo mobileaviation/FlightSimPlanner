@@ -174,6 +174,11 @@ public class MBTile {
         mbTilesLocalDataSource.close();
     }
 
+    public void InsertUpdateDB(MBTilesLocalDataSource mbTilesLocalDataSource)
+    {
+        mbTilesLocalDataSource.insertUpdateTile(this);
+    }
+
     public void CheckVisibleStatus()
     {
         MBTilesLocalDataSource mbTilesLocalDataSource = new MBTilesLocalDataSource(context);
