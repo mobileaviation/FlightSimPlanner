@@ -26,6 +26,8 @@ public class FBTilesDataSource {
     private SQLiteDatabase database;
     private DatabaseReference mDatabase;
 
+    public FBTableDownloadProgress progress;
+
     public void Open()
     {
         database = fbdbHelper.Open();
@@ -65,10 +67,12 @@ public class FBTilesDataSource {
 
                     start = start + count;
                     Log.i(TAG, "Read 1000 tiles, get the next from: " + start.toString());
+                    if (progress != null) progress.onProgress(tilesCount, start, FBTableType.mbtiles);
 
                     query = mDatabase.child("tiles").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<tilesCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
+                        if (progress != null) progress.onProgress(tilesCount, tilesCount, FBTableType.mbtiles);
                         Log.i(TAG, "Finished reading tiles");
                         database.setTransactionSuccessful();
                         database.endTransaction();

@@ -26,6 +26,8 @@ public class FBNavaidsDataSource {
     private SQLiteDatabase database;
     private DatabaseReference mDatabase;
 
+    public FBTableDownloadProgress progress;
+
     public void Open()
     {
         database = fbdbHelper.Open();
@@ -65,10 +67,12 @@ public class FBNavaidsDataSource {
 
                     start = start + count;
                     Log.i(TAG, "Read 1000 navaids, get the next from: " + start.toString());
+                    if (progress != null) progress.onProgress(navaidsCount, start, FBTableType.navaids);
 
                     query = mDatabase.child("navaids").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<navaidsCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
+                        if (progress != null) progress.onProgress(navaidsCount, navaidsCount, FBTableType.navaids);
                         Log.i(TAG, "Finished reading navaids");
                         database.setTransactionSuccessful();
                         database.endTransaction();

@@ -44,9 +44,9 @@
 
                 <ProgressBar
                     android:id="@+id/airportsProgress"
-                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="3"
                     android:max="100"
@@ -71,9 +71,9 @@
 
                 <ProgressBar
                     android:id="@+id/navaidsProgress"
-                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="3"
                     android:max="100"
@@ -98,9 +98,9 @@
 
                 <ProgressBar
                     android:id="@+id/fixesProgress"
-                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="3"
                     android:max="100"
@@ -125,9 +125,9 @@
 
                 <ProgressBar
                     android:id="@+id/countriesProgress"
-                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="3"
                     android:max="100"
@@ -152,9 +152,9 @@
 
                 <ProgressBar
                     android:id="@+id/regionsProgress"
-                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="3"
                     android:max="100"
@@ -179,9 +179,9 @@
 
                 <ProgressBar
                     android:id="@+id/firsProgress"
-                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="3"
                     android:max="100"
@@ -206,9 +206,9 @@
 
                 <ProgressBar
                     android:id="@+id/chartsProgress"
-                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="3"
                     android:max="100"
@@ -233,9 +233,9 @@
 
                 <ProgressBar
                     android:id="@+id/airspacesProgress"
-                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="3"
                     android:max="100"

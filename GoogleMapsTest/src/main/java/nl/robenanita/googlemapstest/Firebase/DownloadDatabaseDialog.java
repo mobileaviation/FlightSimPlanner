@@ -54,7 +54,13 @@ public class DownloadDatabaseDialog extends DialogFragment {
     }
 
     FBTableDownloadProgress progress;
+
     FBAirportsDataSource fbAirportsDataSource;
+    FBNavaidsDataSource fbNavaidsDataSource;
+    FBFixesDataSource fbFixesDataSource;
+    FBTilesDataSource fbTilesDataSource;
+    FBCountriesDataSource fbCountriesDataSource;
+
     private void startDownload()
     {
         Log.i(TAG, "Start download from Firebase");
@@ -67,6 +73,14 @@ public class DownloadDatabaseDialog extends DialogFragment {
 
         fbAirportsDataSource = new FBAirportsDataSource(getContext());
         fbAirportsDataSource.Open();
+        fbNavaidsDataSource = new FBNavaidsDataSource(getContext());
+        fbNavaidsDataSource.Open();
+        fbFixesDataSource = new FBFixesDataSource(getContext());
+        fbFixesDataSource.Open();
+        fbTilesDataSource = new FBTilesDataSource(getContext());
+        fbTilesDataSource.Open();
+        fbCountriesDataSource = new FBCountriesDataSource(getContext());
+        fbCountriesDataSource.Open();
 
         // First get Statistics
         FBStatistics statistics = new FBStatistics();
@@ -78,6 +92,14 @@ public class DownloadDatabaseDialog extends DialogFragment {
                 Boolean clearTable = true;
                 fbAirportsDataSource.progress = progress;
                 fbAirportsDataSource.ReadFBAirportData(statistics.AirportsCount, clearTable);
+                fbNavaidsDataSource.progress = progress;
+                fbNavaidsDataSource.ReadFBNavaidData(statistics.NavaidsCount, clearTable);
+                fbCountriesDataSource.progress = progress;
+                fbCountriesDataSource.ReadFBCountryData(statistics.CountriesCount, clearTable);
+                fbTilesDataSource.progress = progress;
+                fbTilesDataSource.ReadFBTilesData(statistics.MBTilesCount, clearTable);
+                fbFixesDataSource.progress = progress;
+                fbFixesDataSource.ReadFBFixesData(statistics.FixesCount, clearTable);
             }
         };
         statistics.FillStatistics();
@@ -85,9 +107,19 @@ public class DownloadDatabaseDialog extends DialogFragment {
 
     private void onProgressBarUpdate(Integer count, Integer downloaded, FBTableType type)
     {
-        ProgressBar progressBar = (ProgressBar)getView().findViewById(R.id.airportsProgress);
-        progressBar.setMax(count);
-        progressBar.setProgress(downloaded);
+        ProgressBar progressBar = null;
+        if (type==FBTableType.airports) progressBar = (ProgressBar)getView().findViewById(R.id.airportsProgress);
+        if (type==FBTableType.navaids) progressBar = (ProgressBar)getView().findViewById(R.id.navaidsProgress);
+        if (type==FBTableType.countries) progressBar = (ProgressBar)getView().findViewById(R.id.countriesProgress);
+        if (type==FBTableType.regions) progressBar = (ProgressBar)getView().findViewById(R.id.regionsProgress);
+        if (type==FBTableType.mbtiles) progressBar = (ProgressBar)getView().findViewById(R.id.chartsProgress);
+        if (type==FBTableType.firs) progressBar = (ProgressBar)getView().findViewById(R.id.firsProgress);
+        if (type==FBTableType.fixes) progressBar = (ProgressBar)getView().findViewById(R.id.fixesProgress);
+        if (type==FBTableType.airspaces) progressBar = (ProgressBar)getView().findViewById(R.id.airspacesProgress);
+        if (progressBar != null) {
+            progressBar.setMax(count);
+            progressBar.setProgress(downloaded);
+        }
     }
 
 }

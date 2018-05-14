@@ -7,5 +7,6 @@ public enum FBTableType {
     countries,
     regions,
     mbtiles,
-    firs
+    firs,
+    airspaces
 }

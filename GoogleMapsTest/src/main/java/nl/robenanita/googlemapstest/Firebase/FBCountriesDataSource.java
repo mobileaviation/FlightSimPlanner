@@ -26,6 +26,8 @@ public class FBCountriesDataSource {
     private SQLiteDatabase database;
     private DatabaseReference mDatabase;
 
+    public FBTableDownloadProgress progress;
+
     public void Open()
     {
         database = fbdbHelper.Open();
@@ -65,10 +67,12 @@ public class FBCountriesDataSource {
 
                     start = start + count;
                     Log.i(TAG, "Read 100 countries, get the next from: " + start.toString());
+                    if (progress != null) progress.onProgress(countryCount, start, FBTableType.countries);
 
                     query = mDatabase.child("counrties").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<countryCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
+                        if (progress != null) progress.onProgress(countryCount, countryCount, FBTableType.countries);
                         Log.i(TAG, "Finished reading countries");
                         database.setTransactionSuccessful();
                         database.endTransaction();
