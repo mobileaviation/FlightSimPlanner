@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest.Wms;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -38,7 +39,9 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     }
 
     public MapBoxOfflineTileProvider(String pathToFile) {
+
         int flags = SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS;
+
         this.mDatabase = SQLiteDatabase.openDatabase(pathToFile, null, flags);
         this.calculateZoomConstraints();
         this.calculateBounds();

@@ -29,6 +29,7 @@ public class FBStatistics {
     public Integer NavaidsCount;
     public Integer PropertiesCount;
     public Integer RegionsCount;
+    public Integer FirsCount;
 
     public void FillStatistics()
     {

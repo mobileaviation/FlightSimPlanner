@@ -132,7 +132,6 @@
               version integer,
               startValidity integer,
               endValidity integer);</string>
-
     <string name="createFixesLocationIndex">create index fixes_location_index
             on tbl_Fixes(
             latitude_deg,
@@ -140,5 +139,15 @@
     <string name="createFixesNameIndex">create index navaids_name_index
             on tbl_Fixes(
             name);</string>
-
+    <string name="createRegionsTable">create table tbl_Region (_id integer primary key autoincrement,
+            id integer,
+            code text,
+            local_code text, name text,
+            continent text, iso_country text,
+            wikipedia_link text,
+            keywords text);</string>
+    <string name="createPropertiesTable">create table tbl_Properties (_id integer primary key autoincrement,
+            name text,
+            value1 text,
+            value2 text);</string>
 </resources>

@@ -3,19 +3,22 @@ package nl.robenanita.googlemapstest.Firebase;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import nl.robenanita.googlemapstest.R;
 
 public class FBDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "fbairnav.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String TAG = "GooglemapsTest";
 
     public static final String AIRPORT_TABLE_NAME = "tbl_Airports";
     public static final String COUNTRY_TABLE_NAME = "tbl_Country";
     public static final String CONTINENT_TABLE_NAME = "tbl_Continent";
+    public static final String REGIONS_TABLE_NAME = "tbl_Region";
     public static final String RUNWAY_TABLE_NAME = "tbl_Runways";
     public static final String FIXES_TABLE_NAME = "tbl_Fixes";
+    public static final String FIRS_TABLE_NAME = "tbl_Firs";
     public static final String NAVAIDS_TABLE_NAME = "tbl_Navaids";
     public static final String PROPERTIES_TABLE_NAME = "tbl_Properties";
     public static final String FREQUENCIES_TABLE_NAME = "tbl_AirportFrequencies";
@@ -92,6 +95,12 @@ public class FBDBHelper extends SQLiteOpenHelper {
     public static final String C_startValidity = "startValidity";
     public static final String C_endValidity = "endValidity";
     public static final String C_region = "region";
+
+    public static final String C_position = "position";
+    public static final String C_polygon = "polygon";
+
+    public static final String C_value1 = "value1";
+    public static final String C_value2 = "value2";
 
     private Context context;
 
@@ -174,7 +183,19 @@ public class FBDBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        Log.i(TAG, "Updating database from version: " + oldVersion + " to version: " + newVersion);
+        if (oldVersion<2)
+        {
+            String q = context.getString(R.string.createRegionsTable);
+            sqLiteDatabase.execSQL(q);
 
+            q = context.getString(R.string.createPropertiesTable);
+            sqLiteDatabase.execSQL(q);
+
+            q = "INSERT INTO " + PROPERTIES_TABLE_NAME + " (" +
+                    C_name + ", " + C_value1 + ", " + C_value2 + ") VALUES(";
+            sqLiteDatabase.execSQL(q + "'DB_VERSION', '20180515', '2018-05-15');");
+        }
     }
 }

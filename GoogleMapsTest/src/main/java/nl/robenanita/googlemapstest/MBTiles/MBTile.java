@@ -3,6 +3,7 @@ package nl.robenanita.googlemapstest.MBTiles;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -13,13 +14,14 @@ import java.util.Date;
 
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.DBHelper;
+import nl.robenanita.googlemapstest.database.MBTilesDBHelper;
 import nl.robenanita.googlemapstest.database.MBTilesLocalDataSource;
 
 public class MBTile {
     public MBTile(Context context)
     {
         this.context = context;
-        localChartsDir = this.context.getApplicationInfo().dataDir + "/charts/";
+        localChartsDir = this.context.getApplicationInfo().dataDir + "/databases/";
         visible_order = -1;
         CheckfileRunning = false;
     }
@@ -124,10 +126,12 @@ public class MBTile {
 
                     if (downl_file.exists()) {
 
+                        MBTilesDBHelper helper = new MBTilesDBHelper(context, local_file.getName());
                         if (local_file.exists()) local_file.delete();
-                        if (!(new File(localChartsDir)).exists())
-                            (new File(localChartsDir)).mkdir();
-                        DBFilesHelper.Copy1(context, downl_file.toString(), local_file.toString());
+                        helper.getWritableDatabase();
+//                        if (!(new File(localChartsDir)).exists())
+//                            (new File(localChartsDir)).mkdir();
+                        DBFilesHelper.Copy(context, downl_file.toString(), local_file.toString());
                         if (local_file.exists()) downl_file.delete();
 
                         Log.i(TAG, "Copied downloaded file to: " + local_file.toString());

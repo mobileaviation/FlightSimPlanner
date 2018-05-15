@@ -60,6 +60,8 @@ public class DownloadDatabaseDialog extends DialogFragment {
     FBFixesDataSource fbFixesDataSource;
     FBTilesDataSource fbTilesDataSource;
     FBCountriesDataSource fbCountriesDataSource;
+    FBFirDataSource fbFirDataSource;
+    FBRegionsDataSource fbRegionsDataSource;
 
     private void startDownload()
     {
@@ -81,6 +83,10 @@ public class DownloadDatabaseDialog extends DialogFragment {
         fbTilesDataSource.Open();
         fbCountriesDataSource = new FBCountriesDataSource(getContext());
         fbCountriesDataSource.Open();
+        fbFirDataSource = new FBFirDataSource(getContext());
+        fbFirDataSource.Open();
+        fbRegionsDataSource = new FBRegionsDataSource(getContext());
+        fbRegionsDataSource.Open();
 
         // First get Statistics
         FBStatistics statistics = new FBStatistics();
@@ -100,6 +106,10 @@ public class DownloadDatabaseDialog extends DialogFragment {
                 fbTilesDataSource.ReadFBTilesData(statistics.MBTilesCount, clearTable);
                 fbFixesDataSource.progress = progress;
                 fbFixesDataSource.ReadFBFixesData(statistics.FixesCount, clearTable);
+                fbRegionsDataSource.progress = progress;
+                fbRegionsDataSource.ReadFBRegionsData(statistics.RegionsCount, clearTable);
+                fbFirDataSource.progress = progress;
+                fbFirDataSource.ReadFBFirsData(statistics.FirsCount, clearTable);
             }
         };
         statistics.FillStatistics();

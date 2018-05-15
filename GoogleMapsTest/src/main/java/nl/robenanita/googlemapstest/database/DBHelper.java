@@ -21,7 +21,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private SQLiteDatabase myDataBase;
     private final Context myContext;
 
-    public static final String DATABASE_NAME = "airnav.db";
+    //public static final String DATABASE_NAME = "airnav.db";
+    public static final String DATABASE_NAME = "fbairnav.db";
 
     public static final String AIRPORT_TABLE_NAME = "tbl_Airports";
     public static final String COUNTRY_TABLE_NAME = "tbl_Country";
@@ -34,7 +35,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String MBTILES_TABLE_NAME = "tbl_MbTiles";
 
     // PRAGMA user_version (= integer)
-    private static final int DATABASE_VERSION = 33;
+    //private static final int DATABASE_VERSION = 33;
+    private static final int DATABASE_VERSION = 2;
     private static final String TAG = "GooglemapsTest";
 
     public Boolean updated = false;
@@ -140,30 +142,30 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        try
-        {
-            Log.i(TAG, "Creating Database");
-            //createDataBase();
-        }
-        catch (Exception ee)
-        {
-            Log.e(TAG, "Error Creating DB " + ee.getMessage());
-        }
+//        try
+//        {
+//            Log.i(TAG, "Creating Database");
+//            //createDataBase();
+//        }
+//        catch (Exception ee)
+//        {
+//            Log.e(TAG, "Error Creating DB " + ee.getMessage());
+//        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try
-        {
-            deleteDatabase(oldVersion);
-            Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
-            Toast.makeText(myContext, "Updating database from installer!", Toast.LENGTH_LONG).show();
-            DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
-        }
-        catch(Exception ee)
-        {
-            Log.e(TAG, "Error Updating DB " + ee.getMessage());
-        }
+//        try
+//        {
+//            deleteDatabase(oldVersion);
+//            Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
+//            Toast.makeText(myContext, "Updating database from installer!", Toast.LENGTH_LONG).show();
+//            DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
+//        }
+//        catch(Exception ee)
+//        {
+//            Log.e(TAG, "Error Updating DB " + ee.getMessage());
+//        }
     }
 
     private SQLiteDatabase checkDB;
@@ -194,19 +196,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public SQLiteDatabase openDataBase(){
         //Open the database
-        if (!checkDataBase()) {
-            this.getWritableDatabase();
-            try {
-                DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
-            }
-            catch (Exception ee)
-            {
-                Log.e(TAG, "Error copy database: " + ee.getMessage());
-                return null;
-            }
-        }
+//        if (!checkDataBase()) {
+//            this.getWritableDatabase();
+//            try {
+//                DBFilesHelper.CopyFromAssetDatabaseTo(myContext, DATABASE_NAME, DbPath);
+//            }
+//            catch (Exception ee)
+//            {
+//                Log.e(TAG, "Error copy database: " + ee.getMessage());
+//                return null;
+//            }
+//        }
 
-        String myPath = DbPath + DATABASE_NAME;
+//        String myPath = DbPath + DATABASE_NAME;
         myDataBase = this.getWritableDatabase();
         //myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
         return myDataBase;
@@ -221,8 +223,8 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.i(TAG, "Try to remove the old database");
             try
             {
-                myContext.deleteDatabase("airnav.db");
-                Log.i(TAG, "tried to delete database: airnav.db" );
+                myContext.deleteDatabase("fbairnav.db");
+                Log.i(TAG, "tried to delete database: fbairnav.db" );
             }
             catch (Exception ee)
             {

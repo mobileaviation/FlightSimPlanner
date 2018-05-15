@@ -581,7 +581,6 @@ public class StartActivity extends ActionBarActivity {
 
         if (id == R.id.action_firebase_test)
         {
-            //TestFirebaseDatabase();
             DownloadDatabaseDialog downloadDatabaseDialog = new DownloadDatabaseDialog();
             downloadDatabaseDialog.show(fm, "DownloadDatabase");
             return true;
@@ -648,53 +647,9 @@ public class StartActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    FBAirportsDataSource fbAirportsDataSource;
-    FBNavaidsDataSource fbNavaidsDataSource;
-    FBFixesDataSource fbFixesDataSource;
-    FBTilesDataSource fbTilesDataSource;
-    FBCountriesDataSource fbCountriesDataSource;
-    private void TestFirebaseDatabase() {
-        fbAirportsDataSource = new FBAirportsDataSource(this);
-        fbAirportsDataSource.Open();
-        fbNavaidsDataSource = new FBNavaidsDataSource(this);
-        fbNavaidsDataSource.Open();
-        fbFixesDataSource = new FBFixesDataSource(this);
-        fbFixesDataSource.Open();
-        fbTilesDataSource = new FBTilesDataSource(this);
-        fbTilesDataSource.Open();
-        fbCountriesDataSource = new FBCountriesDataSource(this);
-        fbCountriesDataSource.Open();
-
-
-        // load data
-        // First get Statistics
-        FBStatistics statistics = new FBStatistics();
-        statistics.OnStatisticsEvent = new FBStatistics.StatisticsEventListerner() {
-            @Override
-            public void OnStatistics(FBStatistics statistics) {
-                Log.i(TAG, "Recieved statistics from Firebase");
-
-                Boolean clearTable = true;
-                fbAirportsDataSource.ReadFBAirportData(statistics.AirportsCount, clearTable);
-                fbNavaidsDataSource.ReadFBNavaidData(statistics.NavaidsCount, clearTable);
-                fbCountriesDataSource.ReadFBCountryData(statistics.CountriesCount, clearTable);
-                fbTilesDataSource.ReadFBTilesData(statistics.MBTilesCount, clearTable);
-                fbFixesDataSource.ReadFBFixesData(statistics.FixesCount, clearTable);
-
-                //fbAirportsDataSource.Close();
-            }
-        };
-
-        statistics.FillStatistics();
-    }
-
     private void showSettingsActivity() {
         Intent startSettingsIntent = new Intent(StartActivity.this, SettingsActivity.class);
         StartActivity.this.startActivityForResult(startSettingsIntent, 400);
     }
 
-    private void DownloadDatabases()
-    {
-
-    }
 }
