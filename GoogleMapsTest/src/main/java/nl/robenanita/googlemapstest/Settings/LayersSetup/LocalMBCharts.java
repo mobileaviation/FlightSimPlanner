@@ -66,6 +66,8 @@ public class LocalMBCharts {
                     MBTile tile = new MBTile(context);
                     tile.name = f.getName();
                     tile.mbtileslink = f.getAbsolutePath();
+                    tile.local_file = f.getAbsolutePath();
+                    tile.available = f.exists();
                     tile.type = MBTileType.local;
                     tile.version = 1804;
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
