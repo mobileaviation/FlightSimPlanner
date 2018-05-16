@@ -37,6 +37,7 @@ import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
 import com.kishan.askpermission.PermissionInterface;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
@@ -83,15 +84,34 @@ public class StartActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        checkDatabaseVersion();
+        //checkDatabaseVersion();
+        if (checkDatabase())
+        {
+            startApp();
+        }
+        else
+        {
+            DownloadDatabaseDialog downloadDatabaseDialog = new DownloadDatabaseDialog();
+            downloadDatabaseDialog.show(fm, "DownloadDatabase");
+        }
 
+    }
+
+    private boolean checkDatabase() {
+        String databasePath = this.getDatabasePath("fbairnav.db").getPath();
+        Log.i(TAG, "Database Path: " + databasePath);
+        return new File(databasePath).exists();
+    }
+
+    private void startApp()
+    {
         boolean adds = loadAds();
 
         final TextView countDownTxt  = (TextView) findViewById(R.id.countDownTxt);
 //        if (adds)
 //            countDownTxt.setText("5 Sec..");
 //        else
-            countDownTxt.setVisibility(View.INVISIBLE);
+        countDownTxt.setVisibility(View.INVISIBLE);
 
 
         startNavigationBtn = (Button) findViewById(R.id.startNavigationBtn);
@@ -129,7 +149,7 @@ public class StartActivity extends ActionBarActivity {
             @Override
             public void Checked(Boolean result) {
                 if (!result) Toast.makeText(StartActivity.this, "Internet connection is not present. This app will work without, but for charts loading its necessary!",
-                    Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();
             }
         });
         networkCheck.execute();

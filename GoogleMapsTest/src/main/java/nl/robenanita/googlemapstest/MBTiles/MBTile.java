@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Environment;
 import android.util.Log;
 
@@ -34,7 +35,7 @@ public class MBTile {
         this.context = context;
         mbTilesLocalDataSource = new MBTilesLocalDataSource(context);
         mbTilesLocalDataSource.open();
-        localChartsDir = this.context.getApplicationInfo().dataDir + "/databases/";
+        localChartsDir = this.context.getApplicationInfo().dataDir + "/files/";
         visible_order = -1;
         CheckfileRunning = false;
         available = false;
@@ -98,12 +99,19 @@ public class MBTile {
 
     public void StartDownload()
     {
+//        File D = new File(localChartsDir);
+//        if (!D.exists()) D.mkdir();
+
         dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Request nvRequest = new DownloadManager.Request(Uri.parse(mbtileslink));
         nvRequest.setTitle("Downloading " + name + " from " + type.toString());
         nvRequest.setDescription("Downloading " + name + " from " + type.toString());
         nvRequest.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS,
-                new File(mbtileslink).getName());
+                "charts/" + (new File(mbtileslink).getName()));
+//        String df = localChartsDir + new File(mbtileslink).getName();
+//        nvRequest.setDestinationUri(Uri.parse("file:/" + df));
+        nvRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        nvRequest.setMimeType("application/octet-stream");
         dbDownloadId = dm.enqueue(nvRequest);
     }
 

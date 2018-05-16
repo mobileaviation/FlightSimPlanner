@@ -115,8 +115,19 @@ public class ChartsSetupAdapter extends BaseAdapter {
                                         if (chart.DeleteLocalFile())
                                         {
                                             Log.i(TAG, "File deleted: " + chart.getLocalFilename());
-                                            checkFiles checkFiles = new checkFiles(activateChartCheckBox, deleteDownloadChartButton, context);
-                                            checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
+
+                                            boolean localFilePresent = chart.CheckFile();
+                                            activateChartCheckBox.setEnabled(localFilePresent);
+                                            activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context,
+                                                    ((localFilePresent) ? R.color.light_green : R.color.light_red)));
+
+                                            deleteDownloadChartButton.setEnabled(true);
+                                            deleteDownloadChartButton.setBackground((Drawable)context.getResources().
+                                                    getDrawable(localFilePresent ? R.drawable.delete_download_btn : R.drawable.download_btn));
+
+                                            Log.i(TAG, "MBTiles file for: " + chart.name + " is " + ((localFilePresent) ? "present" : "not present"));
+                                            //checkFiles checkFiles = new checkFiles(activateChartCheckBox, deleteDownloadChartButton, context);
+                                            //checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
                                         }
                                         else
                                         {
@@ -198,49 +209,49 @@ public class ChartsSetupAdapter extends BaseAdapter {
         return view;
     }
 
-    public class checkFiles extends AsyncTask<MBTile, String, Boolean>
-    {
-        public checkFiles(CheckBox activateChartCheckBox, ImageButton deleteDownloadBtn, Context context)
-        {
-            this.activateChartCheckBox = activateChartCheckBox;
-            this.deleteDownloadBtn = deleteDownloadBtn;
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            activateChartCheckBox.setEnabled(false);
-            activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context, R.color.light_orange));
-            deleteDownloadBtn.setEnabled(false);
-        }
-
-        @Override
-        protected Boolean doInBackground(MBTile... mbTiles) {
-            tile = mbTiles[0];
-            return tile.CheckFile();
-        }
-
-        private CheckBox activateChartCheckBox;
-        private ImageButton deleteDownloadBtn;
-        private MBTile tile;
-        private Context context;
-
-        @Override
-        protected void onPostExecute(Boolean localFilePresent) {
-            super.onPostExecute(localFilePresent);
-
-            activateChartCheckBox.setEnabled(localFilePresent);
-            activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context,
-                    ((localFilePresent) ? R.color.light_green : R.color.light_red)));
-
-            deleteDownloadBtn.setEnabled(true);
-            deleteDownloadBtn.setBackground((Drawable)context.getResources().
-                    getDrawable(localFilePresent ? R.drawable.delete_download_btn : R.drawable.download_btn));
-
-            Log.i(TAG, "MBTiles file for: " + tile.name + " is " + ((localFilePresent) ? "present" : "not present"));
-
-        }
-    }
+//    public class checkFiles extends AsyncTask<MBTile, String, Boolean>
+//    {
+//        public checkFiles(CheckBox activateChartCheckBox, ImageButton deleteDownloadBtn, Context context)
+//        {
+//            this.activateChartCheckBox = activateChartCheckBox;
+//            this.deleteDownloadBtn = deleteDownloadBtn;
+//            this.context = context;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            activateChartCheckBox.setEnabled(false);
+//            activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context, R.color.light_orange));
+//            deleteDownloadBtn.setEnabled(false);
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(MBTile... mbTiles) {
+//            tile = mbTiles[0];
+//            return tile.CheckFile();
+//        }
+//
+//        private CheckBox activateChartCheckBox;
+//        private ImageButton deleteDownloadBtn;
+//        private MBTile tile;
+//        private Context context;
+//
+//        @Override
+//        protected void onPostExecute(Boolean localFilePresent) {
+//            super.onPostExecute(localFilePresent);
+//
+//            activateChartCheckBox.setEnabled(localFilePresent);
+//            activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context,
+//                    ((localFilePresent) ? R.color.light_green : R.color.light_red)));
+//
+//            deleteDownloadBtn.setEnabled(true);
+//            deleteDownloadBtn.setBackground((Drawable)context.getResources().
+//                    getDrawable(localFilePresent ? R.drawable.delete_download_btn : R.drawable.download_btn));
+//
+//            Log.i(TAG, "MBTiles file for: " + tile.name + " is " + ((localFilePresent) ? "present" : "not present"));
+//
+//        }
+//    }
 
 }
