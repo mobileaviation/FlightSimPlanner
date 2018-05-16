@@ -146,9 +146,17 @@ public class MBTilesLocalDataSource {
 
     public void updateAvailable(MBTile tile)
     {
-        boolean available = tile.CheckFile();
         ContentValues values = new ContentValues();
-        values.put(UserDBHelper.C_available, available);
+        values.put(UserDBHelper.C_available, tile.available);
+        database.update(UserDBHelper.MBTILES_LOCAL_TABLE_NAME,
+                values, "_id = ?",
+                new String[]{Integer.toString(tile._id)});
+    }
+
+    public void updateLocalFile(MBTile tile)
+    {
+        ContentValues values = new ContentValues();
+        values.put(UserDBHelper.C_local_file, tile.local_file);
         database.update(UserDBHelper.MBTILES_LOCAL_TABLE_NAME,
                 values, "_id = ?",
                 new String[]{Integer.toString(tile._id)});
@@ -183,6 +191,8 @@ public class MBTilesLocalDataSource {
         tile.setEndValidity(cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_end_validity)));
         tile.setType(cursor.getString(cursor.getColumnIndex(DBHelper.C_type)));
         tile.visible_order = cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_visible_order));
+        tile.local_file = cursor.getString(cursor.getColumnIndex(UserDBHelper.C_local_file));
+        tile.available = (cursor.getInt(cursor.getColumnIndex(UserDBHelper.C_available))>0);
 
         return tile;
     }
@@ -198,8 +208,9 @@ public class MBTilesLocalDataSource {
         values.put(UserDBHelper.C_type, tile.type.toString());
         values.put(UserDBHelper.C_start_validity, (long)tile.startValidity.getTime()/1000);
         values.put(UserDBHelper.C_end_validity, (long)tile.endValidity.getTime()/1000);
-        values.put(UserDBHelper.C_available, tile.CheckFile());
         values.put(UserDBHelper.C_visible_order, tile.visible_order);
+        values.put(UserDBHelper.C_local_file, tile.local_file);
+        values.put(UserDBHelper.C_available, tile.available);
 
         return values;
     }

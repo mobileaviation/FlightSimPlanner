@@ -180,6 +180,15 @@ public class FBDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(q);
         q = context.getString(R.string.createFixesNameIndex);
         sqLiteDatabase.execSQL(q);
+
+        q = context.getString(R.string.createRegionsTable);
+        sqLiteDatabase.execSQL(q);
+
+        q = context.getString(R.string.createPropertiesTable);
+        sqLiteDatabase.execSQL(q);
+        q = "INSERT INTO " + PROPERTIES_TABLE_NAME + " (" +
+                C_name + ", " + C_value1 + ", " + C_value2 + ") VALUES(";
+        sqLiteDatabase.execSQL(q + "'DB_VERSION', '20180515', '2018-05-15');");
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.io.OutputStream;
 public class UserDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "userairnav.db";
     // PRAGMA user_version (= integer)
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 16;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
     public static final String TRACKPOINTS_TABLE_NAME = "tbl_Trackpoints";
@@ -99,6 +99,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public static final String C_available = "available";
     public static final String C_type = "type";
     public static final String C_visible_order = "visible_order";
+    public static final String C_local_file = "local_file";
 
 //    public static void BackupUserDatabase(String databaseName)
 //    {
@@ -143,7 +144,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
             + C_start_validity + " integer,"
             + C_end_validity + " integer,"
             + C_available + " integer,"
-            + C_visible_order + " integer"
+            + C_visible_order + " integer,"
+            + C_local_file + " text"
             + " );";
 
     private static final String MBTILES_LOCAL_TABLE_ADD_VISIBLE = "alter table "
@@ -346,7 +348,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.i(TAG, "Updating Database from version:" + oldVersion + " to version:" + newVersion);
+        Log.i(TAG, "Updating UserDB Database from version:" + oldVersion + " to version:" + newVersion);
         Toast.makeText(myContext, "Updating userdata database.", Toast.LENGTH_LONG).show();
 
         // add columns to flightplan table
@@ -393,9 +395,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
             {
                 Log.e(TAG, ee.getMessage());
             }
-
         }
 
+        if (oldVersion<15)
+        {
+            db.execSQL("ALTER TABLE " + MBTILES_LOCAL_TABLE_NAME + " ADD COLUMN " + C_local_file + " text;");
+        }
 
         updated = true;
     }

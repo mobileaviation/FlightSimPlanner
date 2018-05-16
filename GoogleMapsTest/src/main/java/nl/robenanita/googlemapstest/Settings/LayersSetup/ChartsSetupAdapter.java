@@ -174,8 +174,19 @@ public class ChartsSetupAdapter extends BaseAdapter {
         });
 
         if (!chart.CheckfileRunning) {
-            checkFiles checkFiles = new checkFiles(activateChartCheckBox, deleteDownloadChartButton, context);
-            checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
+
+            //checkFiles checkFiles = new checkFiles(activateChartCheckBox, deleteDownloadChartButton, context);
+            //checkFiles.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, chart);
+            boolean localFilePresent = chart.CheckFile();
+            activateChartCheckBox.setEnabled(localFilePresent);
+            activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context,
+                    ((localFilePresent) ? R.color.light_green : R.color.light_red)));
+
+            deleteDownloadChartButton.setEnabled(true);
+            deleteDownloadChartButton.setBackground((Drawable)context.getResources().
+                    getDrawable(localFilePresent ? R.drawable.delete_download_btn : R.drawable.download_btn));
+
+            Log.i(TAG, "MBTiles file for: " + chart.name + " is " + ((localFilePresent) ? "present" : "not present"));
         }
 
         LinearLayout chartLayout = (LinearLayout) view.findViewById(R.id.chartSetupLayout);
