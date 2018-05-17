@@ -65,6 +65,7 @@ public class MBTilesDataSource {
         tile.setStartValidity(cursor.getInt(cursor.getColumnIndex(DBHelper.C_startValidity)));
         tile.setEndValidity(cursor.getInt(cursor.getColumnIndex(DBHelper.C_endValidity)));
         tile.setType(cursor.getString(cursor.getColumnIndex(DBHelper.C_type)));
+        tile.GenerateLocalFile();
 
         return tile;
     }

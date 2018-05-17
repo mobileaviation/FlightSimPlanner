@@ -144,7 +144,7 @@ public class LayersChartsSetupFragment extends Fragment {
         chartsSetupAdapter.SetOnEvent(new ChartEvent() {
             @Override
             public void OnStartDownload(MBTile tile) {
-                tile.StartDownload();
+
             }
 
             @Override

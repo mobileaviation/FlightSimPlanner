@@ -6,8 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.opengl.Visibility;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +23,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import nl.robenanita.googlemapstest.Classes.FileDownloader;
 import nl.robenanita.googlemapstest.database.DBFilesHelper;
 import nl.robenanita.googlemapstest.database.DBHelper;
 import nl.robenanita.googlemapstest.database.MBTilesDBHelper;
@@ -35,7 +41,7 @@ public class MBTile {
         this.context = context;
         mbTilesLocalDataSource = new MBTilesLocalDataSource(context);
         mbTilesLocalDataSource.open();
-        localChartsDir = this.context.getApplicationInfo().dataDir + "/files/";
+        localChartsDir = this.context.getApplicationInfo().dataDir + "/charts/";
         visible_order = -1;
         CheckfileRunning = false;
         available = false;
@@ -46,6 +52,7 @@ public class MBTile {
 
     private Context context;
     private String localChartsDir;
+    public String getLocalChartsDirectory() { return  localChartsDir; }
     private DownloadManager dm;
     private Long dbDownloadId;
 
@@ -65,6 +72,11 @@ public class MBTile {
     public Integer version;
     public Integer visible_order;
     public String local_file;
+    public void GenerateLocalFile()
+    {
+        File f = new File(Uri.parse(mbtileslink).getPath());
+        local_file = localChartsDir + f.getName();
+    }
 
     public Date startValidity;
     public void setStartValidity(Integer timestamp) { startValidity = getDate(timestamp);}
@@ -97,68 +109,15 @@ public class MBTile {
         return local_file;
     }
 
-    public void StartDownload()
-    {
-//        File D = new File(localChartsDir);
-//        if (!D.exists()) D.mkdir();
-
-        dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        DownloadManager.Request nvRequest = new DownloadManager.Request(Uri.parse(mbtileslink));
-        nvRequest.setTitle("Downloading " + name + " from " + type.toString());
-        nvRequest.setDescription("Downloading " + name + " from " + type.toString());
-        nvRequest.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS,
-                "charts/" + (new File(mbtileslink).getName()));
-//        String df = localChartsDir + new File(mbtileslink).getName();
-//        nvRequest.setDestinationUri(Uri.parse("file:/" + df));
-        nvRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        nvRequest.setMimeType("application/octet-stream");
-        dbDownloadId = dm.enqueue(nvRequest);
-    }
-
-    public String CheckDownloadedTile()
-    {
-        ArrayList<File> foundFiles = new ArrayList<>();
-        dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        DownloadManager.Query q = new DownloadManager.Query();
-        q.setFilterByStatus(DownloadManager.STATUS_SUCCESSFUL);
-        Cursor c = dm.query(q);
-        if (c.moveToFirst()) {
-            while (!c.isAfterLast()) {
-                String fileStr = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
-                File file = new File(Uri.parse(fileStr).getPath());
-                File orgFile = new File(mbtileslink);
-
-                String orgFilenameNoExt = orgFile.getName().replaceFirst("[.][^.]+$", "");
-
-                if (file.getName().contains(orgFilenameNoExt))
-                {
-                    if (file.exists() && !foundFiles.contains(file))
-                        foundFiles.add(file);
-                }
-
-                c.moveToNext();
-            }
-
-            Collections.sort(foundFiles, new Comparator<File>() {
-                @Override
-                public int compare(File file, File t1) {
-                    return ((file.lastModified() - t1.lastModified())<0) ? 0 : 1;
-                }
-            });
-        }
-
-        return (foundFiles.size()>0)? foundFiles.get(0).getPath() : null;
-    }
-
     public Boolean CheckfileRunning;
     public Boolean CheckFile()
     {
         if (!available) {
-            local_file = CheckDownloadedTile();
+            //local_file = CheckDownloadedTile();
             UpdateLocalFile();
 
             CheckfileRunning = false;
-            return (local_file != null);
+            return (new File(local_file).exists());
         }
         else
         {
@@ -185,51 +144,6 @@ public class MBTile {
             }
 
         }
-
-//        if (!LocalFileExists())
-//        {
-//            String downloadedFile = CheckDownloadedTile();
-//            if (downloadedFile != null)
-//            {
-//                try {
-//                    CheckfileRunning = true;
-//                    Log.i(TAG, "Found downloaded file: " + downloadedFile);
-//                    File downl_file = new File(Uri.parse(downloadedFile).getPath());
-//                    File local_file = new File(getLocalFilename());
-//
-//                    if (downl_file.exists()) {
-//
-//                        MBTilesDBHelper helper = new MBTilesDBHelper(context, local_file.getName());
-//                        if (local_file.exists()) local_file.delete();
-//                        helper.getWritableDatabase();
-////                        if (!(new File(localChartsDir)).exists())
-////                            (new File(localChartsDir)).mkdir();
-//                        DBFilesHelper.Copy(context, downl_file.toString(), local_file.toString());
-//                        if (local_file.exists()) downl_file.delete();
-//
-//                        Log.i(TAG, "Copied downloaded file to: " + local_file.toString());
-//
-//                        CheckfileRunning = false;
-//                        return local_file.exists();
-//                    }
-//                    else
-//                    {
-//                        CheckfileRunning = false;
-//                        return false;
-//
-//                    }
-//
-//                } catch (Exception e) {
-//                    CheckfileRunning = false;
-//                    e.printStackTrace();
-//                    return false;
-//                }
-//            }
-//            else
-//                return false;
-//        }
-//        else
-//            return true;
     }
 
     private Date getDate(Integer timestamp) { return new Date((long)timestamp*1000); }

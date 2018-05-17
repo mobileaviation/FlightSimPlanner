@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.PowerManager;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,6 +78,7 @@ public class FileDownloader extends AsyncTask<String, Integer, String> {
             byte data[] = new byte[4096];
             long total = 0;
             int count;
+            int progress = 0;
             while ((count = input.read(data)) != -1) {
                 // allow canceling with back button
                 if (isCancelled()) {
@@ -86,7 +88,13 @@ public class FileDownloader extends AsyncTask<String, Integer, String> {
                 total += count;
                 // publishing the progress....
                 if (fileLength > 0) // only if total length is known
-                    publishProgress((int) (total * 100 / fileLength));
+                {
+                    int p = (int) (total * 100 / fileLength);
+                    if (p>progress) {
+                        progress = p;
+                        publishProgress((int) progress);
+                    }
+                }
                 output.write(data, 0, count);
             }
         } catch (Exception e) {
@@ -132,10 +140,10 @@ public class FileDownloader extends AsyncTask<String, Integer, String> {
     protected void onPostExecute(String result) {
         mWakeLock.release();
 //        mProgressDialog.dismiss();
-        if (result != null)
-            if (downloadInfo != null) downloadInfo.OnError(url, local_result_file, result);
-        else
+        if (TextUtils.isEmpty(result))
             if (downloadInfo != null) downloadInfo.OnFinished(url, local_result_file);
+        else
+            if (downloadInfo != null) downloadInfo.OnError(url, local_result_file, result);
     }
 
     public interface DownloadInfo
