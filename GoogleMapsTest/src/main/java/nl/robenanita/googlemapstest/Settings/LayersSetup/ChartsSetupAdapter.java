@@ -123,6 +123,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
                                         {
                                             Log.i(TAG, "File deleted: " + chart.getLocalFilename());
                                             checkFile(chart, adapterView);
+                                            setupControls(-1, chart, adapterView);
                                         }
                                         else
                                         {
@@ -272,7 +273,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
                 downloadBtn.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 chart.local_file = result_file.getAbsolutePath();
-                chart.CheckFile();
+                checkFile(chart, adapterView);
                 setupControls(-1, chart, adapterView);
                 Log.i(TAG, "Finished: downloading from: " + url + " To local: " + result_file.getAbsolutePath());
             }

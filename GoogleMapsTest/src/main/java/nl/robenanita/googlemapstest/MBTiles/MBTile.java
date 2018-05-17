@@ -91,9 +91,6 @@ public class MBTile {
     {
         File file = new File(local_file);
         file.delete();
-//        String downloadedFile = CheckDownloadedTile();
-//        File dlFile = new File(downloadedFile);
-//        if (dlFile.exists()) dlFile.delete();
         return !LocalFileExists();// && !dlFile.exists();
     }
 
