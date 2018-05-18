@@ -178,7 +178,6 @@ public class MBTilesLocalDataSource {
         }
     }
 
-
     private MBTile CursorToTile(Cursor cursor)
     {
         MBTile tile = new MBTile(this.context);

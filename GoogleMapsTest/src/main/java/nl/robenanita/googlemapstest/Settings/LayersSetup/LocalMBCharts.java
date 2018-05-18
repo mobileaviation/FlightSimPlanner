@@ -119,6 +119,7 @@ public class LocalMBCharts {
                     cal.setTime(tile.startValidity);
                     cal.add(Calendar.DATE, 30);
                     tile.endValidity = cal.getTime();
+                    tile.GenerateLocalFile();
                     tileList.add(tile);
                 }
 

@@ -43,7 +43,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
     private String TAG = "GooglemapsTest";
     private ChartEvent onEvent;
     private Context context;
-    private View adapterView;
+    //private View adapterView;
 
     public void SetOnEvent(ChartEvent event)
     {
@@ -79,9 +79,10 @@ public class ChartsSetupAdapter extends BaseAdapter {
 
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         view = inflater.inflate(R.layout.adapter_chartssetup, viewGroup, false);
-        adapterView = view;
+        //adapterView = view;
 
         final MBTile chart = GetChart(i);
+        chart.tileView = view;
         chart.CheckVisibleStatus();
 
         final CheckBox activateChartCheckBox = (CheckBox) view.findViewById(R.id.activateChartCheckBox);
@@ -122,8 +123,8 @@ public class ChartsSetupAdapter extends BaseAdapter {
                                         if (chart.DeleteLocalFile())
                                         {
                                             Log.i(TAG, "File deleted: " + chart.getLocalFilename());
-                                            checkFile(chart, adapterView);
-                                            setupControls(-1, chart, adapterView);
+                                            checkFile(chart);
+                                            setupControls(-1, chart);
                                         }
                                         else
                                         {
@@ -159,7 +160,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
 //            }
 //        });
 
-        setupControls(i, chart, adapterView);
+        setupControls(i, chart);
 //        TextView textView = (TextView) view.findViewById(R.id.chartSetupTxt);
 //
 //        textView.setText(chart.name);
@@ -185,25 +186,25 @@ public class ChartsSetupAdapter extends BaseAdapter {
 //            checkFile(chart, adapterView);
 //        }
 //
-//        LinearLayout chartLayout = (LinearLayout) view.findViewById(R.id.chartSetupLayout);
-//
-//        if ( (i & 1) == 0 ) {
-//            chartLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));
-//        }
+        LinearLayout chartLayout = (LinearLayout) view.findViewById(R.id.chartSetupLayout);
+
+        if ( (i & 1) == 0 ) {
+            chartLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));
+        }
 
         return view;
     }
 
-    private void setupControls(int i, MBTile chart, View view)
+    private void setupControls(int i, MBTile chart)
     {
-        TextView textView = (TextView) view.findViewById(R.id.chartSetupTxt);
-        CheckBox activateChartCheckBox = (CheckBox) view.findViewById(R.id.activateChartCheckBox);
+        TextView textView = (TextView) chart.tileView.findViewById(R.id.chartSetupTxt);
+        CheckBox activateChartCheckBox = (CheckBox) chart.tileView.findViewById(R.id.activateChartCheckBox);
         //ImageButton deleteDownloadChartButton = (ImageButton) view.findViewById(R.id.downloadChartButton);
         //ProgressBar tileDownloadProgress = (ProgressBar) view.findViewById(R.id.tileDownloadProgress);
 
         textView.setText(chart.name);
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.chartSetupImage);
+        ImageView imageView = (ImageView) chart.tileView.findViewById(R.id.chartSetupImage);
         if (chart.type == MBTileType.ofm) imageView.setImageResource(R.drawable.ofm_charts_header);
         if (chart.type == MBTileType.fsp) imageView.setImageResource(R.drawable.fsp_charts_header);
         if (chart.type == MBTileType.local) imageView.setImageResource(R.drawable.local_charts_header);
@@ -221,23 +222,16 @@ public class ChartsSetupAdapter extends BaseAdapter {
         });
 
 //        if (!chart.CheckfileRunning) {
-        checkFile(chart, adapterView);
+        checkFile(chart);
 //        }
-
-        LinearLayout chartLayout = (LinearLayout) view.findViewById(R.id.chartSetupLayout);
-
-        if (i>-1)
-            if ( (i & 1) == 0 ) {
-                chartLayout.setBackgroundColor(Color.parseColor("#DDDDDD"));
-            }
     }
 
-    public void checkFile(MBTile chart, View view)
+    public void checkFile(MBTile chart)
     {
-        final CheckBox activateChartCheckBox = (CheckBox) view.findViewById(R.id.activateChartCheckBox);
-        final ImageButton deleteDownloadChartButton = (ImageButton) view.findViewById(R.id.downloadChartButton);
+        final CheckBox activateChartCheckBox = (CheckBox) chart.tileView.findViewById(R.id.activateChartCheckBox);
+        final ImageButton deleteDownloadChartButton = (ImageButton) chart.tileView.findViewById(R.id.downloadChartButton);
 
-        boolean localFilePresent = chart.CheckFile();
+        boolean localFilePresent = chart.LocalFileExists();
         activateChartCheckBox.setEnabled(localFilePresent);
         activateChartCheckBox.setBackgroundColor(ContextCompat.getColor(context,
                 ((localFilePresent) ? R.color.light_green : R.color.light_red)));
@@ -273,8 +267,9 @@ public class ChartsSetupAdapter extends BaseAdapter {
                 downloadBtn.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 chart.local_file = result_file.getAbsolutePath();
-                checkFile(chart, adapterView);
-                setupControls(-1, chart, adapterView);
+                chart.UpdateLocalFile();
+                checkFile(chart);
+                setupControls(-1, chart);
                 Log.i(TAG, "Finished: downloading from: " + url + " To local: " + result_file.getAbsolutePath());
             }
         });

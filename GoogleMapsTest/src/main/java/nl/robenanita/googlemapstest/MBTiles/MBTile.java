@@ -53,8 +53,8 @@ public class MBTile {
     private Context context;
     private String localChartsDir;
     public String getLocalChartsDirectory() { return  localChartsDir; }
-    private DownloadManager dm;
-    private Long dbDownloadId;
+
+    public View tileView;
 
     public Boolean available;
     public Integer _id;
@@ -91,6 +91,8 @@ public class MBTile {
     {
         File file = new File(local_file);
         file.delete();
+        this.visible_order = -1;
+        mbTilesLocalDataSource.updateVisibility(this);
         return !LocalFileExists();// && !dlFile.exists();
     }
 
@@ -110,10 +112,7 @@ public class MBTile {
     public Boolean CheckFile()
     {
         if (!available) {
-            //local_file = CheckDownloadedTile();
             UpdateLocalFile();
-
-            CheckfileRunning = false;
             return (new File(local_file).exists());
         }
         else
@@ -122,21 +121,20 @@ public class MBTile {
             {
                 if (new File(local_file).exists())
                 {
-                    CheckfileRunning = false;
+                    available = true;
+                    UpdateLocalFile();
                     return true;
                 }
                 else
                 {
                     available = false;
                     UpdateLocalFile();
-                    CheckfileRunning = false;
                     return false;
                 }
             }
             else
             {
                 available = false;
-                CheckfileRunning = false;
                 return CheckFile();
             }
 
@@ -150,7 +148,7 @@ public class MBTile {
         mbTilesLocalDataSource.updateVisibility(this);
     }
 
-    private void UpdateLocalFile()
+    public void UpdateLocalFile()
     {
         if (local_file != null) {
             mbTilesLocalDataSource.updateLocalFile(this);
