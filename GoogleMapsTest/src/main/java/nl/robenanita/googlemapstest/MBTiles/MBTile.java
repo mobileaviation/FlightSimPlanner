@@ -177,8 +177,11 @@ public class MBTile {
     {
         if (object instanceof MBTile)
         {
-            MBTile testTile = (MBTile) object;
-            return this.getLocalFilename().equals(testTile.getLocalFilename());
+            if (this.getLocalFilename() == null) return false;
+            else {
+                MBTile testTile = (MBTile) object;
+                return this.getLocalFilename().equals(testTile.getLocalFilename());
+            }
         }
         else return false;
     }

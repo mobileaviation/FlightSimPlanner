@@ -195,12 +195,14 @@ public class MapController
 
         for (MBTile tile : tiles)
         {
-            String localFilename = tile.getLocalFilename();
-            if (new File(localFilename).exists()) {
-                MBTilesOverlay tileOverlay = setupMBTilesMap(localFilename);
-                tileOverlay.Index = tile.visible_order;
-                mbTilesIndex = tile.visible_order + 1;
-                mbTileProviderOverlays.put(localFilename, tileOverlay);
+            if (tile.getLocalFilename()!= null) {
+                String localFilename = tile.getLocalFilename();
+                if (new File(localFilename).exists()) {
+                    MBTilesOverlay tileOverlay = setupMBTilesMap(localFilename);
+                    tileOverlay.Index = tile.visible_order;
+                    mbTilesIndex = tile.visible_order + 1;
+                    mbTileProviderOverlays.put(localFilename, tileOverlay);
+                }
             }
         }
     }

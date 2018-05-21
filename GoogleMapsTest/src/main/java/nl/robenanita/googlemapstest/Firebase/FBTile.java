@@ -7,6 +7,7 @@ import java.util.Date;
 import nl.robenanita.googlemapstest.MBTiles.MBTileType;
 
 public class FBTile {
+    public Long index;
     public String name;
     public String region;
     public MBTileType type;

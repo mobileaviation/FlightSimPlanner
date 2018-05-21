@@ -98,6 +98,7 @@ public class StartActivity extends ActionBarActivity {
     }
 
     private boolean checkDatabase() {
+        //this.deleteDatabase("fbairnav.db");
         String databasePath = this.getDatabasePath("fbairnav.db").getPath();
         Log.i(TAG, "Database Path: " + databasePath);
         return new File(databasePath).exists();
