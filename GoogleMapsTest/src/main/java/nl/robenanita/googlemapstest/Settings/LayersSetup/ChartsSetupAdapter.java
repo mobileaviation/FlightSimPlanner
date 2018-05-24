@@ -161,31 +161,7 @@ public class ChartsSetupAdapter extends BaseAdapter {
 //        });
 
         setupControls(i, chart);
-//        TextView textView = (TextView) view.findViewById(R.id.chartSetupTxt);
-//
-//        textView.setText(chart.name);
-//
-//        ImageView imageView = (ImageView) view.findViewById(R.id.chartSetupImage);
-//        if (chart.type == MBTileType.ofm) imageView.setImageResource(R.drawable.ofm_charts_header);
-//        if (chart.type == MBTileType.fsp) imageView.setImageResource(R.drawable.fsp_charts_header);
-//        if (chart.type == MBTileType.local) imageView.setImageResource(R.drawable.local_charts_header);
-//
-//
-//
-//        activateChartCheckBox.setTag(chart);
-//        activateChartCheckBox.setChecked(((chart.visible_order>-1)));
-//        activateChartCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                MBTile chechedChart = (MBTile) compoundButton.getTag();
-//                if (onEvent != null) onEvent.OnChecked(b, chechedChart);
-//            }
-//        });
-//
-//        if (!chart.CheckfileRunning) {
-//            checkFile(chart, adapterView);
-//        }
-//
+
         LinearLayout chartLayout = (LinearLayout) view.findViewById(R.id.chartSetupLayout);
 
         if ( (i & 1) == 0 ) {

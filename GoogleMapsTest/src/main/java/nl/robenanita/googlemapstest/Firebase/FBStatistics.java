@@ -30,6 +30,7 @@ public class FBStatistics {
     public Integer PropertiesCount;
     public Integer RegionsCount;
     public Integer FirsCount;
+    public Integer AirspacesCount;
 
     public void FillStatistics()
     {

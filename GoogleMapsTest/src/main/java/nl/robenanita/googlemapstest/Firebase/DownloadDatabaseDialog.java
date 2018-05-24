@@ -62,6 +62,7 @@ public class DownloadDatabaseDialog extends DialogFragment {
     FBCountriesDataSource fbCountriesDataSource;
     FBFirDataSource fbFirDataSource;
     FBRegionsDataSource fbRegionsDataSource;
+    FBAirspacesDataSource fbAirspacesDataSource;
 
     private void startDownload()
     {
@@ -87,6 +88,8 @@ public class DownloadDatabaseDialog extends DialogFragment {
         fbFirDataSource.Open();
         fbRegionsDataSource = new FBRegionsDataSource(getContext());
         fbRegionsDataSource.Open();
+        fbAirspacesDataSource = new FBAirspacesDataSource(getContext());
+        fbAirspacesDataSource.Open();
 
         // First get Statistics
         FBStatistics statistics = new FBStatistics();
@@ -110,6 +113,8 @@ public class DownloadDatabaseDialog extends DialogFragment {
                 fbRegionsDataSource.ReadFBRegionsData(statistics.RegionsCount, clearTable);
                 fbFirDataSource.progress = progress;
                 fbFirDataSource.ReadFBFirsData(statistics.FirsCount, clearTable);
+                fbAirspacesDataSource.progress = progress;
+                fbAirspacesDataSource.ReadFBAirspacesData(statistics.AirspacesCount, clearTable);
             }
         };
         statistics.FillStatistics();

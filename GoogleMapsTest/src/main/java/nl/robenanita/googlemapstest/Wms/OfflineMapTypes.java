@@ -9,7 +9,8 @@ import nl.robenanita.googlemapstest.R;
 public enum OfflineMapTypes {
     offline_openstreet,
     offline_aafsectional,
-    offline_germandsf;
+    offline_germandsf,
+    offline_france;
 
     @Override
     public String toString() {
