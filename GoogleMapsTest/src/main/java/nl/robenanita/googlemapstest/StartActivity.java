@@ -91,8 +91,7 @@ public class StartActivity extends ActionBarActivity {
         }
         else
         {
-            DownloadDatabaseDialog downloadDatabaseDialog = new DownloadDatabaseDialog();
-            downloadDatabaseDialog.show(fm, "DownloadDatabase");
+            ShowDownloadDatabaseWindow();
         }
 
     }
@@ -602,8 +601,7 @@ public class StartActivity extends ActionBarActivity {
 
         if (id == R.id.action_firebase_test)
         {
-            DownloadDatabaseDialog downloadDatabaseDialog = new DownloadDatabaseDialog();
-            downloadDatabaseDialog.show(fm, "DownloadDatabase");
+            ShowDownloadDatabaseWindow();
             return true;
         }
 
@@ -666,6 +664,14 @@ public class StartActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void ShowDownloadDatabaseWindow() {
+        DownloadDatabaseDialog downloadDatabaseDialog = new DownloadDatabaseDialog();
+        downloadDatabaseDialog.setCancelable(false);
+        downloadDatabaseDialog.show(fm, "DownloadDatabase");
+
+        
     }
 
     private void showSettingsActivity() {
