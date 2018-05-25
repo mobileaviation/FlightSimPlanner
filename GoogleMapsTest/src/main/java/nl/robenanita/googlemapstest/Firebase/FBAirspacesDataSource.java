@@ -2,6 +2,7 @@ package nl.robenanita.googlemapstest.Firebase;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.google.firebase.FirebaseApp;
@@ -17,22 +18,25 @@ public class FBAirspacesDataSource {
     public FBAirspacesDataSource(Context context)
     {
         this.context = context;
+        fbAirspacesDBHelper = FBAirspacesDBHelper.getInstance(context);
     }
 
     private static final String TAG = "GooglemapsTest";
     private Context context;
     private DatabaseReference mDatabase;
+    private FBAirspacesDBHelper fbAirspacesDBHelper;
+    private SQLiteDatabase database;
 
     public FBTableDownloadProgress progress;
 
     public void Open()
     {
-
+        database = fbAirspacesDBHelper.Open();
     }
 
     public void Close()
     {
-
+        fbAirspacesDBHelper.close();
     }
 
     Integer start;
@@ -61,24 +65,23 @@ public class FBAirspacesDataSource {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    //GenericTypeIndicator<List<Object>> airportsType = new GenericTypeIndicator<List<Object>>(){};
                     for (DataSnapshot airspaceSnapshow: dataSnapshot.getChildren()){
                         FBAirspace airspace = airspaceSnapshow.getValue(FBAirspace.class);
-                        //ContentValues v = fix.getFixContentValues();
-                        //database.insert(FBDBHelper.FIXES_TABLE_NAME, null, v);
+                        ContentValues v = airspace.getAirspaceContentValues();
+                        database.insert(FBAirspacesDBHelper.AIRSPACES_TABLE_NAME, null, v);
                     }
 
                     start = start + count;
-                    Log.i(TAG, "Read 1000 fixes, get the next from: " + start.toString());
+                    Log.i(TAG, "Read 1000 airspaces, get the next from: " + start.toString());
                     if (progress != null) progress.onProgress(airspacesCount, start, FBTableType.airspaces);
 
                     query = mDatabase.child("airspaces").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<airspacesCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
                         if (progress != null) progress.onProgress(airspacesCount, airspacesCount, FBTableType.airspaces);
-                        Log.i(TAG, "Finished reading fixes");
-                        //database.setTransactionSuccessful();
-                        //database.endTransaction();
+                        Log.i(TAG, "Finished reading airspaces");
+                        database.setTransactionSuccessful();
+                        database.endTransaction();
                     }
                 }
                 catch (Exception ee)
@@ -99,6 +102,6 @@ public class FBAirspacesDataSource {
 
     private void deleteAllRowsFromTables()
     {
-        //database.execSQL("DELETE FROM " + FBDBHelper.FIXES_TABLE_NAME);
+        database.execSQL("DELETE FROM " + FBAirspacesDBHelper.AIRSPACES_TABLE_NAME);
     }
 }

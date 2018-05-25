@@ -32,10 +32,11 @@ public class DownloadDatabaseDialog extends DialogFragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_download_database, container, false);
         getDialog().setTitle("Download Navigation Databases");
-        Button downloadButton = (Button) rootView.findViewById(R.id.downloadDatabasesBtn);
+        final Button downloadButton = (Button) rootView.findViewById(R.id.downloadDatabasesBtn);
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                downloadButton.setEnabled(false);
                 startDownload();
             }
         });
