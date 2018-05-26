@@ -88,7 +88,7 @@ public class FBAirportsDataSource {
                     query = mDatabase.child("airports").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<airportCount) query.addListenerForSingleValueEvent(dataListener);
                         else {
-                        if (progress != null) progress.onProgress(airportCount, airportCount, FBTableType.airports);
+                        if (progress != null) progress.OnFinished(FBTableType.airports);
                         database.setTransactionSuccessful();
                         database.endTransaction();
                         Log.i(TAG, "Finished reading airports");

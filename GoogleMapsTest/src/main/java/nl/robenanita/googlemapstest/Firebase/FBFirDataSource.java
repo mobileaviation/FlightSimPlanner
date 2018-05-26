@@ -71,7 +71,7 @@ public class FBFirDataSource {
                     query = mDatabase.child("firs").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<firsCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
-                        if (progress != null) progress.onProgress(firsCount, firsCount, FBTableType.firs);
+                        if (progress != null) progress.OnFinished(FBTableType.firs);
                         Log.i(TAG, "Finished reading firs");
                         database.setTransactionSuccessful();
                         database.endTransaction();

@@ -72,7 +72,7 @@ public class FBCountriesDataSource {
                     query = mDatabase.child("counrties").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<countryCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
-                        if (progress != null) progress.onProgress(countryCount, countryCount, FBTableType.countries);
+                        if (progress != null) progress.OnFinished(FBTableType.countries);
                         Log.i(TAG, "Finished reading countries");
                         database.setTransactionSuccessful();
                         database.endTransaction();

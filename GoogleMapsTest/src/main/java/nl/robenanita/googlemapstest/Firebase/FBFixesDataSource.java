@@ -80,7 +80,7 @@ public class FBFixesDataSource {
                     query = mDatabase.child("fixes").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<fixesCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
-                        if (progress != null) progress.onProgress(fixesCount, fixesCount, FBTableType.fixes);
+                        if (progress != null) progress.OnFinished(FBTableType.fixes);
                         Log.i(TAG, "Finished reading fixes");
                         database.setTransactionSuccessful();
                         database.endTransaction();

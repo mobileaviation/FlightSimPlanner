@@ -71,7 +71,7 @@ public class FBRegionsDataSource {
                     query = mDatabase.child("regions").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<regionsCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
-                        if (progress != null) progress.onProgress(regionsCount, regionsCount, FBTableType.regions);
+                        if (progress != null) progress.OnFinished(FBTableType.regions);
                         Log.i(TAG, "Finished reading regions");
                         database.setTransactionSuccessful();
                         database.endTransaction();

@@ -72,7 +72,7 @@ public class FBTilesDataSource {
                     query = mDatabase.child("tiles").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<tilesCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
-                        if (progress != null) progress.onProgress(tilesCount, tilesCount, FBTableType.mbtiles);
+                        if (progress != null) progress.OnFinished(FBTableType.mbtiles);
                         Log.i(TAG, "Finished reading tiles");
                         database.setTransactionSuccessful();
                         database.endTransaction();

@@ -669,6 +669,14 @@ public class StartActivity extends ActionBarActivity {
     private void ShowDownloadDatabaseWindow() {
         DownloadDatabaseDialog downloadDatabaseDialog = new DownloadDatabaseDialog();
         downloadDatabaseDialog.setCancelable(false);
+
+        downloadDatabaseDialog.onCloseListener = new DownloadDatabaseDialog.DownloadDialogCloseListener() {
+            @Override
+            public void OnClose() {
+                startApp();
+            }
+        };
+
         downloadDatabaseDialog.show(fm, "DownloadDatabase");
 
         

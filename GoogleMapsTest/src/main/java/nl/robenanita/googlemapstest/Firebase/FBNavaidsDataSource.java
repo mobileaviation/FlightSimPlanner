@@ -72,7 +72,7 @@ public class FBNavaidsDataSource {
                     query = mDatabase.child("navaids").orderByChild("index").startAt(start).endAt(start + (count-1));
                     if (start<navaidsCount) query.addListenerForSingleValueEvent(dataListener);
                     else {
-                        if (progress != null) progress.onProgress(navaidsCount, navaidsCount, FBTableType.navaids);
+                        if (progress != null) progress.OnFinished(FBTableType.navaids);
                         Log.i(TAG, "Finished reading navaids");
                         database.setTransactionSuccessful();
                         database.endTransaction();

@@ -17,6 +17,12 @@ import nl.robenanita.googlemapstest.R;
 public class DownloadDatabaseDialog extends DialogFragment {
     private String TAG = "GooglemapsTest";
 
+    public interface DownloadDialogCloseListener
+    {
+        public void OnClose();
+    }
+    public DownloadDialogCloseListener onCloseListener;
+
     public DownloadDatabaseDialog() {
         // Required empty public constructor
     }
@@ -36,6 +42,7 @@ public class DownloadDatabaseDialog extends DialogFragment {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finishedCount = 0;
                 downloadButton.setEnabled(false);
                 startDownload();
             }
@@ -65,6 +72,8 @@ public class DownloadDatabaseDialog extends DialogFragment {
     FBRegionsDataSource fbRegionsDataSource;
     FBAirspacesDataSource fbAirspacesDataSource;
 
+    Integer finishedCount;
+
     private void startDownload()
     {
         Log.i(TAG, "Start download from Firebase");
@@ -72,6 +81,24 @@ public class DownloadDatabaseDialog extends DialogFragment {
             @Override
             public void onProgress(Integer count, Integer downloaded, FBTableType tableType) {
                 onProgressBarUpdate(count, downloaded, tableType);
+            }
+            public void OnFinished(FBTableType tableType)
+            {
+                finishedCount++;
+                if (finishedCount == 8)
+                {
+                    Button downloadButton = (Button) getView().findViewById(R.id.downloadDatabasesBtn);
+                    downloadButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (onCloseListener != null) onCloseListener.OnClose();
+                            dismiss();
+                        }
+                    });
+
+                    downloadButton.setText("Close");
+                    downloadButton.setEnabled(true);
+                }
             }
         };
 
