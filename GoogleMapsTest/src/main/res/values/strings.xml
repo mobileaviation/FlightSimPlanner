@@ -96,5 +96,5 @@
     <string name="airspace_locked">Enable/Disable airspace</string>
     <string name="locked_unlocked">Lock/Unlock</string>
     <string name="settings">More</string>
-    <string name="firebasetest">Test Firebase</string>
+    <string name="firebasetest">Download Databases</string>
 </resources>
