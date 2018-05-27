@@ -153,15 +153,15 @@ public class StartActivity extends ActionBarActivity {
         });
         networkCheck.execute();
 
-        if (adds) {
+//        if (adds) {
             startNavigationBtn.setEnabled(true);
             setupInAppBilling();
-        }
-        else
-        {
-            startNavigationBtn.setEnabled(true);
-
-        }
+//        }
+//        else
+//        {
+//            startNavigationBtn.setEnabled(true);
+//
+//        }
     }
 
     public boolean checkPlayServices(Activity activity) {
@@ -333,6 +333,7 @@ public class StartActivity extends ActionBarActivity {
             {
                 if (result.isFailure()) {
                     // Handle error
+                    if (result.getResponse()==7) consumeItem();
                     return;
                 }
                 else if (purchase.getSku().equals(ITEM_SKU)) {
@@ -391,7 +392,7 @@ public class StartActivity extends ActionBarActivity {
         final Button buyAddsButton;
         buyAddsButton = (Button) findViewById(R.id.buyAppButton);
 
-        final boolean debug = true;// BuildConfig.DEBUG;
+        final boolean debug = false;// BuildConfig.DEBUG;
 
         buyAddsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -527,6 +528,8 @@ public class StartActivity extends ActionBarActivity {
     {
         PropertiesDataSource propertiesDataSource = new PropertiesDataSource(this);
         propertiesDataSource.open(true);
+        // Test
+        // propertiesDataSource.deleteLicense();
         boolean v = propertiesDataSource.checkNoAdvertisements();
         propertiesDataSource.close(true);
 

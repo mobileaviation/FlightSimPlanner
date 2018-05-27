@@ -262,6 +262,13 @@ public class PropertiesDataSource {
 
     }
 
+    public void deleteLicense()
+    {
+        String q = "DELETE FROM " + UserDBHelper.PROPERTIES_TABLE_NAME + " WHERE "
+                + UserDBHelper.C_name + "='ADVERTISEMENTS';";
+        database.execSQL(q);
+    }
+
     public Property getMapSetup(String map)
     {
         Property p = getProperty(map);
