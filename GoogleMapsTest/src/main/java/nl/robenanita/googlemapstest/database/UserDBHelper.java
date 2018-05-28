@@ -18,7 +18,7 @@ import java.io.OutputStream;
 public class UserDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "userairnav.db";
     // PRAGMA user_version (= integer)
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
 
     public static final String TRACKS_TABLE_NAME = "tbl_Tracks";
     public static final String TRACKPOINTS_TABLE_NAME = "tbl_Trackpoints";
@@ -337,11 +337,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL(i + "'INIT_POSITION', '52.453917', '5.515624');");
         db.execSQL(i + "'INIT_ZOOM', '8', '');");
         db.execSQL(i + "'INIT_FLIGHTPLAN_ID', '0', '');");
-        db.execSQL(i + "'DB_VERSION', '4', '2014-05-15');");
-        db.execSQL(i + "'SERVER', '192.168.2.8', '5000');");
+        db.execSQL(i + "'DB_VERSION', '20180528', '2018-05-28');");
+        db.execSQL(i + "'SERVER', '192.168.2.8', '81');");
         db.execSQL(i + "'INIT_AIRPORT', '2522', '237920,le');");
         db.execSQL(i + "'INSTRUMENTS', 'visible', '1');");
-        db.execSQL(i + "'LOCATION', 'Provider', 'sim');");
+        db.execSQL(i + "'LOCATION', 'Provider', 'simV2');");
         db.execSQL(i + "'MARKERS', 'visible', 'test');");
         db.execSQL(i + "'BUFFER', '0.3', 'true');");
     }
@@ -400,6 +400,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
         if (oldVersion<15)
         {
             db.execSQL("ALTER TABLE " + MBTILES_LOCAL_TABLE_NAME + " ADD COLUMN " + C_local_file + " text;");
+        }
+
+        if (oldVersion<17)
+        {
+            db.execSQL("UPDATE " + UserDBHelper.PROPERTIES_TABLE_NAME + " SET value2='simv2' WHERE name='LOCATION' AND value2='sim';");
         }
 
         updated = true;

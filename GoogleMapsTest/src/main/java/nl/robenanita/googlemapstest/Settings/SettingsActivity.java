@@ -98,7 +98,6 @@ public class SettingsActivity extends ActionBarActivity {
         searchAirportBtn = (Button) findViewById(R.id.searchHomeAirportBtn);
 
         gpsRadioBtn = (RadioButton) findViewById(R.id.gpsRadioBtn);
-        simRadioBtn = (RadioButton) findViewById(R.id.simRadioBtn);
         simV2RadioBtn = (RadioButton) findViewById(R.id.simv2RadioBtn);
 
         NavigationActivity.ConnectionType c = propertiesDataSource.getConnectionType();
@@ -107,21 +106,12 @@ public class SettingsActivity extends ActionBarActivity {
             {
                 gpsRadioBtn.setChecked(true);
                 simV2RadioBtn.setChecked(false);
-                simRadioBtn.setChecked(false);
-                break;
-            }
-            case sim:
-            {
-                gpsRadioBtn.setChecked(false);
-                simV2RadioBtn.setChecked(false);
-                simRadioBtn.setChecked(true);
                 break;
             }
             case simv2:
             {
                 gpsRadioBtn.setChecked(false);
                 simV2RadioBtn.setChecked(true);
-                simRadioBtn.setChecked(false);
                 break;
             }
         }
@@ -129,9 +119,9 @@ public class SettingsActivity extends ActionBarActivity {
         showInstrumentsChkBox = (CheckBox) findViewById(R.id.showInstrumentsChkBox);
         showInstrumentsChkBox.setChecked((propertiesDataSource.getInstrumentsVisible()));
 
-        chartUrlEdit = (EditText) findViewById(R.id.airportChartsUrlEdit);
-        if (propertiesDataSource.ChartsUrl != null) chartUrlEdit.setText(propertiesDataSource.ChartsUrl.value1);
-        else chartUrlEdit.setText("http://*****");
+//        chartUrlEdit = (EditText) findViewById(R.id.airportChartsUrlEdit);
+//        if (propertiesDataSource.ChartsUrl != null) chartUrlEdit.setText(propertiesDataSource.ChartsUrl.value1);
+//        else chartUrlEdit.setText("http://*****");
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +162,6 @@ public class SettingsActivity extends ActionBarActivity {
             propertiesDataSource.FillProperties();
 
             NavigationActivity.ConnectionType c = NavigationActivity.ConnectionType.gps;;
-            if (simRadioBtn.isChecked()) c = NavigationActivity.ConnectionType.sim;
             if (simV2RadioBtn.isChecked()) c = NavigationActivity.ConnectionType.simv2;
             if (gpsRadioBtn.isChecked()) c = NavigationActivity.ConnectionType.gps;
             propertiesDataSource.updateConnectionType(c);
@@ -224,19 +213,19 @@ public class SettingsActivity extends ActionBarActivity {
             bufferProperty.value2 = (bufferVisibleBox.isChecked() ? "true" : "false");
             propertiesDataSource.updateProperty(bufferProperty);
 
-            if (propertiesDataSource.ChartsUrl == null)
-            {
-                propertiesDataSource.ChartsUrl = new Property();
-                propertiesDataSource.ChartsUrl.name = "CHARTSURL";
-                propertiesDataSource.ChartsUrl.value1 = chartUrlEdit.getText().toString();
-                propertiesDataSource.ChartsUrl.value2 = "";
-                propertiesDataSource.InsertProperty(propertiesDataSource.ChartsUrl);
-            }
-            else
-            {
-                propertiesDataSource.ChartsUrl.value1 = chartUrlEdit.getText().toString();
-                propertiesDataSource.updateProperty(propertiesDataSource.ChartsUrl);
-            }
+//            if (propertiesDataSource.ChartsUrl == null)
+//            {
+//                propertiesDataSource.ChartsUrl = new Property();
+//                propertiesDataSource.ChartsUrl.name = "CHARTSURL";
+//                propertiesDataSource.ChartsUrl.value1 = chartUrlEdit.getText().toString();
+//                propertiesDataSource.ChartsUrl.value2 = "";
+//                propertiesDataSource.InsertProperty(propertiesDataSource.ChartsUrl);
+//            }
+//            else
+//            {
+//                propertiesDataSource.ChartsUrl.value1 = chartUrlEdit.getText().toString();
+//                propertiesDataSource.updateProperty(propertiesDataSource.ChartsUrl);
+//            }
 
             propertiesDataSource.close(true);
 
