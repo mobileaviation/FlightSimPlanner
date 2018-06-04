@@ -184,7 +184,7 @@ public class NavigationButtonFragment extends Fragment {
 
                MenuItemType itemType = null;
                if(menuItem.getItemId()==R.id.action_loadtrack_menuitem) itemType = MenuItemType.loadTrack;
-               if(menuItem.getItemId()==R.id.action_load_chart_menuitem) itemType = MenuItemType.loadCharts;
+               //if(menuItem.getItemId()==R.id.action_load_chart_menuitem) itemType = MenuItemType.loadCharts;
                if(menuItem.getItemId()==R.id.action_settings_menuitem) itemType = MenuItemType.settings;
                if(menuItem.getItemId()==R.id.action_isnew_menuitem) itemType = MenuItemType.isNew;
                if (itemType != null)

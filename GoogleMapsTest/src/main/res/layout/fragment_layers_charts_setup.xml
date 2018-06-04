@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="20"
             android:text="Refresh local"
-            android:textSize="9sp" />
+            android:textSize="9sp"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/refreshServerChartsBtn"

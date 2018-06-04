@@ -41,7 +41,7 @@ public class PropertiesDataSource {
                 fillMarkerProperties();
             } else
             {
-                database = dbHelper.openDataBase();
+                database = dbHelper.getWritableDatabase();
             }
 
         } catch (Exception e) {

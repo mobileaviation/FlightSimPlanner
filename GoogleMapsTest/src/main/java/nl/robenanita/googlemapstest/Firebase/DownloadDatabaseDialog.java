@@ -1,6 +1,8 @@
 package nl.robenanita.googlemapstest.Firebase;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -11,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import nl.robenanita.googlemapstest.Property;
 import nl.robenanita.googlemapstest.R;
+import nl.robenanita.googlemapstest.database.PropertiesDataSource;
 
 
 public class DownloadDatabaseDialog extends DialogFragment {
@@ -72,6 +76,8 @@ public class DownloadDatabaseDialog extends DialogFragment {
     FBRegionsDataSource fbRegionsDataSource;
     FBAirspacesDataSource fbAirspacesDataSource;
 
+    Property version;
+
     Integer finishedCount;
 
     private void startDownload()
@@ -123,29 +129,114 @@ public class DownloadDatabaseDialog extends DialogFragment {
         FBStatistics statistics = new FBStatistics();
         statistics.OnStatisticsEvent = new FBStatistics.StatisticsEventListerner() {
             @Override
-            public void OnStatistics(FBStatistics statistics) {
+            public void OnStatistics(final FBStatistics statistics) {
                 Log.i(TAG, "Recieved statistics from Firebase");
 
-                Boolean clearTable = true;
-                fbAirportsDataSource.progress = progress;
-                fbAirportsDataSource.ReadFBAirportData(statistics.AirportsCount, clearTable);
-                fbNavaidsDataSource.progress = progress;
-                fbNavaidsDataSource.ReadFBNavaidData(statistics.NavaidsCount, clearTable);
-                fbCountriesDataSource.progress = progress;
-                fbCountriesDataSource.ReadFBCountryData(statistics.CountriesCount, clearTable);
-                fbTilesDataSource.progress = progress;
-                fbTilesDataSource.ReadFBTilesData(statistics.MBTilesCount, clearTable);
-                fbFixesDataSource.progress = progress;
-                fbFixesDataSource.ReadFBFixesData(statistics.FixesCount, clearTable);
-                fbRegionsDataSource.progress = progress;
-                fbRegionsDataSource.ReadFBRegionsData(statistics.RegionsCount, clearTable);
-                fbFirDataSource.progress = progress;
-                fbFirDataSource.ReadFBFirsData(statistics.FirsCount, clearTable);
-                fbAirspacesDataSource.progress = progress;
-                fbAirspacesDataSource.ReadFBAirspacesData(statistics.AirspacesCount, clearTable);
+                final PropertiesDataSource propertiesDataSource = new PropertiesDataSource(getContext());
+                propertiesDataSource.open(false);
+                version = propertiesDataSource.GetProperty("DB_VERSION");
+                //propertiesDataSource.close(false);
+
+                Log.i(TAG, "Checkin version, Local: " + version.value1 + " Remote: " + statistics.Version.toString());
+                if (version.value1.equals(statistics.Version.toString()))
+                {
+                    new AlertDialog.Builder(getContext()).setTitle("Download Databases")
+                            .setMessage("It seems you already have the latest database, Are you sure you want to download it again? ")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    doClose();
+                                }
+                            })
+                            .setPositiveButton("Download", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    version.value1 = statistics.Version.toString();
+                                    propertiesDataSource.updateProperty(version);
+                                    propertiesDataSource.close(false);
+                                    doDownload(statistics);
+                                }
+                            })
+                            .show();
+                } else {
+                    version.value1 = statistics.Version.toString();
+                    propertiesDataSource.updateProperty(version);
+                    propertiesDataSource.close(false);
+                    doDownload(statistics);
+                }
             }
         };
         statistics.FillStatistics();
+    }
+
+    private void doDownload(FBStatistics statistics)
+    {
+        Log.i(TAG, "Start download from Firebase");
+        progress = new FBTableDownloadProgress() {
+            @Override
+            public void onProgress(Integer count, Integer downloaded, FBTableType tableType) {
+                onProgressBarUpdate(count, downloaded, tableType);
+            }
+            public void OnFinished(FBTableType tableType)
+            {
+                finishedCount++;
+                if (finishedCount == 8)
+                {
+                    doClose();
+                }
+            }
+        };
+
+        fbAirportsDataSource = new FBAirportsDataSource(getContext());
+        fbAirportsDataSource.Open();
+        fbNavaidsDataSource = new FBNavaidsDataSource(getContext());
+        fbNavaidsDataSource.Open();
+        fbFixesDataSource = new FBFixesDataSource(getContext());
+        fbFixesDataSource.Open();
+        fbTilesDataSource = new FBTilesDataSource(getContext());
+        fbTilesDataSource.Open();
+        fbCountriesDataSource = new FBCountriesDataSource(getContext());
+        fbCountriesDataSource.Open();
+        fbFirDataSource = new FBFirDataSource(getContext());
+        fbFirDataSource.Open();
+        fbRegionsDataSource = new FBRegionsDataSource(getContext());
+        fbRegionsDataSource.Open();
+        fbAirspacesDataSource = new FBAirspacesDataSource(getContext());
+        fbAirspacesDataSource.Open();
+
+        Boolean clearTable = true;
+        fbAirportsDataSource.progress = progress;
+        fbAirportsDataSource.ReadFBAirportData(statistics.AirportsCount, clearTable);
+        fbNavaidsDataSource.progress = progress;
+        fbNavaidsDataSource.ReadFBNavaidData(statistics.NavaidsCount, clearTable);
+        fbCountriesDataSource.progress = progress;
+        fbCountriesDataSource.ReadFBCountryData(statistics.CountriesCount, clearTable);
+        fbTilesDataSource.progress = progress;
+        fbTilesDataSource.ReadFBTilesData(statistics.MBTilesCount, clearTable);
+        fbFixesDataSource.progress = progress;
+        fbFixesDataSource.ReadFBFixesData(statistics.FixesCount, clearTable);
+        fbRegionsDataSource.progress = progress;
+        fbRegionsDataSource.ReadFBRegionsData(statistics.RegionsCount, clearTable);
+        fbFirDataSource.progress = progress;
+        fbFirDataSource.ReadFBFirsData(statistics.FirsCount, clearTable);
+        fbAirspacesDataSource.progress = progress;
+        fbAirspacesDataSource.ReadFBAirspacesData(statistics.AirspacesCount, clearTable);
+    }
+
+    private void doClose()
+    {
+        Button downloadButton = (Button) getView().findViewById(R.id.downloadDatabasesBtn);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onCloseListener != null) onCloseListener.OnClose();
+                dismiss();
+            }
+        });
+
+        downloadButton.setText("Close");
+        downloadButton.setEnabled(true);
     }
 
     private void onProgressBarUpdate(Integer count, Integer downloaded, FBTableType type)

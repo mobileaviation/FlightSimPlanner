@@ -8,9 +8,9 @@
     <item
         android:id="@+id/action_settings_menuitem"
         android:title="@string/action_settings" />
-    <item
-        android:id="@+id/action_load_chart_menuitem"
-        android:title="@string/action_load_test_chart" />
+    <!--<item-->
+        <!--android:id="@+id/action_load_chart_menuitem"-->
+        <!--android:title="@string/action_load_test_chart" />-->
     <item
         android:id="@+id/action_isnew_menuitem"
         android:title="@string/action_isnew" />
