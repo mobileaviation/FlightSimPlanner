@@ -1,7 +1,7 @@
 package nl.robenanita.googlemapstest.Tracks;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.LocationTrackingDataSource;
 
-public class LoadTrackActivity extends ActionBarActivity {
+public class LoadTrackActivity extends AppCompatActivity {
     private Integer track_id;
     private static final String TAG = "GooglemapsTest";
     private Button loadButton;

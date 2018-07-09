@@ -3,7 +3,7 @@ package nl.robenanita.googlemapstest.Route;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +17,7 @@ import nl.robenanita.googlemapstest.RouteAdapter;
 import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.RouteDataSource;
 
-public class RouteActivateActivity extends ActionBarActivity {
+public class RouteActivateActivity extends AppCompatActivity {
     public Route selectedFlightplan;
     private ListView flightplanList;
     private String TAG = "GooglemapsTest";

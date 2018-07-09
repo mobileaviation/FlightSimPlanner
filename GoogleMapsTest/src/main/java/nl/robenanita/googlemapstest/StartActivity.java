@@ -13,7 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -57,7 +57,7 @@ import nl.robenanita.googlemapstest.inappbilling.util.IabResult;
 import nl.robenanita.googlemapstest.inappbilling.util.Inventory;
 import nl.robenanita.googlemapstest.inappbilling.util.Purchase;
 
-public class StartActivity extends ActionBarActivity {
+public class StartActivity extends AppCompatActivity {
     private String TAG = "GooglemapsTest";
     final String ITEM_SKU = "com.mobileaviationtools.noadds";
     private final int REQUEST_PERMISSION = 20;

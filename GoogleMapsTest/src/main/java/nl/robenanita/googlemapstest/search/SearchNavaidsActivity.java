@@ -1,11 +1,11 @@
 package nl.robenanita.googlemapstest.search;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import nl.robenanita.googlemapstest.R;
 
-public class SearchNavaidsActivity extends ActionBarActivity {
+public class SearchNavaidsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

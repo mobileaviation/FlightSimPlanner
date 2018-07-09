@@ -19,13 +19,13 @@ allprojects {
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
 //    buildToolsVersion "18.1.1"
 //    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 27
     }
     sourceSets { main { aidl.srcDirs = ['src/main/aidl', 'src/main/aidl/'] } }
 
@@ -41,9 +41,10 @@ dependencies {
     implementation files('libs/jts-1.13.jar')
     implementation 'com.andreabaccega:android-form-edittext:1.0.5@aar'
     implementation 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
-    implementation 'com.android.support:support-v4:25.3.1'
+    //implementation 'com.android.support:support-v4:25.3.1'
+    //implementation 'com.android.support:support-v4:27.1.0'
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
-    //implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.android.support:appcompat-v7:25.3.1'
     implementation 'com.android.support:design:25.3.1'
     implementation 'com.google.android.gms:play-services-location:11.8.0'
     implementation 'com.google.android.gms:play-services-ads:11.8.0'

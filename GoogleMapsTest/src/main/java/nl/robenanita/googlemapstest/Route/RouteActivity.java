@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,7 +23,7 @@ import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.database.RouteDataSource;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
-public class RouteActivity extends ActionBarActivity {
+public class RouteActivity extends AppCompatActivity {
     private String TAG = "GooglemapsTest";
 
     private Button searchDepartureAirportBtn;

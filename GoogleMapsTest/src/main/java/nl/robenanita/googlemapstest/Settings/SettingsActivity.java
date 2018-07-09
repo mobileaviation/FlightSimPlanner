@@ -3,7 +3,7 @@ package nl.robenanita.googlemapstest.Settings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.Gravity;
@@ -32,7 +32,7 @@ import nl.robenanita.googlemapstest.database.PropertiesDataSource;
 import nl.robenanita.googlemapstest.database.RunwaysDataSource;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
-public class SettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends AppCompatActivity {
     private String ServerIPAddress;
     private Integer ServerPort;
     private Airport airport;

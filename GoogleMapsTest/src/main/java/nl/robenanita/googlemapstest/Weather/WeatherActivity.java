@@ -1,7 +1,7 @@
 package nl.robenanita.googlemapstest.Weather;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +22,7 @@ import nl.robenanita.googlemapstest.R;
 import nl.robenanita.googlemapstest.Xs;
 import nl.robenanita.googlemapstest.database.AirportDataSource;
 
-public class WeatherActivity extends ActionBarActivity {
+public class WeatherActivity extends AppCompatActivity {
     private String TAG = "GooglemapsTest";
     private ArrayList<Metar> metars;
     private ArrayList<Taf> tafs;

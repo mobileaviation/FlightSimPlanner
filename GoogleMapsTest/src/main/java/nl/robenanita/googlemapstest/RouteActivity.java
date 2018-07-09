@@ -1,7 +1,7 @@
 package nl.robenanita.googlemapstest;
 
 import android.content.Context;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,7 +17,7 @@ import android.widget.PopupWindow;
 import nl.robenanita.googlemapstest.Airport.Airport;
 import nl.robenanita.googlemapstest.search.SearchAirportsPopup;
 
-public class RouteActivity extends ActionBarActivity {
+public class RouteActivity extends AppCompatActivity {
     private String TAG = "GooglemapsTest";
 
     private Button searchDepartureAirportBtn;
