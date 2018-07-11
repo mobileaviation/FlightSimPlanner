@@ -1,7 +1,7 @@
 package nl.robenanita.googlemapstest;
 
 import android.Manifest;
-import android.app.Activity;
+//import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,13 +42,13 @@ import java.util.ArrayList;
 
 import nl.robenanita.googlemapstest.Classes.NetworkCheck;
 import nl.robenanita.googlemapstest.Firebase.DownloadDatabaseDialog;
-import nl.robenanita.googlemapstest.Firebase.FBAirportsDataSource;
-import nl.robenanita.googlemapstest.Firebase.FBCountriesDataSource;
-import nl.robenanita.googlemapstest.Firebase.FBDBHelper;
-import nl.robenanita.googlemapstest.Firebase.FBFixesDataSource;
-import nl.robenanita.googlemapstest.Firebase.FBNavaidsDataSource;
-import nl.robenanita.googlemapstest.Firebase.FBStatistics;
-import nl.robenanita.googlemapstest.Firebase.FBTilesDataSource;
+//import nl.robenanita.googlemapstest.Firebase.FBAirportsDataSource;
+//import nl.robenanita.googlemapstest.Firebase.FBCountriesDataSource;
+//import nl.robenanita.googlemapstest.Firebase.FBDBHelper;
+//import nl.robenanita.googlemapstest.Firebase.FBFixesDataSource;
+//import nl.robenanita.googlemapstest.Firebase.FBNavaidsDataSource;
+//import nl.robenanita.googlemapstest.Firebase.FBStatistics;
+//import nl.robenanita.googlemapstest.Firebase.FBTilesDataSource;
 import nl.robenanita.googlemapstest.Settings.SettingsActivity;
 import nl.robenanita.googlemapstest.database.*;
 import nl.robenanita.googlemapstest.database.Downloader.DBDownloader;
@@ -164,7 +164,7 @@ public class StartActivity extends AppCompatActivity {
 //        }
     }
 
-    public boolean checkPlayServices(Activity activity) {
+    public boolean checkPlayServices(AppCompatActivity activity) {
         final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
