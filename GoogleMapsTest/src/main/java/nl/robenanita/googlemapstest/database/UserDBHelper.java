@@ -399,7 +399,13 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
         if (oldVersion<15)
         {
-            db.execSQL("ALTER TABLE " + MBTILES_LOCAL_TABLE_NAME + " ADD COLUMN " + C_local_file + " text;");
+            try {
+                db.execSQL("ALTER TABLE " + MBTILES_LOCAL_TABLE_NAME + " ADD COLUMN " + C_local_file + " text;");
+            }
+            catch (Exception ee) {
+                Log.e(TAG, ee.getMessage());
+                Log.e(TAG, "duplicate column error can be ignored!");
+            }
         }
 
         if (oldVersion<17)
