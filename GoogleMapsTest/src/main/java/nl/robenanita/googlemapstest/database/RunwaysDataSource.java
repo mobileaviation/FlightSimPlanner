@@ -74,23 +74,23 @@ public class RunwaysDataSource {
     {
         RunwaysList runways = null;
 
-        String query = "SELECT * FROM " + DBHelper.RUNWAY_TABLE_NAME +
-                " WHERE " + DBHelper.C_airport_ref + "=" + airport.id;
+        if (airport != null) {
+            String query = "SELECT * FROM " + DBHelper.RUNWAY_TABLE_NAME +
+                    " WHERE " + DBHelper.C_airport_ref + "=" + airport.id;
 
 
-        Cursor cursor = database.rawQuery(query, null);
+            Cursor cursor = database.rawQuery(query, null);
 
-        if(cursor.getCount()>0)
-        {
-            runways = new RunwaysList();
-            cursor.moveToFirst();
-            while(!cursor.isAfterLast())
-            {
-                Runway runway = cursorToRunway(cursor);
-                runways.add(runway);
-                cursor.moveToNext();
+            if (cursor.getCount() > 0) {
+                runways = new RunwaysList();
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    Runway runway = cursorToRunway(cursor);
+                    runways.add(runway);
+                    cursor.moveToNext();
+                }
+
             }
-
         }
 
         return runways;

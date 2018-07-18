@@ -310,6 +310,16 @@ public class FSPMapFragment extends Fragment {
         navaidMarkerMap = new HashMap<Marker, Navaid>();
     }
 
+    public void setMapNorthOrientation()
+    {
+
+    }
+
+    public void setMapFlightDirectionOrientation()
+    {
+
+    }
+
     private void setUiSettings()
     {
         UiSettings settings = googleMap.getUiSettings();
@@ -350,6 +360,19 @@ public class FSPMapFragment extends Fragment {
         if (googleMap != null) {
             float zoom = googleMap.getCameraPosition().zoom;
             curPosition = new CameraPosition(position, zoom, 0, 0);
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
+        }
+    }
+
+    public void SetMapPosition(LatLng position, Float bearing, Boolean north)
+    {
+        if (googleMap != null) {
+            float zoom = googleMap.getCameraPosition().zoom;
+            curPosition = new CameraPosition.Builder()
+                    .target(position)
+                    .bearing(bearing)
+                    .zoom(zoom)
+                    .build();
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
         }
     }

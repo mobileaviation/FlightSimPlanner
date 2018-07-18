@@ -1218,6 +1218,7 @@ public class NavigationActivity extends AppCompatActivity implements
                 {
                     LatLng searchPos = new LatLng(airport.latitude_deg, airport.longitude_deg);
                     curPosition = searchPos;
+                    //fspMapFragment.SetMapPosition(searchPos, 90f, false);
                     fspMapFragment.SetMapPosition(searchPos);
 
 //                    setCompassroseMarker(searchPos);
