@@ -50,6 +50,7 @@ import nl.robenanita.googlemapstest.Airspaces.Airspaces;
 import nl.robenanita.googlemapstest.AnimationHelpers;
 import nl.robenanita.googlemapstest.Classes.PlanePosition;
 import nl.robenanita.googlemapstest.Fix;
+import nl.robenanita.googlemapstest.Menus.MapDirectionType;
 import nl.robenanita.googlemapstest.NavigationActivity;
 import nl.robenanita.googlemapstest.Route.Json.RouteObject;
 import nl.robenanita.googlemapstest.RouteGrid;
@@ -288,7 +289,7 @@ public class FSPMapFragment extends Fragment {
                 googleMap.setMinZoomPreference(7f);
 
                 createVariables();
-                setUiSettings();
+                setUiSettings(false);
                 setMapController();
                 setOnCameraMoveListener();
                 setOnPolylineClickListeners();
@@ -310,21 +311,11 @@ public class FSPMapFragment extends Fragment {
         navaidMarkerMap = new HashMap<Marker, Navaid>();
     }
 
-    public void setMapNorthOrientation()
-    {
-
-    }
-
-    public void setMapFlightDirectionOrientation()
-    {
-
-    }
-
-    private void setUiSettings()
+    public void setUiSettings(Boolean rotateGesture)
     {
         UiSettings settings = googleMap.getUiSettings();
         settings.setCompassEnabled(true);
-        settings.setRotateGesturesEnabled(true);
+        settings.setRotateGesturesEnabled(rotateGesture);
         settings.setTiltGesturesEnabled(false);
         settings.setScrollGesturesEnabled(true);
         settings.setZoomControlsEnabled(true);
@@ -349,13 +340,13 @@ public class FSPMapFragment extends Fragment {
         return mapController;
     }
 
-    public void SetMapPosition(LatLng position, Float zoom)
+    private void SetMapPosition(LatLng position, Float zoom)
     {
         curPosition = new CameraPosition(position, zoom,0,0);
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
     }
 
-    public void SetMapPosition(LatLng position)
+    private void SetMapPosition(LatLng position)
     {
         if (googleMap != null) {
             float zoom = googleMap.getCameraPosition().zoom;
@@ -364,14 +355,33 @@ public class FSPMapFragment extends Fragment {
         }
     }
 
-    public void SetMapPosition(LatLng position, Float bearing, Boolean north)
+    private void SetMapPosition(LatLng position, Float bearing, Boolean north)
     {
+        Float b = (north) ? 0f : bearing;
         if (googleMap != null) {
             float zoom = googleMap.getCameraPosition().zoom;
             curPosition = new CameraPosition.Builder()
                     .target(position)
-                    .bearing(bearing)
+                    .bearing(b)
                     .zoom(zoom)
+                    .build();
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
+        }
+    }
+
+    public void SetMapPosition(LatLng position, Float bearing, Float zoom, MapDirectionType mapDirectionType)
+    {
+        if (googleMap != null)
+        {
+            Float _b = (mapDirectionType==MapDirectionType.north) ? 0f : bearing;
+            _b = (mapDirectionType==MapDirectionType.free) ? googleMap.getCameraPosition().bearing : _b;
+            _b = (mapDirectionType==MapDirectionType.flight) ? bearing : _b;
+            Float _z = (zoom<0) ? googleMap.getCameraPosition().zoom : zoom;
+
+            curPosition = new CameraPosition.Builder()
+                    .target(position)
+                    .bearing(_b)
+                    .zoom(_z)
                     .build();
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(curPosition));
         }

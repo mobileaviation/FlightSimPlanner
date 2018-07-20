@@ -314,7 +314,8 @@ public class NavigationActivity extends AppCompatActivity implements
 
                 fspMapFragment.SetUniqueID(uniqueID);
                 fspMapFragment.SetMarkerProperties(markerProperties);
-                fspMapFragment.SetMapPosition(curPosition, curZoom);
+                fspMapFragment.SetMapPosition(curPosition, 0f, curZoom, mapDirectionType);
+                //fspMapFragment.SetMapPosition(curPosition, curZoom);
                 fspMapFragment.SetPlaneMarker(curPlanePosition);
                 //fspMapFragment.SetAviationMarkersByZoomAndBoundary();
 
@@ -800,16 +801,19 @@ public class NavigationActivity extends AppCompatActivity implements
                     case north:
                     {
                         mapDirectionType = MapDirectionType.flight;
+                        fspMapFragment.setUiSettings(false);
                         break;
                     }
                     case free:
                     {
                         mapDirectionType = MapDirectionType.north;
+                        fspMapFragment.setUiSettings(false);
                         break;
                     }
                     case flight:
                     {
                         mapDirectionType = MapDirectionType.free;
+                        fspMapFragment.setUiSettings(true);
                         break;
                     }
                 }
@@ -822,6 +826,7 @@ public class NavigationActivity extends AppCompatActivity implements
     private void setMapDirection(MapDirectionType mapDirection)
     {
         navigationButtonFragment.setDirectionBtnIcon(mapDirection);
+        fspMapFragment.SetMapPosition(curPosition, (float)curPlanePosition.Heading, -1f, mapDirectionType);
     }
 
 //    @Override
@@ -1184,7 +1189,9 @@ public class NavigationActivity extends AppCompatActivity implements
                                     selectedLocation.getLongitude(), selectedLocation.getAltitude(),
                                     selectedLocation.getBearing()));
                             if (trackingEnabled) fspMapFragment.SetMapPosition(new LatLng(selectedLocation.getLatitude(),
-                                    selectedLocation.getLongitude()));
+                                    selectedLocation.getLongitude()),selectedLocation.getBearing(),-1f, mapDirectionType);
+//                            if (trackingEnabled) fspMapFragment.SetMapPosition(new LatLng(selectedLocation.getLatitude(),
+//                                    selectedLocation.getLongitude()));
                             SetInfoPanel(selectedLocation);
                         }
                     });
@@ -1250,7 +1257,8 @@ public class NavigationActivity extends AppCompatActivity implements
                     LatLng searchPos = new LatLng(airport.latitude_deg, airport.longitude_deg);
                     curPosition = searchPos;
                     //fspMapFragment.SetMapPosition(searchPos, 90f, false);
-                    fspMapFragment.SetMapPosition(searchPos);
+                    //fspMapFragment.SetMapPosition(searchPos);
+                    fspMapFragment.SetMapPosition(searchPos, (float)curPlanePosition.Heading, -1f, mapDirectionType );
 
 //                    setCompassroseMarker(searchPos);
 //                    SetAirportMarkersByZoomAndBoundary();
@@ -1283,7 +1291,7 @@ public class NavigationActivity extends AppCompatActivity implements
                 {
                     LatLng searchPos = new LatLng(navaid.latitude_deg, navaid.longitude_deg);
                     curPosition = searchPos;
-                    fspMapFragment.SetMapPosition(searchPos);
+                    fspMapFragment.SetMapPosition(searchPos, (float)curPlanePosition.Heading, -1f, mapDirectionType );
 //                    setCompassroseMarker(searchPos);
 //                    SetAirportMarkersByZoomAndBoundary();
                 }
@@ -1314,7 +1322,7 @@ public class NavigationActivity extends AppCompatActivity implements
                 {
                     LatLng searchPos = new LatLng(fix.latitude_deg, fix.longitude_deg);
                     curPosition = searchPos;
-                    fspMapFragment.SetMapPosition(searchPos);
+                    fspMapFragment.SetMapPosition(searchPos, (float)curPlanePosition.Heading, -1f, mapDirectionType );
 //                    setCompassroseMarker(searchPos);
 //                    SetAirportMarkersByZoomAndBoundary();
                 }
@@ -1367,7 +1375,7 @@ public class NavigationActivity extends AppCompatActivity implements
                     Airport a = searchAirportsPopup.SelectedAirport;
                     LatLng planePos = new LatLng(a.latitude_deg, a.longitude_deg);
                     curPosition = planePos;
-                    fspMapFragment.SetMapPosition(planePos);
+                    fspMapFragment.SetMapPosition(planePos, (float)curPlanePosition.Heading, -1f, mapDirectionType );
                 }
             }
         });
@@ -1747,7 +1755,9 @@ public class NavigationActivity extends AppCompatActivity implements
 
             fspMapFragment.SetNewTrackingLinePosition(location);
             fspMapFragment.SetPlaneMarker(new PlanePosition(location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getBearing()));
-            if (trackingEnabled) fspMapFragment.SetMapPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+            //if (trackingEnabled) fspMapFragment.SetMapPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+            if (trackingEnabled) fspMapFragment.SetMapPosition(new LatLng(location.getLatitude(), location.getLongitude()),
+                    location.getBearing(), -1f, mapDirectionType);
             SetInfoPanel(location);
         }
     }
