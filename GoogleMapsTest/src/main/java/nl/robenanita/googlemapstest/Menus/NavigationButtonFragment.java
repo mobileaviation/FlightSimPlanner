@@ -120,6 +120,7 @@ public class NavigationButtonFragment extends Fragment {
     private ImageButton aerodrome_searchBtn;
     private ImageButton airspace_lockingBtn;
     private ImageButton appLockingBtn;
+    private ImageButton mapDirectionBtn;
     private ImageButton moreBtn;
     private MenuItem settingsItem;
     private MenuItem prevtrackItem;
@@ -171,6 +172,9 @@ public class NavigationButtonFragment extends Fragment {
        moreBtn = (ImageButton) view.findViewById(R.id.settings);
        moreBtn.setTag(MenuItemType.more);
        moreBtn.setOnClickListener(onButtonClick);
+       mapDirectionBtn = (ImageButton) view.findViewById(R.id.map_direction);
+       mapDirectionBtn.setTag(MenuItemType.mapDirection);
+       mapDirectionBtn.setOnClickListener(onButtonClick);
    }
 
    private void showMoreMenu()
@@ -225,6 +229,28 @@ public class NavigationButtonFragment extends Fragment {
     {
         connect_disconnectBtn.setBackground((Drawable)getResources().
                 getDrawable(R.drawable.connecting));
+    }
+
+    public void setDirectionBtnIcon(MapDirectionType directionType)
+    {
+        switch (directionType)
+        {
+            case free:{
+                mapDirectionBtn.setBackground((Drawable)getResources().
+                    getDrawable(R.drawable.free_direction_button_icon));
+                break;
+            }
+            case flight:{
+                mapDirectionBtn.setBackground((Drawable)getResources().
+                        getDrawable(R.drawable.plane_direction_button_icon));
+                break;
+            }
+            case north:{
+                mapDirectionBtn.setBackground((Drawable)getResources().
+                        getDrawable(R.drawable.north_direction_button_icon));
+                break;
+            }
+        }
     }
 
 }

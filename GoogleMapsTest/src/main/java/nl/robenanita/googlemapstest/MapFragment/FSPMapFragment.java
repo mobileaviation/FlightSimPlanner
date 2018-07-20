@@ -324,7 +324,7 @@ public class FSPMapFragment extends Fragment {
     {
         UiSettings settings = googleMap.getUiSettings();
         settings.setCompassEnabled(true);
-        settings.setRotateGesturesEnabled(false);
+        settings.setRotateGesturesEnabled(true);
         settings.setTiltGesturesEnabled(false);
         settings.setScrollGesturesEnabled(true);
         settings.setZoomControlsEnabled(true);

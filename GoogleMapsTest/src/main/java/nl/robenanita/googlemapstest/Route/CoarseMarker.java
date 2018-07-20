@@ -126,6 +126,7 @@ public class CoarseMarker {
         coarseMarkerOptions.anchor(0.5f, 0.5f);
         coarseMarkerOptions.draggable(false);
         coarseMarkerOptions.rotation(true_heading + 90);
+        coarseMarkerOptions.flat(true);
         coarseMarker = map.addMarker(coarseMarkerOptions);
         return coarseMarker;
     }

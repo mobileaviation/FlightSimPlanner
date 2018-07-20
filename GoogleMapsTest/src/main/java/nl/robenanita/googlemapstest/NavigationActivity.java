@@ -90,6 +90,7 @@ import nl.robenanita.googlemapstest.MapFragment.FSPMapFragment;
 import nl.robenanita.googlemapstest.MapFragment.TrackingLine;
 import nl.robenanita.googlemapstest.Menus.FSPMainMenuDrawer;
 import nl.robenanita.googlemapstest.Menus.FSPSecondairyMenuDrawer;
+import nl.robenanita.googlemapstest.Menus.MapDirectionType;
 import nl.robenanita.googlemapstest.Menus.MenuItemType;
 import nl.robenanita.googlemapstest.Menus.NavigationButtonFragment;
 import nl.robenanita.googlemapstest.Menus.OnNavigationMemuItemClicked;
@@ -196,6 +197,8 @@ public class NavigationActivity extends AppCompatActivity implements
     private Boolean appLocking;
     private NavigationButtonFragment navigationButtonFragment;
 
+    private MapDirectionType mapDirectionType;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -235,6 +238,7 @@ public class NavigationActivity extends AppCompatActivity implements
 //            }
 //        });
 
+        mapDirectionType = MapDirectionType.north;
         navigationButtonFragment = (NavigationButtonFragment) getFragmentManager().findFragmentById(R.id.navigationbuttonsfragment);
         navigationButtonFragment.SetOnButtonClicked(new OnNavigationMemuItemClicked() {
             @Override
@@ -790,7 +794,34 @@ public class NavigationActivity extends AppCompatActivity implements
                 navigationButtonFragment.SetApplockedIcon(appLocking);
                 break;
             }
+            case mapDirection:{
+                switch(mapDirectionType)
+                {
+                    case north:
+                    {
+                        mapDirectionType = MapDirectionType.flight;
+                        break;
+                    }
+                    case free:
+                    {
+                        mapDirectionType = MapDirectionType.north;
+                        break;
+                    }
+                    case flight:
+                    {
+                        mapDirectionType = MapDirectionType.free;
+                        break;
+                    }
+                }
+                setMapDirection(mapDirectionType);
+                break;
+            }
         }
+    }
+
+    private void setMapDirection(MapDirectionType mapDirection)
+    {
+        navigationButtonFragment.setDirectionBtnIcon(mapDirection);
     }
 
 //    @Override

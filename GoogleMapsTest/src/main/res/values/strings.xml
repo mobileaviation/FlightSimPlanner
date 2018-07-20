@@ -92,7 +92,8 @@
     <string name="trackactive">Lock Map to Location</string>
     <string name="flightplanbutton">Add new Route</string>
     <string name="maptype">Select Maps</string>
-    <string name="aerodromesearch">Seach</string>
+    <string name="aerodromesearch">Search</string>
+    <string name="mapdirection">Set Map Direction</string>
     <string name="airspace_locked">Enable/Disable airspace</string>
     <string name="locked_unlocked">Lock/Unlock</string>
     <string name="settings">More</string>

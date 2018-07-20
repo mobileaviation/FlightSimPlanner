@@ -227,6 +227,7 @@ public class AviationMarkers extends AsyncTask<String, Integer, Void> {
 
 
             m.icon(airport.GetIcon((float)airport.heading, airport.ident, context));
+            m.flat(true);
 
             m.anchor(0.5f, 0.5f);
             airport.marker = map.addMarker(m);

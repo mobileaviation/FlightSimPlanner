@@ -86,6 +86,14 @@
                     android:contentDescription="@string/aerodromesearch" />
 
                 <ImageButton
+                    android:id="@+id/map_direction"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/north_direction_button_icon"
+                    android:contentDescription="@string/mapdirection" />
+
+                <ImageButton
                     android:id="@+id/airspace_locking"
                     android:layout_width="30dp"
                     android:layout_height="30dp"

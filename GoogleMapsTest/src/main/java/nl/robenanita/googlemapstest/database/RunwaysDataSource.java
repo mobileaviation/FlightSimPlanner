@@ -54,7 +54,7 @@ public class RunwaysDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     public Integer GetRunwaysCount()

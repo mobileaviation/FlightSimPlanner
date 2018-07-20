@@ -19,5 +19,6 @@ public enum MenuItemType
     isNew,
     airspacesTracking,
     appLocking,
+    mapDirection,
     more
 }

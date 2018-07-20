@@ -39,7 +39,8 @@ public class NavaidsDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        // Removed due to IlligalOperations Exceptions
+        //dbHelper.close();
     }
 
     public Integer GetNavaidsCount()

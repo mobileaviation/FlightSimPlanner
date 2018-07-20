@@ -38,7 +38,8 @@ public class FixesDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        // Removed due to IlligalOperations Exceptions
+        //dbHelper.close();
     }
 
     public Integer GetFixesCount()

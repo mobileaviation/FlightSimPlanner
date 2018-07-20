@@ -72,7 +72,8 @@ public class AirportDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        // Removed due to IlligalOperations Exceptions
+        //dbHelper.close();
     }
 
 
