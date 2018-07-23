@@ -33,7 +33,7 @@ public class MBTilesLocalDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     public List<MBTile> getAllLocalTiles(ArrayList<MBTile> tiles, MBTileType type)

@@ -33,7 +33,7 @@ public class MBTilesDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     public ArrayList<MBTile> GetMBTilesByType(MBTileType type, ArrayList<MBTile> tiles)

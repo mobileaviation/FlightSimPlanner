@@ -44,7 +44,7 @@ public class ContinentDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     public ArrayList<Continent> getAllContinents(boolean emptyStart) {

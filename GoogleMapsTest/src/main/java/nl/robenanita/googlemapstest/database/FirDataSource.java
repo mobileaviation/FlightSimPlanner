@@ -33,7 +33,7 @@ public class FirDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     public ArrayList<Fir> GetPossibleFirs(ArrayList<Station> stations)

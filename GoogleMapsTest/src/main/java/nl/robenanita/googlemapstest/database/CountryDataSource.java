@@ -46,7 +46,7 @@ public class CountryDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     public ArrayList<Country> getAllCountries(boolean emptyStart) {

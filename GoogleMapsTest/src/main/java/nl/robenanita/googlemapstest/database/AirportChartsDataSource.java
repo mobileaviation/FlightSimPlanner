@@ -33,7 +33,7 @@ public class AirportChartsDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     private ContentValues createAirportChartValues(AirportChart airportChart)

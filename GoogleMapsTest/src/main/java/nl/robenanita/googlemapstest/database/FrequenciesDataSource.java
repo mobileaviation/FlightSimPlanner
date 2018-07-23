@@ -33,7 +33,7 @@ public class FrequenciesDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     public ArrayList<Frequency> loadFrequenciesByAirport(Airport airport)

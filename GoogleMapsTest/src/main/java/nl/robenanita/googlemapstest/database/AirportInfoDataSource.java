@@ -31,7 +31,7 @@ public class AirportInfoDataSource {
     }
 
     public void close() {
-        dbHelper.close();
+        //dbHelper.close();
     }
 
     public Cursor GetNotams(String icao)
