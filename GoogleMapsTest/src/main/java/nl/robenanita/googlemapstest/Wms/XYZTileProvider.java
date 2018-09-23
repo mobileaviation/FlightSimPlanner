@@ -1,5 +1,6 @@
 package nl.robenanita.googlemapstest.Wms;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,10 +9,20 @@ import android.graphics.Paint;
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Rob Verhoef on 14-10-2014.
@@ -20,6 +31,12 @@ public class XYZTileProvider implements TileProvider {
     private String url;
     private Paint opacityPaint = new Paint();
     private static String TAG = "GooglemapsTest";
+    private TileProviderType tileProviderType;
+    private String layer;
+    private String style;
+    private Context context;
+
+    final private Long cacheTimeOut = Long.valueOf(14 * 24); // in hours
 
 
     /**
@@ -30,11 +47,15 @@ public class XYZTileProvider implements TileProvider {
      *
      * @param url The tile server's endpoint URL, from which to retrieve {@link Tile} images
      */
-    public XYZTileProvider(String url, String layer, int opacity )
+    public XYZTileProvider(TileProviderType tileProviderType, String url, String layer, int opacity , Context context)
     {
 
         this.url = url.replace("#LAYER#", layer);
         setOpacity(opacity);
+        this.tileProviderType = tileProviderType;
+        this.layer = layer;
+        this.style = style;
+        this.context = context;
     }
 
     /**
@@ -52,19 +73,59 @@ public class XYZTileProvider implements TileProvider {
     {
         URL tileUrl = getTileUrl(x, y, zoom);
 
-        //Log.i(TAG, "WeatherURL: " + tileUrl.toString());
-        // http://tile.openweathermap.org/map/clouds/6/33/20.png
+
+        // https://maps.skylines.aero/mapserver/?service=WMS&version=1.3.0&request=GetMap&layers=Airspace&transparent=true&bbox=313086.067936,6418264.392684,469629.101904,6574807.426652&width=256&height=256&crs=EPSG:3857&format=image/png&styles=
+        String cachedFileName = tileProviderType.toString() + layer.toString() + Integer.toString(x) + "_"
+                + Integer.toString(y) + "_"
+                + Integer.toString(zoom) + ".png";
+
+        //Log.i(TAG, "Cached Filename:" + cachedFileName);
 
         Tile tile = null;
         ByteArrayOutputStream stream = null;
+        Bitmap image = null;
+        Boolean cached = false;
+        Boolean timedOut = false;
 
         try
         {
-            Bitmap image = BitmapFactory.decodeStream(tileUrl.openConnection().getInputStream());
-            image = adjustOpacity(image);
+
+            File f = new File(context.getFilesDir().getPath() + "/" + cachedFileName);
+            if (f.exists()) {
+                //Log.i(TAG, "Loading from cache: " + f.getPath() + "/" +f.getName() + " Modified: " + Long.toString(f.lastModified()));
+                Date today = new Date();
+                long diff = TimeUnit.HOURS.convert(today.getTime() - f.lastModified(), TimeUnit.MILLISECONDS);
+
+                image = BitmapFactory.decodeStream(context.openFileInput(cachedFileName));
+
+                timedOut = (diff > cacheTimeOut);
+                //Log.i(TAG, "HoursDif " + diff + " TimedOut: " + timedOut.toString());
+                cached = true;
+            }
+            else
+            {
+                image = BitmapFactory.decodeStream(tileUrl.openConnection().getInputStream());
+                //Log.i(TAG, "Loading from url: " + tileUrl.toString());
+//                InputStream content = null;
+//                HttpGet httpGet = new HttpGet(url);
+//                HttpClient httpclient = new DefaultHttpClient();
+//                // Execute HTTP Get Request
+//                HttpResponse response = httpclient.execute(httpGet);
+//                content = response.getEntity().getContent();
+//                image = BitmapFactory.decodeStream(content);
+
+                cached = false;
+            }
 
             stream = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+            if (!cached)
+            {
+                FileOutputStream fos = context.openFileOutput(cachedFileName, Context.MODE_PRIVATE);
+                fos.write(stream.toByteArray());
+                fos.close();
+            }
 
             byte[] byteArray = stream.toByteArray();
 
@@ -81,6 +142,8 @@ public class XYZTileProvider implements TileProvider {
                 try
                 {
                     stream.close();
+//                    Todo: Only delete when connected to the Internet
+                    if (timedOut) context.deleteFile(cachedFileName);
                 }
                 catch(IOException e) {}
             }

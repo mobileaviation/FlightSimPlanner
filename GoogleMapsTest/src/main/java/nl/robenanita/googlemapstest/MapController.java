@@ -129,15 +129,15 @@ public class MapController
         skylinesOverlay.setZIndex(105);
 
         TileProvider tp7 =
-                TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.precipitation, 50);
+                TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.precipitation, 50, context);
         openWeathermapPertOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp7));
         openWeathermapPertOverlay.setZIndex(110);
         TileProvider tp8 =
-                TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.clouds, 50);
+                TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.clouds, 50, context);
         openWeathermapCloudsOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp8));
         openWeathermapCloudsOverlay.setZIndex(110);
         TileProvider tp9 =
-                TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.pressure_cntr, 80);
+                TileProviderFactory.getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer.pressure_cntr, 80, context);
         openWeathermapPressOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(tp9));
         openWeathermapPressOverlay.setZIndex(110);
         TileProvider tp10 =

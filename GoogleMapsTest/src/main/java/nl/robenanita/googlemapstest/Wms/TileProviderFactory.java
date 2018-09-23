@@ -34,9 +34,9 @@ public class TileProviderFactory {
                     s = String.format(Locale.US, TileProviderFormats.CHARTBUNDLE_FORMAT, bbox[MINX],
                             bbox[MINY], bbox[MAXX], bbox[MAXY]);
 
-                if (tileProviderType == TileProviderType.skylines)
-                    s = String.format(Locale.US, TileProviderFormats.SKYLINES_FORMAT, bbox[MINX],
-                            bbox[MINY], bbox[MAXX], bbox[MAXY]);
+//                if (tileProviderType == TileProviderType.skylines)
+//                    s = String.format(Locale.US, TileProviderFormats.SKYLINES_FORMAT, bbox[MINX],
+//                            bbox[MINY], bbox[MAXX], bbox[MAXY]);
 
                 if (tileProviderType == TileProviderType.canadaweather)
                     s = String.format(Locale.US, TileProviderFormats.CANADAWEATHER_FORMAT, bbox[MINX],
@@ -58,7 +58,10 @@ public class TileProviderFactory {
 
     public static TileProvider getSkylinesProvider(TileProviderFormats.skylinesLayer layer, Context context)
     {
-        WMSCachedTileProvider tileProvider = new WMSCachedTileProvider(TileProviderType.skylines, layer.toString(), "", context);
+        XYZTileProvider tileProvider = new XYZTileProvider(TileProviderType.skylines, TileProviderFormats.SKYLINES_FORMAT_XYZ,
+                layer.toString(), 255, context);
+
+        //WMSCachedTileProvider tileProvider = new WMSCachedTileProvider(TileProviderType.skylines, layer.toString(), "", context);
         return tileProvider;
 
         //return TileProviderFactory.getTileProvider(TileProviderType.skylines, layer.toString(), "");
@@ -79,10 +82,11 @@ public class TileProviderFactory {
     }
 
     public static TileProvider getTileOpenWeatherMapProvider(TileProviderFormats.weathermapLayer layer,
-                                                      int opacity)
+                                                      int opacity, Context context)
     {
-        TileProvider tileProvider = new XYZTileProvider(TileProviderFormats.OPENWEATHERTILE_FORMAT,
-                layer.toString(), opacity);
+        TileProvider tileProvider = new XYZTileProvider(TileProviderType.openweathermaps,
+                TileProviderFormats.OPENWEATHERTILE_FORMAT,
+                layer.toString(), opacity, context);
         return tileProvider;
     }
 

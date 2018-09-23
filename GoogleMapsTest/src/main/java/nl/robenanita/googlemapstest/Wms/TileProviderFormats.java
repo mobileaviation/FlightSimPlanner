@@ -67,6 +67,7 @@ public class TileProviderFormats {
     public static final String SKYLINES_FORMAT_XYZ = "https://skylines.aero/mapproxy/tiles/1.0.0/airspace/" +
             "{zoom}/{x}/{y}.png";
 
+
     public enum skylinesLayer
     {
         Airports,
