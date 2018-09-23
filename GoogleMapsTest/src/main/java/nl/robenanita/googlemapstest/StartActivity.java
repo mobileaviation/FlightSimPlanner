@@ -17,9 +17,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -605,6 +608,11 @@ public class StartActivity extends AppCompatActivity {
             showSettingsActivity();
             return true;
         }
+        if (id == R.id.action_showPrivacyPolicy)
+        {
+            showPrivacyPolicyPopup();
+            return true;
+        }
         if (id == R.id.action_download_databases)
         {
             NetworkCheck networkCheck = new NetworkCheck();
@@ -681,6 +689,24 @@ public class StartActivity extends AppCompatActivity {
     private void showSettingsActivity() {
         Intent startSettingsIntent = new Intent(StartActivity.this, SettingsActivity.class);
         StartActivity.this.startActivityForResult(startSettingsIntent, 400);
+    }
+
+    private void showPrivacyPolicyPopup() {
+        int popupWidth = 440;
+        int popupHeight = 500;
+
+        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.privacyLayout);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View Layout = layoutInflater.inflate(R.layout.webprivacy_popup, viewGroup);
+
+        final PrivacyPolicyPopup privacyPopup = new PrivacyPolicyPopup(this, Layout);
+
+        privacyPopup.setContentView(Layout);
+        privacyPopup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        privacyPopup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        privacyPopup.setFocusable(true);
+
+        privacyPopup.showAtLocation(Layout, Gravity.CENTER, 0, 0);
     }
 
 }

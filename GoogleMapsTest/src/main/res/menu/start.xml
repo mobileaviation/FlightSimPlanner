@@ -17,4 +17,8 @@
         android:title="@string/firebasetest"
         android:orderInCategory="102"
         app:showAsAction="never" />
+    <item android:id="@+id/action_showPrivacyPolicy"
+        android:title="@string/privacypolicy"
+        android:orderInCategory="103"
+        app:showAsAction="never" />
 </menu>

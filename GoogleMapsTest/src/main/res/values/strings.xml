@@ -98,4 +98,5 @@
     <string name="locked_unlocked">Lock/Unlock</string>
     <string name="settings">More</string>
     <string name="firebasetest">Download Databases</string>
+    <string name="privacypolicy">Privacy Policy</string>
 </resources>
